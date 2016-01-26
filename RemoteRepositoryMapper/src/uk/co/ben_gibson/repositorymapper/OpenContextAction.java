@@ -41,12 +41,13 @@ public class OpenContextAction extends AnAction
         }
 
         Settings settings = this.getProjectSettings(e.getProject());
+        String STASH_URL = "123";
 
-//        String url = String.format(STASH_URL, context.getProject(), context.getRepository(), context.getPath());
-//
-//        if (context.getCaretLinePosition() != null) {
-//            url += "#" + context.getCaretLinePosition().toString();
-//        }
+        String url = String.format(STASH_URL, context.getProject(), context.getRepository(), context.getPath());
+
+        if (context.getCaretLinePosition() != null) {
+            url += "#" + context.getCaretLinePosition().toString();
+        }
 
         // Copy the url to clipboard
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

@@ -23,9 +23,9 @@ public class Context
      */
     public Context(String project, String repository, String path, Integer caretLinePosition)
     {
-        this.project       = project;
-        this.repository    = repository;
-        this.path          = path;
+        this.project           = project;
+        this.repository        = repository;
+        this.path              = path;
         this.caretLinePosition = caretLinePosition;
     }
 

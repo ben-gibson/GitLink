@@ -17,7 +17,19 @@ import java.util.ArrayList;
 public class Settings implements PersistentStateComponent<Settings>
 {
 
+    public enum RepositoryProvider
+    {
+        BIT_BUCKET,
+        GIT_HUB,
+    }
+
     private ArrayList<Mapping> mappingList = new ArrayList<>();
+
+    private Host host;
+
+    private Boolean copyToClipboard = false;
+
+    private RepositoryProvider repositoryProvider;
 
 
     /**
@@ -54,6 +66,72 @@ public class Settings implements PersistentStateComponent<Settings>
     public void setMappingList(ArrayList<Mapping> mappingList)
     {
         this.mappingList = mappingList;
+    }
+
+
+    /**
+     * Get the host.
+     *
+     * @return Host
+     */
+    public Host getHost()
+    {
+        return host;
+    }
+
+
+    /**
+     * Set the host.
+     *
+     * host  The host.
+     */
+    public void setHost(Host host)
+    {
+        this.host = host;
+    }
+
+
+    /**
+     * Should we copy the result to the clipboard.
+     *
+     * @return Boolean
+     */
+    public Boolean shouldCopyToClipboard()
+    {
+        return copyToClipboard;
+    }
+
+
+    /**
+     * Set copy to clip board preference.
+     *
+     * copyToClipboard  Should we copy the result to the clipboard?
+     */
+    public void setCopyToClipboard(Boolean copyToClipboard)
+    {
+        this.copyToClipboard = copyToClipboard;
+    }
+
+
+    /**
+     * Get the repository provider.
+     *
+     * @return RepositoryProvider
+     */
+    public RepositoryProvider getRepositoryProvider()
+    {
+        return repositoryProvider;
+    }
+
+
+    /**
+     * Set the repository provider.
+     *
+     * @param repositoryProvider  The repository provider.
+     */
+    public void setRepositoryProvider(RepositoryProvider repositoryProvider)
+    {
+        this.repositoryProvider = repositoryProvider;
     }
 
 
