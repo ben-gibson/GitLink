@@ -1,0 +1,5 @@
+.idea
+*.jar
+*.class
+out
+.DS_Store
