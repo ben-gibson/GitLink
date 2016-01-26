@@ -1,0 +1,42 @@
+<idea-plugin version="2">
+  <id>uk.co.ben-gibson.remote.repository.mapper</id>
+  <name>Remote Repository Mapper</name>
+  <version>1.0</version>
+  <vendor email="ben.gibson.2011@gmail.com" url="h">https://github.com/ben-gibson/remote-repository-mapper</vendor>
+
+  <description><![CDATA[
+      Opens a file in a remove repository.
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Nothing to see here.
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="141.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+
+  <depends>com.intellij.modules.vcs</depends>
+  <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.platform</depends>
+  <depends>Git4Idea</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.Context.ContextProvider"/>
+    <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider"/>
+    <projectService serviceImplementation="uk.co.ben_gibson.repositorymapper.Settings.Settings"/>
+    <projectConfigurable instance="uk.co.ben_gibson.repositorymapper.Settings.Configuration"/>
+  </extensions>
+
+  <actions>
+    <action id="RemoteRepositoryMapper.uk.co.ben_gibson.repositorymapper.OpenContextAction" class="uk.co.ben_gibson.repositorymapper.OpenContextAction" text="Open in remote repository"
+            description="Open the current context in the remote repository">
+      <add-to-group group-id="ViewMenu" anchor="last"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt I"/>
+    </action>
+  </actions>
+
+</idea-plugin>
