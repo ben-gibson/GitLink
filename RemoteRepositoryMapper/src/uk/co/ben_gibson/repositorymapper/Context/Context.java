@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.repositorymapper.Context;
 
+import git4idea.actions.GitBranch;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +19,10 @@ public class Context
     private String repository;
     @NotNull
     private String path;
+
+    @Nullable
+    private GitBranch branch;
+
     @Nullable
     private Integer caretLinePosition;
 
@@ -29,14 +34,23 @@ public class Context
      * @param project           The project.
      * @param repository        The repository.
      * @param path              The path.
+     * @param branch            The branch.
      * @param caretLinePosition The line position of the caret.
      */
-    public Context(@NotNull URL host, @NotNull String project, @NotNull String repository, @NotNull String path, @Nullable Integer caretLinePosition)
+    public Context(
+        @NotNull URL host,
+        @NotNull String project,
+        @NotNull String repository,
+        @NotNull String path,
+        @Nullable GitBranch branch,
+        @Nullable Integer caretLinePosition
+    )
     {
         this.host              = host;
         this.project           = project;
         this.repository        = repository;
         this.path              = path;
+        this.branch            = branch;
         this.caretLinePosition = caretLinePosition;
     }
 
@@ -50,6 +64,18 @@ public class Context
     public URL getHost()
     {
         return host;
+    }
+
+
+    /**
+     * Get the branch name.
+     *
+     * @return GitBranch
+     */
+    @Nullable
+    public GitBranch getBranch()
+    {
+        return this.branch;
     }
 
 

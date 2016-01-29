@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.repositorymapper;
 
+import com.intellij.openapi.vcs.VcsException;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.Context.ContextFactory;
@@ -55,7 +56,7 @@ public class OpenContextAction extends AnAction
             // Open in the default browser
             BrowserLauncher.getInstance().browse(url.toURI());
 
-        } catch (MalformedURLException | URISyntaxException e) {
+        } catch (MalformedURLException | URISyntaxException | VcsException e) {
             e.printStackTrace();
         }
     }
@@ -77,11 +78,11 @@ public class OpenContextAction extends AnAction
 
         try {
             context = this.getContextFactory().create(event.getProject(), settings);
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | VcsException e) {
             e.printStackTrace();
         }
 
-        event.getPresentation().setVisible((context != null));
+        event.getPresentation().setEnabledAndVisible((context != null));
     }
 
 

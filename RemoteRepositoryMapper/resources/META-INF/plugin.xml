@@ -22,6 +22,7 @@
   <depends>com.intellij.modules.vcs</depends>
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.platform</depends>
+  <depends>Git4Idea</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.Context.ContextFactory"/>

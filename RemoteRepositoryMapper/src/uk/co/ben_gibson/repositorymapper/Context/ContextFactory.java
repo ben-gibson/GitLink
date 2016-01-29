@@ -5,18 +5,18 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vcs.history.VcsBaseRevisionAdviser;
-import com.intellij.openapi.vcs.history.VcsHistoryProvider;
-import com.intellij.openapi.vcs.history.VcsHistoryUtil;
-import com.intellij.openapi.vcs.vfs.VcsFileSystem;
+import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.vcsUtil.VcsUtil;
+import git4idea.GitUtil;
+import git4idea.GitVcs;
+import git4idea.actions.GitBranch;
+import git4idea.commands.GitCommand;
 import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.repositorymapper.Settings.Mapping;
 import uk.co.ben_gibson.repositorymapper.Settings.Settings;
-
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Context Factory
@@ -32,7 +32,7 @@ public class ContextFactory
      *
      * @return Context
      */
-    public Context create(Project project, Settings settings) throws MalformedURLException {
+    public Context create(Project project, Settings settings) throws MalformedURLException, VcsException {
 
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 
@@ -54,6 +54,20 @@ public class ContextFactory
             return null;
         }
 
+        GitVcs vcs = GitVcs.getInstance(project);
+
+        GitCommand command = new GitCommand(project, vcs.getSettings(), GitUtil.getVcsRoot(project, file));
+
+        List<GitBranch> branchList = command.branchList();
+
+        GitBranch activeBranch = null;
+
+        for(GitBranch branch : branchList){
+            if (branch.isActive()) {
+                activeBranch = branch;
+            }
+        }
+
         String path = file.getCanonicalPath().replace(mapping.getBaseDirectoryPath()+"/", "");
 
         return new Context(
@@ -61,6 +75,7 @@ public class ContextFactory
             mapping.getProject(),
             mapping.getRepository(),
             path,
+            activeBranch,
             caretPosition
         );
     }

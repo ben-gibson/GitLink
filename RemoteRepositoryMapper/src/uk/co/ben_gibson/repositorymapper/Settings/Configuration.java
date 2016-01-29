@@ -261,7 +261,7 @@ public class Configuration implements Configurable
 
         try {
             URL host = new URL(this.hostTextField.getText().trim());
-            this.settings.setHost(host.getHost());
+            this.settings.setHost(host.toString());
         } catch (MalformedURLException e) {
             throw new ConfigurationException("Invalid host");
         }
