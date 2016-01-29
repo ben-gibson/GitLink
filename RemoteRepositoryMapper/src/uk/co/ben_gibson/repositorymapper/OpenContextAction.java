@@ -1,28 +1,24 @@
 package uk.co.ben_gibson.repositorymapper;
 
+import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.Settings.Mapping;
+import uk.co.ben_gibson.repositorymapper.Context.ContextFactory;
 import uk.co.ben_gibson.repositorymapper.Settings.Settings;
 import com.intellij.ide.browsers.BrowserLauncher;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.net.URI;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.net.URL;
 
 /**
- * Opens the current context in a remote repository based on the mapped settings.
+ * Opens the current context in a remote repository.
  */
 public class OpenContextAction extends AnAction
 {
@@ -30,145 +26,64 @@ public class OpenContextAction extends AnAction
     /**
      * Open the current context.
      *
-     * @param e The event.
+     * @param event The event.
      */
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(AnActionEvent event)
+    {
 
-        Context context = this.getContext(e);
+        Project project = event.getProject();
 
-        if (context == null) {
+        if (project == null) {
             return;
         }
 
-        Settings settings = this.getProjectSettings(e.getProject());
-        String STASH_URL = "123";
+        Settings settings = this.getProjectSettings(project);
 
-        String url = String.format(STASH_URL, context.getProject(), context.getRepository(), context.getPath());
-
-        if (context.getCaretLinePosition() != null) {
-            url += "#" + context.getCaretLinePosition().toString();
-        }
-
-        // Copy the url to clipboard
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(new StringSelection(url), null);
-
-        // Open in the default browser
         try {
-            BrowserLauncher.getInstance().browse(new URI(url));
-        } catch (URISyntaxException e1) {
-            e1.printStackTrace();
+
+            Context context = this.getContextFactory().create(project, settings);
+
+            UrlFactoryProvider urlFactoryProvider = ServiceManager.getService(UrlFactoryProvider.class);
+
+            URL url = urlFactoryProvider.getUrlFactoryForProvider(settings.getRepositoryProvider()).getUrlFromContext(context);
+
+            if (settings.copyToClipboard()) {
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(new StringSelection(url.toString()), null);
+            }
+
+            // Open in the default browser
+            BrowserLauncher.getInstance().browse(url.toURI());
+
+        } catch (MalformedURLException | URISyntaxException e) {
+            e.printStackTrace();
         }
-    }
-
-
-    /**
-     * Get the context that should be opened (project, repo, path, line number, branch).
-     *
-     * @param e The event.
-     *
-     * @return uk.co.ben_gibson.repositorymapper.Context
-     */
-    private Context getContext(AnActionEvent e)
-    {
-
-        final Project project = e.getProject();
-
-        if (project == null) {
-            return null;
-        }
-
-        Editor editor = e.getData(LangDataKeys.EDITOR);
-
-        Integer caretPosition = null;
-
-        if (editor != null) {
-            caretPosition = editor.getCaretModel().getLogicalPosition().line;
-        }
-
-        VirtualFile file = this.getCurrentFileOrNull(project);
-
-        if (file == null || file.getCanonicalPath() == null) {
-            return null;
-        }
-
-        Settings settings = this.getProjectSettings(e.getProject());
-
-        Mapping mapping = this.getMappingForFileOrNull(settings.getMappingList(), file);
-
-        if (mapping == null) {
-            return null;
-        }
-
-        String path = file.getCanonicalPath().replace(mapping.getBaseDirectoryPath()+"/", "");
-
-
-        return new Context(mapping.getProject(), mapping.getRepository(), path, caretPosition);
-    }
-
-
-    /**
-     * Get the current file or return null if there isn't one.
-     *
-     * @param project The project from which we want to get the current/active file.
-     *
-     * @return VirtualFile
-     */
-    private VirtualFile getCurrentFileOrNull(Project project)
-    {
-        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-
-        if (editor == null) {
-            return null;
-        }
-
-        final Document document = editor.getDocument();
-
-        return FileDocumentManager.getInstance().getFile(document);
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public void update(AnActionEvent e)
+    @Override
+    public void update(AnActionEvent event)
     {
-        if (e.getProject() == null) {
+        if (event.getProject() == null) {
             return;
         }
 
-        VirtualFile file = this.getCurrentFileOrNull(e.getProject());
+        Settings settings = this.getProjectSettings(event.getProject());
 
-        Settings settings = this.getProjectSettings(e.getProject());
+        Context context = null;
 
-        Boolean supported = (file != null && (this.getMappingForFileOrNull(settings.getMappingList(), file) != null));
-
-        e.getPresentation().setEnabledAndVisible(supported);
-    }
-
-
-    /**
-     * Get the mapping for the file or null if one doesn't exist.
-     *
-     * @param mappings The list of mappings that have been setup.
-     * @param file     The file to get a mapping for.
-     *
-     * @return Mapping
-     */
-    private Mapping getMappingForFileOrNull(ArrayList<Mapping> mappings, VirtualFile file)
-    {
-        if (file.getCanonicalPath() == null) {
-            return null;
+        try {
+            context = this.getContextFactory().create(event.getProject(), settings);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
 
-        for(Mapping mapping : mappings){
-            if (file.getCanonicalPath().startsWith(mapping.getBaseDirectoryPath(), 0)) {
-                return mapping;
-            }
-        }
-
-        return null;
+        event.getPresentation().setVisible((context != null));
     }
+
 
 
     /**
@@ -178,8 +93,21 @@ public class OpenContextAction extends AnAction
      *
      * @return Settings
      */
-    private Settings getProjectSettings(Project project)
+    @NotNull
+    private Settings getProjectSettings(@NotNull Project project)
     {
         return ServiceManager.getService(project, Settings.class);
+    }
+
+
+    /**
+     * Get the context factory.
+     *
+     * @return ContextFactory
+     */
+    @NotNull
+    private ContextFactory getContextFactory()
+    {
+        return ServiceManager.getService(ContextFactory.class);
     }
 }

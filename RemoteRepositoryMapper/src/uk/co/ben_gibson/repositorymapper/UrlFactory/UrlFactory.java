@@ -1,0 +1,24 @@
+package uk.co.ben_gibson.repositorymapper.UrlFactory;
+
+import org.jetbrains.annotations.NotNull;
+import uk.co.ben_gibson.repositorymapper.Context.Context;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+/**
+ * An interface for creating URLs to a remote repository from a context.
+ */
+public interface UrlFactory
+{
+
+    /**
+     * Get a remote repository from a context.
+     *
+     * @param context  The context to create a URL from.
+     *
+     * @return Url
+     */
+    @NotNull
+    public URL getUrlFromContext(Context context) throws MalformedURLException;
+}

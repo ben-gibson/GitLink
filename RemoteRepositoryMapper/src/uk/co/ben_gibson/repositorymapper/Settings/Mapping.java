@@ -1,23 +1,27 @@
 package uk.co.ben_gibson.repositorymapper.Settings;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a local => remote mapping.
  */
 public class Mapping
 {
+
     private String baseDirectoryPath;
+
     private String project;
+
     private String repository;
 
     /**
-     * Constructor.
-     *
-     * Vital for persistence!
+     * Support serialisation.
      */
     public Mapping()
     {
 
     }
+
 
     /**
      * Constructor.
@@ -26,7 +30,7 @@ public class Mapping
      * @param project            The Stash project that relates to the base directory.
      * @param repository         The Stash repository that relates to the base directory.
      */
-    public Mapping(String baseDirectoryPath, String project, String repository)
+    public Mapping(@NotNull String baseDirectoryPath, @NotNull String project, @NotNull String repository)
     {
         this.baseDirectoryPath = baseDirectoryPath;
         this.project           = project;
@@ -37,10 +41,9 @@ public class Mapping
     /**
      * Get the base directory path.
      *
-     * Vital for persistence!
-     *
      * @return String
      */
+    @NotNull
     public String getBaseDirectoryPath()
     {
         return this.baseDirectoryPath;
@@ -50,10 +53,9 @@ public class Mapping
     /**
      * Get the project.
      *
-     * Vital for persistence!
-     *
      * @return String
      */
+    @NotNull
     public String getProject()
     {
         return this.project;
@@ -63,10 +65,9 @@ public class Mapping
     /**
      * Get the repository.
      *
-     * Vital for persistence!
-     *
      * @return String
      */
+    @NotNull
     public String getRepository()
     {
         return this.repository;
@@ -80,7 +81,7 @@ public class Mapping
      *
      * @param baseDirectoryPath The base directory path.
      */
-    public void setBaseDirectoryPath(String baseDirectoryPath)
+    public void setBaseDirectoryPath(@NotNull String baseDirectoryPath)
     {
         this.baseDirectoryPath = baseDirectoryPath;
     }
@@ -93,7 +94,7 @@ public class Mapping
      *
      * @param project The project.
      */
-    public void setProject(String project)
+    public void setProject(@NotNull String project)
     {
         this.project = project;
     }
@@ -106,7 +107,7 @@ public class Mapping
      *
      * @param repository The repository.
      */
-    public void setRepository(String repository)
+    public void setRepository(@NotNull String repository)
     {
         this.repository = repository;
     }

@@ -5,6 +5,11 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import org.jetbrains.annotations.NotNull;
+import uk.co.ben_gibson.repositorymapper.RepositoryProvider.RepositoryProvider;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 @State(name = "SaveActionSettings",
@@ -12,30 +17,27 @@ import java.util.ArrayList;
 )
 
 /**
- * Persists the settings state.
+ * Persistent settings.
  */
 public class Settings implements PersistentStateComponent<Settings>
 {
 
-    public enum RepositoryProvider
-    {
-        BIT_BUCKET,
-        GIT_HUB,
-    }
-
     private ArrayList<Mapping> mappingList = new ArrayList<>();
 
-    private Host host;
+    @NotNull
+    private String host = "https://github.com";
 
+    @NotNull
     private Boolean copyToClipboard = false;
 
-    private RepositoryProvider repositoryProvider;
+    @NotNull
+    private RepositoryProvider repositoryProvider = RepositoryProvider.GIT_HUB;
 
 
     /**
      * {@inheritDoc}
      *
-     * Maintains its own state so returns itself.
+     * Self maintaining state.
      */
     public Settings getState()
     {
@@ -46,10 +48,9 @@ public class Settings implements PersistentStateComponent<Settings>
     /**
      * Get mapping collection.
      *
-     * Vital for persistence!
-     *
      * @return ArrayList<Mapping>
      */
+    @NotNull
     public ArrayList<Mapping> getMappingList()
     {
         return this.mappingList;
@@ -59,24 +60,38 @@ public class Settings implements PersistentStateComponent<Settings>
     /**
      * Set mapping collection.
      *
-     * Vital for persistence!
-     *
      * @param mappingList The mapping list to set.
      */
-    public void setMappingList(ArrayList<Mapping> mappingList)
+    public void setMappingList(@NotNull ArrayList<Mapping> mappingList)
     {
         this.mappingList = mappingList;
     }
 
 
     /**
-     * Get the host.
+     * Get host.
      *
-     * @return Host
+     *
+     * @return String
      */
-    public Host getHost()
+    @NotNull
+    public String getHost()
     {
-        return host;
+        return this.host;
+    }
+
+
+    /**
+     * Get host.
+     *
+     * I would prefer host to be a URL by default however I don't think it's possible for these serializable classes?
+     *
+     * @return URL
+     */
+    @NotNull
+    public URL getHostAsURL() throws MalformedURLException
+    {
+        return new URL(this.host);
     }
 
 
@@ -85,7 +100,7 @@ public class Settings implements PersistentStateComponent<Settings>
      *
      * host  The host.
      */
-    public void setHost(Host host)
+    public void setHost(@NotNull String host)
     {
         this.host = host;
     }
@@ -96,7 +111,8 @@ public class Settings implements PersistentStateComponent<Settings>
      *
      * @return Boolean
      */
-    public Boolean shouldCopyToClipboard()
+    @NotNull
+    public Boolean copyToClipboard()
     {
         return copyToClipboard;
     }
@@ -107,7 +123,7 @@ public class Settings implements PersistentStateComponent<Settings>
      *
      * copyToClipboard  Should we copy the result to the clipboard?
      */
-    public void setCopyToClipboard(Boolean copyToClipboard)
+    public void setCopyToClipboard(@NotNull Boolean copyToClipboard)
     {
         this.copyToClipboard = copyToClipboard;
     }
@@ -118,6 +134,7 @@ public class Settings implements PersistentStateComponent<Settings>
      *
      * @return RepositoryProvider
      */
+    @NotNull
     public RepositoryProvider getRepositoryProvider()
     {
         return repositoryProvider;
@@ -129,7 +146,7 @@ public class Settings implements PersistentStateComponent<Settings>
      *
      * @param repositoryProvider  The repository provider.
      */
-    public void setRepositoryProvider(RepositoryProvider repositoryProvider)
+    public void setRepositoryProvider(@NotNull RepositoryProvider repositoryProvider)
     {
         this.repositoryProvider = repositoryProvider;
     }
