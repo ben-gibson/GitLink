@@ -2,11 +2,7 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 
 /**
  * Creates a URL in the format expected by the remote repository provider Stash.
@@ -19,7 +15,7 @@ public class StashUrlFactory implements UrlFactory
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException {
+    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException {
 
         URL remoteHost = context.getRemoteHost();
 
@@ -36,25 +32,21 @@ public class StashUrlFactory implements UrlFactory
         String project    = parts[1];
         String repository = parts[2];
 
-        String fullPath = String.format(
+        String path = String.format(
             "/projects/%s/repos/%s/browse%s",
             project,
             repository,
             context.getPath()
         );
 
-        try {
-            fullPath += "?at=" + URLEncoder.encode("refs/heads/" + context.getBranch(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new UrlFactoryException("Failed to encode path, unsupported encoding");
-        }
+        String query = "at=refs/heads/" + context.getBranch();
+
+        String fragment = null;
 
         if (context.getCaretLinePosition() != null) {
-            fullPath += "#" + context.getCaretLinePosition().toString();
+            fragment = context.getCaretLinePosition().toString();
         }
 
-        fullPath = remoteHost.getProtocol() + "://" + remoteHost.getHost() + fullPath;
-
-        return new URL(fullPath);
+        return new URI(remoteHost.getProtocol(), remoteHost.getHost(), path, query, fragment).toURL();
     }
 }
