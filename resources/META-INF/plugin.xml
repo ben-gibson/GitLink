@@ -5,7 +5,7 @@
   <vendor email="ben.gibson.2011@gmail.com" url="h">https://github.com/ben-gibson/remote-repository-mapper</vendor>
 
   <description><![CDATA[
-       Opens a local file under git version control in its remote origin repository.
+      Opens a local file under git version control in its remote origin repository.
       After installing select your remote repository provider in Settings -> Other Settings -> Remote Repository Mapper (Defaults to GitHub).
       The current checked out branch is used unless it does not track a remote branch, in which case it defaults to using master.
 
@@ -15,7 +15,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <ul>
+    <ul>
       <li>Fixed clipboard preference not persisting</li>
       <li>Updated default shortcut</li>
       <li>Moved action to file menu</li>
@@ -25,7 +25,7 @@
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="141.0"/>
+  <idea-version since-build="139.0"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->

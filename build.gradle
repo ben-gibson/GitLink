@@ -1,0 +1,25 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.0.39"
+}
+
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+}
+
+intellij {
+    version '14.1.4'
+    plugins 'git4idea'
+    pluginName 'RemoteRepositoryMapper'
+    updateSinceUntilBuild false
+    sameSinceUntilBuild false
+}
