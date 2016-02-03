@@ -5,16 +5,27 @@
   <vendor email="ben.gibson.2011@gmail.com" url="h">https://github.com/ben-gibson/remote-repository-mapper</vendor>
 
   <description><![CDATA[
-      Opens a file in a remove repository.
+      Opens a local file under git version control in its remote origin repository.
+      After installing select your remote repository provider in Settings -> Other Settings -> Remote Repository Mapper (Defaults to GitHub).
+      The current checked out branch is used unless it does not track a remote branch, in which case it defaults to using master.
+
+      To use, open a file that is under git version control in the editor and select File->Open in remote repository.
+
+      The resulting link can be copied to the clipboard depending on your preference in the settings.
     ]]></description>
 
   <change-notes><![CDATA[
-      Nothing to see here.
+    <ul>
+      <li>Fixed clipboard preference not persisting</li>
+      <li>Updated default shortcut</li>
+      <li>Moved action to file menu</li>
+      <li>Action appears as disabled when unusable in the current context instead of being hidden</li>
+     </ul>
     ]]>
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="141.0"/>
+  <idea-version since-build="139.0"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
@@ -34,8 +45,8 @@
   <actions>
     <action id="RemoteRepositoryMapper.uk.co.ben_gibson.repositorymapper.OpenContextAction" class="uk.co.ben_gibson.repositorymapper.OpenContextAction" text="Open in remote repository"
             description="Open the current context in the remote repository">
-      <add-to-group group-id="ViewMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt I"/>
+      <add-to-group group-id="FileMenu" anchor="last"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
     </action>
   </actions>
 
