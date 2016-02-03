@@ -3,6 +3,7 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -19,5 +20,5 @@ public interface UrlFactory
      * @return Url
      */
     @NotNull
-    URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException;
+    URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException;
 }
