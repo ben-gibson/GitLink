@@ -1,10 +1,17 @@
 package uk.co.ben_gibson.repositorymapper;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.sun.istack.internal.Nullable;
+import git4idea.GitBranch;
+import git4idea.GitUtil;
+import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.Context.ContextProvider;
 import uk.co.ben_gibson.repositorymapper.Context.ContextProviderException;
 import uk.co.ben_gibson.repositorymapper.Settings.Settings;
 import com.intellij.ide.browsers.BrowserLauncher;
@@ -77,7 +84,7 @@ public class OpenContextAction extends AnAction
 
         if (event.getProject() != null) {
             try {
-                context = this.getContextProvider().getContext(event.getProject());
+                context = this.getContext(event.getProject());
             } catch (MalformedURLException | ContextProviderException e) {
                 Logger.getInstance(OpenContextAction.class).info(e);
             }
@@ -88,13 +95,41 @@ public class OpenContextAction extends AnAction
 
 
     /**
-     * Get the context factory.
+     * Get the current context.
      *
-     * @return ContextProvider
+     * @return Context
      */
-    @NotNull
-    private ContextProvider getContextProvider()
+    @Nullable
+    public Context getContext(@NotNull Project project)
     {
-        return ServiceManager.getService(ContextProvider.class);
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+
+        if (editor == null) {
+            return null;
+        }
+
+        VirtualFile file =  FileDocumentManager.getInstance().getFile(editor.getDocument());
+
+        if (file == null) {
+            return null;
+        }
+
+        GitRepository repository = GitUtil.getRepositoryManager(project).getRepositoryForFile(file);
+
+        if (repository == null) {
+            return null;
+        }
+
+        GitBranch branch;
+
+        if (repository.getCurrentBranch() != null && repository.getCurrentBranch().findTrackedBranch(repository) != null) {
+            branch = repository.getCurrentBranch();
+        } else {
+            branch = repository.getBranches().findBranchByName("master");
+        }
+
+        Integer caretPosition = editor.getCaretModel().getLogicalPosition().line + 1;
+
+        return new Context(repository, branch, file, caretPosition);
     }
 }

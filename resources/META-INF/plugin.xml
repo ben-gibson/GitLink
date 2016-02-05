@@ -36,7 +36,6 @@
   <depends>Git4Idea</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.Context.ContextProvider"/>
     <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider"/>
     <projectService serviceImplementation="uk.co.ben_gibson.repositorymapper.Settings.Settings"/>
     <projectConfigurable instance="uk.co.ben_gibson.repositorymapper.Settings.Configuration"/>

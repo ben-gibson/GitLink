@@ -1,22 +1,22 @@
 package uk.co.ben_gibson.repositorymapper.Context;
 
+import com.intellij.openapi.vfs.VirtualFile;
+import git4idea.GitBranch;
+import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.net.URL;
 
 /**
  * Represents some context that can be opened in a remote repository.
  */
 public class Context
 {
-    private static final String DEFAULT_BRANCH = "master";
-
     @NotNull
-    private URL remoteHost;
+    private GitRepository repository;
     @NotNull
-    private String path;
+    private GitBranch branch;
     @NotNull
-    private String branch;
+    private VirtualFile file;
     @Nullable
     private Integer caretLinePosition;
 
@@ -24,34 +24,34 @@ public class Context
     /**
      * Constructor.
      *
-     * @param remoteHost        The remote host.
-     * @param path              The path of the file we want to view.
+     * @param repository        The repository.
      * @param branch            The branch if we have one.
+     * @param file              The file.
      * @param caretLinePosition The line position of the caret.
      */
     public Context(
-        @NotNull URL remoteHost,
-        @NotNull String path,
-        @Nullable String branch,
+        @NotNull GitRepository repository,
+        @NotNull GitBranch branch,
+        @NotNull VirtualFile file,
         @Nullable Integer caretLinePosition
     )
     {
-        this.remoteHost        = remoteHost;
-        this.path              = path;
-        this.branch            = (branch != null) ? branch : DEFAULT_BRANCH;
+        this.repository        = repository;
+        this.branch            = branch;
+        this.file              = file;
         this.caretLinePosition = caretLinePosition;
     }
 
 
     /**
-     * Get the path.
+     * Get the file.
      *
-     * @return String
+     * @return VirtualFile
      */
     @NotNull
-    public String getPath()
+    public VirtualFile getFile()
     {
-        return this.path;
+        return this.file;
     }
 
 
@@ -68,23 +68,25 @@ public class Context
 
 
     /**
-     * Get the remote host.
+     * Get the repository.
      *
-     * @return URL
+     * @return GitRepository
      */
     @NotNull
-    public URL getRemoteHost() {
-        return remoteHost;
+    public GitRepository getRepository()
+    {
+        return repository;
     }
 
 
     /**
      * Get the branch.
      *
-     * @return String
+     * @return GitBranch
      */
     @NotNull
-    public String getBranch() {
+    public GitBranch getBranch()
+    {
         return this.branch;
     }
 }

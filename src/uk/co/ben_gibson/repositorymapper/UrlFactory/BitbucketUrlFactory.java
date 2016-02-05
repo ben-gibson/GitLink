@@ -5,10 +5,11 @@ import uk.co.ben_gibson.repositorymapper.Context.Context;
 import java.net.*;
 
 /**
- * Creates a URL in the format expected by the remote repository provider GitHub.
+ * Creates a URL in the format expected by the remote repository provider Bitbucket.
  */
-public class GitHubUrlFactory extends AbstractUrlFactory
+public class BitbucketUrlFactory extends AbstractUrlFactory
 {
+
 
     /**
      * {@inheritDoc}
@@ -17,14 +18,15 @@ public class GitHubUrlFactory extends AbstractUrlFactory
     @NotNull
     public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException {
 
+
         URL remoteHost = context.getRemoteHost();
 
-        String path = context.getRemoteHost().getPath() + "/blob/" + context.getBranch() + context.getPath();
+        String path = context.getRemoteHost().getPath() + "/src/" + context.getPath();
 
         String fragment = null;
 
         if (context.getCaretLinePosition() != null) {
-            fragment = "L" + context.getCaretLinePosition().toString();
+            fragment = "FILENAME" + "-" + context.getCaretLinePosition().toString();
         }
 
         return new URI(remoteHost.getProtocol(), remoteHost.getHost(), path, fragment).toURL();
