@@ -21,7 +21,14 @@ public class BitbucketUrlFactory extends AbstractUrlFactory
 
         URL remoteUrl = this.getRemoteUrlFromRepository(context.getRepository());
 
-        String path = remoteUrl.getPath() + "/src/" + context.getRepositoryRelativeFilePath();
+        String path = String.format(
+            "%s/src/%s%s",
+            remoteUrl.getPath(),
+            context.getRepository().getCurrentRevision(),
+            context.getRepositoryRelativeFilePath()
+        );
+
+        String query = "at=" + this.getBranch(context.getRepository()).getName();
 
         String fragment = null;
 
@@ -29,6 +36,6 @@ public class BitbucketUrlFactory extends AbstractUrlFactory
             fragment = context.getFile().getName() + "-" + context.getCaretLinePosition().toString();
         }
 
-        return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, fragment).toURL();
+        return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, query, fragment).toURL();
     }
 }
