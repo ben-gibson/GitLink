@@ -1,22 +1,20 @@
 package uk.co.ben_gibson.repositorymapper.Context;
 
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.net.URL;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.BranchNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 
 /**
  * Represents some context that can be opened in a remote repository.
  */
 public class Context
 {
-    private static final String DEFAULT_BRANCH = "master";
-
     @NotNull
-    private URL remoteHost;
+    private Repository repository;
     @NotNull
-    private String path;
-    @NotNull
-    private String branch;
+    private VirtualFile file;
     @Nullable
     private Integer caretLinePosition;
 
@@ -24,34 +22,31 @@ public class Context
     /**
      * Constructor.
      *
-     * @param remoteHost        The remote host.
-     * @param path              The path of the file we want to view.
-     * @param branch            The branch if we have one.
+     * @param repository        The repository.
+     * @param file              The file.
      * @param caretLinePosition The line position of the caret.
      */
     public Context(
-        @NotNull URL remoteHost,
-        @NotNull String path,
-        @Nullable String branch,
+        @NotNull Repository repository,
+        @NotNull VirtualFile file,
         @Nullable Integer caretLinePosition
     )
     {
-        this.remoteHost        = remoteHost;
-        this.path              = path;
-        this.branch            = (branch != null) ? branch : DEFAULT_BRANCH;
+        this.repository        = repository;
+        this.file              = file;
         this.caretLinePosition = caretLinePosition;
     }
 
 
     /**
-     * Get the path.
+     * Get the file.
      *
-     * @return String
+     * @return VirtualFile
      */
     @NotNull
-    public String getPath()
+    public VirtualFile getFile()
     {
-        return this.path;
+        return this.file;
     }
 
 
@@ -68,13 +63,14 @@ public class Context
 
 
     /**
-     * Get the remote host.
+     * Get the repository.
      *
-     * @return URL
+     * @return Repository
      */
     @NotNull
-    public URL getRemoteHost() {
-        return remoteHost;
+    public Repository getRepository()
+    {
+        return repository;
     }
 
 
@@ -84,7 +80,24 @@ public class Context
      * @return String
      */
     @NotNull
-    public String getBranch() {
-        return this.branch;
+    public String getBranch()
+    {
+        try {
+            return this.repository.getActiveBranchWithRemote();
+        } catch (BranchNotFoundException e) {
+            return this.repository.getDefaultBranch();
+        }
+    }
+
+
+    /**
+     * Get the file path relative to the repository.
+     *
+     * @return String
+     */
+    @NotNull
+    public String getRepositoryRelativeFilePath()
+    {
+        return this.file.getPath().substring(this.repository.getRoot().getPath().length());
     }
 }

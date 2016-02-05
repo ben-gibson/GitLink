@@ -5,6 +5,14 @@ plugins {
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile "org.mockito:mockito-core:1.+"
+}
+
 sourceSets {
     main {
         java {
@@ -12,6 +20,12 @@ sourceSets {
         }
         resources {
             srcDir 'resources'
+        }
+    }
+
+    test {
+        java {
+            srcDir 'tests/'
         }
     }
 }

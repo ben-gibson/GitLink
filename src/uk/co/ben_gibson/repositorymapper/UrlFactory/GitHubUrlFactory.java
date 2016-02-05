@@ -2,33 +2,32 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
+import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+
 import java.io.UnsupportedEncodingException;
 import java.net.*;
 
 /**
  * Creates a URL in the format expected by the remote repository provider GitHub.
  */
-public class GitHubUrlFactory implements UrlFactory
-{
+public class GitHubUrlFactory implements UrlFactory {
 
     /**
      * {@inheritDoc}
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException {
+    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException, UnsupportedEncodingException
+    {
 
-        String branch;
+        URL remoteUrl = context.getRepository().getOriginUrl();
 
-        try {
-            branch = URLEncoder.encode(context.getBranch(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new UrlFactoryException("Failed to encode path, unsupported encoding");
-        }
-
-        URL remoteHost = context.getRemoteHost();
-
-        String path = context.getRemoteHost().getPath() + "/blob/" + branch + context.getPath();
+        String path = String.format(
+            "%s/blob/%s%s",
+            remoteUrl.getPath(),
+            URLEncoder.encode(context.getBranch(), "UTF-8"),
+            context.getRepositoryRelativeFilePath()
+        );
 
         String fragment = null;
 
@@ -36,6 +35,6 @@ public class GitHubUrlFactory implements UrlFactory
             fragment = "L" + context.getCaretLinePosition().toString();
         }
 
-        return new URI(remoteHost.getProtocol(), remoteHost.getHost(), path, fragment).toURL();
+        return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, fragment).toURL();
     }
 }

@@ -6,7 +6,9 @@ package uk.co.ben_gibson.repositorymapper.RepositoryProvider;
 public enum RepositoryProvider
 {
     STASH("Stash"),
-    GIT_HUB("GitHub");
+    GIT_HUB("GitHub"),
+    BITBUCKET("Bitbucket"),
+    GITLAB("GitLab");
 
     private final String name;
 

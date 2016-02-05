@@ -32,6 +32,10 @@ Development
 Execute an IntelliJ IDEA instance with the plugin you're developing installed
 
     $ ./gradlew runIdea
+    
+Run the tests
+    
+     $ ./gradlew test
 
 Usage
 -------------------------------------------------------------------------------

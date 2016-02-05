@@ -1,24 +1,26 @@
 package uk.co.ben_gibson.repositorymapper;
 
-import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.VirtualFile;
+import git4idea.GitUtil;
+import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.Context.ContextProvider;
-import uk.co.ben_gibson.repositorymapper.Context.ContextProviderException;
+import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 import uk.co.ben_gibson.repositorymapper.Settings.Settings;
 import com.intellij.ide.browsers.BrowserLauncher;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryException;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -44,7 +46,7 @@ public class OpenContextAction extends AnAction
 
         try {
 
-            Context context = this.getContextProvider().getContext(project);
+            Context context = this.getContext(project);
 
             if (context == null) {
                 return;
@@ -61,7 +63,7 @@ public class OpenContextAction extends AnAction
 
             BrowserLauncher.getInstance().browse(url.toURI());
 
-        } catch (MalformedURLException | URISyntaxException | ContextProviderException | UrlFactoryException e) {
+        } catch (Exception e) {
             Messages.showErrorDialog(event.getProject(), e.getMessage(), "Error");
         }
     }
@@ -73,28 +75,42 @@ public class OpenContextAction extends AnAction
     @Override
     public void update(AnActionEvent event)
     {
-        Context context = null;
+        Project project = event.getProject();
 
-        if (event.getProject() != null) {
-            try {
-                context = this.getContextProvider().getContext(event.getProject());
-            } catch (MalformedURLException | ContextProviderException e) {
-                Logger.getInstance(OpenContextAction.class).info(e);
-            }
-        }
+        Boolean enabled = (project != null) && (this.getContext(project) != null);
 
-        event.getPresentation().setEnabled((context != null));
+        event.getPresentation().setEnabled(enabled);
     }
 
 
     /**
-     * Get the context factory.
+     * Get the current context.
      *
-     * @return ContextProvider
+     * @return Context
      */
-    @NotNull
-    private ContextProvider getContextProvider()
+    @Nullable
+    public Context getContext(@NotNull Project project)
     {
-        return ServiceManager.getService(ContextProvider.class);
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+
+        if (editor == null) {
+            return null;
+        }
+
+        VirtualFile file =  FileDocumentManager.getInstance().getFile(editor.getDocument());
+
+        if (file == null) {
+            return null;
+        }
+
+        GitRepository repository = GitUtil.getRepositoryManager(project).getRepositoryForFile(file);
+
+        if (repository == null) {
+            return null;
+        }
+
+        Integer caretPosition = editor.getCaretModel().getLogicalPosition().line + 1;
+
+        return new Context(new Repository(repository, "master"), file, caretPosition);
     }
 }
