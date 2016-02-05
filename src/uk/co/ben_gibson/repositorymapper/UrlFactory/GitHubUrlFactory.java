@@ -15,11 +15,17 @@ public class GitHubUrlFactory extends AbstractUrlFactory
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException {
+    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException
+    {
 
-        URL remoteHost = context.getRemoteHost();
+        URL remoteUrl = this.getRemoteUrlFromRepository(context.getRepository());
 
-        String path = context.getRemoteHost().getPath() + "/blob/" + context.getBranch() + context.getPath();
+        String path = String.format(
+            "%s/blob/%s%s",
+            remoteUrl.getPath(),
+            this.getBranch(context.getRepository()).getName(),
+             context.getRepositoryRelativeFilePath()
+        );
 
         String fragment = null;
 
@@ -27,6 +33,6 @@ public class GitHubUrlFactory extends AbstractUrlFactory
             fragment = "L" + context.getCaretLinePosition().toString();
         }
 
-        return new URI(remoteHost.getProtocol(), remoteHost.getHost(), path, fragment).toURL();
+        return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, fragment).toURL();
     }
 }

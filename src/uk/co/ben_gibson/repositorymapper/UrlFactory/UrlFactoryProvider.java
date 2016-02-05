@@ -19,10 +19,12 @@ public class UrlFactoryProvider
     @NotNull
     public UrlFactory getUrlFactoryForProvider(RepositoryProvider provider) throws UrlFactoryException
     {
-        if (provider == RepositoryProvider.GIT_HUB) {
+        if (provider == RepositoryProvider.GIT_HUB || provider == RepositoryProvider.GITLAB) {
             return new GitHubUrlFactory();
         } else if (provider == RepositoryProvider.STASH) {
             return new StashUrlFactory();
+        }  else if (provider == RepositoryProvider.BITBUCKET) {
+            return new BitbucketUrlFactory();
         }
 
         throw UrlFactoryException.unsupportedProvider(provider);

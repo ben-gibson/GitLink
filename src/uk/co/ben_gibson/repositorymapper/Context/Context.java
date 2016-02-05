@@ -1,7 +1,6 @@
 package uk.co.ben_gibson.repositorymapper.Context;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import git4idea.GitBranch;
 import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,8 +13,6 @@ public class Context
     @NotNull
     private GitRepository repository;
     @NotNull
-    private GitBranch branch;
-    @NotNull
     private VirtualFile file;
     @Nullable
     private Integer caretLinePosition;
@@ -25,19 +22,16 @@ public class Context
      * Constructor.
      *
      * @param repository        The repository.
-     * @param branch            The branch if we have one.
      * @param file              The file.
      * @param caretLinePosition The line position of the caret.
      */
     public Context(
         @NotNull GitRepository repository,
-        @NotNull GitBranch branch,
         @NotNull VirtualFile file,
         @Nullable Integer caretLinePosition
     )
     {
         this.repository        = repository;
-        this.branch            = branch;
         this.file              = file;
         this.caretLinePosition = caretLinePosition;
     }
@@ -80,13 +74,12 @@ public class Context
 
 
     /**
-     * Get the branch.
+     * Get the file path relative to the repository.
      *
-     * @return GitBranch
+     * @return String
      */
-    @NotNull
-    public GitBranch getBranch()
+    public String getRepositoryRelativeFilePath()
     {
-        return this.branch;
+        return this.file.getPath().substring(this.repository.getRoot().getPath().length());
     }
 }

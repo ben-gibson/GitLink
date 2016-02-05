@@ -15,31 +15,28 @@ public class StashUrlFactory extends AbstractUrlFactory
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException {
+    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException
+    {
 
-        URL remoteHost = this.getRemoteHostFromRepository(context.getRepository());
+        URL remoteUrl = this.getRemoteUrlFromRepository(context.getRepository());
 
-        String[] parts = remoteHost.getPath().split("/", 3);
+        String[] parts = remoteUrl.getPath().split("/", 3);
 
         if (parts.length < 3) {
-            throw new MalformedURLException("Could not find project and repo from path " + context.getRemoteHost().getPath());
+            throw UrlFactoryException.projectAndRepoNameNotFoundInUrl(remoteUrl);
         }
 
-        /**
-         * If we find more providers need this level of flexibility we could split host, project and repo
-         * within Context but for now this will do.
-         */
-        String project    = parts[1];
-        String repository = parts[2];
+        String projectName    = parts[1];
+        String repositoryName = parts[2];
 
         String path = String.format(
             "/projects/%s/repos/%s/browse%s",
-            project,
-            repository,
-            this.getRepositoryRelativeFilePath(context.getRepository(), context.getFile())
+            projectName,
+            repositoryName,
+            context.getRepositoryRelativeFilePath()
         );
 
-        String query = "at=refs/heads/" + context.getBranch().getName();
+        String query = "at=refs/heads/" + this.getBranch(context.getRepository()).getName();
 
         String fragment = null;
 
@@ -47,6 +44,6 @@ public class StashUrlFactory extends AbstractUrlFactory
             fragment = context.getCaretLinePosition().toString();
         }
 
-        return new URI(remoteHost.getProtocol(), remoteHost.getHost(), path, query, fragment).toURL();
+        return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, query, fragment).toURL();
     }
 }

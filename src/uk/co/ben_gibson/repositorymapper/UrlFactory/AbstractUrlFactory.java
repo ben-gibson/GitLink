@@ -1,11 +1,10 @@
 package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import git4idea.GitBranch;
 import git4idea.repo.GitRemote;
 import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
-import uk.co.ben_gibson.repositorymapper.Context.ContextProviderException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -15,15 +14,27 @@ import java.net.URL;
 abstract public class AbstractUrlFactory implements UrlFactory
 {
 
-
     /**
-     * Get the file path relative to the repository.
+     * Get the current branch or default to master.
      *
-     * @return String
+     * @return GitBranch
      */
-    protected String getRepositoryRelativeFilePath(@NotNull GitRepository repository, @NotNull VirtualFile file)
-    {
-        return file.getPath().substring(repository.getRoot().getPath().length());
+    @NotNull
+    protected GitBranch getBranch(@NotNull GitRepository repository) throws UrlFactoryException {
+
+        GitBranch branch;
+
+        if (repository.getCurrentBranch() != null && repository.getCurrentBranch().findTrackedBranch(repository) != null) {
+            branch = repository.getCurrentBranch();
+        } else {
+            branch = repository.getBranches().findBranchByName("master");
+        }
+
+        if (branch == null) {
+            throw UrlFactoryException.remoteBranchNotFound();
+        }
+
+        return branch;
     }
 
 
@@ -33,7 +44,7 @@ abstract public class AbstractUrlFactory implements UrlFactory
      * @return URL
      */
     @NotNull
-    protected URL getRemoteHostFromRepository(@NotNull GitRepository repository) throws MalformedURLException, ContextProviderException
+    protected URL getRemoteUrlFromRepository(@NotNull GitRepository repository) throws MalformedURLException, UrlFactoryException
     {
         GitRemote origin = null;
 
@@ -44,11 +55,11 @@ abstract public class AbstractUrlFactory implements UrlFactory
         }
 
         if (origin == null) {
-            throw ContextProviderException.originRemoteNotFound(repository);
+            throw UrlFactoryException.originRemoteNotFound(repository);
         }
 
         if (origin.getFirstUrl() == null) {
-            throw ContextProviderException.urlNotFoundForRemote(origin);
+            throw UrlFactoryException.urlNotFoundForRemote(origin);
         }
 
         String url = StringUtil.trimEnd(origin.getFirstUrl(), ".git");

@@ -16,19 +16,19 @@ public class BitbucketUrlFactory extends AbstractUrlFactory
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException {
+    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException
+    {
 
+        URL remoteUrl = this.getRemoteUrlFromRepository(context.getRepository());
 
-        URL remoteHost = context.getRemoteHost();
-
-        String path = context.getRemoteHost().getPath() + "/src/" + context.getPath();
+        String path = remoteUrl.getPath() + "/src/" + context.getRepositoryRelativeFilePath();
 
         String fragment = null;
 
         if (context.getCaretLinePosition() != null) {
-            fragment = "FILENAME" + "-" + context.getCaretLinePosition().toString();
+            fragment = context.getFile().getName() + "-" + context.getCaretLinePosition().toString();
         }
 
-        return new URI(remoteHost.getProtocol(), remoteHost.getHost(), path, fragment).toURL();
+        return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, fragment).toURL();
     }
 }
