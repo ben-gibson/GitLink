@@ -6,10 +6,11 @@
 
   <description><![CDATA[
       Opens a local file under git version control in its remote origin repository.
-      After installing select your remote repository provider in Settings -> Other Settings -> Remote Repository Mapper (Defaults to GitHub).
+      This is a really simple plugin that provides a way to quickly share some source code via a remote repsositry.
+      After installing select your remote repository provider in Settings &rarr; Other Settings &rarr; Remote Repository Mapper (Defaults to GitHub).
       The current checked out branch is used unless it does not track a remote branch, in which case it defaults to using master.
 
-      To use, open a file that is under git version control in the editor and select File->Open in remote repository.
+      To use, open a file that is under git version control in the editor and select File &rarr; Open in remote repository.
 
       The resulting link can be copied to the clipboard depending on your preference in the settings.
     ]]></description>
