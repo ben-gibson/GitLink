@@ -1,7 +1,9 @@
 package uk.co.ben_gibson.repositorymapper.RepositoryProvider;
 
 /**
- * Created by bengibson on 2/6/16.
+ * Tests the repository.
  */
-public class test {
+public class RepositoryTest
+{
+
 }

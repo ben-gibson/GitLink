@@ -6,18 +6,19 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.StashUrlFactory;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.BitBucketUrlFactory;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Tests the Stash Url factory.
+ * Tests the BitBucket Url factory.
  */
 @RunWith(Parameterized.class)
-public class StashUrlFactoryTest extends UsefulTestCase
+public class BitBucketUrlFactoryTest extends UsefulTestCase
 {
 
     private Context context;
@@ -30,7 +31,7 @@ public class StashUrlFactoryTest extends UsefulTestCase
      * @param expectedUrl  The expected url to be returned from the context.
      *
      */
-    public StashUrlFactoryTest(Context context, String expectedUrl)
+    public BitBucketUrlFactoryTest(Context context, String expectedUrl)
     {
         this.context     = context;
         this.expectedUrl = expectedUrl;
@@ -41,9 +42,9 @@ public class StashUrlFactoryTest extends UsefulTestCase
      * Tests the url factory creates the correct url from a given context.
      */
     @Test
-    public void testGetUrlFromContext() throws URISyntaxException, UrlFactoryException, MalformedURLException
+    public void testGetUrlFromContext() throws URISyntaxException, UrlFactoryException, MalformedURLException, UnsupportedEncodingException
     {
-        assertEquals(this.getStashUrlFactory().getUrlFromContext(this.context).toString(), this.expectedUrl);
+        assertEquals(this.expectedUrl, this.getBitBucketUrlFactory().getUrlFromContext(this.context).toString());
     }
 
 
@@ -57,16 +58,16 @@ public class StashUrlFactoryTest extends UsefulTestCase
     {
         return Arrays.asList(new Object[][] {
             {
-                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "master", "/src/Bar.java"),
-                "https://stash.example.com/projects/foo/repos/bar/browse/src/Bar.java?at=refs/heads/master"
+                ContextTestUtil.getMockedContext("https://bitbucket.org/foo/bar", "master", "/src/Bar.java"),
+                "https://bitbucket.org/foo/bar/src/HEAD/src/Bar.java?at=master"
             },
             {
-                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", 10),
-                "https://stash.example.com/projects/foo/repos/bar/browse/src/FooBar/Bar.java?at=refs/heads/foo-bar#10"
+                ContextTestUtil.getMockedContext("https://bitbucket.org/foo/bar", "foo-bar", "/src/FooBar/Bar.java", 10),
+                "https://bitbucket.org/foo/bar/src/HEAD/FooBar/Bar.java?at=foo-bar#Bar.java-10"
             },
             {
-                ContextTestUtil.getMockedContext("http://stash.example.com/foo bar/bar", "foo-bar", "/src/Foo Bar/Bar.java", 0),
-                "http://stash.example.com/projects/foo%20bar/repos/bar/browse/src/Foo%20Bar/Bar.java?at=refs/heads/foo-bar#0"
+                ContextTestUtil.getMockedContext("https://bitbucket.org/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", 0),
+                "https://bitbucket.com/foo%20bar/bar/src/HEAD/Foo%20Bar/Bar.java?at=misc%2ffoo-bar#Bar.java-0"
             },
         });
     }
@@ -75,10 +76,10 @@ public class StashUrlFactoryTest extends UsefulTestCase
     /**
      * Get the url factory.
      *
-     * @return StashUrlFactory
+     * @return BitBucketUrlFactory
      */
-    public StashUrlFactory getStashUrlFactory()
+    public BitBucketUrlFactory getBitBucketUrlFactory()
     {
-        return new StashUrlFactory();
+        return new BitBucketUrlFactory();
     }
 }

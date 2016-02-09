@@ -7,8 +7,7 @@ import java.net.*;
 /**
  * Creates a URL in the format expected by the remote repository provider Stash.
  */
-public class StashUrlFactory extends AbstractUrlFactory
-{
+public class StashUrlFactory implements UrlFactory {
 
     /**
      * {@inheritDoc}
@@ -18,7 +17,7 @@ public class StashUrlFactory extends AbstractUrlFactory
     public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException
     {
 
-        URL remoteUrl = this.getRemoteUrlFromRepository(context.getRepository());
+        URL remoteUrl = context.getRepository().getRemoteUrlFromRepository();
 
         String[] parts = remoteUrl.getPath().split("/", 3);
 
@@ -36,7 +35,7 @@ public class StashUrlFactory extends AbstractUrlFactory
             context.getRepositoryRelativeFilePath()
         );
 
-        String query = "at=refs/heads/" + this.getBranch(context.getRepository()).getName();
+        String query = "at=refs/heads/" + context.getRepository().getActiveBranchNameWithRemote();
 
         String fragment = null;
 

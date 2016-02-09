@@ -1,9 +1,9 @@
 package uk.co.ben_gibson.repositorymapper.Context;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.co.ben_gibson.repositorymapper.Repository;
 
 /**
  * Represents some context that can be opened in a remote repository.
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public class Context
 {
     @NotNull
-    private GitRepository repository;
+    private Repository repository;
     @NotNull
     private VirtualFile file;
     @Nullable
@@ -26,7 +26,7 @@ public class Context
      * @param caretLinePosition The line position of the caret.
      */
     public Context(
-        @NotNull GitRepository repository,
+        @NotNull Repository repository,
         @NotNull VirtualFile file,
         @Nullable Integer caretLinePosition
     )
@@ -64,10 +64,10 @@ public class Context
     /**
      * Get the repository.
      *
-     * @return GitRepository
+     * @return Repository
      */
     @NotNull
-    public GitRepository getRepository()
+    public Repository getRepository()
     {
         return repository;
     }

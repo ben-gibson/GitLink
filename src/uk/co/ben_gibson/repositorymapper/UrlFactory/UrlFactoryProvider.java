@@ -24,7 +24,7 @@ public class UrlFactoryProvider
         } else if (provider == RepositoryProvider.STASH) {
             return new StashUrlFactory();
         }  else if (provider == RepositoryProvider.BITBUCKET) {
-            return new BitbucketUrlFactory();
+            return new BitBucketUrlFactory();
         }
 
         throw UrlFactoryException.unsupportedProvider(provider);

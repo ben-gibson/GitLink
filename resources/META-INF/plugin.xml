@@ -6,21 +6,26 @@
 
   <description><![CDATA[
       Opens a local file under git version control in its remote origin repository.
-      This is a really simple plugin that provides a way to quickly share some source code via a remote repsositry.
-      After installing select your remote repository provider in Settings &rarr; Other Settings &rarr; Remote Repository Mapper (Defaults to GitHub).
-      The current checked out branch is used unless it does not track a remote branch, in which case it defaults to using master.
-
-      To use, open a file that is under git version control in the editor and select File &rarr; Open in remote repository.
-
+      <br />
+      <br />
+      This is a really simple plugin that provides a way to quickly share some source code via its remote repository.
+      <br />
+      <br />
+      After installing select your remote repository provider in Settings &rarr; Other Settings &rarr; Remote Repository Mapper
+      (currently supports GitHub, Stash, BitBucket, GitLab).
+      <br />
+      <br />
+      To use, open a file that is under git version control in the editor and select File &rarr; Open in remote repository
+      (the current checked out branch is used unless it does not track a remote branch, in which case it defaults to using master).
+      <br />
+      <br />
       The resulting link can be copied to the clipboard depending on your preference in the settings.
     ]]></description>
 
   <change-notes><![CDATA[
     <ul>
-      <li>Fixed clipboard preference not persisting</li>
-      <li>Updated default shortcut</li>
-      <li>Moved action to file menu</li>
-      <li>Action appears as disabled when unusable in the current context instead of being hidden</li>
+      <li>Added BitBucket as a provider</li>
+      <li>Added GitLab as a provider</li>
      </ul>
     ]]>
   </change-notes>

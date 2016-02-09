@@ -7,8 +7,7 @@ import java.net.*;
 /**
  * Creates a URL in the format expected by the remote repository provider Bitbucket.
  */
-public class BitbucketUrlFactory extends AbstractUrlFactory
-{
+public class BitBucketUrlFactory implements UrlFactory {
 
 
     /**
@@ -19,16 +18,16 @@ public class BitbucketUrlFactory extends AbstractUrlFactory
     public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException
     {
 
-        URL remoteUrl = this.getRemoteUrlFromRepository(context.getRepository());
+        URL remoteUrl = context.getRepository().getRemoteUrlFromRepository();
 
         String path = String.format(
             "%s/src/%s%s",
             remoteUrl.getPath(),
-            context.getRepository().getCurrentRevision(),
+            "HEAD",
             context.getRepositoryRelativeFilePath()
         );
 
-        String query = "at=" + this.getBranch(context.getRepository()).getName();
+        String query = "at=" + context.getRepository().getActiveBranchNameWithRemote();
 
         String fragment = null;
 

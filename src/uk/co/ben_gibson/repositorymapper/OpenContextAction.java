@@ -1,6 +1,5 @@
 package uk.co.ben_gibson.repositorymapper;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -22,6 +21,7 @@ import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -66,7 +66,7 @@ public class OpenContextAction extends AnAction
 
             BrowserLauncher.getInstance().browse(url.toURI());
 
-        } catch (MalformedURLException | URISyntaxException | UrlFactoryException e) {
+        } catch (MalformedURLException | URISyntaxException | UrlFactoryException | UnsupportedEncodingException e) {
             Messages.showErrorDialog(event.getProject(), e.getMessage(), "Error");
         }
     }
@@ -80,27 +80,7 @@ public class OpenContextAction extends AnAction
     {
         Project project = event.getProject();
 
-        if (project == null) {
-            return;
-        }
-
-        Boolean enabled = false;
-
-        Settings settings = ServiceManager.getService(project, Settings.class);
-
-        try {
-
-            Context context = this.getContext(project);
-
-            if (context != null) {
-                UrlFactoryProvider urlFactoryProvider = ServiceManager.getService(UrlFactoryProvider.class);
-                urlFactoryProvider.getUrlFactoryForProvider(settings.getRepositoryProvider()).getUrlFromContext(context);
-                enabled = true;
-            }
-
-        } catch (MalformedURLException | URISyntaxException | UrlFactoryException e) {
-            Logger.getInstance(OpenContextAction.class).info(e);
-        }
+        Boolean enabled = (project != null) && (this.getContext(project) != null);
 
         event.getPresentation().setEnabled(enabled);
     }
@@ -134,6 +114,6 @@ public class OpenContextAction extends AnAction
 
         Integer caretPosition = editor.getCaretModel().getLogicalPosition().line + 1;
 
-        return new Context(repository, file, caretPosition);
+        return new Context(new Repository(repository), file, caretPosition);
     }
 }
