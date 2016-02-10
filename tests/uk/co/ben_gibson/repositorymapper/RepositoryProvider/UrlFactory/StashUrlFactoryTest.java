@@ -58,15 +58,15 @@ public class StashUrlFactoryTest extends UsefulTestCase
     {
         return Arrays.asList(new Object[][] {
             {
-                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "master", "/src/Bar.java"),
+                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "master", "/src/Bar.java", "Bar.java", null),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Bar.java?at=refs/heads/master"
             },
             {
-                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", 10),
+                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", "Bar.java", 10),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/FooBar/Bar.java?at=refs/heads/foo-bar#10"
             },
             {
-                ContextTestUtil.getMockedContext("http://stash.example.com/foo bar/bar", "foo-bar", "/src/Foo Bar/Bar.java", 0),
+                ContextTestUtil.getMockedContext("http://stash.example.com/foo bar/bar", "foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", 0),
                 "http://stash.example.com/projects/foo%20bar/repos/bar/browse/src/Foo%20Bar/Bar.java?at=refs/heads/foo-bar#0"
             },
         });

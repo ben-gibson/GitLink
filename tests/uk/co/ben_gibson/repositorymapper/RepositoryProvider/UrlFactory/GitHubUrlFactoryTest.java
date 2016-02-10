@@ -58,15 +58,15 @@ public class GitHubUrlFactoryTest extends UsefulTestCase
     {
         return Arrays.asList(new Object[][] {
             {
-                ContextTestUtil.getMockedContext("https://github.com/foo/bar", "master", "/src/Bar.java"),
+                ContextTestUtil.getMockedContext("https://github.com/foo/bar", "master", "/src/Bar.java", "Bar.java", null),
                 "https://github.com/foo/bar/blob/master/src/Bar.java"
             },
             {
-                ContextTestUtil.getMockedContext("https://github.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", 10),
+                ContextTestUtil.getMockedContext("https://github.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", "Bar.java", 10),
                 "https://github.com/foo/bar/blob/foo-bar/src/FooBar/Bar.java#L10"
             },
             {
-                ContextTestUtil.getMockedContext("https://github.com/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", 0),
+                ContextTestUtil.getMockedContext("https://github.com/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", 0),
                 "https://github.com/foo%20bar/bar/blob/misc%252Ffoo-bar/src/Foo%20Bar/Bar.java#L0"
             },
         });

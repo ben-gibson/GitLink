@@ -20,7 +20,7 @@ public class GitHubUrlFactory implements UrlFactory {
     public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException, UnsupportedEncodingException
     {
 
-        URL remoteUrl = context.getRepository().getRemoteOriginUrl();
+        URL remoteUrl = context.getRepository().getOriginUrl();
 
         String path = String.format(
             "%s/blob/%s%s",

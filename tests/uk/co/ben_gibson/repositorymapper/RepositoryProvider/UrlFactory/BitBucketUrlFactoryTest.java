@@ -59,16 +59,16 @@ public class BitBucketUrlFactoryTest extends UsefulTestCase
     {
         return Arrays.asList(new Object[][] {
             {
-                ContextTestUtil.getMockedContext("https://bitbucket.org/foo/bar", "master", "/src/Bar.java"),
+                ContextTestUtil.getMockedContext("https://bitbucket.org/foo/bar", "master", "/src/Bar.java", "Bar.java", null),
                 "https://bitbucket.org/foo/bar/src/HEAD/src/Bar.java?at=master"
             },
             {
-                ContextTestUtil.getMockedContext("https://bitbucket.org/foo/bar", "foo-bar", "/src/FooBar/Bar.java", 10),
-                "https://bitbucket.org/foo/bar/src/HEAD/FooBar/Bar.java?at=foo-bar#Bar.java-10"
+                ContextTestUtil.getMockedContext("https://bitbucket.org/foo/bar", "foo-bar", "/src/FooBar/Bar.java", "Bar.java", 10),
+                "https://bitbucket.org/foo/bar/src/HEAD/src/FooBar/Bar.java?at=foo-bar#Bar.java-10"
             },
             {
-                ContextTestUtil.getMockedContext("https://bitbucket.org/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", 0),
-                "https://bitbucket.com/foo%20bar/bar/src/HEAD/Foo%20Bar/Bar.java?at=misc%2ffoo-bar#Bar.java-0"
+                ContextTestUtil.getMockedContext("https://bitbucket.org/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", 0),
+                "https://bitbucket.org/foo%20bar/bar/src/HEAD/src/Foo%20Bar/Bar.java?at=misc/foo-bar#Bar.java-0"
             },
         });
     }

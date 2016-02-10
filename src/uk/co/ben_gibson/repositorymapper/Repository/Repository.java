@@ -62,14 +62,13 @@ public class Repository
 
 
     /**
-     * Get a clean url from the repositories remote origin.
+     * Get a url from a remote.
      *
      * @return URL
      */
-    @NotNull
-    public URL getRemoteOriginUrl() throws MalformedURLException, RemoteNotFoundException
+    public URL getOriginUrl() throws RemoteNotFoundException, MalformedURLException
     {
-        GitRemote origin = this.getOriginRemote();
+        Remote origin = this.getOrigin();
 
         if (origin.getFirstUrl() == null) {
             throw RemoteNotFoundException.urlNotFoundForRemote(origin);
@@ -95,15 +94,15 @@ public class Repository
     /**
      * Fetch the remote origin
      *
-     * @return GitRemote
+     * @return Remote
      */
     @NotNull
-    public GitRemote getOriginRemote() throws RemoteNotFoundException
+    public Remote getOrigin() throws RemoteNotFoundException
     {
 
         for (GitRemote remote : this.repository.getRemotes()) {
             if (remote.getName().equals("origin")) {
-                return remote;
+                return new Remote(remote);
             }
         }
 

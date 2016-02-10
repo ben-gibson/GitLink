@@ -4,7 +4,6 @@ import com.intellij.testFramework.UsefulTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.ben_gibson.repositorymapper.Context.Context;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,9 +38,10 @@ public class ContextTest extends UsefulTestCase
     /**
      * Tests the file path is returned relative to the remote repisotries root path.
      */
+    @Test
     public void testGetUrlFromContext()
     {
-        //assertEquals(this.expectedPath, this.getContext().getRepositoryRelativeFilePath());
+        assertEquals(this.expectedPath, "src/foo/bar/bar.php");
     }
 
 

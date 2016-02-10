@@ -1,8 +1,8 @@
 package uk.co.ben_gibson.repositorymapper.Repository.Exception;
 
-import git4idea.repo.GitRemote;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+import uk.co.ben_gibson.repositorymapper.Repository.Remote;
 
 /**
  * Thrown when a remote could not be found.
@@ -39,7 +39,7 @@ public class RemoteNotFoundException extends RemoteRepositoryMapperException
      * @return RemoteNotFoundException
      */
     @NotNull
-    public static RemoteNotFoundException urlNotFoundForRemote(@NotNull GitRemote remote)
+    public static RemoteNotFoundException urlNotFoundForRemote(@NotNull Remote remote)
     {
         return new RemoteNotFoundException("Could not find the url associated with remote " + remote.getName());
     }
