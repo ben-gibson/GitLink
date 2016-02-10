@@ -3,7 +3,8 @@ package uk.co.ben_gibson.repositorymapper.Context;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.co.ben_gibson.repositorymapper.Repository;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.BranchNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 
 /**
  * Represents some context that can be opened in a remote repository.
@@ -74,10 +75,27 @@ public class Context
 
 
     /**
+     * Get the branch.
+     *
+     * @return String
+     */
+    @NotNull
+    public String getBranch()
+    {
+        try {
+            return this.repository.getActiveBranchWithRemote();
+        } catch (BranchNotFoundException e) {
+            return this.repository.getDefaultBranch();
+        }
+    }
+
+
+    /**
      * Get the file path relative to the repository.
      *
      * @return String
      */
+    @NotNull
     public String getRepositoryRelativeFilePath()
     {
         return this.file.getPath().substring(this.repository.getRoot().getPath().length());

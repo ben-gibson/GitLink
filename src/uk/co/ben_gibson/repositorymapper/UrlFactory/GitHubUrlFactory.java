@@ -2,6 +2,7 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
+import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.*;
@@ -16,15 +17,15 @@ public class GitHubUrlFactory implements UrlFactory {
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException, UnsupportedEncodingException
+    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException, UnsupportedEncodingException
     {
 
-        URL remoteUrl = context.getRepository().getRemoteUrlFromRepository();
+        URL remoteUrl = context.getRepository().getRemoteOriginUrl();
 
         String path = String.format(
             "%s/blob/%s%s",
             remoteUrl.getPath(),
-            URLEncoder.encode(context.getRepository().getActiveBranchNameWithRemote(), "UTF-8"),
+            URLEncoder.encode(context.getBranch(), "UTF-8"),
             context.getRepositoryRelativeFilePath()
         );
 

@@ -10,20 +10,17 @@ import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
+import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 import uk.co.ben_gibson.repositorymapper.Settings.Settings;
 import com.intellij.ide.browsers.BrowserLauncher;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryException;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -66,7 +63,7 @@ public class OpenContextAction extends AnAction
 
             BrowserLauncher.getInstance().browse(url.toURI());
 
-        } catch (MalformedURLException | URISyntaxException | UrlFactoryException | UnsupportedEncodingException e) {
+        } catch (Exception e) {
             Messages.showErrorDialog(event.getProject(), e.getMessage(), "Error");
         }
     }
@@ -114,6 +111,6 @@ public class OpenContextAction extends AnAction
 
         Integer caretPosition = editor.getCaretModel().getLogicalPosition().line + 1;
 
-        return new Context(new Repository(repository), file, caretPosition);
+        return new Context(new Repository(repository, "master"), file, caretPosition);
     }
 }

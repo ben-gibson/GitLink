@@ -5,9 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
+import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.BitBucketUrlFactory;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -42,7 +43,7 @@ public class BitBucketUrlFactoryTest extends UsefulTestCase
      * Tests the url factory creates the correct url from a given context.
      */
     @Test
-    public void testGetUrlFromContext() throws URISyntaxException, UrlFactoryException, MalformedURLException, UnsupportedEncodingException
+    public void testGetUrlFromContext() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException, RemoteRepositoryMapperException
     {
         assertEquals(this.expectedUrl, this.getBitBucketUrlFactory().getUrlFromContext(this.context).toString());
     }
@@ -54,7 +55,7 @@ public class BitBucketUrlFactoryTest extends UsefulTestCase
      * @return Collection
      */
     @Parameterized.Parameters
-    public static Collection contexts() throws MalformedURLException, UrlFactoryException
+    public static Collection contexts() throws MalformedURLException, RemoteNotFoundException
     {
         return Arrays.asList(new Object[][] {
             {

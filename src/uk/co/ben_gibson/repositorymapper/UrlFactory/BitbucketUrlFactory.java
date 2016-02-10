@@ -2,6 +2,8 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
+import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+
 import java.net.*;
 
 /**
@@ -15,10 +17,10 @@ public class BitBucketUrlFactory implements UrlFactory {
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException
+    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException
     {
 
-        URL remoteUrl = context.getRepository().getRemoteUrlFromRepository();
+        URL remoteUrl = context.getRepository().getRemoteOriginUrl();
 
         String path = String.format(
             "%s/src/%s%s",
@@ -27,7 +29,7 @@ public class BitBucketUrlFactory implements UrlFactory {
             context.getRepositoryRelativeFilePath()
         );
 
-        String query = "at=" + context.getRepository().getActiveBranchNameWithRemote();
+        String query = "at=" + context.getBranch();
 
         String fragment = null;
 

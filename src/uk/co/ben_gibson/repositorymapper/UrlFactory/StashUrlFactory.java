@@ -2,6 +2,9 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
+import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
+
 import java.net.*;
 
 /**
@@ -14,15 +17,15 @@ public class StashUrlFactory implements UrlFactory {
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException
+    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException
     {
 
-        URL remoteUrl = context.getRepository().getRemoteUrlFromRepository();
+        URL remoteUrl = context.getRepository().getRemoteOriginUrl();
 
         String[] parts = remoteUrl.getPath().split("/", 3);
 
         if (parts.length < 3) {
-            throw UrlFactoryException.projectAndRepoNameNotFoundInUrl(remoteUrl);
+            throw new ProjectNotFoundException(remoteUrl);
         }
 
         String projectName    = parts[1];
@@ -35,7 +38,7 @@ public class StashUrlFactory implements UrlFactory {
             context.getRepositoryRelativeFilePath()
         );
 
-        String query = "at=refs/heads/" + context.getRepository().getActiveBranchNameWithRemote();
+        String query = "at=refs/heads/" + context.getBranch();
 
         String fragment = null;
 

@@ -2,6 +2,7 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
+import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -22,5 +23,5 @@ public interface UrlFactory
      * @return Url
      */
     @NotNull
-    URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, UrlFactoryException, URISyntaxException, UnsupportedEncodingException;
+    URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, URISyntaxException, UnsupportedEncodingException, RemoteRepositoryMapperException;
 }
