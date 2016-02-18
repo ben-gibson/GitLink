@@ -22,7 +22,7 @@ public class BranchNotFoundException extends RemoteRepositoryMapperException
 
 
     /**
-     * Could not find active branch with a remote.
+     * Could not find active branch that tracked a remote branch.
      *
      * @return BranchNotFoundException
      */

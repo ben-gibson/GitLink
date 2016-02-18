@@ -22,19 +22,21 @@ public class RemoteNotFoundException extends RemoteRepositoryMapperException
 
 
     /**
-     * Could not find the remote 'origin'
+     * Could not find 'origin'
      *
      * @return RemoteNotFoundException
      */
     @NotNull
-    public static RemoteNotFoundException remoteOriginNotFound()
+    public static RemoteNotFoundException originNotFound()
     {
         return new RemoteNotFoundException("Could not find the remote 'origin'");
     }
 
 
     /**
-     * Could not find the url associated with the remote
+     * Could not find a url associated with the remote
+     *
+     * @param remote The remote that had no url.
      *
      * @return RemoteNotFoundException
      */

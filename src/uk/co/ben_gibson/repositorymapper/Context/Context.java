@@ -96,7 +96,7 @@ public class Context
      * @return String
      */
     @NotNull
-    public String getRepositoryRelativeFilePath()
+    public String getFilePathRelativeToRepository()
     {
         return this.file.getPath().substring(this.repository.getRoot().getPath().length());
     }

@@ -24,7 +24,7 @@ public class ContextTestUtil
     {
         Context context = mock(Context.class, RETURNS_DEEP_STUBS);
 
-        when(context.getRepositoryRelativeFilePath()).thenReturn(filePath);
+        when(context.getFilePathRelativeToRepository()).thenReturn(filePath);
         when(context.getRepository().getOriginUrl()).thenReturn(new URL(remoteURL));
         when(context.getBranch()).thenReturn(branch);
         when(context.getCaretLinePosition()).thenReturn(caretLinePosition);

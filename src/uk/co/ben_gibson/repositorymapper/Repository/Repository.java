@@ -10,19 +10,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Wraps up a GitRepository to add some behaviour.
+ * Decorates the git repository.
  */
 public class Repository
 {
 
+    @NotNull
     private GitRepository repository;
+
+    @NotNull
     private String defaultBranch;
 
 
     /**
      * Constructor.
      *
-     * @param repository    The repository.
+     * @param repository    The git repository.
      * @param defaultBranch The default branch.
      */
     public Repository(@NotNull GitRepository repository, @NotNull String defaultBranch)
@@ -33,7 +36,7 @@ public class Repository
 
 
     /**
-     * Get default branch.
+     * Get the default branch.
      *
      * @return String
      */
@@ -46,7 +49,7 @@ public class Repository
 
 
     /**
-     * Get the active branch which tracks a remote or default to master.
+     * Get the active branch if it tracks a remote branch.
      *
      * @return String
      */
@@ -54,7 +57,7 @@ public class Repository
     public String getActiveBranchWithRemote() throws BranchNotFoundException
     {
         if (this.repository.getCurrentBranch() != null && this.repository.getCurrentBranch().findTrackedBranch(this.repository) != null) {
-           return this.repository.getCurrentBranch().getName();
+            return this.repository.getCurrentBranch().getName();
         }
 
         throw BranchNotFoundException.activeBranchWithRemoteTrackingNotFound();
@@ -62,19 +65,24 @@ public class Repository
 
 
     /**
-     * Get a url from a remote.
+     * Get the canonical origin url
      *
      * @return URL
      */
     public URL getOriginUrl() throws RemoteNotFoundException, MalformedURLException
     {
-        Remote origin = this.getOrigin();
+        return this.getRemoteUrl(this.getOrigin());
+    }
 
-        if (origin.getFirstUrl() == null) {
-            throw RemoteNotFoundException.urlNotFoundForRemote(origin);
-        }
 
-        String url = StringUtil.trimEnd(origin.getFirstUrl(), ".git");
+    /**
+     * Get the canonical url from a remote.
+     *
+     * @return URL
+     */
+    public URL getRemoteUrl(Remote remote) throws MalformedURLException, RemoteNotFoundException
+    {
+        String url = StringUtil.trimEnd(remote.getFirstUrl(), ".git");
 
         url = url.replaceAll(":\\d{1,4}", ""); // remove port
 
@@ -92,21 +100,20 @@ public class Repository
 
 
     /**
-     * Fetch the remote origin
+     * Get origin.
      *
      * @return Remote
      */
     @NotNull
-    public Remote getOrigin() throws RemoteNotFoundException
+    private Remote getOrigin() throws RemoteNotFoundException
     {
-
         for (GitRemote remote : this.repository.getRemotes()) {
             if (remote.getName().equals("origin")) {
                 return new Remote(remote);
             }
         }
 
-        throw RemoteNotFoundException.remoteOriginNotFound();
+        throw RemoteNotFoundException.originNotFound();
     }
 
 

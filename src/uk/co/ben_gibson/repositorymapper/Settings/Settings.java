@@ -73,7 +73,7 @@ public class Settings implements PersistentStateComponent<Settings>
     /**
      * Set the repository provider.
      *
-     * @param repositoryProvider  The repository provider.
+     * @param repositoryProvider The repository provider.
      */
     public void setRepositoryProvider(@NotNull RepositoryProvider repositoryProvider)
     {
