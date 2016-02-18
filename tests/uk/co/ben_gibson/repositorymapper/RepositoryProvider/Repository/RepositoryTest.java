@@ -1,78 +1,86 @@
 package uk.co.ben_gibson.repositorymapper.RepositoryProvider.Repository;
 
 import com.intellij.testFramework.UsefulTestCase;
-import git4idea.repo.GitRemote;
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import git4idea.repo.GitRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Repository.Remote;
 import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 import java.net.MalformedURLException;
-import java.util.Arrays;
-import java.util.Collection;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Repository test
+ * Tests the repository.
  */
-@RunWith(Parameterized.class)
+@RunWith(DataProviderRunner.class)
 public class RepositoryTest extends UsefulTestCase
 {
 
-    private String remote;
-    private String expectedUrl;
-
-
     /**
-     * Constructor.
-     *
-     * @param remote       The remote we want a url from.
-     * @param expectedUrl  The expected url after normalisation.
-     *
-     */
-    public RepositoryTest(String remote, String expectedUrl)
-    {
-        this.remote       = remote;
-        this.expectedUrl  = expectedUrl;
-    }
-
-
-    /**
-     * Tests getting a remotes url.
+     * Tests remote url is returned in the canonical form.
      */
     @Test
-    public void testGetRemoteUrl() throws MalformedURLException, RemoteNotFoundException
+    @UseDataProvider("getRemoteUrls")
+    public void testGetRemoteUrl(Remote remote, String canonicalizedURL) throws MalformedURLException, RemoteNotFoundException
     {
-        assertEquals(this.expectedUrl, this.getRepository().getOriginUrl().toString());
+        assertEquals(canonicalizedURL, this.getRepository().getRemoteUrl(remote).toString());
     }
 
 
-
     /**
-     * Acts as a data provider.
-     *
-     * @return Collection
+     * Tests origin not found is thrown.
      */
-    @Parameterized.Parameters
-    public static Collection contexts() throws MalformedURLException
+    @Test(expected=RemoteNotFoundException.class)
+    public void testOriginNotFoundException() throws MalformedURLException, RemoteNotFoundException
     {
-        return Arrays.asList(new Object[][] {
-            {"https://github.com/ben-gibson/remote-repository-mapper.git", "https://github.com/ben-gibson/remote-repository-mapper"}
-        });
+        this.getRepository().getOriginUrl();
     }
 
 
     /**
-     * Get the repository.
+     * Acts as a data provider for remote urls.
+     *
+     * @return Object[][]
+     */
+    @DataProvider
+    public static Object[][] getRemoteUrls() throws RemoteNotFoundException
+    {
+        return new Object[][] {
+            {getMockedRemote("https://bitbucket.org/foo/bar.git"), "https://bitbucket.org/foo/bar"},
+            {getMockedRemote("ssh://git@stash.example.com:7999/foo/bar.git"), "https://stash.example.com/foo/bar"},
+            {getMockedRemote("https://github.com/foo/bar.git"), "https://github.com/foo/bar"},
+            {getMockedRemote("git@bitbucket.org:foo/bar.git"), "https://bitbucket.org/foo/bar"},
+            {getMockedRemote("https://foo@bitbucket.org/foo/bar"), "https://foo@bitbucket.org/foo/bar"},
+        };
+    }
+
+
+    /**
+     * Get repository.
      *
      * @return Repository
      */
     public Repository getRepository()
     {
-        GitRepository gitRepository = mock(GitRepository.class);
+        return new Repository(mock(GitRepository.class), "master");
+    }
 
-        return new Repository(gitRepository, "master");
+
+    /**
+     * Get mocked remote.
+     *
+     * @return Remote
+     */
+    public static Remote getMockedRemote(String firstURL) throws RemoteNotFoundException
+    {
+        Remote remote = mock(Remote.class);
+        when(remote.getFirstUrl()).thenReturn(firstURL);
+
+        return remote;
     }
 }

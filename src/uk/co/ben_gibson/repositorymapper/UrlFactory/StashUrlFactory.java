@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
-
 import java.net.*;
 
 /**
@@ -35,7 +34,7 @@ public class StashUrlFactory implements UrlFactory {
             "/projects/%s/repos/%s/browse%s",
             projectName,
             repositoryName,
-            context.getRepositoryRelativeFilePath()
+            context.getFilePathRelativeToRepository()
         );
 
         String query = "at=refs/heads/" + context.getBranch();

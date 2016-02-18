@@ -19,7 +19,6 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 
@@ -57,8 +56,7 @@ public class OpenContextAction extends AnAction
             URL url = urlFactoryProvider.getUrlFactoryForProvider(settings.getRepositoryProvider()).getUrlFromContext(context);
 
             if (settings.getCopyToClipboard()) {
-                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(new StringSelection(url.toString()), null);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(url.toString()), null);
             }
 
             BrowserLauncher.getInstance().browse(url.toURI());
@@ -111,6 +109,8 @@ public class OpenContextAction extends AnAction
 
         Integer caretPosition = editor.getCaretModel().getLogicalPosition().line + 1;
 
-        return new Context(new Repository(repository, "master"), file, caretPosition);
+        Repository repositoryWrapper = new Repository(repository, "master");
+
+        return new Context(repositoryWrapper, file, caretPosition);
     }
 }

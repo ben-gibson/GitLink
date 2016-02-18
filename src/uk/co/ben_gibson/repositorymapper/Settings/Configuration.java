@@ -4,7 +4,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.ui.EnumComboBoxModel;
-import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.openapi.components.ServiceManager;
@@ -31,7 +30,7 @@ public class Configuration implements Configurable
     /**
      * Constructor.
      *
-     * @param project  The project.
+     * @param project The project.
      */
     public Configuration(Project project)
     {
@@ -47,6 +46,7 @@ public class Configuration implements Configurable
      *
      * @return JPanel
      */
+    @Override
     public JComponent createComponent()
     {
         this.reset();
@@ -81,8 +81,9 @@ public class Configuration implements Configurable
     /**
      * {@inheritDoc}
      *
-     * This determines if the 'apply' button should be disabled.
+     * Determines if the 'apply' button should be disabled.
      */
+    @Override
     public boolean isModified()
     {
         return !Comparing.equal(this.copyToClipboardCheckBox.isSelected(), this.settings.getCopyToClipboard()) ||
@@ -95,6 +96,7 @@ public class Configuration implements Configurable
      *
      * Saves the changes.
      */
+    @Override
     public void apply() throws ConfigurationException
     {
         this.settings.setCopyToClipboard(this.copyToClipboardCheckBox.isSelected());

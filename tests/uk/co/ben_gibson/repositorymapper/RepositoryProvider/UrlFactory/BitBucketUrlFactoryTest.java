@@ -1,9 +1,11 @@
 package uk.co.ben_gibson.repositorymapper.RepositoryProvider.UrlFactory;
 
 import com.intellij.testFramework.UsefulTestCase;
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
@@ -12,52 +14,35 @@ import uk.co.ben_gibson.repositorymapper.UrlFactory.BitBucketUrlFactory;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
- * Tests the BitBucket Url factory.
+ * Tests the BitBucket url factory.
  */
-@RunWith(Parameterized.class)
+@RunWith(DataProviderRunner.class)
 public class BitBucketUrlFactoryTest extends UsefulTestCase
 {
 
-    private Context context;
-    private String expectedUrl;
 
     /**
-     * Constructor.
-     *
-     * @param context      The context.
-     * @param expectedUrl  The expected url to be returned from the context.
-     *
-     */
-    public BitBucketUrlFactoryTest(Context context, String expectedUrl)
-    {
-        this.context     = context;
-        this.expectedUrl = expectedUrl;
-    }
-
-
-    /**
-     * Tests the url factory creates the correct url from a given context.
+     * Tests the url factory creates the correct url for a context.
      */
     @Test
-    public void testGetUrlFromContext() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException, RemoteRepositoryMapperException
+    @UseDataProvider("getContexts")
+    public void testGetUrlFromContext(Context context, String expectedUrl) throws URISyntaxException, MalformedURLException, UnsupportedEncodingException, RemoteRepositoryMapperException
     {
-        assertEquals(this.expectedUrl, this.getBitBucketUrlFactory().getUrlFromContext(this.context).toString());
+        assertEquals(expectedUrl, this.getBitBucketUrlFactory().getUrlFromContext(context).toString());
     }
 
 
     /**
-     * Acts as a data provider for contexts and their expected url result.
+     * Acts as a data provider for contexts.
      *
-     * @return Collection
+     * @return Object[][]
      */
-    @Parameterized.Parameters
-    public static Collection contexts() throws MalformedURLException, RemoteNotFoundException
+    @DataProvider
+    public static Object[][] getContexts() throws MalformedURLException, RemoteNotFoundException
     {
-        return Arrays.asList(new Object[][] {
+        return new Object[][] {
             {
                 ContextTestUtil.getMockedContext("https://bitbucket.org/foo/bar", "master", "/src/Bar.java", "Bar.java", null),
                 "https://bitbucket.org/foo/bar/src/HEAD/src/Bar.java?at=master"
@@ -70,7 +55,11 @@ public class BitBucketUrlFactoryTest extends UsefulTestCase
                 ContextTestUtil.getMockedContext("https://bitbucket.org/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", 0),
                 "https://bitbucket.org/foo%20bar/bar/src/HEAD/src/Foo%20Bar/Bar.java?at=misc/foo-bar#Bar.java-0"
             },
-        });
+            {
+                ContextTestUtil.getMockedContext("https://example@bitbucket.org/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", 0),
+                "https://bitbucket.org/foo%20bar/bar/src/HEAD/src/Foo%20Bar/Bar.java?at=misc/foo-bar#Bar.java-0"
+            },
+        };
     }
 
 

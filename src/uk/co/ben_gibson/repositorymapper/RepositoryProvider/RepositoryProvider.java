@@ -1,7 +1,7 @@
 package uk.co.ben_gibson.repositorymapper.RepositoryProvider;
 
 /**
- * Represents different remote repository providers that we support.
+ * Represents different remote repository providers that are supported.
  */
 public enum RepositoryProvider
 {
@@ -16,7 +16,7 @@ public enum RepositoryProvider
     /**
      * Constructor.
      *
-     * @param name The name.
+     * @param name The repository provider name.
      */
     RepositoryProvider(String name)
     {

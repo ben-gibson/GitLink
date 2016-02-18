@@ -3,14 +3,13 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
-import java.net.*;
-
-/**
- * Creates a URL in the format expected by the remote repository provider Bitbucket.
- */
-public class BitBucketUrlFactory implements UrlFactory {
-
+public class BitBucketUrlFactory implements UrlFactory
+{
 
     /**
      * {@inheritDoc}
@@ -26,7 +25,7 @@ public class BitBucketUrlFactory implements UrlFactory {
             "%s/src/%s%s",
             remoteUrl.getPath(),
             "HEAD",
-            context.getRepositoryRelativeFilePath()
+            context.getFilePathRelativeToRepository()
         );
 
         String query = "at=" + context.getBranch();

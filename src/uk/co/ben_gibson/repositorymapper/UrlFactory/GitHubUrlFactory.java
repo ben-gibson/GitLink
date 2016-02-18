@@ -3,7 +3,6 @@ package uk.co.ben_gibson.repositorymapper.UrlFactory;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
-
 import java.io.UnsupportedEncodingException;
 import java.net.*;
 
@@ -26,7 +25,7 @@ public class GitHubUrlFactory implements UrlFactory {
             "%s/blob/%s%s",
             remoteUrl.getPath(),
             URLEncoder.encode(context.getBranch(), "UTF-8"),
-            context.getRepositoryRelativeFilePath()
+            context.getFilePathRelativeToRepository()
         );
 
         String fragment = null;
