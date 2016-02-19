@@ -4,6 +4,7 @@ import com.intellij.testFramework.UsefulTestCase;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import git4idea.commands.Git;
 import git4idea.repo.GitRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +27,9 @@ public class RepositoryTest extends UsefulTestCase
      */
     @Test
     @UseDataProvider("getRemoteUrls")
-    public void testGetRemoteUrl(Remote remote, String canonicalizedURL) throws MalformedURLException, RemoteNotFoundException
+    public void testGetRemoteUrl(Remote remote, String canonicalURL) throws MalformedURLException, RemoteNotFoundException
     {
-        assertEquals(canonicalizedURL, this.getRepository().getRemoteUrl(remote).toString());
+        assertEquals(canonicalURL, this.getRepository().getRemoteUrl(remote).toString());
     }
 
 
@@ -67,7 +68,7 @@ public class RepositoryTest extends UsefulTestCase
      */
     public Repository getRepository()
     {
-        return new Repository(mock(GitRepository.class), "master");
+        return new Repository(mock(Git.class), mock(GitRepository.class), "master");
     }
 
 

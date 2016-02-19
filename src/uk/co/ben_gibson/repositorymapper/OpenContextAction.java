@@ -3,9 +3,9 @@ package uk.co.ben_gibson.repositorymapper;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import git4idea.GitUtil;
+import git4idea.commands.GitImpl;
 import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,10 +47,6 @@ public class OpenContextAction extends AnAction
 
             Context context = this.getContext(project);
 
-            if (context == null) {
-                return;
-            }
-
             UrlFactoryProvider urlFactoryProvider = ServiceManager.getService(UrlFactoryProvider.class);
 
             URL url = urlFactoryProvider.getUrlFactoryForProvider(settings.getRepositoryProvider()).getUrlFromContext(context);
@@ -62,7 +58,7 @@ public class OpenContextAction extends AnAction
             BrowserLauncher.getInstance().browse(url.toURI());
 
         } catch (Exception e) {
-            Messages.showErrorDialog(event.getProject(), e.getMessage(), "Error");
+            ServiceManager.getService(NotificationHelper.class).errorNotification(e.getMessage());
         }
     }
 
@@ -73,11 +69,32 @@ public class OpenContextAction extends AnAction
     @Override
     public void update(AnActionEvent event)
     {
-        Project project = event.getProject();
+        event.getPresentation().setEnabled(this.shouldActionBeEnabled(event.getProject()));
+    }
 
-        Boolean enabled = (project != null) && (this.getContext(project) != null);
 
-        event.getPresentation().setEnabled(enabled);
+    /**
+     * Should the action be enabled.
+     *
+     * @param project The project.
+     *
+     * @return Boolean
+     */
+    private Boolean shouldActionBeEnabled(@Nullable Project project)
+    {
+        if (project == null) {
+            return false;
+        }
+
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+
+        if (editor == null) {
+            return false;
+        }
+
+        VirtualFile file =  FileDocumentManager.getInstance().getFile(editor.getDocument());
+
+        return file != null;
     }
 
 
@@ -86,30 +103,30 @@ public class OpenContextAction extends AnAction
      *
      * @return Context
      */
-    @Nullable
-    public Context getContext(@NotNull Project project)
-    {
+    @NotNull
+    public Context getContext(@NotNull Project project) throws IllegalArgumentException {
+
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 
         if (editor == null) {
-            return null;
+            throw new IllegalArgumentException("File editor not found for project");
         }
 
         VirtualFile file =  FileDocumentManager.getInstance().getFile(editor.getDocument());
 
         if (file == null) {
-            return null;
+            throw new IllegalArgumentException("Active file not found for project");
         }
 
         GitRepository repository = GitUtil.getRepositoryManager(project).getRepositoryForFile(file);
 
         if (repository == null) {
-            return null;
+            throw new IllegalArgumentException("Git repository not found for project, version control root has not been registered in Preferences → Version Control");
         }
 
         Integer caretPosition = editor.getCaretModel().getLogicalPosition().line + 1;
 
-        Repository repositoryWrapper = new Repository(repository, "master");
+        Repository repositoryWrapper = new Repository(new GitImpl(), repository, "master");
 
         return new Context(repositoryWrapper, file, caretPosition);
     }

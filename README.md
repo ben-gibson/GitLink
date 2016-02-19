@@ -1,5 +1,7 @@
 # Remote Repository Mapper
 
+[![Build Status](https://travis-ci.org/ben-gibson/remote-repository-mapper.svg?branch=master)](https://travis-ci.org/ben-gibson/remote-repository-mapper)
+
 A Jetbrains plugin that opens a local file under git version control in its remote origin repository.
 
 Installation
@@ -43,6 +45,10 @@ Usage
 After installing, adjust the settings to match your remote repository provider
 
       Preferences → Other Settings → Remote Repository Mapper
+      
+Make sure you have registered your projects root under the version control settings.
+
+      Preferences → Version Control (see unregistered roots)
 
 Open a file that is under git version control in the editor
 
