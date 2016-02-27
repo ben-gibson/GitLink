@@ -1,9 +1,12 @@
 package uk.co.ben_gibson.repositorymapper.Context;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.co.ben_gibson.repositorymapper.NotificationHelper;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.BranchNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 
 /**
@@ -80,10 +83,10 @@ public class Context
      * @return String
      */
     @NotNull
-    public String getBranch()
+    public String getBranch() throws RemoteNotFoundException
     {
         try {
-            return this.repository.getActiveBranchWithRemote();
+            return this.repository.getCurrentBranch();
         } catch (BranchNotFoundException e) {
             return this.repository.getDefaultBranch();
         }

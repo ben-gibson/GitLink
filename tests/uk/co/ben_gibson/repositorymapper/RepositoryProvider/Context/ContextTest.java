@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.BranchNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
@@ -45,12 +46,12 @@ public class ContextTest extends UsefulTestCase
      * Tests getting a branch.
      */
     @Test
-    public void testGetBranch() throws BranchNotFoundException
+    public void testGetBranch() throws BranchNotFoundException, RemoteNotFoundException
     {
         Repository repository = mock(Repository.class, RETURNS_DEEP_STUBS);
         VirtualFile file      = mock(VirtualFile.class, RETURNS_DEEP_STUBS);
 
-        when(repository.getActiveBranchWithRemote()).thenReturn("fix-some-issue");
+        when(repository.getCurrentBranch()).thenReturn("fix-some-issue");
 
         assertEquals("fix-some-issue", this.getContext(repository, file).getBranch());
     }
@@ -60,12 +61,12 @@ public class ContextTest extends UsefulTestCase
      * Tests the default branch is used as a fallback.
      */
     @Test
-    public void testGetBranchFallsBackToDefault() throws BranchNotFoundException
+    public void testGetBranchFallsBackToDefault() throws BranchNotFoundException, RemoteNotFoundException
     {
         Repository repository = mock(Repository.class, RETURNS_DEEP_STUBS);
         VirtualFile file      = mock(VirtualFile.class, RETURNS_DEEP_STUBS);
 
-        when(repository.getActiveBranchWithRemote()).thenThrow(BranchNotFoundException.activeBranchWithRemoteTrackingNotFound());
+        when(repository.getCurrentBranch()).thenThrow(new BranchNotFoundException(""));
         when(repository.getDefaultBranch()).thenReturn("master");
 
         assertEquals("master", this.getContext(repository, file).getBranch());

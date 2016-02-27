@@ -2,9 +2,14 @@ package uk.co.ben_gibson.repositorymapper.Repository;
 
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import git4idea.GitBranch;
+import git4idea.GitLocalBranch;
+import git4idea.commands.Git;
+import git4idea.commands.GitCommandResult;
 import git4idea.repo.*;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.BranchNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.CouldNotFetchRemoteBranchesException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,6 +26,9 @@ public class Repository
     @NotNull
     private String defaultBranch;
 
+    @NotNull
+    private Git git;
+
 
     /**
      * Constructor.
@@ -28,8 +36,9 @@ public class Repository
      * @param repository    The git repository.
      * @param defaultBranch The default branch.
      */
-    public Repository(@NotNull GitRepository repository, @NotNull String defaultBranch)
+    public Repository(@NotNull Git git, @NotNull GitRepository repository, @NotNull String defaultBranch)
     {
+        this.git           = git;
         this.repository    = repository;
         this.defaultBranch = defaultBranch;
     }
@@ -49,18 +58,56 @@ public class Repository
 
 
     /**
-     * Get the active branch if it tracks a remote branch.
+     * Get the current branch.
+     *
+     * If no current branch is found, or it does not exist in the origin repository and doesn't track a remote branch then
+     * the branch not found exception is thrown.
      *
      * @return String
      */
     @NotNull
-    public String getActiveBranchWithRemote() throws BranchNotFoundException
+    public String getCurrentBranch() throws BranchNotFoundException, RemoteNotFoundException
     {
-        if (this.repository.getCurrentBranch() != null && this.repository.getCurrentBranch().findTrackedBranch(this.repository) != null) {
-            return this.repository.getCurrentBranch().getName();
+        GitLocalBranch branch = this.repository.getCurrentBranch();
+
+        if (branch != null) {
+
+            try {
+
+                if (branch.getName().equals(this.getDefaultBranch()) || this.remoteHasBranch(this.getRawOrigin(), branch)) {
+                    return branch.getName();
+                }
+
+            } catch (CouldNotFetchRemoteBranchesException e) {
+                // if we cannot check branches in the remote repository then we fall back to checking for a remote tracking branch.
+                if (branch.findTrackedBranch(this.repository) != null) {
+                    return branch.getName();
+                }
+
+            }
         }
 
-        throw BranchNotFoundException.activeBranchWithRemoteTrackingNotFound();
+        throw new BranchNotFoundException("Could not find the current branch");
+    }
+
+
+    /**
+     * Does the branch exist on a given remote.
+     *
+     * @param remote The remote to check.
+     * @param branch The branch to check.
+     *
+     * @return Boolean
+     */
+    private Boolean remoteHasBranch(GitRemote remote, GitBranch branch) throws CouldNotFetchRemoteBranchesException
+    {
+        GitCommandResult result = this.git.lsRemote(this.repository.getProject(), this.repository.getRoot(), remote, remote.getFirstUrl(), branch.getFullName(), "--heads");
+
+        if (!result.success()) {
+            throw new CouldNotFetchRemoteBranchesException(result.getOutputAsJoinedString());
+        }
+
+        return (result.getOutput().size() == 1);
     }
 
 
@@ -107,9 +154,24 @@ public class Repository
     @NotNull
     private Remote getOrigin() throws RemoteNotFoundException
     {
+        return new Remote(this.getRawOrigin());
+    }
+
+
+    /**
+     * Get the origin Git4idea remote object.
+     *
+     * We need to be able to access the Git4Idea remote object to use the git command
+     * functionality (see remoteHasBranch()). Any remote returned from this class should
+     * return our decorated version of remote.
+     *
+     * @return GitRemote
+     */
+    private GitRemote getRawOrigin() throws RemoteNotFoundException {
+
         for (GitRemote remote : this.repository.getRemotes()) {
             if (remote.getName().equals("origin")) {
-                return new Remote(remote);
+                return remote;
             }
         }
 
