@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Remote Repository Mapper</name>
-  <version>1.3</version>
+  <version>1.4</version>
   <vendor url="h">https://github.com/ben-gibson/remote-repository-mapper</vendor>
 
   <description><![CDATA[
@@ -22,8 +22,8 @@
 
   <change-notes><![CDATA[
     <ul>
-      <li>Use ls-remote to check the current branch exists in origin and fall back to master if not</li>
-      <li>Show alert when VCS root has not been added</li>
+      <li>Use HTTP by default.</li>
+      <li>Add setting to force SSL when the HTTP protocol is not used in origin</li>
      </ul>
     ]]>
   </change-notes>

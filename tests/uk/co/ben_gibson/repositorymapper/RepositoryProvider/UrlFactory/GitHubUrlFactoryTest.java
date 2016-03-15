@@ -29,7 +29,7 @@ public class GitHubUrlFactoryTest extends UsefulTestCase
     @UseDataProvider("getContexts")
     public void testGetUrlFromContext(Context context, String expectedUrl) throws URISyntaxException, RemoteRepositoryMapperException, MalformedURLException, UnsupportedEncodingException
     {
-        assertEquals(expectedUrl, this.getGitHubUrlFactory().getUrlFromContext(context).toString());
+        assertEquals(expectedUrl, this.getGitHubUrlFactory().getUrlFromContext(context, false).toString());
     }
 
 

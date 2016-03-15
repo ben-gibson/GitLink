@@ -30,7 +30,7 @@ public class BitBucketUrlFactoryTest extends UsefulTestCase
     @UseDataProvider("getContexts")
     public void testGetUrlFromContext(Context context, String expectedUrl) throws URISyntaxException, MalformedURLException, UnsupportedEncodingException, RemoteRepositoryMapperException
     {
-        assertEquals(expectedUrl, this.getBitBucketUrlFactory().getUrlFromContext(context).toString());
+        assertEquals(expectedUrl, this.getBitBucketUrlFactory().getUrlFromContext(context, false).toString());
     }
 
 

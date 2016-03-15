@@ -97,9 +97,9 @@ public class Repository
      * @param remote The remote to check.
      * @param branch The branch to check.
      *
-     * @return Boolean
+     * @return boolean
      */
-    private Boolean remoteHasBranch(GitRemote remote, GitBranch branch) throws CouldNotFetchRemoteBranchesException
+    private boolean remoteHasBranch(@NotNull GitRemote remote, @NotNull GitBranch branch) throws CouldNotFetchRemoteBranchesException
     {
         GitCommandResult result = this.git.lsRemote(this.repository.getProject(), this.repository.getRoot(), remote, remote.getFirstUrl(), branch.getFullName(), "--heads");
 
@@ -112,22 +112,28 @@ public class Repository
 
 
     /**
-     * Get the canonical origin url
+     * Get the canonical origin url.
+     *
+     * @param forceSSL Should we enforce SSL if the HTTP protocol is not used in origin?.
+     *
      *
      * @return URL
      */
-    public URL getOriginUrl() throws RemoteNotFoundException, MalformedURLException
+    public URL getOriginUrl(boolean forceSSL) throws RemoteNotFoundException, MalformedURLException
     {
-        return this.getRemoteUrl(this.getOrigin());
+        return this.getRemoteUrl(this.getOrigin(), forceSSL);
     }
 
 
     /**
      * Get the canonical url from a remote.
      *
+     * @param remote    The remote to get the url from.
+     * @param forceSSL  Should we enforce SSL if the HTTP protocol is not used in the remote?.
+     *
      * @return URL
      */
-    public URL getRemoteUrl(Remote remote) throws MalformedURLException, RemoteNotFoundException
+    public URL getRemoteUrl(@NotNull Remote remote, boolean forceSSL) throws MalformedURLException, RemoteNotFoundException
     {
         String url = StringUtil.trimEnd(remote.getFirstUrl(), ".git");
 
@@ -140,7 +146,9 @@ public class Repository
         url = StringUtil.replace(url, "git@", "");
         url = StringUtil.replace(url, "ssh://", "");
 
-        url = "https://" + StringUtil.replace(url, ":", "/");
+        String protocol = (forceSSL) ? "https" : "http";
+
+        url = protocol + "://" + StringUtil.replace(url, ":", "/");
 
         return new URL(url);
     }

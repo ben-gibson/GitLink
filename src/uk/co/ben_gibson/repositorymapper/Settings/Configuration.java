@@ -18,10 +18,12 @@ import javax.swing.*;
 public class Configuration implements Configurable
 {
 
-    private static final String LABEL_COPY_TO_CLIPBOARD = "Copy to clipboard";
+    private static final String LABEL_COPY_TO_CLIPBOARD = "Copy link to clipboard";
+    private static final String FORCE_SSL               = "Force SSL if the HTTP protocol is not used in origin";
     private static final String LABEL_PROVIDERS         = "Providers";
 
     private JBCheckBox copyToClipboardCheckBox;
+    private JBCheckBox forceSSLCheckBox;
     private ComboBox providerComboBox;
 
     private Settings settings;
@@ -36,6 +38,7 @@ public class Configuration implements Configurable
     {
         this.settings = ServiceManager.getService(project, Settings.class);
 
+        this.forceSSLCheckBox        = new JBCheckBox(FORCE_SSL);
         this.copyToClipboardCheckBox = new JBCheckBox(LABEL_COPY_TO_CLIPBOARD);
         this.providerComboBox        = new ComboBox(new EnumComboBoxModel<>(RepositoryProvider.class), 200);
     }
@@ -63,6 +66,8 @@ public class Configuration implements Configurable
 
         this.copyToClipboardCheckBox.setMaximumSize(this.copyToClipboardCheckBox.getPreferredSize());
 
+        this.forceSSLCheckBox.setMaximumSize(this.forceSSLCheckBox.getPreferredSize());
+
         panel.add(label);
         panel.add(this.providerComboBox);
 
@@ -73,6 +78,8 @@ public class Configuration implements Configurable
         panel.add(spacing);
 
         panel.add(this.copyToClipboardCheckBox);
+
+        panel.add(this.forceSSLCheckBox);
 
         return panel;
     }
@@ -86,7 +93,8 @@ public class Configuration implements Configurable
     @Override
     public boolean isModified()
     {
-        return !Comparing.equal(this.copyToClipboardCheckBox.isSelected(), this.settings.getCopyToClipboard()) ||
+        return !Comparing.equal(this.forceSSLCheckBox.isSelected(), this.settings.getForceSSL()) ||
+            !Comparing.equal(this.copyToClipboardCheckBox.isSelected(), this.settings.getCopyToClipboard()) ||
             this.providerComboBox.getSelectedItem() != this.settings.getRepositoryProvider();
     }
 
@@ -99,6 +107,7 @@ public class Configuration implements Configurable
     @Override
     public void apply() throws ConfigurationException
     {
+        this.settings.setForceSSL(this.forceSSLCheckBox.isSelected());
         this.settings.setCopyToClipboard(this.copyToClipboardCheckBox.isSelected());
         this.settings.setRepositoryProvider((RepositoryProvider) this.providerComboBox.getSelectedItem());
     }
@@ -110,6 +119,7 @@ public class Configuration implements Configurable
     @Override
     public void reset()
     {
+        this.forceSSLCheckBox.setSelected(this.settings.getForceSSL());
         this.copyToClipboardCheckBox.setSelected(this.settings.getCopyToClipboard());
         this.providerComboBox.setSelectedItem(this.settings.getRepositoryProvider());
     }
@@ -121,8 +131,9 @@ public class Configuration implements Configurable
     @Override
     public void disposeUIResources()
     {
+        this.forceSSLCheckBox = null;
         this.copyToClipboardCheckBox = null;
-        this.providerComboBox = null;
+        this.providerComboBox        = null;
     }
 
 

@@ -17,8 +17,9 @@ import uk.co.ben_gibson.repositorymapper.RepositoryProvider.RepositoryProvider;
  */
 public class Settings implements PersistentStateComponent<Settings>
 {
-    @NotNull
-    private Boolean copyToClipboard = false;
+    private boolean copyToClipboard = false;
+
+    private boolean forceSSL = false;
 
     @NotNull
     private RepositoryProvider repositoryProvider = RepositoryProvider.GIT_HUB;
@@ -36,12 +37,33 @@ public class Settings implements PersistentStateComponent<Settings>
 
 
     /**
+     * Should we force SSL if the HTTP protocol is not used in origin.
+     *
+     * @return boolean
+     */
+    public boolean getForceSSL()
+    {
+        return this.forceSSL;
+    }
+
+
+    /**
+     * Set the force ssl preference.
+     *
+     * @param forceSSL  Should we enforce SSL if the HTTP protocol is not used in origin?
+     */
+    public void setForceSSL(boolean forceSSL)
+    {
+        this.forceSSL = forceSSL;
+    }
+
+
+    /**
      * Should the results be copied to the clipboard.
      *
-     * @return Boolean
+     * @return boolean
      */
-    @NotNull
-    public Boolean getCopyToClipboard()
+    public boolean getCopyToClipboard()
     {
         return this.copyToClipboard;
     }
@@ -50,9 +72,9 @@ public class Settings implements PersistentStateComponent<Settings>
     /**
      * Set copy to clip board preference.
      *
-     * getCopyToClipboard  Should the results be copied to the clipboard?
+     * @param copyToClipboard  Should the results be copied to the clipboard?
      */
-    public void setCopyToClipboard(@NotNull Boolean copyToClipboard)
+    public void setCopyToClipboard(boolean copyToClipboard)
     {
         this.copyToClipboard = copyToClipboard;
     }

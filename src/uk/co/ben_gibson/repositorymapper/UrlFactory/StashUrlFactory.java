@@ -16,10 +16,10 @@ public class StashUrlFactory implements UrlFactory {
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException
+    public URL getUrlFromContext(@NotNull Context context, boolean forceSSL) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException
     {
 
-        URL remoteUrl = context.getRepository().getOriginUrl();
+        URL remoteUrl = context.getRepository().getOriginUrl(forceSSL);
 
         String[] parts = remoteUrl.getPath().split("/", 3);
 
