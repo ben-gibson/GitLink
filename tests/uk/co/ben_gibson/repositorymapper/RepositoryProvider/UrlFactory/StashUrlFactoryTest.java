@@ -30,7 +30,7 @@ public class StashUrlFactoryTest extends UsefulTestCase
     @UseDataProvider("getContexts")
     public void testGetUrlFromContext(Context context, String expectedUrl) throws URISyntaxException, RemoteRepositoryMapperException, MalformedURLException
     {
-        assertEquals(expectedUrl, this.getStashUrlFactory().getUrlFromContext(context).toString());
+        assertEquals(expectedUrl, this.getStashUrlFactory().getUrlFromContext(context, false).toString());
     }
 
 
@@ -41,7 +41,7 @@ public class StashUrlFactoryTest extends UsefulTestCase
     public void testGetUrlFromContext() throws URISyntaxException, RemoteRepositoryMapperException, MalformedURLException
     {
         Context context = ContextTestUtil.getMockedContext("https://stash.example.com", "master", "", "Bar.java", null);
-        this.getStashUrlFactory().getUrlFromContext(context);
+        this.getStashUrlFactory().getUrlFromContext(context, false);
     }
 
 

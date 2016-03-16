@@ -27,9 +27,9 @@ public class RepositoryTest extends UsefulTestCase
      */
     @Test
     @UseDataProvider("getRemoteUrls")
-    public void testGetRemoteUrl(Remote remote, String canonicalURL) throws MalformedURLException, RemoteNotFoundException
+    public void testGetRemoteUrl(Remote remote, String canonicalURL, boolean forceSSL) throws MalformedURLException, RemoteNotFoundException
     {
-        assertEquals(canonicalURL, this.getRepository().getRemoteUrl(remote).toString());
+        assertEquals(canonicalURL, this.getRepository().getRemoteUrl(remote, forceSSL).toString());
     }
 
 
@@ -39,7 +39,7 @@ public class RepositoryTest extends UsefulTestCase
     @Test(expected=RemoteNotFoundException.class)
     public void testOriginNotFoundException() throws MalformedURLException, RemoteNotFoundException
     {
-        this.getRepository().getOriginUrl();
+        this.getRepository().getOriginUrl(true);
     }
 
 
@@ -52,11 +52,11 @@ public class RepositoryTest extends UsefulTestCase
     public static Object[][] getRemoteUrls() throws RemoteNotFoundException
     {
         return new Object[][] {
-            {getMockedRemote("https://bitbucket.org/foo/bar.git"), "https://bitbucket.org/foo/bar"},
-            {getMockedRemote("ssh://git@stash.example.com:7999/foo/bar.git"), "https://stash.example.com/foo/bar"},
-            {getMockedRemote("https://github.com/foo/bar.git"), "https://github.com/foo/bar"},
-            {getMockedRemote("git@bitbucket.org:foo/bar.git"), "https://bitbucket.org/foo/bar"},
-            {getMockedRemote("https://foo@bitbucket.org/foo/bar"), "https://foo@bitbucket.org/foo/bar"},
+            {getMockedRemote("https://bitbucket.org/foo/bar.git"), "https://bitbucket.org/foo/bar", false},
+            {getMockedRemote("ssh://git@stash.example.com:7999/foo/bar.git"), "https://stash.example.com/foo/bar", true},
+            {getMockedRemote("https://github.com/foo/bar.git"), "https://github.com/foo/bar", true},
+            {getMockedRemote("git@bitbucket.org:foo/bar.git"), "http://bitbucket.org/foo/bar", false},
+            {getMockedRemote("https://foo@bitbucket.org/foo/bar"), "https://foo@bitbucket.org/foo/bar", true},
         };
     }
 

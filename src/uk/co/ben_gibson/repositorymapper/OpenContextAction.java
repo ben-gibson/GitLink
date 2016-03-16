@@ -17,6 +17,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactory;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -49,7 +50,9 @@ public class OpenContextAction extends AnAction
 
             UrlFactoryProvider urlFactoryProvider = ServiceManager.getService(UrlFactoryProvider.class);
 
-            URL url = urlFactoryProvider.getUrlFactoryForProvider(settings.getRepositoryProvider()).getUrlFromContext(context);
+            UrlFactory urlFactory = urlFactoryProvider.getUrlFactoryForProvider(settings.getRepositoryProvider());
+
+            URL url = urlFactory.getUrlFromContext(context, settings.getForceSSL());
 
             if (settings.getCopyToClipboard()) {
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(url.toString()), null);
@@ -78,9 +81,9 @@ public class OpenContextAction extends AnAction
      *
      * @param project The project.
      *
-     * @return Boolean
+     * @return boolean
      */
-    private Boolean shouldActionBeEnabled(@Nullable Project project)
+    private boolean shouldActionBeEnabled(@Nullable Project project)
     {
         if (project == null) {
             return false;
