@@ -5,13 +5,13 @@ import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 
 /**
- * Decorates the git remote.
+ * Decorates a git remote.
  */
 public class Remote
 {
 
     @NotNull
-    GitRemote remote;
+    private GitRemote remote;
 
     /**
      * Constructor.
@@ -23,7 +23,6 @@ public class Remote
         this.remote = remote;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -32,7 +31,6 @@ public class Remote
     {
         return remote.getName();
     }
-
 
     /**
      * {@inheritDoc}

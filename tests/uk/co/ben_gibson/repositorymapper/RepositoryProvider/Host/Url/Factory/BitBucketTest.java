@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.RepositoryProvider.UrlFactory;
+package uk.co.ben_gibson.repositorymapper.RepositoryProvider.Host.Url.Factory;
 
 import com.intellij.testFramework.UsefulTestCase;
 import com.tngtech.java.junit.dataprovider.DataProvider;
@@ -7,10 +7,10 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.BitBucketUrlFactory;
+import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.BitBucket;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -19,7 +19,7 @@ import java.net.URISyntaxException;
  * Tests the BitBucket url factory.
  */
 @RunWith(DataProviderRunner.class)
-public class BitBucketUrlFactoryTest extends UsefulTestCase
+public class BitBucketTest extends UsefulTestCase
 {
 
 
@@ -28,9 +28,9 @@ public class BitBucketUrlFactoryTest extends UsefulTestCase
      */
     @Test
     @UseDataProvider("getContexts")
-    public void testGetUrlFromContext(Context context, String expectedUrl) throws URISyntaxException, MalformedURLException, UnsupportedEncodingException, RemoteRepositoryMapperException
+    public void testGetUrlFromContext(Context context, String expectedUrl) throws URISyntaxException, RemoteNotFoundException, MalformedURLException
     {
-        assertEquals(expectedUrl, this.getBitBucketUrlFactory().getUrlFromContext(context, false).toString());
+        assertEquals(expectedUrl, this.getBitBucketUrlFactory().createUrl(context, false).toString());
     }
 
 
@@ -66,10 +66,10 @@ public class BitBucketUrlFactoryTest extends UsefulTestCase
     /**
      * Get the url factory.
      *
-     * @return BitBucketUrlFactory
+     * @return BitBucket
      */
-    public BitBucketUrlFactory getBitBucketUrlFactory()
+    public BitBucket getBitBucketUrlFactory()
     {
-        return new BitBucketUrlFactory();
+        return new BitBucket();
     }
 }

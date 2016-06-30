@@ -1,14 +1,12 @@
 package uk.co.ben_gibson.repositorymapper.Repository.Exception;
 
 import org.jetbrains.annotations.NotNull;
-import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
 import uk.co.ben_gibson.repositorymapper.Repository.Remote;
 
 /**
  * Thrown when a remote could not be found.
  */
-public class RemoteNotFoundException extends RemoteRepositoryMapperException
-{
+public class RemoteNotFoundException extends Exception {
 
     /**
      * Constructor.
@@ -20,7 +18,6 @@ public class RemoteNotFoundException extends RemoteRepositoryMapperException
         super(message);
     }
 
-
     /**
      * Could not find 'origin'
      *
@@ -31,7 +28,6 @@ public class RemoteNotFoundException extends RemoteRepositoryMapperException
     {
         return new RemoteNotFoundException("Could not find the remote 'origin'");
     }
-
 
     /**
      * Could not find a url associated with the remote

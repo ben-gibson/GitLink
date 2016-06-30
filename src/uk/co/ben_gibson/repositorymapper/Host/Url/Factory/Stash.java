@@ -1,24 +1,23 @@
-package uk.co.ben_gibson.repositorymapper.UrlFactory;
+package uk.co.ben_gibson.repositorymapper.Host.Url.Factory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Host.Url.Exception.ProjectNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import java.net.*;
 
 /**
- * Creates a URL in the format expected by the remote repository provider Stash.
+ * Creates a URL in a format expected by Stash.
  */
-public class StashUrlFactory implements UrlFactory {
+public class Stash implements Factory
+{
 
     /**
      * {@inheritDoc}
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context, boolean forceSSL) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException
-    {
-
+    public URL createUrl(@NotNull Context context, boolean forceSSL) throws MalformedURLException, URISyntaxException, RemoteNotFoundException, ProjectNotFoundException {
         URL remoteUrl = context.getRepository().getOriginUrl(forceSSL);
 
         String[] parts = remoteUrl.getPath().split("/", 3);

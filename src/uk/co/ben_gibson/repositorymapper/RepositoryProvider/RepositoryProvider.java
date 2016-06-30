@@ -2,6 +2,8 @@ package uk.co.ben_gibson.repositorymapper.RepositoryProvider;
 
 /**
  * Represents different remote repository providers that are supported.
+ *
+ * @deprecated use uk.co.ben_gibson.repositorymapper.Host.Host instead.
  */
 public enum RepositoryProvider
 {

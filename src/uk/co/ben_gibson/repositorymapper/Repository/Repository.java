@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Decorates the git repository.
+ * Decorates a git repository.
  */
 public class Repository
 {
@@ -28,7 +28,6 @@ public class Repository
 
     @NotNull
     private Git git;
-
 
     /**
      * Constructor.
@@ -43,7 +42,6 @@ public class Repository
         this.defaultBranch = defaultBranch;
     }
 
-
     /**
      * Get the default branch.
      *
@@ -54,7 +52,6 @@ public class Repository
     {
         return this.defaultBranch;
     }
-
 
 
     /**
@@ -90,7 +87,6 @@ public class Repository
         throw new BranchNotFoundException("Could not find the current branch");
     }
 
-
     /**
      * Does the branch exist on a given remote.
      *
@@ -110,7 +106,6 @@ public class Repository
         return (result.getOutput().size() == 1);
     }
 
-
     /**
      * Get the canonical origin url.
      *
@@ -123,7 +118,6 @@ public class Repository
     {
         return this.getRemoteUrl(this.getOrigin(), forceSSL);
     }
-
 
     /**
      * Get the canonical url from a remote.
@@ -153,7 +147,6 @@ public class Repository
         return new URL(url);
     }
 
-
     /**
      * Get origin.
      *
@@ -164,7 +157,6 @@ public class Repository
     {
         return new Remote(this.getRawOrigin());
     }
-
 
     /**
      * Get the origin Git4idea remote object.
@@ -185,7 +177,6 @@ public class Repository
 
         throw RemoteNotFoundException.originNotFound();
     }
-
 
     /**
      * {@inheritDoc}

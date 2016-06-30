@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.RepositoryProvider.UrlFactory;
+package uk.co.ben_gibson.repositorymapper.RepositoryProvider.Host.Url.Factory;
 
 import com.intellij.testFramework.UsefulTestCase;
 import com.tngtech.java.junit.dataprovider.DataProvider;
@@ -7,11 +7,11 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.StashUrlFactory;
+import uk.co.ben_gibson.repositorymapper.Host.Url.Exception.ProjectNotFoundException;
+import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.Stash;
+
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
@@ -19,7 +19,7 @@ import java.net.URISyntaxException;
  * Tests the Stash url factory.
  */
 @RunWith(DataProviderRunner.class)
-public class StashUrlFactoryTest extends UsefulTestCase
+public class StashTest extends UsefulTestCase
 {
 
 
@@ -28,9 +28,9 @@ public class StashUrlFactoryTest extends UsefulTestCase
      */
     @Test
     @UseDataProvider("getContexts")
-    public void testGetUrlFromContext(Context context, String expectedUrl) throws URISyntaxException, RemoteRepositoryMapperException, MalformedURLException
+    public void testGetUrlFromContext(Context context, String expectedUrl) throws ProjectNotFoundException, MalformedURLException, RemoteNotFoundException, URISyntaxException
     {
-        assertEquals(expectedUrl, this.getStashUrlFactory().getUrlFromContext(context, false).toString());
+        assertEquals(expectedUrl, this.getStashUrlFactory().createUrl(context, false).toString());
     }
 
 
@@ -38,10 +38,10 @@ public class StashUrlFactoryTest extends UsefulTestCase
      * Tests the project not found exception is thrown when no project is included in remote url
      */
     @Test(expected=ProjectNotFoundException.class)
-    public void testGetUrlFromContext() throws URISyntaxException, RemoteRepositoryMapperException, MalformedURLException
+    public void testGetUrlFromContext() throws URISyntaxException, MalformedURLException, RemoteNotFoundException, ProjectNotFoundException
     {
         Context context = ContextTestUtil.getMockedContext("https://stash.example.com", "master", "", "Bar.java", null);
-        this.getStashUrlFactory().getUrlFromContext(context, false);
+        this.getStashUrlFactory().createUrl(context, false);
     }
 
 
@@ -73,10 +73,10 @@ public class StashUrlFactoryTest extends UsefulTestCase
     /**
      * Get the url factory.
      *
-     * @return StashUrlFactory
+     * @return Stash
      */
-    public StashUrlFactory getStashUrlFactory()
+    public Stash getStashUrlFactory()
     {
-        return new StashUrlFactory();
+        return new Stash();
     }
 }
