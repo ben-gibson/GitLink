@@ -1,16 +1,14 @@
 package uk.co.ben_gibson.repositorymapper.Context;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.co.ben_gibson.repositorymapper.NotificationHelper;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.BranchNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 
 /**
- * Represents some context that can be opened in a remote repository.
+ * A contextual representation of a version controlled file and its current state.
  */
 public class Context
 {
@@ -21,13 +19,12 @@ public class Context
     @Nullable
     private Integer caretLinePosition;
 
-
     /**
      * Constructor.
      *
-     * @param repository        The repository.
+     * @param repository        The repository the file belongs to.
      * @param file              The file.
-     * @param caretLinePosition The line position of the caret.
+     * @param caretLinePosition The line number.
      */
     public Context(
         @NotNull Repository repository,
@@ -40,7 +37,6 @@ public class Context
         this.caretLinePosition = caretLinePosition;
     }
 
-
     /**
      * Get the file.
      *
@@ -52,9 +48,8 @@ public class Context
         return this.file;
     }
 
-
     /**
-     * Get the caret line position.
+     * Get the line number
      *
      * @return Integer
      */
@@ -63,7 +58,6 @@ public class Context
     {
         return this.caretLinePosition;
     }
-
 
     /**
      * Get the repository.
@@ -75,7 +69,6 @@ public class Context
     {
         return repository;
     }
-
 
     /**
      * Get the branch.
@@ -91,7 +84,6 @@ public class Context
             return this.repository.getDefaultBranch();
         }
     }
-
 
     /**
      * Get the file path relative to the repository.

@@ -21,6 +21,7 @@ Clone this repository:
 
 Build the plugin zip file:
 
+    $ chmod +x ./gradlew
     $ ./gradlew buildPlugin
 
 Install the plugin from `./build/distributions/RemoteRepositoryMapper.zip`:
@@ -33,11 +34,13 @@ Development
 
 Execute an IntelliJ IDEA instance with the plugin you're developing installed
 
+    $ chmod +x ./gradlew
     $ ./gradlew runIdea
     
 Run the tests
-    
-     $ ./gradlew test
+
+    $ chmod +x ./gradlew
+    $ ./gradlew test
 
 Usage
 -------------------------------------------------------------------------------
@@ -52,7 +55,7 @@ Make sure you have registered your projects root under the version control setti
 
 Open a file that is under git version control in the editor
 
-      File → Open in remote repository
+      View → Open in Git host
 
 The current checked out branch is used unless it does not track a remote branch, in which case it defaults to using master.
 The resulting link can be copied to the clipboard depending on your settings.

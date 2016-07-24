@@ -1,14 +1,17 @@
-package uk.co.ben_gibson.repositorymapper.UrlFactory;
+package uk.co.ben_gibson.repositorymapper.Host.Url.Factory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class BitBucketUrlFactory implements UrlFactory
+/**
+ * Creates a URL in a format expected by BitBucket.
+ */
+public class BitBucket implements Factory
 {
 
     /**
@@ -16,8 +19,7 @@ public class BitBucketUrlFactory implements UrlFactory
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context, boolean forceSSL) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException
-    {
+    public URL createUrl(@NotNull Context context, boolean forceSSL) throws MalformedURLException, URISyntaxException, RemoteNotFoundException {
 
         URL remoteUrl = context.getRepository().getOriginUrl(forceSSL);
 

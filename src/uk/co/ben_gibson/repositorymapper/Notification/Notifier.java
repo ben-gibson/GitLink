@@ -1,19 +1,20 @@
-package uk.co.ben_gibson.repositorymapper;
+package uk.co.ben_gibson.repositorymapper.Notification;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Helper for sending notifications.
+ * Responsible for sending system notifications.
  */
-public class NotificationHelper
+public class Notifier
 {
 
     /**
      * Error notification.
      */
-    public void errorNotification(String message)
+    public static void errorNotification(@NotNull String message)
     {
         Notification notification = new Notification(
             "RequiredPlugins",

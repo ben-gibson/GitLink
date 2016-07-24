@@ -1,29 +1,33 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Remote Repository Mapper</name>
-  <version>1.4</version>
+  <version>1.5.0</version>
   <vendor url="h">https://github.com/ben-gibson/remote-repository-mapper</vendor>
 
   <description><![CDATA[
-      This is a really simple plugin that provides a convenient shortcut to open a git version controlled file
-      in its origin repository. This can be useful if you need to share the code with someone or
-      just get quick access to it in the remote repository.
+      This is a really simple plugin that provides a convenient shortcut to open a Git version controlled file
+      in its origin host. This can be useful if you need to share the code with someone or
+      just get quick access to it in the remote host.
       <br />
       <br />
-      After installing select your remote repository provider in Settings &rarr; Other Settings &rarr; Remote Repository Mapper
+      After installing select your remote host in Settings &rarr; Other Settings &rarr; Remote Repository Mapper
       (currently supports GitHub, Stash, BitBucket, GitLab). Make sure you have registered your project's root under the version control settings.
       Preferences → Version Control (see unregistered roots)
       <br />
       <br />
-      To use, open a file that is under git version control in the editor and select File &rarr; Open in remote repository.
-      Note that the current branch is used unless it does not exist in origin or does not track a
-      remote branch in which case it defaults to master.
+      To use, open a file that is under Git version control in the editor and select View &rarr; Open in Git host. You can
+      also access this action through the <i>Select target</i> menu under Navigate &rarr; Select in.
+      <br />
+      <br />
+      Note: The current branch is used unless it does not exist in your remote host in which case it defaults to the
+      master branch.
     ]]></description>
 
   <change-notes><![CDATA[
     <ul>
-      <li>Use HTTP by default.</li>
-      <li>Add setting to force SSL when the HTTP protocol is not used in origin</li>
+      <li>Moved menu item under View and renamed it to Open in Git host.</li>
+      <li>Added menu item to the <i>Select target</i> menu.</li>
+      <li>Other minor usability tweaks and improvements</li>
      </ul>
     ]]>
   </change-notes>
@@ -40,16 +44,16 @@
   <depends>Git4Idea</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider"/>
-    <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.NotificationHelper"/>
+    <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.Handler"/>
     <projectService serviceImplementation="uk.co.ben_gibson.repositorymapper.Settings.Settings"/>
     <projectConfigurable instance="uk.co.ben_gibson.repositorymapper.Settings.Configuration"/>
+    <selectInTarget implementation="uk.co.ben_gibson.repositorymapper.Target"/>
   </extensions>
 
   <actions>
-    <action id="RemoteRepositoryMapper.uk.co.ben_gibson.repositorymapper.OpenContextAction" class="uk.co.ben_gibson.repositorymapper.OpenContextAction" text="Open in remote repository"
-            description="Open the current context in the remote repository">
-      <add-to-group group-id="FileMenu" anchor="last"/>
+    <action id="RemoteRepositoryMapper.uk.co.ben_gibson.repositorymapper.Action" class="uk.co.ben_gibson.repositorymapper.Action" text="Open in Git host"
+            description="Opens a version controlled file in its Git host">
+      <add-to-group group-id="ViewMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
     </action>
   </actions>

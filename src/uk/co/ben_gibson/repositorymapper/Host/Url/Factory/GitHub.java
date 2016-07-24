@@ -1,23 +1,23 @@
-package uk.co.ben_gibson.repositorymapper.UrlFactory;
+package uk.co.ben_gibson.repositorymapper.Host.Url.Factory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
 
 /**
- * Creates a URL in the format expected by the remote repository provider GitHub.
+ * Creates a URL in a format expected by GitHub.
  */
-public class GitHubUrlFactory implements UrlFactory {
+public class GitHub implements Factory
+{
 
     /**
      * {@inheritDoc}
      */
     @Override
     @NotNull
-    public URL getUrlFromContext(@NotNull Context context, boolean forceSSL) throws MalformedURLException, URISyntaxException, RemoteRepositoryMapperException, UnsupportedEncodingException
-    {
+    public URL createUrl(@NotNull Context context, boolean forceSSL) throws URISyntaxException, UnsupportedEncodingException, MalformedURLException, RemoteNotFoundException {
 
         URL remoteUrl = context.getRepository().getOriginUrl(forceSSL);
 

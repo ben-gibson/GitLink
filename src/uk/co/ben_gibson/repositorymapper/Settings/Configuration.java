@@ -9,7 +9,7 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import uk.co.ben_gibson.repositorymapper.RepositoryProvider.RepositoryProvider;
+import uk.co.ben_gibson.repositorymapper.Host.Host;
 import javax.swing.*;
 
 /**
@@ -20,14 +20,13 @@ public class Configuration implements Configurable
 
     private static final String LABEL_COPY_TO_CLIPBOARD = "Copy link to clipboard";
     private static final String FORCE_SSL               = "Force SSL if the HTTP protocol is not used in origin";
-    private static final String LABEL_PROVIDERS         = "Providers";
+    private static final String LABEL_HOSTS             = "Hosts";
 
     private JBCheckBox copyToClipboardCheckBox;
     private JBCheckBox forceSSLCheckBox;
-    private ComboBox providerComboBox;
+    private ComboBox hostsComboBox;
 
     private Settings settings;
-
 
     /**
      * Constructor.
@@ -40,9 +39,8 @@ public class Configuration implements Configurable
 
         this.forceSSLCheckBox        = new JBCheckBox(FORCE_SSL);
         this.copyToClipboardCheckBox = new JBCheckBox(LABEL_COPY_TO_CLIPBOARD);
-        this.providerComboBox        = new ComboBox(new EnumComboBoxModel<>(RepositoryProvider.class), 200);
+        this.hostsComboBox           = new ComboBox(new EnumComboBoxModel<>(Host.class), 200);
     }
-
 
     /**
      * Creates the panel component that is rendered in the setting dialog.
@@ -58,18 +56,18 @@ public class Configuration implements Configurable
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JBLabel label = new JBLabel(LABEL_PROVIDERS);
+        JBLabel label = new JBLabel(LABEL_HOSTS);
         label.setMaximumSize(label.getPreferredSize());
 
-        this.providerComboBox.setMaximumSize(this.providerComboBox.getPreferredSize());
-        this.providerComboBox.setAlignmentX(0.0f);
+        this.hostsComboBox.setMaximumSize(this.hostsComboBox.getPreferredSize());
+        this.hostsComboBox.setAlignmentX(0.0f);
 
         this.copyToClipboardCheckBox.setMaximumSize(this.copyToClipboardCheckBox.getPreferredSize());
 
         this.forceSSLCheckBox.setMaximumSize(this.forceSSLCheckBox.getPreferredSize());
 
         panel.add(label);
-        panel.add(this.providerComboBox);
+        panel.add(this.hostsComboBox);
 
         JPanel spacing = new JPanel();
         spacing.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
@@ -84,7 +82,6 @@ public class Configuration implements Configurable
         return panel;
     }
 
-
     /**
      * {@inheritDoc}
      *
@@ -95,9 +92,8 @@ public class Configuration implements Configurable
     {
         return !Comparing.equal(this.forceSSLCheckBox.isSelected(), this.settings.getForceSSL()) ||
             !Comparing.equal(this.copyToClipboardCheckBox.isSelected(), this.settings.getCopyToClipboard()) ||
-            this.providerComboBox.getSelectedItem() != this.settings.getRepositoryProvider();
+            this.hostsComboBox.getSelectedItem() != this.settings.getHost();
     }
-
 
     /**
      * {@inheritDoc}
@@ -109,9 +105,8 @@ public class Configuration implements Configurable
     {
         this.settings.setForceSSL(this.forceSSLCheckBox.isSelected());
         this.settings.setCopyToClipboard(this.copyToClipboardCheckBox.isSelected());
-        this.settings.setRepositoryProvider((RepositoryProvider) this.providerComboBox.getSelectedItem());
+        this.settings.setHost((Host) this.hostsComboBox.getSelectedItem());
     }
-
 
     /**
      * {@inheritDoc}
@@ -121,9 +116,8 @@ public class Configuration implements Configurable
     {
         this.forceSSLCheckBox.setSelected(this.settings.getForceSSL());
         this.copyToClipboardCheckBox.setSelected(this.settings.getCopyToClipboard());
-        this.providerComboBox.setSelectedItem(this.settings.getRepositoryProvider());
+        this.hostsComboBox.setSelectedItem(this.settings.getHost());
     }
-
 
     /**
      * {@inheritDoc}
@@ -133,9 +127,8 @@ public class Configuration implements Configurable
     {
         this.forceSSLCheckBox = null;
         this.copyToClipboardCheckBox = null;
-        this.providerComboBox        = null;
+        this.hostsComboBox = null;
     }
-
 
     /**
      * {@inheritDoc}
@@ -145,7 +138,6 @@ public class Configuration implements Configurable
     {
         return null;
     }
-
 
     /**
      * {@inheritDoc}

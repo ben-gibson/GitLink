@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.RepositoryProvider.UrlFactory;
+package uk.co.ben_gibson.repositorymapper.RepositoryProvider.Host.Url.Factory;
 
 import com.intellij.testFramework.UsefulTestCase;
 import com.tngtech.java.junit.dataprovider.DataProvider;
@@ -7,18 +7,18 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.RemoteRepositoryMapperException;
+import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.GitHubUrlFactory;
+import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.GitHub;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 /**
- * Tests the GitHub Url factory.
+ * Tests the GitHub Factory factory.
  */
 @RunWith(DataProviderRunner.class)
-public class GitHubUrlFactoryTest extends UsefulTestCase
+public class GitHubTest extends UsefulTestCase
 {
 
 
@@ -27,9 +27,9 @@ public class GitHubUrlFactoryTest extends UsefulTestCase
      */
     @Test
     @UseDataProvider("getContexts")
-    public void testGetUrlFromContext(Context context, String expectedUrl) throws URISyntaxException, RemoteRepositoryMapperException, MalformedURLException, UnsupportedEncodingException
+    public void testGetUrlFromContext(Context context, String expectedUrl) throws MalformedURLException, UnsupportedEncodingException, RemoteNotFoundException, URISyntaxException
     {
-        assertEquals(expectedUrl, this.getGitHubUrlFactory().getUrlFromContext(context, false).toString());
+        assertEquals(expectedUrl, this.getGitHubUrlFactory().createUrl(context, false).toString());
     }
 
 
@@ -39,8 +39,7 @@ public class GitHubUrlFactoryTest extends UsefulTestCase
      * @return Object[][]
      */
     @DataProvider
-    public static  Object[][] getContexts() throws MalformedURLException, RemoteRepositoryMapperException
-    {
+    public static  Object[][] getContexts() throws MalformedURLException, RemoteNotFoundException {
         return new Object[][] {
             {
                 ContextTestUtil.getMockedContext("https://github.com/foo/bar", "master", "/src/Bar.java", "Bar.java", null),
@@ -61,10 +60,10 @@ public class GitHubUrlFactoryTest extends UsefulTestCase
     /**
      * Get the url factory.
      *
-     * @return GitHubUrlFactory
+     * @return GitHub
      */
-    public GitHubUrlFactory getGitHubUrlFactory()
+    public GitHub getGitHubUrlFactory()
     {
-        return new GitHubUrlFactory();
+        return new GitHub();
     }
 }

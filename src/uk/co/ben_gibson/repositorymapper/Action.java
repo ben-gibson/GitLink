@@ -10,27 +10,23 @@ import git4idea.repo.GitRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
+import uk.co.ben_gibson.repositorymapper.Context.Exception.InvalidContextException;
+import uk.co.ben_gibson.repositorymapper.Notification.Notifier;
 import uk.co.ben_gibson.repositorymapper.Repository.Repository;
-import uk.co.ben_gibson.repositorymapper.Settings.Settings;
-import com.intellij.ide.browsers.BrowserLauncher;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactory;
-import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.net.URL;
+import uk.co.ben_gibson.repositorymapper.Settings.Settings;
 
 /**
- * Opens the current context in a remote repository.
+ * Menu item action.
  */
-public class OpenContextAction extends AnAction
+public class Action extends AnAction
 {
 
     /**
-     * Open the current context.
+     * Handle the current context.
      *
      * @param event The event.
      */
@@ -45,26 +41,16 @@ public class OpenContextAction extends AnAction
         Settings settings = ServiceManager.getService(project, Settings.class);
 
         try {
-
-            Context context = this.getContext(project);
-
-            UrlFactoryProvider urlFactoryProvider = ServiceManager.getService(UrlFactoryProvider.class);
-
-            UrlFactory urlFactory = urlFactoryProvider.getUrlFactoryForProvider(settings.getRepositoryProvider());
-
-            URL url = urlFactory.getUrlFromContext(context, settings.getForceSSL());
-
-            if (settings.getCopyToClipboard()) {
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(url.toString()), null);
-            }
-
-            BrowserLauncher.getInstance().browse(url.toURI());
-
+            Handler.getInstance().open(
+                settings.getHost(),
+                this.getContext(project),
+                settings.getForceSSL(),
+                settings.getCopyToClipboard()
+            );
         } catch (Exception e) {
-            ServiceManager.getService(NotificationHelper.class).errorNotification(e.getMessage());
+            Notifier.errorNotification(e.getMessage());
         }
     }
-
 
     /**
      * {@inheritDoc}
@@ -75,12 +61,10 @@ public class OpenContextAction extends AnAction
         event.getPresentation().setEnabled(this.shouldActionBeEnabled(event.getProject()));
     }
 
-
     /**
      * Should the action be enabled.
      *
      * @param project The project.
-     *
      * @return boolean
      */
     private boolean shouldActionBeEnabled(@Nullable Project project)
@@ -95,11 +79,10 @@ public class OpenContextAction extends AnAction
             return false;
         }
 
-        VirtualFile file =  FileDocumentManager.getInstance().getFile(editor.getDocument());
+        VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
 
         return file != null;
     }
-
 
     /**
      * Get the current context.
@@ -107,24 +90,24 @@ public class OpenContextAction extends AnAction
      * @return Context
      */
     @NotNull
-    public Context getContext(@NotNull Project project) throws IllegalArgumentException {
-
+    private Context getContext(@NotNull Project project) throws InvalidContextException
+    {
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 
         if (editor == null) {
-            throw new IllegalArgumentException("File editor not found for project");
+            throw new InvalidContextException("File editor not found for project");
         }
 
-        VirtualFile file =  FileDocumentManager.getInstance().getFile(editor.getDocument());
+        VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
 
         if (file == null) {
-            throw new IllegalArgumentException("Active file not found for project");
+            throw new InvalidContextException("Active file not found for project");
         }
 
         GitRepository repository = GitUtil.getRepositoryManager(project).getRepositoryForFile(file);
 
         if (repository == null) {
-            throw new IllegalArgumentException("Git repository not found for project, version control root has not been registered in Preferences → Version Control");
+            throw new InvalidContextException("Git repository not found for project, version control root has not been registered in Preferences → Version Control");
         }
 
         Integer caretPosition = editor.getCaretModel().getLogicalPosition().line + 1;
