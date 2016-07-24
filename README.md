@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ben-gibson/remote-repository-mapper.svg?branch=master)](https://travis-ci.org/ben-gibson/remote-repository-mapper)
 
-A Jetbrains plugin that opens a local file under git version control in its remote origin repository.
+A Jetbrains plugin that opens a local file under Git version control in its remote host.
 
 Installation
 -------------------------------------------------------------------------------
@@ -19,9 +19,12 @@ Clone this repository:
     $ git clone https://github.com/ben-gibson/remote-repository-mapper
     $ cd remote-repository-mapper
 
+Update the permissions:
+
+     $ chmod +x ./gradlew
+
 Build the plugin zip file:
 
-    $ chmod +x ./gradlew
     $ ./gradlew buildPlugin
 
 Install the plugin from `./build/distributions/RemoteRepositoryMapper.zip`:
@@ -32,33 +35,35 @@ Install the plugin from `./build/distributions/RemoteRepositoryMapper.zip`:
 Development
 -------------------------------------------------------------------------------
 
-Execute an IntelliJ IDEA instance with the plugin you're developing installed
+Update the permissions:
 
-    $ chmod +x ./gradlew
+     $ chmod +x ./gradlew
+
+Execute an IntelliJ IDEA instance with the plugin you're developing installed:
+
     $ ./gradlew runIdea
     
-Run the tests
+Run the tests:
 
-    $ chmod +x ./gradlew
     $ ./gradlew test
 
 Usage
 -------------------------------------------------------------------------------
 
-After installing, adjust the settings to match your remote repository provider
+After installing the plugin set your remote host in the preferences:
 
       Preferences → Other Settings → Remote Repository Mapper
       
-Make sure you have registered your projects root under the version control settings.
+Make sure you have registered your projects root under the version control preferences:
 
       Preferences → Version Control (see unregistered roots)
 
-Open a file that is under git version control in the editor
+Open a project file that is under Git version control in the editor:
 
       View → Open in Git host
 
-The current checked out branch is used unless it does not track a remote branch, in which case it defaults to using master.
-The resulting link can be copied to the clipboard depending on your settings.
+The current branch is used unless it does not exist in the remote host in which case it defaults to using the master branch.
+The resulting link can be copied to the clipboard depending on your plugin preferences.
 
 Change log
 -------------------------------------------------------------------------------
