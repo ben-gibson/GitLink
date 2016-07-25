@@ -145,6 +145,6 @@ public class Configuration implements Configurable
     @Override
     public String getDisplayName()
     {
-        return "Remote Repository Mapper";
+        return "Open in Git host";
     }
 }

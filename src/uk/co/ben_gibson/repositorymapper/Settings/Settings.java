@@ -9,8 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Host.Host;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.RepositoryProvider;
 
-import java.lang.reflect.Method;
-
 @State(name = "SaveActionSettings",
     storages = {@Storage(id = "default", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/settings.xml")}
 )

@@ -1,8 +1,9 @@
-# Remote Repository Mapper
+# Open in Git host
 
 [![Build Status](https://travis-ci.org/ben-gibson/remote-repository-mapper.svg?branch=master)](https://travis-ci.org/ben-gibson/remote-repository-mapper)
 
-A Jetbrains plugin that opens a local file under Git version control in its remote host.
+A Jetbrains plugin that opens a local file under Git version control in its remote host using the default browser.
+It can also optionally copy the URL to the clipboard.
 
 Installation
 -------------------------------------------------------------------------------
@@ -10,14 +11,14 @@ Installation
 This plugin is published on the
 [JetBrains Plugin Repository](https://plugins.jetbrains.com/plugin/8183):
 
-    Preferences → Plugins → Browse Repositories → Search for "Remote Repository Mapper"
+    Preferences → Plugins → Browse Repositories → Search for "Open in Git host"
 
 ### From Source
 
 Clone this repository:
 
-    $ git clone https://github.com/ben-gibson/remote-repository-mapper
-    $ cd remote-repository-mapper
+    $ git clone https://github.com/ben-gibson/jetbrains-open-in-git-host
+    $ cd jetbrains-open-in-git-host
 
 Update the permissions:
 
@@ -52,7 +53,7 @@ Usage
 
 After installing the plugin set your remote host in the preferences:
 
-      Preferences → Other Settings → Remote Repository Mapper
+      Preferences → Other Settings → Open in Git host
       
 Make sure you have registered your projects root under the version control preferences:
 

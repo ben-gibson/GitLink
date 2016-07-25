@@ -1,17 +1,16 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
-  <name>Remote Repository Mapper</name>
-  <version>1.5.0</version>
-  <vendor url="h">https://github.com/ben-gibson/remote-repository-mapper</vendor>
+  <name>Open in Git host</name>
+  <version>1.5.3</version>
+  <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
 
   <description><![CDATA[
-      This is a really simple plugin that provides a convenient shortcut to open a Git version controlled file
-      in its origin host. This can be useful if you need to share the code with someone or
-      just get quick access to it in the remote host.
+      Opens a local file under Git version control in its remote host using the default browser.
+      It can also optionally copy the URL to the clipboard.
       <br />
       <br />
-      After installing select your remote host in Settings &rarr; Other Settings &rarr; Remote Repository Mapper
-      (currently supports GitHub, Stash, BitBucket, GitLab). Make sure you have registered your project's root under the version control settings.
+      After installing select your remote host in Settings &rarr; Other Settings &rarr; Open in Git host
+      (currently supports GitHub, Stash, BitBucket and GitLab). Make sure you have registered your project's root under the version control settings.
       Preferences → Version Control (see unregistered roots)
       <br />
       <br />
@@ -25,9 +24,7 @@
 
   <change-notes><![CDATA[
     <ul>
-      <li>Moved menu item under View and renamed it to Open in Git host.</li>
-      <li>Added menu item to the <i>Select target</i> menu.</li>
-      <li>Other minor usability tweaks and improvements</li>
+      <li>Renamed project</li>
      </ul>
     ]]>
   </change-notes>
@@ -52,7 +49,7 @@
 
   <actions>
     <action id="RemoteRepositoryMapper.uk.co.ben_gibson.repositorymapper.Action" class="uk.co.ben_gibson.repositorymapper.Action" text="Open in Git host"
-            description="Opens a version controlled file in its Git host">
+            description="Opens a version controlled file in its Git host using the default browser">
       <add-to-group group-id="ViewMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
     </action>
