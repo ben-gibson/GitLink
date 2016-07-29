@@ -1,20 +1,8 @@
 # Changelog
 
-All Notable changes to command-bus will be documented in this file
+All Notable changes to `Open in Gut host` will be documented in this file
 
-## NEXT - YYYY-MM-DD
+## 1.5.4 - 2016-07-29
 
-### Added
-- Nothing
-
-### Deprecated
-- Nothing
-
-### Fixed
-- Nothing
-
-### Removed
-- Nothing
-
-### Security
-- Nothing
+- Fixed issue with branch encoding for `GitHub` and `GitLab` hosts.
+- Fixed issue with origins using `git` protocol.

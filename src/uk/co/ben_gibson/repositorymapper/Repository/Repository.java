@@ -139,6 +139,7 @@ public class Repository
 
         url = StringUtil.replace(url, "git@", "");
         url = StringUtil.replace(url, "ssh://", "");
+        url = StringUtil.replace(url, "git://", "");
 
         String protocol = (forceSSL) ? "https" : "http";
 
