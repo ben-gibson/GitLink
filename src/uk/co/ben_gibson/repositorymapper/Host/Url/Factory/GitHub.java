@@ -24,7 +24,7 @@ public class GitHub implements Factory
         String path = String.format(
             "%s/blob/%s%s",
             remoteUrl.getPath(),
-            URLEncoder.encode(context.getBranch(), "UTF-8"),
+            context.getBranch(),
             context.getFilePathRelativeToRepository()
         );
 
