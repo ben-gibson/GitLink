@@ -57,6 +57,7 @@ public class RepositoryTest extends UsefulTestCase
             {getMockedRemote("https://github.com/foo/bar.git"), "https://github.com/foo/bar", true},
             {getMockedRemote("git@bitbucket.org:foo/bar.git"), "http://bitbucket.org/foo/bar", false},
             {getMockedRemote("https://foo@bitbucket.org/foo/bar"), "https://foo@bitbucket.org/foo/bar", true},
+            {getMockedRemote("git://github.com/foo/bar"), "https://github.com/foo/bar", true},
         };
     }
 

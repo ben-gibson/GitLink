@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Open in Git host</name>
-  <version>1.5.3</version>
+  <version>1.5.4</version>
   <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
 
   <description><![CDATA[
@@ -24,7 +24,8 @@
 
   <change-notes><![CDATA[
     <ul>
-      <li>Renamed project</li>
+      <li>Fixed encoding issue on GitHub and GitLab branches.</li>
+      <li>Fixed issue with origins using `git` protocol.</li>
      </ul>
     ]]>
   </change-notes>

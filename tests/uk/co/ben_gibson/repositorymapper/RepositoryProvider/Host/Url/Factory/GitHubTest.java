@@ -51,7 +51,7 @@ public class GitHubTest extends UsefulTestCase
             },
             {
                 ContextTestUtil.getMockedContext("https://github.com/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", 0),
-                "https://github.com/foo%20bar/bar/blob/misc%252Ffoo-bar/src/Foo%20Bar/Bar.java#L0"
+                "https://github.com/foo%20bar/bar/blob/misc/foo-bar/src/Foo%20Bar/Bar.java#L0"
             },
         };
     }
