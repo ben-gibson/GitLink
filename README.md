@@ -1,6 +1,6 @@
 # Open in Git host
 
-[![Build Status](https://travis-ci.org/ben-gibson/remote-repository-mapper.svg?branch=master)](https://travis-ci.org/ben-gibson/remote-repository-mapper)
+[![Build Status](https://travis-ci.org/ben-gibson/jetbrains-open-in-git-host)](https://travis-ci.org/ben-gibson/jetbrains-open-in-git-host)
 
 A Jetbrains plugin that opens a local file under Git version control in its remote host using the default browser.
 It can also optionally copy the URL to the clipboard.
