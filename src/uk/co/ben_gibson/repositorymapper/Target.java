@@ -38,12 +38,8 @@ public class Target implements SelectInTarget
         Settings settings = ServiceManager.getService(targetContext.getProject(), Settings.class);
 
         try {
-            Handler.getInstance().open(
-                    settings.getHost(),
-                    this.getContext(targetContext),
-                    settings.getForceSSL(),
-                    settings.getCopyToClipboard()
-            );
+            Context context = this.getContext(targetContext);
+            Handler.getInstance().open(settings.getHost(), context, settings.getForceSSL(), settings.getCopyToClipboard());
         } catch (Exception e) {
             Notifier.errorNotification(e.getMessage());
         }
