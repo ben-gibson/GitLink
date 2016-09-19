@@ -41,12 +41,8 @@ public class Action extends AnAction
         Settings settings = ServiceManager.getService(project, Settings.class);
 
         try {
-            Handler.getInstance().open(
-                settings.getHost(),
-                this.getContext(project),
-                settings.getForceSSL(),
-                settings.getCopyToClipboard()
-            );
+            Context context = this.getContext(project);
+            Handler.getInstance().open(settings.getHost(), context, settings.getForceSSL(), settings.getCopyToClipboard());
         } catch (Exception e) {
             Notifier.errorNotification(e.getMessage());
         }
