@@ -40,7 +40,7 @@ public class StashTest extends UsefulTestCase
     @Test(expected=ProjectNotFoundException.class)
     public void testGetUrlFromContext() throws URISyntaxException, MalformedURLException, RemoteNotFoundException, ProjectNotFoundException
     {
-        Context context = ContextTestUtil.getMockedContext("https://stash.example.com", "master", "", "Bar.java", null);
+        Context context = ContextTestUtil.getMockedContext("https://stash.example.com", "master", "", "Bar.java", null, null);
         this.getStashUrlFactory().createUrl(context, false);
     }
 
@@ -55,16 +55,24 @@ public class StashTest extends UsefulTestCase
     {
         return new Object[][] {
             {
-                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "master", "/src/Bar.java", "Bar.java", null),
+                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "master", "/src/Bar.java", "Bar.java", null, null),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Bar.java?at=refs/heads/master"
             },
             {
-                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", "Bar.java", 10),
+                ContextTestUtil.getMockedContext("https://stash.example.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", "Bar.java", null, 10),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/FooBar/Bar.java?at=refs/heads/foo-bar#10"
             },
             {
-                ContextTestUtil.getMockedContext("http://stash.example.com/foo bar/bar", "foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", 0),
+                ContextTestUtil.getMockedContext("http://stash.example.com/foo bar/bar", "foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", null, 0),
                 "http://stash.example.com/projects/foo%20bar/repos/bar/browse/src/Foo%20Bar/Bar.java?at=refs/heads/foo-bar#0"
+            },
+            {
+                ContextTestUtil.getMockedContext("http://stash.example.com/foo bar/bar", "foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", "ab342nfj2324", 10),
+                "http://stash.example.com/projects/foo%20bar/repos/bar/commits/ab342nfj2324"
+            },
+            {
+                ContextTestUtil.getMockedContext("http://stash.example.com/foo bar/bar", "foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", "ab342n", null),
+                "http://stash.example.com/projects/foo%20bar/repos/bar/commits/ab342n"
             },
         };
     }

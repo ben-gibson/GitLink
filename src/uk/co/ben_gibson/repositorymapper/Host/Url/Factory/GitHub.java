@@ -21,17 +21,23 @@ public class GitHub implements Factory
 
         URL remoteUrl = context.getRepository().getOriginUrl(forceSSL);
 
-        String path = String.format(
-            "%s/blob/%s%s",
-            remoteUrl.getPath(),
-            context.getBranch(),
-            context.getFilePathRelativeToRepository()
-        );
-
+        String path;
         String fragment = null;
 
-        if (context.getCaretLinePosition() != null) {
-            fragment = "L" + context.getCaretLinePosition().toString();
+
+        if (context.getCommitHash() != null) {
+            path = String.format("%s/commit/%s", remoteUrl.getPath(), context.getCommitHash());
+        } else {
+            path = String.format(
+                "%s/blob/%s%s",
+                remoteUrl.getPath(),
+                context.getBranch(),
+                context.getFilePathRelativeToRepository()
+            );
+
+            if (context.getCaretLinePosition() != null) {
+                fragment = "L" + context.getCaretLinePosition().toString();
+            }
         }
 
         return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, fragment).toURL();

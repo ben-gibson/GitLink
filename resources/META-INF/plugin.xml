@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Open in Git host</name>
-  <version>1.5.5</version>
+  <version>1.5.6</version>
   <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
 
   <description><![CDATA[
@@ -15,7 +15,9 @@
       <br />
       <br />
       To use, open a file that is under Git version control in the editor and select View &rarr; Open in Git host. You can
-      also access this action through the <i>Select target</i> menu under Navigate &rarr; Select in.
+      also access this action through the <i>Select target</i> menu under Navigate &rarr; Select in. If you want to view
+      a specific commit, you can do this by right clicking the commit from the <i>VCS log tool window</i> and selecting
+      Open in Git host.
       <br />
       <br />
       Note: The current branch is used unless it does not exist in your remote host in which case it defaults to the
@@ -25,8 +27,7 @@
   <change-notes><![CDATA[
     <ul>
       <li>
-          Fixed issue <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/20">#20</a> which
-          would cause the UI to freeze in some instances.
+          Ability to open a commit from the VCS log tool window <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/22">#22</a>.
       </li>
      </ul>
     ]]>
@@ -47,14 +48,19 @@
     <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.Handler"/>
     <projectService serviceImplementation="uk.co.ben_gibson.repositorymapper.Settings.Settings"/>
     <projectConfigurable instance="uk.co.ben_gibson.repositorymapper.Settings.Configuration"/>
-    <selectInTarget implementation="uk.co.ben_gibson.repositorymapper.Target"/>
+    <selectInTarget implementation="uk.co.ben_gibson.repositorymapper.OpenFileInGitHostTarget"/>
   </extensions>
 
   <actions>
-    <action id="RemoteRepositoryMapper.uk.co.ben_gibson.repositorymapper.Action" class="uk.co.ben_gibson.repositorymapper.Action" text="Open in Git host"
-            description="Opens a version controlled file in its Git host using the default browser">
+    <action id="RemoteRepositoryMapper.Open.File.In.Git.Host.Action" class="uk.co.ben_gibson.repositorymapper.OpenFileInGitHostAction" text="Open in Git host"
+            description="Opens the version controlled file in the Git host using the default browser">
       <add-to-group group-id="ViewMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
+    </action>
+    <action id="RemoteRepositoryMapper.Open.Commit.In.Git.Host" class="uk.co.ben_gibson.repositorymapper.OpenCommitInGitHostAction" text="Open in Git host"
+            description="Opens the commit in the Git host using the default browser">
+      <add-to-group group-id="Git.LogContextMenu" />
+      <add-to-group group-id="Vcs.Log.ContextMenu" />
     </action>
   </actions>
 

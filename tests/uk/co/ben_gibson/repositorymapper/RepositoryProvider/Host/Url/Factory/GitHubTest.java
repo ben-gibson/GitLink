@@ -42,16 +42,24 @@ public class GitHubTest extends UsefulTestCase
     public static  Object[][] getContexts() throws MalformedURLException, RemoteNotFoundException {
         return new Object[][] {
             {
-                ContextTestUtil.getMockedContext("https://github.com/foo/bar", "master", "/src/Bar.java", "Bar.java", null),
+                ContextTestUtil.getMockedContext("https://github.com/foo/bar", "master", "/src/Bar.java", "Bar.java", null, null),
                 "https://github.com/foo/bar/blob/master/src/Bar.java"
             },
             {
-                ContextTestUtil.getMockedContext("https://github.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", "Bar.java", 10),
+                ContextTestUtil.getMockedContext("https://github.com/foo/bar", "foo-bar", "/src/FooBar/Bar.java", "Bar.java", null, 10),
                 "https://github.com/foo/bar/blob/foo-bar/src/FooBar/Bar.java#L10"
             },
             {
-                ContextTestUtil.getMockedContext("https://github.com/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", 0),
+                ContextTestUtil.getMockedContext("https://github.com/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", null, 0),
                 "https://github.com/foo%20bar/bar/blob/misc/foo-bar/src/Foo%20Bar/Bar.java#L0"
+            },
+            {
+                ContextTestUtil.getMockedContext("https://github.com/foo bar/bar", "misc/foo-bar", "/src/Foo Bar/Bar.java", "Bar.java", "ab342nfj2324", 10),
+                "https://github.com/foo%20bar/bar/commit/ab342nfj2324"
+            },
+            {
+                ContextTestUtil.getMockedContext("https://github.com/foo bar/bar", "master", "/src/Foo Bar/Bar.java", "Bar.java", "ab342nfj2324", null),
+                "https://github.com/foo%20bar/bar/commit/ab342nfj2324"
             },
         };
     }

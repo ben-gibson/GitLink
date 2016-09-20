@@ -20,15 +20,13 @@ import com.intellij.openapi.project.Project;
 import uk.co.ben_gibson.repositorymapper.Settings.Settings;
 
 /**
- * Menu item action.
+ * Opens a file in its Git Host.
  */
-public class Action extends AnAction
+public class OpenFileInGitHostAction extends AnAction
 {
 
     /**
-     * Handle the current context.
-     *
-     * @param event The event.
+     * {@inheritDoc}
      */
     public void actionPerformed(AnActionEvent event)
     {
@@ -110,6 +108,6 @@ public class Action extends AnAction
 
         Repository repositoryWrapper = new Repository(new GitImpl(), repository, "master");
 
-        return new Context(repositoryWrapper, file, caretPosition);
+        return new Context(repositoryWrapper, file, null, caretPosition);
     }
 }

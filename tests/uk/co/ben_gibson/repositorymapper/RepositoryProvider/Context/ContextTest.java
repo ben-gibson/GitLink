@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 public class ContextTest extends UsefulTestCase
 {
 
-
     /**
      * Tests the file path is returned relative to the repository path.
      */
@@ -94,6 +93,6 @@ public class ContextTest extends UsefulTestCase
      */
     public Context getContext(Repository repository, VirtualFile file)
     {
-        return new Context(repository, file, null);
+        return new Context(repository, file, null, null);
     }
 }
