@@ -16,9 +16,9 @@ import uk.co.ben_gibson.repositorymapper.Repository.Repository;
 import uk.co.ben_gibson.repositorymapper.Settings.Settings;
 
 /**
- * Select in target action.
+ * Opens a file in its Git Host.
  */
-public class Target implements SelectInTarget
+public class OpenFileInGitHostTarget implements SelectInTarget
 {
     /**
      * {@inheritDoc}
@@ -63,7 +63,7 @@ public class Target implements SelectInTarget
 
         Repository repositoryWrapper = new Repository(new GitImpl(), repository, "master");
 
-        return new Context(repositoryWrapper, file, null);
+        return new Context(repositoryWrapper, file, null, null);
     }
 
     /**

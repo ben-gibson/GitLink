@@ -29,19 +29,25 @@ public class Stash implements Factory
         String projectName    = parts[1];
         String repositoryName = parts[2];
 
-        String path = String.format(
-            "/projects/%s/repos/%s/browse%s",
-            projectName,
-            repositoryName,
-            context.getFilePathRelativeToRepository()
-        );
-
-        String query = "at=refs/heads/" + context.getBranch();
-
+        String path;
+        String query = null;
         String fragment = null;
 
-        if (context.getCaretLinePosition() != null) {
-            fragment = context.getCaretLinePosition().toString();
+        if (context.getCommitHash() != null) {
+            path = String.format("/projects/%s/repos/%s/commits/%s", projectName, repositoryName, context.getCommitHash());
+        } else {
+            path = String.format(
+                "/projects/%s/repos/%s/browse%s",
+                projectName,
+                repositoryName,
+                context.getFilePathRelativeToRepository()
+            );
+
+            query = "at=refs/heads/" + context.getBranch();
+
+            if (context.getCaretLinePosition() != null) {
+                fragment = context.getCaretLinePosition().toString();
+            }
         }
 
         return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, query, fragment).toURL();

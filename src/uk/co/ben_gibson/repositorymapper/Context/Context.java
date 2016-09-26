@@ -17,6 +17,8 @@ public class Context
     @NotNull
     private VirtualFile file;
     @Nullable
+    private String commitHash;
+    @Nullable
     private Integer caretLinePosition;
 
     /**
@@ -24,16 +26,19 @@ public class Context
      *
      * @param repository        The repository the file belongs to.
      * @param file              The file.
+     * @param commitHash        The commit hash.
      * @param caretLinePosition The line number.
      */
     public Context(
         @NotNull Repository repository,
         @NotNull VirtualFile file,
+        @Nullable String commitHash,
         @Nullable Integer caretLinePosition
     )
     {
         this.repository        = repository;
         this.file              = file;
+        this.commitHash        = commitHash;
         this.caretLinePosition = caretLinePosition;
     }
 
@@ -46,6 +51,17 @@ public class Context
     public VirtualFile getFile()
     {
         return this.file;
+    }
+
+    /**
+     * Get the commit hash.
+     *
+     * @return String
+     */
+    @Nullable
+    public String getCommitHash()
+    {
+        return this.commitHash;
     }
 
     /**

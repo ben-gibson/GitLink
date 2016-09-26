@@ -21,7 +21,7 @@ public class ContextTestUtil
      *
      * @return Context
      */
-    public static Context getMockedContext(String remoteURL, String branch, String filePath, String fileName, Integer caretLinePosition)
+    public static Context getMockedContext(String remoteURL, String branch, String filePath, String fileName, String commitHash, Integer caretLinePosition)
         throws MalformedURLException, RemoteNotFoundException
     {
         Context context = mock(Context.class, RETURNS_DEEP_STUBS);
@@ -30,6 +30,7 @@ public class ContextTestUtil
         when(context.getRepository().getOriginUrl(anyBoolean())).thenReturn(new URL(remoteURL));
         when(context.getBranch()).thenReturn(branch);
         when(context.getCaretLinePosition()).thenReturn(caretLinePosition);
+        when(context.getCommitHash()).thenReturn(commitHash);
         when(context.getFile().getName()).thenReturn(fileName);
 
         return context;

@@ -23,19 +23,25 @@ public class BitBucket implements Factory
 
         URL remoteUrl = context.getRepository().getOriginUrl(forceSSL);
 
-        String path = String.format(
-            "%s/src/%s%s",
-            remoteUrl.getPath(),
-            "HEAD",
-            context.getFilePathRelativeToRepository()
-        );
-
-        String query = "at=" + context.getBranch();
-
+        String path;
+        String query = null;
         String fragment = null;
 
-        if (context.getCaretLinePosition() != null) {
-            fragment = context.getFile().getName() + "-" + context.getCaretLinePosition().toString();
+        if (context.getCommitHash() != null) {
+            path = String.format("%s/commits/%s", remoteUrl.getPath(), context.getCommitHash());
+        } else {
+            path = String.format(
+                "%s/src/%s%s",
+                remoteUrl.getPath(),
+                "HEAD",
+                context.getFilePathRelativeToRepository()
+            );
+
+            query = "at=" + context.getBranch();
+
+            if (context.getCaretLinePosition() != null) {
+                fragment = context.getFile().getName() + "-" + context.getCaretLinePosition().toString();
+            }
         }
 
         return new URI(remoteUrl.getProtocol(), remoteUrl.getHost(), path, query, fragment).toURL();
