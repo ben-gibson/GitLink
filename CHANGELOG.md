@@ -10,3 +10,7 @@ All Notable changes to `Open in Git host` will be documented in this file
 ## 1.5.5 - 2016-09-19
 
 - Run plugin process on a background thread to prevent UI freezes.
+
+## 1.5.6 - 2016-09-26
+
+- Ability to open a specific commit from the VCS log tool window.
