@@ -133,6 +133,9 @@ public class Settings implements PersistentStateComponent<Settings>
                 case GITLAB:
                     this.setHost(Host.GITLAB);
                     break;
+                case GITBLIT:
+                    this.setHost(Host.GITBLIT);
+                    break;
                 case BITBUCKET:
                     this.setHost(Host.BITBUCKET);
                     break;
