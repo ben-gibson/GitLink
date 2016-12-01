@@ -10,6 +10,7 @@ public enum RepositoryProvider
     STASH("Stash"),
     GIT_HUB("GitHub"),
     BITBUCKET("Bitbucket"),
+    GITBLIT("Gitblit"),
     GITLAB("GitLab");
 
     private final String name;

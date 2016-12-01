@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Open in Git host</name>
-  <version>1.5.7</version>
+  <version>1.6.0</version>
   <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
 
   <description><![CDATA[
@@ -10,7 +10,7 @@
       <br />
       <br />
       After installing select your remote host in Settings &rarr; Other Settings &rarr; Open in Git host
-      (currently supports GitHub, Stash, BitBucket and GitLab). Make sure you have registered your project's root under the version control settings.
+      (currently supports GitHub, Stash, BitBucket, GitLab and GitBlit). Make sure you have registered your project's root under the version control settings.
       Preferences → Version Control (see unregistered roots)
       <br />
       <br />
@@ -27,7 +27,7 @@
   <change-notes><![CDATA[
     <ul>
       <li>
-          Fixed: Select target action now uses the correct line number when used from the editor. <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/24">#24</a>
+          Support GitBlit <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/26">#26</a>.
       </li>
      </ul>
     ]]>

@@ -154,7 +154,7 @@ public class Repository
      * @return Remote
      */
     @NotNull
-    private Remote getOrigin() throws RemoteNotFoundException
+    public Remote getOrigin() throws RemoteNotFoundException
     {
         return new Remote(this.getRawOrigin());
     }
