@@ -3,6 +3,9 @@ package uk.co.ben_gibson.repositorymapper;
 import com.intellij.ide.SelectInContext;
 import com.intellij.ide.SelectInTarget;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import git4idea.GitUtil;
 import git4idea.commands.GitImpl;
@@ -63,7 +66,18 @@ public class OpenFileInGitHostTarget implements SelectInTarget
 
         Repository repositoryWrapper = new Repository(new GitImpl(), repository, "master");
 
-        return new Context(repositoryWrapper, file, null, null);
+        Integer line = null;
+
+        // also support "Select in Git Host" from the current editor
+        Editor selectedTextEditor = FileEditorManager.getInstance(targetContext.getProject()).getSelectedTextEditor();
+        FileEditor fileEditor = FileEditorManager.getInstance(targetContext.getProject()).getSelectedEditor(file);
+
+        boolean isCurrentFileOpenedInEditor = fileEditor != null;
+        boolean isEditorOpened = selectedTextEditor != null;
+        if (isEditorOpened && isCurrentFileOpenedInEditor) {
+            line = selectedTextEditor.getCaretModel().getLogicalPosition().line + 1;
+        }
+        return new Context(repositoryWrapper, file, null, line);
     }
 
     /**
