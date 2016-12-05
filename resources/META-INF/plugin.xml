@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Open in Git host</name>
-  <version>1.5.6</version>
+  <version>1.5.7</version>
   <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
 
   <description><![CDATA[
@@ -27,7 +27,7 @@
   <change-notes><![CDATA[
     <ul>
       <li>
-          Ability to open a commit from the VCS log tool window <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/22">#22</a>.
+          Fixed: Select target action now uses the correct line number when used from the editor. <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/24">#24</a>
       </li>
      </ul>
     ]]>

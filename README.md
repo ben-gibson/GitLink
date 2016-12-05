@@ -61,7 +61,8 @@ Make sure you have registered your projects root under the version control prefe
 
 Open a project file that is under Git version control in the editor:
 
-      View → Open in Git host
+      View → Open in Git host or
+      Select in... → Open in Git host
 
 The current branch is used unless it does not exist in the remote host in which case it defaults to using the master branch.
 The resulting link can be copied to the clipboard depending on your plugin preferences.
