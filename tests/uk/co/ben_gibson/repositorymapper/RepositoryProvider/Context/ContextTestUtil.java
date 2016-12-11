@@ -28,6 +28,7 @@ public class ContextTestUtil
 
         when(context.getFilePathRelativeToRepository()).thenReturn(filePath);
         when(context.getRepository().getOriginUrl(anyBoolean())).thenReturn(new URL(remoteURL));
+        when(context.getRepository().getOrigin().getFirstUrl()).thenReturn(remoteURL);
         when(context.getBranch()).thenReturn(branch);
         when(context.getCaretLinePosition()).thenReturn(caretLinePosition);
         when(context.getCommitHash()).thenReturn(commitHash);

@@ -8,7 +8,8 @@ public enum Host
     STASH("Stash"),
     GIT_HUB("GitHub"),
     BITBUCKET("Bitbucket"),
-    GITLAB("GitLab");
+    GITLAB("GitLab"),
+    GITBLIT("GitBlit");
 
     private final String name;
 

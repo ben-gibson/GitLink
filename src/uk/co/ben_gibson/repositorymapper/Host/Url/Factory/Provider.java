@@ -26,6 +26,8 @@ public class Provider
             return new Stash();
         }  else if (host == Host.BITBUCKET) {
             return new BitBucket();
+        }  else if (host == Host.GITBLIT) {
+            return new GitBlit();
         }
 
         throw new UnsupportedHostException(host);
