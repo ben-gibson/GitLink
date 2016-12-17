@@ -1,9 +1,9 @@
-package uk.co.ben_gibson.repositorymapper.Host.Url.Factory;
+package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import com.intellij.util.containers.hash.LinkedHashMap;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Exception.ProjectNotFoundException;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * Creates a URL in a format expected by GitBlit.
  */
-public class GitBlit implements Factory {
+public class GitBlitUrlFactory implements UrlFactory {
 
     /**
      * {@inheritDoc}

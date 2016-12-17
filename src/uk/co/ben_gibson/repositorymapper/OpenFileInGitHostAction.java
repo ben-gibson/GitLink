@@ -1,8 +1,10 @@
 package uk.co.ben_gibson.repositorymapper;
 
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import git4idea.GitUtil;
 import git4idea.commands.GitImpl;
@@ -39,7 +41,7 @@ public class OpenFileInGitHostAction extends AnAction
         Settings settings = ServiceManager.getService(project, Settings.class);
 
         try {
-            Context context = this.getContext(project);
+            Context context = this.getContext(event);
             Handler.getInstance().open(settings.getHost(), context, settings.getForceSSL(), settings.getCopyToClipboard());
         } catch (Exception e) {
             Notifier.errorNotification(e.getMessage());
@@ -52,49 +54,40 @@ public class OpenFileInGitHostAction extends AnAction
     @Override
     public void update(AnActionEvent event)
     {
-        event.getPresentation().setEnabled(this.shouldActionBeEnabled(event.getProject()));
+        event.getPresentation().setEnabled(this.shouldActionBeEnabled(event));
+
+        if (event.getPresentation().isEnabled() && event.getProject() != null) {
+            Settings settings = ServiceManager.getService(event.getProject(), Settings.class);
+            event.getPresentation().setIcon(settings.getHost().getIcon());
+        }
     }
 
     /**
      * Should the action be enabled.
      *
-     * @param project The project.
+     * @param event The action event.
+     *
      * @return boolean
      */
-    private boolean shouldActionBeEnabled(@Nullable Project project)
+    private boolean shouldActionBeEnabled(@NotNull AnActionEvent event)
     {
-        if (project == null) {
-            return false;
-        }
-
-        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-
-        if (editor == null) {
-            return false;
-        }
-
-        VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
-
-        return file != null;
+        return (event.getProject() != null && event.getData(CommonDataKeys.VIRTUAL_FILE) != null);
     }
 
     /**
      * Get the current context.
      *
+     * @param event The action event.
+     *
      * @return Context
      */
     @NotNull
-    private Context getContext(@NotNull Project project) throws InvalidContextException
+    private Context getContext(@NotNull AnActionEvent event) throws InvalidContextException
     {
-        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+        VirtualFile file = event.getData(CommonDataKeys.VIRTUAL_FILE);
+        Project project  = event.getProject();
 
-        if (editor == null) {
-            throw new InvalidContextException("File editor not found for project");
-        }
-
-        VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
-
-        if (file == null) {
+        if (file == null || project == null) {
             throw new InvalidContextException("Active file not found for project");
         }
 
@@ -104,7 +97,9 @@ public class OpenFileInGitHostAction extends AnAction
             throw new InvalidContextException("Git repository not found for project, version control root has not been registered in Preferences → Version Control");
         }
 
-        Integer caretPosition = editor.getCaretModel().getLogicalPosition().line + 1;
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+
+        Integer caretPosition = (editor != null) ? editor.getCaretModel().getLogicalPosition().line + 1 : null;
 
         Repository repositoryWrapper = new Repository(new GitImpl(), repository, "master");
 

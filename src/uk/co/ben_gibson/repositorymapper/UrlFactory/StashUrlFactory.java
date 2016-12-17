@@ -1,15 +1,15 @@
-package uk.co.ben_gibson.repositorymapper.Host.Url.Factory;
+package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Exception.ProjectNotFoundException;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import java.net.*;
 
 /**
  * Creates a URL in a format expected by Stash.
  */
-public class Stash implements Factory
+public class StashUrlFactory implements UrlFactory
 {
 
     /**

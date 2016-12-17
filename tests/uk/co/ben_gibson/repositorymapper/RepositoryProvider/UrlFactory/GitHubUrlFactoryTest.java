@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.RepositoryProvider.Host.Url.Factory;
+package uk.co.ben_gibson.repositorymapper.RepositoryProvider.UrlFactory;
 
 import com.intellij.testFramework.UsefulTestCase;
 import com.tngtech.java.junit.dataprovider.DataProvider;
@@ -9,16 +9,17 @@ import org.junit.runner.RunWith;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.GitHub;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.GitHubUrlFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 /**
- * Tests the GitHub Factory factory.
+ * Tests the GitHub url factory.
  */
 @RunWith(DataProviderRunner.class)
-public class GitHubTest extends UsefulTestCase
+public class GitHubUrlFactoryTest extends UsefulTestCase
 {
 
 
@@ -68,10 +69,10 @@ public class GitHubTest extends UsefulTestCase
     /**
      * Get the url factory.
      *
-     * @return GitHub
+     * @return GitHubUrlFactory
      */
-    public GitHub getGitHubUrlFactory()
+    public GitHubUrlFactory getGitHubUrlFactory()
     {
-        return new GitHub();
+        return new GitHubUrlFactory();
     }
 }

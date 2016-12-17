@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.RepositoryProvider.Host.Url.Factory;
+package uk.co.ben_gibson.repositorymapper.RepositoryProvider.UrlFactory;
 
 import com.intellij.testFramework.UsefulTestCase;
 import com.tngtech.java.junit.dataprovider.DataProvider;
@@ -9,9 +9,8 @@ import org.junit.runner.RunWith;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.BitBucket;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.BitBucketUrlFactory;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
@@ -19,7 +18,7 @@ import java.net.URISyntaxException;
  * Tests the BitBucket url factory.
  */
 @RunWith(DataProviderRunner.class)
-public class BitBucketTest extends UsefulTestCase
+public class BitBucketUrlFactoryTest extends UsefulTestCase
 {
 
 
@@ -74,10 +73,10 @@ public class BitBucketTest extends UsefulTestCase
     /**
      * Get the url factory.
      *
-     * @return BitBucket
+     * @return BitBucketUrlFactory
      */
-    public BitBucket getBitBucketUrlFactory()
+    public BitBucketUrlFactory getBitBucketUrlFactory()
     {
-        return new BitBucket();
+        return new BitBucketUrlFactory();
     }
 }

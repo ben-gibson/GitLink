@@ -22,3 +22,9 @@ All Notable changes to `Open in Git host` will be documented in this file
 ## 1.6.0 - 2016-12-08
 
 - Support GitBlit #26
+
+## 1.6.1 - 2016-12-17
+
+- Support more shortcuts.
+- Added host icons.
+- Minor refactors.

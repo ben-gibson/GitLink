@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.RepositoryProvider.Host.Url.Factory;
+package uk.co.ben_gibson.repositorymapper.RepositoryProvider.UrlFactory;
 
 import com.intellij.testFramework.UsefulTestCase;
 import com.tngtech.java.junit.dataprovider.DataProvider;
@@ -9,17 +9,17 @@ import org.junit.runner.RunWith;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Exception.ProjectNotFoundException;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.Stash;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.StashUrlFactory;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 /**
- * Tests the Stash url factory.
+ * Tests the stash url factory.
  */
 @RunWith(DataProviderRunner.class)
-public class StashTest extends UsefulTestCase
+public class StashUrlFactoryTest extends UsefulTestCase
 {
 
 
@@ -81,10 +81,10 @@ public class StashTest extends UsefulTestCase
     /**
      * Get the url factory.
      *
-     * @return Stash
+     * @return StashUrlFactory
      */
-    public Stash getStashUrlFactory()
+    public StashUrlFactory getStashUrlFactory()
     {
-        return new Stash();
+        return new StashUrlFactory();
     }
 }
