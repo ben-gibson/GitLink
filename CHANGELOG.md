@@ -28,3 +28,7 @@ All Notable changes to `Open in Git host` will be documented in this file
 - Support more shortcuts.
 - Added host icons.
 - Minor refactors.
+
+## 1.6.2 - 2016-12-17
+
+- Added analytics

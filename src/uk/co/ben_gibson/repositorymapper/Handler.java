@@ -13,7 +13,9 @@ import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
 import uk.co.ben_gibson.repositorymapper.Notification.Notifier;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.UUID;
 
 /**
  * Responsible for handling a context.
@@ -21,6 +23,7 @@ import java.net.URL;
 class Handler
 {
     private UrlFactoryProvider urlFactoryProvider;
+    private UUID installId = UUID.randomUUID();
 
     static Handler getInstance()
     {
@@ -50,6 +53,19 @@ class Handler
                     }
 
                     BrowserLauncher.getInstance().open(url.toURI().toString());
+
+                    URL googleAnalyticsUrl = new URL(String.format(
+                        "https://google-analytics.com/collect?v=%s&tid=%s&cid=%s&t=event&ec=%s&ea=open&el=%sl",
+                        1,
+                        "UA-89097365-1",
+                        installId.toString(),
+                        host.toString(),
+                        url.toURI().toString()
+                    ));
+
+                    InputStream stream = googleAnalyticsUrl.openStream();
+                    stream.close();
+
                 }  catch (Exception e) {
                     Notifier.errorNotification(e.getMessage());
                 }

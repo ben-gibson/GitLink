@@ -9,11 +9,11 @@ import javax.swing.*;
  */
 public enum Host
 {
-    STASH("Stash", "/icons/Bitbucket/Bitbucket.png"),
-    GIT_HUB("GitHub", "/icons/GitHub/GitHub.png"),
-    BITBUCKET("Bitbucket", "/icons/Bitbucket/Bitbucket.png"),
-    GITLAB("GitLab", "/icons/GitLab/GitLab.png"),
-    GITBLIT("GitBlit", "/icons/GitHub/GitHub.png");
+    STASH("Stash", "/Icons/Bitbucket/Bitbucket.png"),
+    GIT_HUB("GitHub", "/Icons/GitHub/GitHub.png"),
+    BITBUCKET("Bitbucket", "/Icons/Bitbucket/Bitbucket.png"),
+    GITLAB("GitLab", "/Icons/GitLab/GitLab.png"),
+    GITBLIT("GitBlit", "/Icons/GitHub/GitHub.png");
 
     private final String name;
     private final String icon;
