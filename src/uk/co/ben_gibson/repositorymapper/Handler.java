@@ -8,8 +8,8 @@ import com.intellij.openapi.progress.Task;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.Host.Host;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.Factory;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.Provider;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactory;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
 import uk.co.ben_gibson.repositorymapper.Notification.Notifier;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -20,7 +20,7 @@ import java.net.URL;
  */
 class Handler
 {
-    private Provider urlFactoryProvider;
+    private UrlFactoryProvider urlFactoryProvider;
 
     static Handler getInstance()
     {
@@ -41,7 +41,7 @@ class Handler
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
                 try {
-                    Factory factory = Handler.this.getUrlFactoryProvider().getForHost(host);
+                    UrlFactory factory = Handler.this.getUrlFactoryProvider().getForHost(host);
 
                     URL url = factory.createUrl(context, forceSSL);
 
@@ -62,12 +62,12 @@ class Handler
     /**
      * Lazy load the url factory provider.
      *
-     * @return Provider
+     * @return UrlFactoryProvider
      */
-    private Provider getUrlFactoryProvider()
+    private UrlFactoryProvider getUrlFactoryProvider()
     {
         if (this.urlFactoryProvider == null) {
-            this.urlFactoryProvider = new Provider();
+            this.urlFactoryProvider = new UrlFactoryProvider();
         }
 
         return this.urlFactoryProvider;

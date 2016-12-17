@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Open in Git host</name>
-  <version>1.6.0</version>
+  <version>1.6.1</version>
   <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
 
   <description><![CDATA[
@@ -27,7 +27,13 @@
   <change-notes><![CDATA[
     <ul>
       <li>
-          Support GitBlit <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/26">#26</a>.
+          Support more shortcuts.
+      </li>
+      <li>
+          Added host icons.
+      </li>
+      <li>
+          Minor refactors.
       </li>
      </ul>
     ]]>
@@ -55,6 +61,9 @@
     <action id="RemoteRepositoryMapper.Open.File.In.Git.Host.Action" class="uk.co.ben_gibson.repositorymapper.OpenFileInGitHostAction" text="Open in Git host"
             description="Opens the version controlled file in the Git host using the default browser">
       <add-to-group group-id="ViewMenu" anchor="last"/>
+      <add-to-group group-id="EditorPopupMenu"/>
+      <add-to-group group-id="ProjectViewPopupMenu"/>
+      <add-to-group group-id="EditorTabPopupMenu"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
     </action>
     <action id="RemoteRepositoryMapper.Open.Commit.In.Git.Host" class="uk.co.ben_gibson.repositorymapper.OpenCommitInGitHostAction" text="Open in Git host"

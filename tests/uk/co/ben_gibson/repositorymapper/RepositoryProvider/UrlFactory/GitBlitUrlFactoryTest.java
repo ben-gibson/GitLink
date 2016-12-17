@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.RepositoryProvider.Host.Url.Factory;
+package uk.co.ben_gibson.repositorymapper.RepositoryProvider.UrlFactory;
 
 import com.intellij.testFramework.UsefulTestCase;
 import com.tngtech.java.junit.dataprovider.DataProvider;
@@ -7,8 +7,8 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Exception.ProjectNotFoundException;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Factory.GitBlit;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.GitBlitUrlFactory;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.RepositoryProvider.Context.ContextTestUtil;
 
@@ -17,10 +17,10 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 /**
- * Tests the GitBlit Factory factory.
+ * Tests the GitBlit url factory.
  */
 @RunWith(DataProviderRunner.class)
-public class GitBlitTest extends UsefulTestCase {
+public class GitBlitUrlFactoryTest extends UsefulTestCase {
 
     /**
      * Tests the url factory creates the correct url for a context.
@@ -164,9 +164,9 @@ public class GitBlitTest extends UsefulTestCase {
     /**
      * Get the url factory.
      *
-     * @return GitBlit
+     * @return GitBlitUrlFactory
      */
-    public GitBlit getGitBlitUrlFactory() {
-        return new GitBlit();
+    public GitBlitUrlFactory getGitBlitUrlFactory() {
+        return new GitBlitUrlFactory();
     }
 }

@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.Host.Url.Exception;
+package uk.co.ben_gibson.repositorymapper.UrlFactory.Exception;
 
 import java.net.URL;
 

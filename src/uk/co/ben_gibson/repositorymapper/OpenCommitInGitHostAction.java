@@ -78,6 +78,10 @@ public class OpenCommitInGitHostAction extends AnAction
         }
 
         event.getPresentation().setEnabledAndVisible(true);
+
+        Settings settings = ServiceManager.getService(event.getProject(), Settings.class);
+
+        event.getPresentation().setIcon(settings.getHost().getIcon());
     }
 
     /**

@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.Host.Url.Factory;
+package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
@@ -9,7 +9,7 @@ import java.net.*;
 /**
  * Creates a URL in a format expected by GitHub.
  */
-public class GitHub implements Factory
+public class GitHubUrlFactory implements UrlFactory
 {
 
     /**

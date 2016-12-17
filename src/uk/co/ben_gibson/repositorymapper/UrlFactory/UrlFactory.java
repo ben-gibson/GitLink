@@ -1,8 +1,8 @@
-package uk.co.ben_gibson.repositorymapper.Host.Url.Factory;
+package uk.co.ben_gibson.repositorymapper.UrlFactory;
 
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
-import uk.co.ben_gibson.repositorymapper.Host.Url.Exception.ProjectNotFoundException;
+import uk.co.ben_gibson.repositorymapper.UrlFactory.Exception.ProjectNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -12,7 +12,7 @@ import java.net.URL;
 /**
  * Creates Urls from a context for a git host.
  */
-public interface Factory
+public interface UrlFactory
 {
 
     /**
