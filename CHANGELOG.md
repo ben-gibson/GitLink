@@ -32,3 +32,7 @@ All Notable changes to `Open in Git host` will be documented in this file
 ## 1.6.2 - 2016-12-17
 
 - Added analytics
+
+## 1.6.3- 2016-12-18
+
+- Improved analytics
