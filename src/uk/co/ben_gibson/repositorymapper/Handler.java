@@ -73,21 +73,25 @@ class Handler
                         "google-analytics.com",
                         "/collect",
                         String.format(
-                            "v=%s&tid=%s&cid=%s&t=event&an=%s&aid=%s&av=%s&ec=%s&ea=open&el=%s",
+                            "v=%s&tid=%s&cid=%s&t=event&an=%s&aid=%s&av=%s&ec=%s&ea=%s",
                             1,
-                            "UA-89097365-1",
+                            "UA-88421127-2",
                             getInstallId(),
                             "Open in git host",
                             plugin.getPluginId(),
                             plugin.getVersion(),
                             host.toString(),
-                            url.toURI().toString()
+                            (copyToClipboard) ? "Open and Copy" : "Open"
                         ),
                         null
                     );
 
-                    InputStream stream = googleAnalyticsUrl.toURL().openStream();
-                    stream.close();
+                    try {
+                        InputStream stream = googleAnalyticsUrl.toURL().openStream();
+                        stream.close();
+                    } catch (Exception ignored) {
+
+                    }
 
                 }  catch (Exception e) {
                     Notifier.errorNotification(e.getMessage());
