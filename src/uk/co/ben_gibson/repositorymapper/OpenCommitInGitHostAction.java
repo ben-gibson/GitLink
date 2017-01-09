@@ -42,7 +42,7 @@ public class OpenCommitInGitHostAction extends AnAction
 
         try {
             Context context = this.getContext(project, log);
-            Handler.getInstance().open(settings.getHost(), context, settings.getForceSSL(), settings.getCopyToClipboard());
+            Handler.getInstance().open(settings.getHost(), context);
         } catch (Exception e) {
             Notifier.errorNotification(e.getMessage());
         }
@@ -105,6 +105,8 @@ public class OpenCommitInGitHostAction extends AnAction
 
         Repository repositoryWrapper = new Repository(new GitImpl(), repository, "master");
 
-        return new Context(repositoryWrapper, commit.getRoot(), commit.getId().toString(), null);
+        Settings settings = ServiceManager.getService(project, Settings.class);
+
+        return new Context(repositoryWrapper, commit.getRoot(), commit.getId().toString(), null, settings);
     }
 }

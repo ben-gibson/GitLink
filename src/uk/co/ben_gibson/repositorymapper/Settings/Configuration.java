@@ -21,9 +21,11 @@ public class Configuration implements Configurable
     private static final String LABEL_COPY_TO_CLIPBOARD = "Copy link to clipboard";
     private static final String FORCE_SSL               = "Force SSL if the HTTP protocol is not used in origin";
     private static final String LABEL_HOSTS             = "Hosts";
+    private static final String LABEL_ANALYTICS         = "Enable anonymous usage statistics";
 
     private JBCheckBox copyToClipboardCheckBox;
     private JBCheckBox forceSSLCheckBox;
+    private JBCheckBox enableAnalyticsCheckBox;
     private ComboBox hostsComboBox;
 
     private Settings settings;
@@ -39,6 +41,7 @@ public class Configuration implements Configurable
 
         this.forceSSLCheckBox        = new JBCheckBox(FORCE_SSL);
         this.copyToClipboardCheckBox = new JBCheckBox(LABEL_COPY_TO_CLIPBOARD);
+        this.enableAnalyticsCheckBox = new JBCheckBox(LABEL_ANALYTICS);
         this.hostsComboBox           = new ComboBox(new EnumComboBoxModel<>(Host.class), 200);
     }
 
@@ -78,6 +81,7 @@ public class Configuration implements Configurable
         panel.add(this.copyToClipboardCheckBox);
 
         panel.add(this.forceSSLCheckBox);
+        panel.add(this.enableAnalyticsCheckBox);
 
         return panel;
     }
@@ -92,6 +96,7 @@ public class Configuration implements Configurable
     {
         return !Comparing.equal(this.forceSSLCheckBox.isSelected(), this.settings.getForceSSL()) ||
             !Comparing.equal(this.copyToClipboardCheckBox.isSelected(), this.settings.getCopyToClipboard()) ||
+            !Comparing.equal(this.enableAnalyticsCheckBox.isSelected(), this.settings.getEnableAnalytics()) ||
             this.hostsComboBox.getSelectedItem() != this.settings.getHost();
     }
 
@@ -106,6 +111,7 @@ public class Configuration implements Configurable
         this.settings.setForceSSL(this.forceSSLCheckBox.isSelected());
         this.settings.setCopyToClipboard(this.copyToClipboardCheckBox.isSelected());
         this.settings.setHost((Host) this.hostsComboBox.getSelectedItem());
+        this.settings.setEnableAnalytics(this.enableAnalyticsCheckBox.isSelected());
     }
 
     /**
@@ -117,6 +123,7 @@ public class Configuration implements Configurable
         this.forceSSLCheckBox.setSelected(this.settings.getForceSSL());
         this.copyToClipboardCheckBox.setSelected(this.settings.getCopyToClipboard());
         this.hostsComboBox.setSelectedItem(this.settings.getHost());
+        this.enableAnalyticsCheckBox.setSelected(this.settings.getEnableAnalytics());
     }
 
     /**
@@ -128,6 +135,7 @@ public class Configuration implements Configurable
         this.forceSSLCheckBox = null;
         this.copyToClipboardCheckBox = null;
         this.hostsComboBox = null;
+        this.enableAnalyticsCheckBox = null;
     }
 
     /**

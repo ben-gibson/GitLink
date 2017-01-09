@@ -11,6 +11,8 @@ import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.BranchNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Repository;
+import uk.co.ben_gibson.repositorymapper.Settings.Settings;
+
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -93,6 +95,7 @@ public class ContextTest extends UsefulTestCase
      */
     public Context getContext(Repository repository, VirtualFile file)
     {
-        return new Context(repository, file, null, null);
+        final Settings settings = new Settings();
+        return new Context(repository, file, null, null, settings);
     }
 }

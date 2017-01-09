@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.BranchNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Exception.RemoteNotFoundException;
 import uk.co.ben_gibson.repositorymapper.Repository.Repository;
+import uk.co.ben_gibson.repositorymapper.Settings.Settings;
 
 /**
  * A contextual representation of a version controlled file and its current state.
@@ -20,26 +21,36 @@ public class Context
     private String commitHash;
     @Nullable
     private Integer caretLinePosition;
+    private Settings settings;
 
     /**
      * Constructor.
-     *
-     * @param repository        The repository the file belongs to.
+     *  @param repository        The repository the file belongs to.
      * @param file              The file.
      * @param commitHash        The commit hash.
      * @param caretLinePosition The line number.
+     * @param settings
      */
     public Context(
-        @NotNull Repository repository,
-        @NotNull VirtualFile file,
-        @Nullable String commitHash,
-        @Nullable Integer caretLinePosition
-    )
+            @NotNull Repository repository,
+            @NotNull VirtualFile file,
+            @Nullable String commitHash,
+            @Nullable Integer caretLinePosition,
+            @NotNull Settings settings)
     {
         this.repository        = repository;
         this.file              = file;
         this.commitHash        = commitHash;
         this.caretLinePosition = caretLinePosition;
+        this.settings = settings;
+    }
+
+    /**
+     * Get the settings.
+     * @return Settings
+     */
+    public Settings getSettings() {
+        return settings;
     }
 
     /**

@@ -12,9 +12,10 @@ import com.intellij.openapi.progress.Task;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Context.Context;
 import uk.co.ben_gibson.repositorymapper.Host.Host;
+import uk.co.ben_gibson.repositorymapper.Notification.Notifier;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactory;
 import uk.co.ben_gibson.repositorymapper.UrlFactory.UrlFactoryProvider;
-import uk.co.ben_gibson.repositorymapper.Notification.Notifier;
+
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.InputStream;
@@ -42,10 +43,8 @@ class Handler
      *
      * @param host             The git host to open in.
      * @param context          The context to open.
-     * @param forceSSL         Should SSL be enforced.
-     * @param copyToClipboard  Should the URL be copied to the clipboard.
      */
-    void open(@NotNull final Host host, @NotNull final Context context, final boolean forceSSL, final boolean copyToClipboard)
+    void open(@NotNull final Host host, @NotNull final Context context)
     {
         Task.Backgroundable task = new Task.Backgroundable(null, "Opening In Git Host") {
             @Override
@@ -53,44 +52,48 @@ class Handler
                 try {
                     UrlFactory factory = Handler.this.getUrlFactoryProvider().getForHost(host);
 
-                    URL url = factory.createUrl(context, forceSSL);
+                    URL url = factory.createUrl(context, context.getSettings().getForceSSL());
 
-                    if (copyToClipboard) {
+                    if (context.getSettings().getCopyToClipboard()) {
                         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(url.toString()), null);
                     }
 
                     BrowserLauncher.getInstance().open(url.toURI().toString());
 
-                    IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper"));
+                    if (context.getSettings().getEnableAnalytics()) {
 
-                    if (plugin == null) {
-                        LOG.info("Could not find plugin, skipping analytics.");
-                        return;
-                    }
+                        IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper"));
 
-                    URI googleAnalyticsUrl = new URI(
-                        "https",
-                        "google-analytics.com",
-                        "/collect",
-                        String.format(
-                            "v=%s&tid=%s&cid=%s&t=event&an=%s&aid=%s&av=%s&ec=%s&ea=%s",
-                            1,
-                            "UA-88421127-2",
-                            getInstallId(),
-                            "Open in git host",
-                            plugin.getPluginId(),
-                            plugin.getVersion(),
-                            host.toString(),
-                            (copyToClipboard) ? "Open and Copy" : "Open"
-                        ),
-                        null
-                    );
+                        if (plugin == null) {
+                            LOG.info("Could not find plugin, skipping analytics.");
+                            return;
+                        }
 
-                    try {
-                        InputStream stream = googleAnalyticsUrl.toURL().openStream();
-                        stream.close();
-                    } catch (Exception ignored) {
+                        URI googleAnalyticsUrl = new URI(
+                                "https",
+                                "google-analytics.com",
+                                "/collect",
+                                String.format(
+                                        "v=%s&tid=%s&cid=%s&t=event&an=%s&aid=%s&av=%s&ec=%s&ea=%s",
+                                        1,
+                                        "UA-88421127-2",
+                                        getInstallId(),
+                                        "Open in git host",
+                                        plugin.getPluginId(),
+                                        plugin.getVersion(),
+                                        host.toString(),
+                                        (context.getSettings().getCopyToClipboard()) ? "Open and Copy" : "Open"
+                                ),
+                                null
+                        );
 
+
+                        try {
+                            InputStream stream = googleAnalyticsUrl.toURL().openStream();
+                            stream.close();
+                        } catch (Exception ignored) {
+
+                        }
                     }
 
                 }  catch (Exception e) {

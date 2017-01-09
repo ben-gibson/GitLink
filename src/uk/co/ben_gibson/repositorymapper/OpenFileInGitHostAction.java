@@ -42,7 +42,7 @@ public class OpenFileInGitHostAction extends AnAction
 
         try {
             Context context = this.getContext(event);
-            Handler.getInstance().open(settings.getHost(), context, settings.getForceSSL(), settings.getCopyToClipboard());
+            Handler.getInstance().open(settings.getHost(), context);
         } catch (Exception e) {
             Notifier.errorNotification(e.getMessage());
         }
@@ -103,6 +103,8 @@ public class OpenFileInGitHostAction extends AnAction
 
         Repository repositoryWrapper = new Repository(new GitImpl(), repository, "master");
 
-        return new Context(repositoryWrapper, file, null, caretPosition);
+        Settings settings = ServiceManager.getService(project, Settings.class);
+
+        return new Context(repositoryWrapper, file, null, caretPosition, settings);
     }
 }

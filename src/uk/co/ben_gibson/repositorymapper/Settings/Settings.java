@@ -20,6 +20,7 @@ public class Settings implements PersistentStateComponent<Settings>
     private boolean copyToClipboard = false;
     private boolean forceSSL        = false;
     private Host host               = Host.GIT_HUB;
+    private boolean enableAnalytics = true;
 
     /**
      * {@inheritDoc}
@@ -98,5 +99,13 @@ public class Settings implements PersistentStateComponent<Settings>
     public void loadState(Settings state)
     {
         XmlSerializerUtil.copyBean(state, this);
+    }
+
+    public boolean getEnableAnalytics() {
+        return enableAnalytics;
+    }
+
+    public void setEnableAnalytics(boolean enableAnalytics) {
+        this.enableAnalytics = enableAnalytics;
     }
 }
