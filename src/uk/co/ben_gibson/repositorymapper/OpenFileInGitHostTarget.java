@@ -42,7 +42,7 @@ public class OpenFileInGitHostTarget implements SelectInTarget
 
         try {
             Context context = this.getContext(targetContext);
-            Handler.getInstance().open(settings.getHost(), context, settings.getForceSSL(), settings.getCopyToClipboard());
+            Handler.getInstance().open(settings.getHost(), context);
         } catch (Exception e) {
             Notifier.errorNotification(e.getMessage());
         }
@@ -77,7 +77,8 @@ public class OpenFileInGitHostTarget implements SelectInTarget
         if (isEditorOpened && isCurrentFileOpenedInEditor) {
             line = selectedTextEditor.getCaretModel().getLogicalPosition().line + 1;
         }
-        return new Context(repositoryWrapper, file, null, line);
+        Settings settings = ServiceManager.getService(targetContext.getProject(), Settings.class);
+        return new Context(repositoryWrapper, file, null, line, settings);
     }
 
     /**

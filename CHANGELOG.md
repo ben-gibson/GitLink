@@ -40,3 +40,7 @@ All Notable changes to `Open in Git host` will be documented in this file
 ## 1.6.4- 2016-12-30
 
 - Tweaked analytics
+
+## 1.6.5- 2017-01-10
+
+- Add an option to make analytics optional (enabled by default) #34

@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Open in Git host</name>
-  <version>1.6.4</version>
+  <version>1.6.5</version>
   <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
 
   <description><![CDATA[
