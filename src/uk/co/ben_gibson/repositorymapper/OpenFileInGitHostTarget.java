@@ -70,13 +70,15 @@ public class OpenFileInGitHostTarget implements SelectInTarget
 
         // also support "Select in Git Host" from the current editor
         Editor selectedTextEditor = FileEditorManager.getInstance(targetContext.getProject()).getSelectedTextEditor();
-        FileEditor fileEditor = FileEditorManager.getInstance(targetContext.getProject()).getSelectedEditor(file);
+        FileEditor fileEditor     = FileEditorManager.getInstance(targetContext.getProject()).getSelectedEditor(file);
 
         boolean isCurrentFileOpenedInEditor = fileEditor != null;
         boolean isEditorOpened = selectedTextEditor != null;
+
         if (isEditorOpened && isCurrentFileOpenedInEditor) {
             line = selectedTextEditor.getCaretModel().getLogicalPosition().line + 1;
         }
+
         return new Context(repositoryWrapper, file, null, line);
     }
 
