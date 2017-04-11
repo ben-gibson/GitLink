@@ -8,7 +8,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.repositorymapper.Host.Host;
 
-@State(name = "SaveActionSettings",
+@State(name = "uk.co.ben_gibson.repositorymapper.Settings",
     storages = {@Storage(id = "default", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/settings.xml")}
 )
 
