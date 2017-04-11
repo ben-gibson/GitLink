@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>uk.co.ben-gibson.remote.repository.mapper</id>
   <name>Open in Git host</name>
-  <version>1.6.5</version>
+  <version>1.6.6</version>
   <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
 
   <description><![CDATA[
@@ -27,7 +27,7 @@
   <change-notes><![CDATA[
     <ul>
       <li>
-          Removed analytics.
+          Fixed incompatibility issue with save actions plugin. Note that you have to configure the plugin again!
       </li>
      </ul>
     ]]>
