@@ -1,10 +1,9 @@
-<idea-plugin version="2">
-  <id>uk.co.ben-gibson.remote.repository.mapper</id>
-  <name>Open in Git host</name>
-  <version>1.6.6</version>
-  <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
-
-  <description><![CDATA[
+<idea-plugin url="https://github.com/ben-gibson/jetbrains-open-in-git-host">
+    <id>uk.co.ben-gibson.remote.repository.mapper</id>
+    <name>Open in Git host</name>
+    <version>2.0.0</version>
+    <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
+    <description><![CDATA[
       Opens a local file under Git version control in its remote host using the default browser.
       It can also optionally copy the URL to the clipboard.
       <br />
@@ -23,48 +22,45 @@
       Note: The current branch is used unless it does not exist in your remote host in which case it defaults to the
       master branch.
     ]]></description>
-
-  <change-notes><![CDATA[
+    <change-notes><![CDATA[
     <ul>
       <li>
-          Fixed incompatibility issue with save actions plugin. Note that you have to configure the plugin again!
+          Rebuilt code base for a cleaner more modular plugin that will scale better in future updates!
       </li>
      </ul>
     ]]>
-  </change-notes>
+    </change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="139.0"/>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="139.0"/>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-       on how to target different products -->
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
 
-  <depends>com.intellij.modules.vcs</depends>
-  <depends>com.intellij.modules.lang</depends>
-  <depends>com.intellij.modules.platform</depends>
-  <depends>Git4Idea</depends>
+    <depends>com.intellij.modules.vcs</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>Git4Idea</depends>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceImplementation="uk.co.ben_gibson.repositorymapper.Handler"/>
-    <projectService serviceImplementation="uk.co.ben_gibson.repositorymapper.Settings.Settings"/>
-    <projectConfigurable instance="uk.co.ben_gibson.repositorymapper.Settings.Configuration"/>
-    <selectInTarget implementation="uk.co.ben_gibson.repositorymapper.OpenFileInGitHostTarget"/>
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceInterface="uk.co.ben_gibson.repositorymapper.Logger.Logger"
+                            serviceImplementation="uk.co.ben_gibson.repositorymapper.Logger.Logger"/>
+    </extensions>
 
-  <actions>
-    <action id="RemoteRepositoryMapper.Open.File.In.Git.Host.Action" class="uk.co.ben_gibson.repositorymapper.OpenFileInGitHostAction" text="Open in Git host"
-            description="Opens the version controlled file in the Git host using the default browser">
-      <add-to-group group-id="ViewMenu" anchor="last"/>
-      <add-to-group group-id="EditorPopupMenu"/>
-      <add-to-group group-id="ProjectViewPopupMenu"/>
-      <add-to-group group-id="EditorTabPopupMenu"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
-    </action>
-    <action id="RemoteRepositoryMapper.Open.Commit.In.Git.Host" class="uk.co.ben_gibson.repositorymapper.OpenCommitInGitHostAction" text="Open in Git host"
-            description="Opens the commit in the Git host using the default browser">
-      <add-to-group group-id="Git.LogContextMenu" />
-      <add-to-group group-id="Vcs.Log.ContextMenu" />
-    </action>
-  </actions>
+    <actions>
+
+        <action id="uk.co.ben_gibson.repositorymapper.Action.FileAction.FileAction"
+                class="uk.co.ben_gibson.repositorymapper.Action.FileAction"
+                text="Open in Git host"
+                description="Opens the version controlled file in the Git host using the default browser"
+        >
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
+        </action>
+
+    </actions>
 
 </idea-plugin>
