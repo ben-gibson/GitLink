@@ -9,7 +9,8 @@ public class LogMessage
     private final Type type;
 
     public enum Type {
-        NOTICE, ERROR
+        NOTICE,
+        ERROR
     }
 
     /**

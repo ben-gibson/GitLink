@@ -1,9 +1,9 @@
-package uk.co.ben_gibson.repositorymapper.Logger.Handler;
+package uk.co.ben_gibson.repositorymapper.Logger.Handlers;
 
 import uk.co.ben_gibson.repositorymapper.Logger.LogMessage;
 
 /**
- * Handles a log message in some way.
+ * Handlers a log message in some way.
  */
 public interface LogHandler
 {

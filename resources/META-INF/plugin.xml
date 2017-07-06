@@ -43,16 +43,19 @@
     <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceInterface="uk.co.ben_gibson.repositorymapper.Logger.Logger"
-                            serviceImplementation="uk.co.ben_gibson.repositorymapper.Logger.Logger"/>
+        <applicationService
+            serviceInterface="uk.co.ben_gibson.repositorymapper.Container"
+            serviceImplementation="uk.co.ben_gibson.repositorymapper.Container"
+        />
     </extensions>
 
     <actions>
 
-        <action id="uk.co.ben_gibson.repositorymapper.Action.FileAction.FileAction"
-                class="uk.co.ben_gibson.repositorymapper.Action.FileAction"
-                text="Open in Git host"
-                description="Opens the version controlled file in the Git host using the default browser"
+        <action
+            id="uk.co.ben_gibson.repositorymapper.Action.OpenInGitHostActiveFileAction.FileAction"
+            class="uk.co.ben_gibson.repositorymapper.Action.OpenInGitHostActiveFileAction"
+            text="Open in Git host"
+            description="Opens the version controlled file in the Git host using the default browser"
         >
             <add-to-group group-id="ViewMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu"/>

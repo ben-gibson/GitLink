@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.repositorymapper.Logger;
 
-import uk.co.ben_gibson.repositorymapper.Logger.Handler.LogHandler;
+import uk.co.ben_gibson.repositorymapper.Logger.Handlers.LogHandler;
 import java.util.ArrayList;
 import java.util.List;
 
