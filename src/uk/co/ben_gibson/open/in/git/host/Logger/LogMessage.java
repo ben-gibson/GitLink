@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.repositorymapper.Logger;
+package uk.co.ben_gibson.open.in.git.host.Logger;
 
 /**
  * Represents a log message.
@@ -31,6 +31,14 @@ public class LogMessage
     static LogMessage notice(String message)
     {
         return new LogMessage(message, Type.NOTICE);
+    }
+
+    /**
+     * Append a string to the current message.
+     */
+    public LogMessage append(String message)
+    {
+        return new LogMessage(message.concat(this.toString()), this.type);
     }
 
     /**

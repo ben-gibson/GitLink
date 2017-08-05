@@ -1,11 +1,14 @@
-package uk.co.ben_gibson.repositorymapper;
+package uk.co.ben_gibson.open.in.git.host;
 
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
-import uk.co.ben_gibson.repositorymapper.Logger.Handlers.DiagnosticLogHandler;
-import uk.co.ben_gibson.repositorymapper.Logger.Handlers.EventLogHandler;
-import uk.co.ben_gibson.repositorymapper.Logger.Logger;
-import uk.co.ben_gibson.repositorymapper.Plugin.Plugin;
+import uk.co.ben_gibson.open.in.git.host.Git.Remote.RemoteHost;
+import uk.co.ben_gibson.open.in.git.host.Git.Remote.Url.UrlFactory.CompoundRemoteUrlFactory;
+import uk.co.ben_gibson.open.in.git.host.Git.Remote.Url.UrlFactory.GitHubRemoteUrlFactory;
+import uk.co.ben_gibson.open.in.git.host.Git.Remote.Url.UrlFactory.RemoteUrlFactory;
+import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.DiagnosticLogHandler;
+import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.EventLogHandler;
+import uk.co.ben_gibson.open.in.git.host.Logger.Logger;
 
 /**
  * Dependency container.
@@ -35,15 +38,37 @@ public class Container
     }
 
     /**
+     * Get the remote host configured in the settings.
+     */
+    public RemoteHost getRemoteHost()
+    {
+        return this.getSettings().getRemoteHost();
+    }
+
+    /**
      * Get the plugin settings scoped to the given project.
      */
     public Settings getSettings()
     {
         if (this.settings == null) {
-            this.settings = new Settings(true);
+            this.settings = new Settings(RemoteHost.GIT_HUB, true, true);
         }
 
         return this.settings;
+    }
+
+    /**
+     * Get the remote url factory.
+     */
+    public RemoteUrlFactory getRemoteUrlFactory()
+    {
+        boolean forceSSL = this.getSettings().forceSSL();
+
+        CompoundRemoteUrlFactory compoundFactory = new CompoundRemoteUrlFactory();
+
+        compoundFactory.registerFactory(new GitHubRemoteUrlFactory(forceSSL));
+
+        return compoundFactory;
     }
 
     /**

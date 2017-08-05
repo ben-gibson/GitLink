@@ -1,9 +1,9 @@
-package uk.co.ben_gibson.repositorymapper.Plugin;
+package uk.co.ben_gibson.open.in.git.host;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 
 /**
- * A value object representing the plugin.
+ * Represents the plugin.
  */
 public class Plugin
 {

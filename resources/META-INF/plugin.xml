@@ -44,16 +44,16 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService
-            serviceInterface="uk.co.ben_gibson.repositorymapper.Container"
-            serviceImplementation="uk.co.ben_gibson.repositorymapper.Container"
+            serviceInterface="uk.co.ben_gibson.open.in.git.host.Container"
+            serviceImplementation="uk.co.ben_gibson.open.in.git.host.Container"
         />
     </extensions>
 
     <actions>
 
         <action
-            id="uk.co.ben_gibson.repositorymapper.Action.OpenInGitHostActiveFileAction.FileAction"
-            class="uk.co.ben_gibson.repositorymapper.Action.OpenInGitHostActiveFileAction"
+            id="uk.co.ben_gibson.open.in.git.host.Action.ActiveFileAction.FileAction"
+            class="uk.co.ben_gibson.open.in.git.host.Action.ActiveFileAction"
             text="Open in Git host"
             description="Opens the version controlled file in the Git host using the default browser"
         >

@@ -1,6 +1,8 @@
-package uk.co.ben_gibson.repositorymapper.Logger;
+package uk.co.ben_gibson.open.in.git.host.Logger;
 
-import uk.co.ben_gibson.repositorymapper.Logger.Handlers.LogHandler;
+import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.LogHandler;
+import uk.co.ben_gibson.open.in.git.host.Plugin;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,16 @@ public class Logger
     public void notice(String message)
     {
         this.log(LogMessage.notice(message));
+    }
+
+    /**
+     * Logs an error.
+     *
+     * @param message The error message to log.
+     */
+    public void error(String message)
+    {
+        this.log(LogMessage.error(message));
     }
 
     /**

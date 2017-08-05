@@ -1,10 +1,10 @@
-package uk.co.ben_gibson.repositorymapper.Logger.Handlers;
+package uk.co.ben_gibson.open.in.git.host.Logger.Handlers;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import uk.co.ben_gibson.repositorymapper.Logger.LogMessage;
-import uk.co.ben_gibson.repositorymapper.Plugin.Plugin;
+import uk.co.ben_gibson.open.in.git.host.Logger.LogMessage;
+import uk.co.ben_gibson.open.in.git.host.Plugin;
 
 /**
  * Logs messages to the event log window.

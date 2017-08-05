@@ -1,7 +1,7 @@
-package uk.co.ben_gibson.repositorymapper.Logger.Handlers;
+package uk.co.ben_gibson.open.in.git.host.Logger.Handlers;
 
 import com.intellij.openapi.diagnostic.Logger;
-import uk.co.ben_gibson.repositorymapper.Logger.LogMessage;
+import uk.co.ben_gibson.open.in.git.host.Logger.LogMessage;
 
 /**
  * Decorates the intellij diagnostic logger.
