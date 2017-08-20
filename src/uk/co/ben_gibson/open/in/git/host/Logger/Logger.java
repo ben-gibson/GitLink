@@ -11,47 +11,34 @@ import java.util.List;
  */
 public class Logger
 {
-    private List<LogHandler> handlers = new ArrayList<LogHandler>();
+    private List<LogHandler> handlers = new ArrayList<>();
 
-    /**
-     * Logs a notice.
-     *
-     * @param message The notice message to log.
-     */
     public void notice(String message)
     {
         this.log(LogMessage.notice(message));
     }
 
-    /**
-     * Logs an error.
-     *
-     * @param message The error message to log.
-     */
+    public void warning(String message)
+    {
+        this.log(LogMessage.warning(message));
+    }
+
     public void error(String message)
     {
         this.log(LogMessage.error(message));
     }
 
-    /**
-     * Register a handler.
-     *
-     * @param handler The handler to register.
-     */
     public void registerHandler(LogHandler handler)
     {
         this.handlers.add(handler);
     }
 
-    /**
-     * Logs a message.
-     *
-     * @param message The message to log.
-     */
     private void log(LogMessage message)
     {
         for (LogHandler handler : this.handlers) {
-            handler.handle(message);
+            if (handler.handles(message)) {
+                handler.handle(message);
+            }
         }
     }
 }

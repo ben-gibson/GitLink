@@ -10,62 +10,46 @@ public class LogMessage
 
     public enum Type {
         NOTICE,
-        ERROR
+        ERROR,
+        WARNING
     }
 
-    /**
-     * Constructor.
-     *
-     * @param message  The log message.
-     * @param type     The log type.
-     */
     private LogMessage(String message, Type type)
     {
         this.message = message;
         this.type    = type;
     }
 
-    /**
-     * Create a notice message.
-     */
     static LogMessage notice(String message)
     {
         return new LogMessage(message, Type.NOTICE);
     }
 
-    /**
-     * Append a string to the current message.
-     */
-    public LogMessage append(String message)
+    static LogMessage warning(String message)
     {
-        return new LogMessage(message.concat(this.toString()), this.type);
+        return new LogMessage(message, Type.WARNING);
     }
 
-    /**
-     * Create a error message.
-     */
     public static LogMessage error(String message)
     {
         return new LogMessage(message, Type.ERROR);
     }
 
-    @Override
     public String toString() {
         return this.message;
     }
 
-    /**
-     * Does this represent a notice.
-     */
-    public boolean isNotice()
+    public boolean notice()
     {
         return this.type.equals(Type.NOTICE);
     }
 
-    /**
-     * Does this represent a error.
-     */
-    public boolean isError()
+    public boolean error()
+    {
+        return this.type.equals(Type.ERROR);
+    }
+
+    public boolean warning()
     {
         return this.type.equals(Type.ERROR);
     }

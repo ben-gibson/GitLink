@@ -1,15 +1,21 @@
 package uk.co.ben_gibson.open.in.git.host.Extension;
 
-import uk.co.ben_gibson.open.in.git.host.Git.Remote.Url.RemoteUrl;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.net.URL;
 
 /**
  * An extension to copy a remote git url to the clipboard.
  */
 public class CopyToClipboardExtension implements Extension
 {
-    @Override
-    public void handle(RemoteUrl url)
+    public void handle(URL remoteUrl)
     {
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(remoteUrl.toString()), null);
+    }
 
+    public String displayName()
+    {
+        return "Copy to Clipboard";
     }
 }

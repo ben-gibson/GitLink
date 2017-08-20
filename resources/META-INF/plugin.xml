@@ -47,6 +47,8 @@
             serviceInterface="uk.co.ben_gibson.open.in.git.host.Container"
             serviceImplementation="uk.co.ben_gibson.open.in.git.host.Container"
         />
+        <projectService serviceImplementation="uk.co.ben_gibson.open.in.git.host.Settings"/>
+        <projectConfigurable instance="uk.co.ben_gibson.open.in.git.host.Configuration"/>
     </extensions>
 
     <actions>
@@ -62,6 +64,12 @@
             <add-to-group group-id="ProjectViewPopupMenu"/>
             <add-to-group group-id="EditorTabPopupMenu"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
+        </action>
+
+        <action id="RemoteRepositoryMapper.Open.Commit.In.Git.Host" class="uk.co.ben_gibson.open.in.git.host.Action.CommitAction" text="Open in Git host"
+                description="Opens the commit in the Git host using the default browser">
+            <add-to-group group-id="Git.LogContextMenu" />
+            <add-to-group group-id="Vcs.Log.ContextMenu" />
         </action>
 
     </actions>

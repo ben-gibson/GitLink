@@ -1,10 +1,10 @@
-package uk.co.ben_gibson.open.in.git.host.Git.Remote;
+package uk.co.ben_gibson.open.in.git.host.Git;
 
 import com.intellij.openapi.util.IconLoader;
 import javax.swing.*;
 
 /**
- * Represents a remote git host (GitHub, BitBucket, GitLab etc).
+ * Represents a remote git createHostUrl (GitHub, BitBucket, GitLab etc).
  */
 public enum RemoteHost
 {
@@ -17,42 +17,23 @@ public enum RemoteHost
     private final String name;
     private final String icon;
 
-    /**
-     * Constructor.
-     *
-     * @param name The host name.
-     * @param icon The host icon.
-     */
     RemoteHost(String name, String icon)
     {
         this.name = name;
         this.icon = icon;
     }
 
-    /**
-     * Get name.
-     *
-     * @return String
-     */
     public String toString()
     {
         return this.name;
     }
 
-    /**
-     * Does this represent GitHub?
-     */
-    public boolean isGitHub()
+    public boolean gitHub()
     {
         return (this == GIT_HUB);
     }
 
-    /**
-     * Get icon.
-     *
-     * @return Icon
-     */
-    public Icon getIcon()
+    public Icon icon()
     {
         return IconLoader.getIcon(this.icon);
     }

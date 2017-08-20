@@ -2,6 +2,7 @@ plugins {
     id "org.jetbrains.intellij" version "0.2.13"
 }
 
+apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
@@ -28,3 +29,6 @@ intellij {
     updateSinceUntilBuild false
     sameSinceUntilBuild false
 }
+
+group 'org.jetbrains'
+version '2.0'

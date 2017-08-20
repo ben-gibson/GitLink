@@ -12,41 +12,37 @@ import uk.co.ben_gibson.open.in.git.host.Plugin;
 public class EventLogHandler implements LogHandler
 {
     private Plugin plugin;
+    private boolean verbose;
 
-    /**
-     * Constructor.
-     *
-     * @param plugin The plugin to log on behalf of.
-     */
-    public EventLogHandler(Plugin plugin)
+    public EventLogHandler(Plugin plugin, boolean verbose)
     {
-        this.plugin = plugin;
+        this.plugin  = plugin;
+        this.verbose = verbose;
     }
 
-    @Override
     public void handle(LogMessage message)
     {
         Notifications.Bus.notify(new Notification(
-            this.plugin.getName(),
+            this.plugin.displayName(),
             this.plugin.toString(),
             message.toString(),
             this.getNotificationTypeForMessage(message)
         ));
     }
 
-    /**
-     * Get the notification type for a message.
-     *
-     * @param message The message to get a notification type from.
-     */
     private NotificationType getNotificationTypeForMessage(LogMessage message)
     {
-        if (message.isError()) {
+        if (message.error()) {
             return NotificationType.ERROR;
-        } else if (message.isNotice()) {
+        } else if (message.notice()) {
             return NotificationType.INFORMATION;
         }
 
-        return NotificationType.WARNING; // TODO
+        return NotificationType.WARNING;
+    }
+
+    public boolean handles(LogMessage message)
+    {
+        return !message.notice() || (message.notice() && this.verbose);
     }
 }

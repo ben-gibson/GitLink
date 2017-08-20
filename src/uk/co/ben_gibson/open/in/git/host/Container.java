@@ -1,31 +1,46 @@
 package uk.co.ben_gibson.open.in.git.host;
 
+import com.intellij.ide.DataManager;
 import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.PluginId;
-import uk.co.ben_gibson.open.in.git.host.Git.Remote.RemoteHost;
-import uk.co.ben_gibson.open.in.git.host.Git.Remote.Url.UrlFactory.CompoundRemoteUrlFactory;
-import uk.co.ben_gibson.open.in.git.host.Git.Remote.Url.UrlFactory.GitHubRemoteUrlFactory;
-import uk.co.ben_gibson.open.in.git.host.Git.Remote.Url.UrlFactory.RemoteUrlFactory;
+import com.intellij.openapi.project.Project;
+import uk.co.ben_gibson.open.in.git.host.Extension.CopyToClipboardExtension;
+import uk.co.ben_gibson.open.in.git.host.Extension.Extension;
+import uk.co.ben_gibson.open.in.git.host.Extension.OpenInBrowserExtension;
+import uk.co.ben_gibson.open.in.git.host.Git.RemoteHost;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.CompoundRemoteUrlFactory;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.GitHubRemoteUrlFactory;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.DiagnosticLogHandler;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.EventLogHandler;
 import uk.co.ben_gibson.open.in.git.host.Logger.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Dependency container.
  *
- * Wraps the Intellij service manager. I'm unsure if Intellij have a better solution to dependency injection or the Java
- * world in general. Coming from a purely PHP background I have opted for this simple container.
+ * There doesn't seem to be much documentation around Intellij's service manager. Services seem to be
+ * registered through the plugin.xml but there isn't any information about handling services that have complex dependencies.
+ * This acts as a simple alternative.
  */
 public class Container
 {
     private Plugin plugin;
     private Logger logger;
-    private Settings settings;
+    private List<Extension> extensions;
 
-    /**
-     * Get the plugin.
-     */
-    public Plugin getPlugin()
+    public Project activeProject()
+    {
+        DataContext dataContext = DataManager.getInstance().getDataContextFromFocus().getResult();
+
+        return DataKeys.PROJECT.getData(dataContext);
+    }
+
+    public Plugin plugin()
     {
         if (this.plugin == null) {
 
@@ -37,58 +52,54 @@ public class Container
         return this.plugin;
     }
 
-    /**
-     * Get the remote host configured in the settings.
-     */
-    public RemoteHost getRemoteHost()
+    public Settings settings()
     {
-        return this.getSettings().getRemoteHost();
+       return ServiceManager.getService(this.activeProject(), Settings.class);
     }
 
-    /**
-     * Get the plugin settings scoped to the given project.
-     */
-    public Settings getSettings()
+    public RemoteUrlFactory remoteUrlFactory()
     {
-        if (this.settings == null) {
-            this.settings = new Settings(RemoteHost.GIT_HUB, true, true);
-        }
-
-        return this.settings;
-    }
-
-    /**
-     * Get the remote url factory.
-     */
-    public RemoteUrlFactory getRemoteUrlFactory()
-    {
-        boolean forceSSL = this.getSettings().forceSSL();
-
         CompoundRemoteUrlFactory compoundFactory = new CompoundRemoteUrlFactory();
 
-        compoundFactory.registerFactory(new GitHubRemoteUrlFactory(forceSSL));
+        compoundFactory.registerFactory(new GitHubRemoteUrlFactory(this.settings().forceSSL()));
 
         return compoundFactory;
     }
 
-    /**
-     * Get the logger.
-     */
-    public Logger getLogger()
+    public Logger logger()
     {
         if (this.logger == null) {
 
             this.logger = new Logger();
 
-            if (this.getSettings().enableEventLog()) {
-                this.logger.registerHandler(new EventLogHandler(this.getPlugin()));
-            }
+            this.logger.registerHandler(new EventLogHandler(this.plugin(), this.settings().enableVerboseEventLog()));
 
             this.logger.registerHandler(
-                new DiagnosticLogHandler(com.intellij.openapi.diagnostic.Logger.getInstance(this.getPlugin().getName()))
+                new DiagnosticLogHandler(com.intellij.openapi.diagnostic.Logger.getInstance(this.plugin().displayName()))
             );
         }
 
         return this.logger;
+    }
+
+    public List<Extension> registeredExtensions()
+    {
+        if (this.extensions == null) {
+            this.extensions = new ArrayList<>();
+            this.extensions.add(new OpenInBrowserExtension());
+            this.extensions.add(new CopyToClipboardExtension());
+        }
+
+        return this.extensions;
+    }
+
+    /**
+     * Flushes the lazy loading cache. This is useful when there are have been setting changes with could affect
+     * the services behaviour.
+     */
+    public void flush()
+    {
+        this.logger = null;
+        this.extensions = null;
     }
 }

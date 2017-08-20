@@ -1,10 +1,14 @@
 package uk.co.ben_gibson.open.in.git.host.Git;
 
-import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import git4idea.GitLocalBranch;
+import git4idea.GitRemoteBranch;
 import git4idea.commands.Git;
+import git4idea.repo.GitRemote;
 import git4idea.repo.GitRepository;
-
-import java.net.URL;
+import uk.co.ben_gibson.open.in.git.host.Git.Exception.BranchException;
+import uk.co.ben_gibson.open.in.git.host.Git.Exception.RemoteException;
 
 /**
  * Represents a git repository.
@@ -14,10 +18,8 @@ public class Repository
     private final String defaultBranch;
     private final GitRepository repository;
     private final Git git;
+    private Remote origin;
 
-    /**
-     * Constructor.
-     */
     public Repository(Git git, GitRepository repository, String defaultBranch)
     {
         this.git           = git;
@@ -25,50 +27,69 @@ public class Repository
         this.defaultBranch = defaultBranch;
     }
 
-    /**
-     * Get the default branch.
-     *
-     * @return String
-     */
-    public String getDefaultBranch()
+    Project project()
     {
-        return this.defaultBranch;
+        return this.repository.getProject();
     }
 
-    /**
-     * Get the canonical origin url.
-     */
-    public URL getOriginUrl() throws RemoteNotFoundException, MalformedURLException
+    VirtualFile root()
     {
-        return this.getRemoteUrl(this.getOrigin(), forceSSL);
+        return this.repository.getRoot();
     }
 
-    /**
-     * Get the canonical url from a remote.
-     *
-     * @param remote    The remote to get the url from.
-     * @param forceSSL  Should we enforce SSL if the HTTP protocol is not used in the remote?.
-     *
-     * @return URL
-     */
-    public URL getRemoteUrl(@NotNull Remote remote, boolean forceSSL) throws MalformedURLException, RemoteNotFoundException
+    public String getRelativePath(File file)
     {
-        String url = StringUtil.trimEnd(remote.getFirstUrl(), ".git");
+        return file.path().substring(this.root().getPath().length());
+    }
 
-        url = url.replaceAll(":\\d{1,4}", ""); // remove port
+    public String originUrl() throws RemoteException
+    {
+        return this.origin().url();
+    }
 
-        if (url.startsWith("http")) {
-            return new URL(url);
+    public String currentBranch()
+    {
+        GitLocalBranch localBranch = this.repository.getCurrentBranch();
+
+        // If no current branch is found, or it does not exist in the origin repository and doesn't track a remote branch then
+        // the branch not found exception is thrown.
+
+        if (localBranch != null) {
+            try {
+                if (this.origin.hasBranch(this, localBranch)) {
+                    return localBranch.getName();
+                }
+            } catch (BranchException exception) {
+                GitRemoteBranch trackedBranch = localBranch.findTrackedBranch(this.repository);
+                if (trackedBranch != null) {
+                    return trackedBranch.getName();
+                }
+            }
         }
 
-        url = StringUtil.replace(url, "git@", "");
-        url = StringUtil.replace(url, "ssh://", "");
-        url = StringUtil.replace(url, "git://", "");
+        return this.defaultBranch();
+    }
 
-        String protocol = (forceSSL) ? "https" : "http";
+    private Remote origin() throws RemoteException
+    {
+        if (this.origin == null) {
 
-        url = protocol + "://" + StringUtil.replace(url, ":", "/");
+            for (GitRemote remote : this.repository.getRemotes()) {
+                if (remote.getName().equals("origin")) {
+                    this.origin = new Remote(this.git, remote);
+                }
+            }
 
-        return new URL(url);
+            if (this.origin == null) {
+                throw RemoteException.originNotFound();
+            }
+        }
+
+        return this.origin;
+    }
+
+    private String defaultBranch()
+    {
+        return this.defaultBranch;
     }
 }

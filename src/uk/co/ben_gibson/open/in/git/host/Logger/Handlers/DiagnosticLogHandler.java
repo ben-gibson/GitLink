@@ -10,25 +10,24 @@ public class DiagnosticLogHandler implements LogHandler
 {
     private Logger logger;
 
-    /**
-     * Constructor.
-     *
-     * @param logger The intellij logger
-     */
     public DiagnosticLogHandler(Logger logger)
     {
         this.logger = logger;
     }
 
-    @Override
     public void handle(LogMessage message)
     {
-        if (message.isError()) {
+        if (message.error()) {
             this.logger.error(message.toString());
-        } else if (message.isNotice()) {
+        } else if (message.notice()) {
             this.logger.info(message.toString());
-        } else { // TODO
+        } else {
             this.logger.warn(message.toString());
         }
+    }
+
+    public boolean handles(LogMessage message)
+    {
+        return true;
     }
 }
