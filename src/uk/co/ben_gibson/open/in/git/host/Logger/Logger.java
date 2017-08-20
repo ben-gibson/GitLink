@@ -1,7 +1,6 @@
 package uk.co.ben_gibson.open.in.git.host.Logger;
 
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.LogHandler;
-import uk.co.ben_gibson.open.in.git.host.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;

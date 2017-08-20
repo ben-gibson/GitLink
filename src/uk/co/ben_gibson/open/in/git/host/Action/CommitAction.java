@@ -20,14 +20,9 @@ import java.util.List;
  */
 public class CommitAction extends Action
 {
-    protected URL handleAction(AnActionEvent event) throws OpenInGitHostException
+    protected URL handleAction(Project project, AnActionEvent event) throws OpenInGitHostException
     {
-        Project project = event.getProject();
         VcsLog log = event.getData(VcsLogDataKeys.VCS_LOG);
-
-        if (project == null) {
-            throw ActionException.projectNotFound();
-        }
 
         if (log == null) {
             throw ActionException.vcsLogNotFound();
@@ -38,44 +33,27 @@ public class CommitAction extends Action
         GitRepository repository = GitUtil.getRepositoryManager(project).getRepositoryForRoot(commit.getRoot());
 
         if (repository == null) {
-            this.logger().warning("Git repository not found, make sure you have registered your version control root: Preferences → Version Control");
+            this.logger.warning("Git repository not found, make sure you have registered your version control root: Preferences → Version Control");
             return null;
         }
 
-        return this.remoteUrlFactory().createRemoteUrlToCommit(
-            this.settings().remoteHost(),
+        return this.remoteUrlFactory.createRemoteUrlToCommit(
+            this.settings.getRemoteHost(),
             new Repository(new GitImpl(), repository, "master"),
             new Commit(commit)
         );
     }
 
-    public void update(AnActionEvent event)
+    protected boolean shouldActionBeEnabled(AnActionEvent event)
     {
-        event.getPresentation().setEnabledAndVisible(true);
-
-        Project project = event.getProject();
-
-        if (project == null) {
-            event.getPresentation().setEnabledAndVisible(false);
-            return;
-        }
-
         VcsLog log = event.getData(VcsLogDataKeys.VCS_LOG);
 
         if (log == null) {
-            event.getPresentation().setEnabledAndVisible(false);
-            return;
+            return false;
         }
 
         List<VcsFullCommitDetails> commits = log.getSelectedDetails();
 
-        if (commits.size() != 1) {
-            event.getPresentation().setEnabledAndVisible(false);
-            return;
-        }
-
-        event.getPresentation().setEnabledAndVisible(true);
-
-        event.getPresentation().setIcon(this.settings().remoteHost().icon());
+        return commits.size() == 1;
     }
 }

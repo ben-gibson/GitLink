@@ -7,11 +7,12 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
-@State(name = "uk.co.ben_gibson.open.in.git.host.Settings",
-        storages = {@Storage(id = "default", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/settings.xml")}
+@State(name = "Settings",
+    storages = {@Storage(id = "default", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/settings.xml")}
 )
 
 public class Settings implements PersistentStateComponent<Settings>
@@ -26,7 +27,7 @@ public class Settings implements PersistentStateComponent<Settings>
         return !this.enabledExtensions.isEmpty();
     }
 
-    public boolean extensionIsEnabled(Extension extension)
+    public boolean getEnabledExtensions(Extension extension)
     {
         return this.enabledExtensions.contains(extension);
     }
@@ -36,7 +37,7 @@ public class Settings implements PersistentStateComponent<Settings>
         this.enabledExtensions = enabledExtensions;
     }
 
-    public boolean forceSSL()
+    public boolean getForceSSL()
     {
         return this.forceSSL;
     }
@@ -46,7 +47,7 @@ public class Settings implements PersistentStateComponent<Settings>
         this.forceSSL = forceSSL;
     }
 
-    public boolean enableVerboseEventLog()
+    public boolean getEnableVerboseEventLog()
     {
         return this.enableVerboseEventLog;
     }
@@ -61,7 +62,7 @@ public class Settings implements PersistentStateComponent<Settings>
         this.remoteHost = remoteHost;
     }
 
-    public RemoteHost remoteHost()
+    public RemoteHost getRemoteHost()
     {
         return this.remoteHost;
     }

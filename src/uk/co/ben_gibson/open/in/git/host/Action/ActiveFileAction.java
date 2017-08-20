@@ -21,14 +21,9 @@ import java.net.URL;
  */
 public class ActiveFileAction extends Action
 {
-    public URL handleAction(AnActionEvent event) throws OpenInGitHostException
+    public URL handleAction(Project project, AnActionEvent event) throws OpenInGitHostException
     {
-        Project project  = event.getProject();
         VirtualFile file = event.getData(CommonDataKeys.VIRTUAL_FILE);
-
-        if (project == null) {
-            throw ActionException.projectNotFound();
-        }
 
         if (file == null) {
             throw ActionException.fileNotFound();
@@ -37,7 +32,7 @@ public class ActiveFileAction extends Action
         GitRepository repository = GitUtil.getRepositoryManager(project).getRepositoryForFile(file);
 
         if (repository == null) {
-            this.logger().warning("Git repository not found, make sure you have registered your version control root: Preferences → Version Control");
+            this.logger.warning("Git repository not found, make sure you have registered your version control root: Preferences → Version Control");
             return null;
         }
 
@@ -45,27 +40,16 @@ public class ActiveFileAction extends Action
 
         Integer caretPosition = (editor != null) ? editor.getCaretModel().getLogicalPosition().line + 1 : null;
 
-        return this.remoteUrlFactory().createRemoteUrlToFile(
-            this.settings().remoteHost(),
+        return this.remoteUrlFactory.createRemoteUrlToFile(
+            this.settings.getRemoteHost(),
             new Repository(new GitImpl(), repository, "master"),
             new File(file),
             caretPosition
         );
     }
 
-    public void update(AnActionEvent event)
+    protected boolean shouldActionBeEnabled(AnActionEvent event)
     {
-        super.update(event);
-
-        event.getPresentation().setEnabled(this.shouldActionBeEnabled(event));
-
-        if (event.getPresentation().isEnabled() && event.getProject() != null) {
-            event.getPresentation().setIcon(this.settings().remoteHost().icon());
-        }
-    }
-
-    private boolean shouldActionBeEnabled(AnActionEvent event)
-    {
-        return ((event.getProject() != null) && (event.getData(CommonDataKeys.VIRTUAL_FILE) != null));
+        return (event.getData(CommonDataKeys.VIRTUAL_FILE) != null);
     }
 }

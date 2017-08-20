@@ -1,22 +1,19 @@
 package uk.co.ben_gibson.open.in.git.host;
 
-import com.intellij.ide.DataManager;
 import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import uk.co.ben_gibson.open.in.git.host.Extension.CopyToClipboardExtension;
 import uk.co.ben_gibson.open.in.git.host.Extension.Extension;
 import uk.co.ben_gibson.open.in.git.host.Extension.OpenInBrowserExtension;
-import uk.co.ben_gibson.open.in.git.host.Git.RemoteHost;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.CompoundRemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.GitHubRemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.DiagnosticLogHandler;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.EventLogHandler;
 import uk.co.ben_gibson.open.in.git.host.Logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +27,7 @@ import java.util.List;
 public class Container
 {
     private Plugin plugin;
-    private Logger logger;
     private List<Extension> extensions;
-
-    public Project activeProject()
-    {
-        DataContext dataContext = DataManager.getInstance().getDataContextFromFocus().getResult();
-
-        return DataKeys.PROJECT.getData(dataContext);
-    }
 
     public Plugin plugin()
     {
@@ -52,34 +41,31 @@ public class Container
         return this.plugin;
     }
 
-    public Settings settings()
+    public Settings settings(Project project)
     {
-       return ServiceManager.getService(this.activeProject(), Settings.class);
+       return ServiceManager.getService(project, Settings.class);
     }
 
-    public RemoteUrlFactory remoteUrlFactory()
+    public RemoteUrlFactory remoteUrlFactory(Project project)
     {
         CompoundRemoteUrlFactory compoundFactory = new CompoundRemoteUrlFactory();
 
-        compoundFactory.registerFactory(new GitHubRemoteUrlFactory(this.settings().forceSSL()));
+        compoundFactory.registerFactory(new GitHubRemoteUrlFactory(this.settings(project).getForceSSL()));
 
         return compoundFactory;
     }
 
-    public Logger logger()
+    public Logger logger(Project project)
     {
-        if (this.logger == null) {
+        Logger logger = new Logger();
 
-            this.logger = new Logger();
+        logger.registerHandler(new EventLogHandler(this.plugin(), this.settings(project).getEnableVerboseEventLog()));
 
-            this.logger.registerHandler(new EventLogHandler(this.plugin(), this.settings().enableVerboseEventLog()));
+        logger.registerHandler(
+            new DiagnosticLogHandler(com.intellij.openapi.diagnostic.Logger.getInstance(this.plugin().displayName()))
+        );
 
-            this.logger.registerHandler(
-                new DiagnosticLogHandler(com.intellij.openapi.diagnostic.Logger.getInstance(this.plugin().displayName()))
-            );
-        }
-
-        return this.logger;
+        return logger;
     }
 
     public List<Extension> registeredExtensions()
@@ -91,15 +77,5 @@ public class Container
         }
 
         return this.extensions;
-    }
-
-    /**
-     * Flushes the lazy loading cache. This is useful when there are have been setting changes with could affect
-     * the services behaviour.
-     */
-    public void flush()
-    {
-        this.logger = null;
-        this.extensions = null;
     }
 }

@@ -1,6 +1,7 @@
 package uk.co.ben_gibson.open.in.git.host;
 
 import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.EnumComboBoxModel;
 import com.intellij.ui.components.JBCheckBox;
@@ -36,10 +37,10 @@ public class Configuration implements Configurable
      *
      * Now idea how to inject the dependencies as this is wired up in the plugin.xml and auto-magically created :(
      */
-    public Configuration(Container container)
+    public Configuration(Project project, Container container)
     {
         this.container = container;
-        this.settings = container.settings();
+        this.settings = container.settings(project);
 
         this.enableVerboseEventLogging = new JBCheckBox(EVENT_LOGGING);
         this.forceSSLCheckBox          = new JBCheckBox(FORCE_SSL);
@@ -84,15 +85,15 @@ public class Configuration implements Configurable
             Extension extension = entry.getKey();
             JBCheckBox checkBox = entry.getValue();
 
-            if (checkBox.isSelected() != this.settings.extensionIsEnabled(extension)) {
+            if (checkBox.isSelected() != this.settings.getEnabledExtensions(extension)) {
                 return true;
             }
         }
 
         return
-            this.forceSSLCheckBox.isSelected() != this.settings.forceSSL() ||
-            this.enableVerboseEventLogging.isSelected() != this.settings.enableVerboseEventLog() ||
-            this.hostsComboBox.getSelectedItem() != this.settings.remoteHost();
+            this.forceSSLCheckBox.isSelected() != this.settings.getForceSSL() ||
+            this.enableVerboseEventLogging.isSelected() != this.settings.getEnableVerboseEventLog() ||
+            this.hostsComboBox.getSelectedItem() != this.settings.getRemoteHost();
     }
 
     public void apply() throws ConfigurationException
@@ -113,22 +114,20 @@ public class Configuration implements Configurable
         }
 
         this.settings.setEnabledExtensions(enabledExtensions);
-
-        this.container.flush(); // clear lazy loading cache to ensure changes take affect!
     }
 
     public void reset()
     {
-        this.enableVerboseEventLogging.setSelected(this.settings.enableVerboseEventLog());
-        this.forceSSLCheckBox.setSelected(this.settings.forceSSL());
-        this.hostsComboBox.setSelectedItem(this.settings.remoteHost());
+        this.enableVerboseEventLogging.setSelected(this.settings.getEnableVerboseEventLog());
+        this.forceSSLCheckBox.setSelected(this.settings.getForceSSL());
+        this.hostsComboBox.setSelectedItem(this.settings.getRemoteHost());
 
         for (Map.Entry<Extension, JBCheckBox> entry : this.extensionCheckBoxes.entrySet()) {
 
             Extension extension = entry.getKey();
             JBCheckBox checkBox = entry.getValue();
 
-            checkBox.setSelected(this.settings.extensionIsEnabled(extension));
+            checkBox.setSelected(this.settings.getEnabledExtensions(extension));
         }
     }
 

@@ -9,11 +9,6 @@ public class ActionException extends OpenInGitHostException
         super(message);
     }
 
-    public static ActionException projectNotFound()
-    {
-        return new ActionException("Project not found");
-    }
-
     public static ActionException fileNotFound()
     {
         return new ActionException("File not found");
