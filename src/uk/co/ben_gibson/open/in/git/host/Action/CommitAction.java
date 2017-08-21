@@ -38,9 +38,9 @@ public class CommitAction extends Action
         }
 
         return this.remoteUrlFactory.createRemoteUrlToCommit(
-            this.settings.getRemoteHost(),
             new Repository(new GitImpl(), repository, "master"),
-            new Commit(commit)
+            new Commit(commit),
+            this.settings.getForceSSL()
         );
     }
 

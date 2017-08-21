@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project;
 import uk.co.ben_gibson.open.in.git.host.Extension.CopyToClipboardExtension;
 import uk.co.ben_gibson.open.in.git.host.Extension.Extension;
 import uk.co.ben_gibson.open.in.git.host.Extension.OpenInBrowserExtension;
-import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.CompoundRemoteUrlFactory;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactoryProvider;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.GitHubRemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.DiagnosticLogHandler;
@@ -46,13 +46,13 @@ public class Container
        return ServiceManager.getService(project, Settings.class);
     }
 
-    public RemoteUrlFactory remoteUrlFactory(Project project)
+    public RemoteUrlFactoryProvider remoteUrlFactoryProvider()
     {
-        CompoundRemoteUrlFactory compoundFactory = new CompoundRemoteUrlFactory();
+        RemoteUrlFactoryProvider provider = new RemoteUrlFactoryProvider();
 
-        compoundFactory.registerFactory(new GitHubRemoteUrlFactory(this.settings(project).getForceSSL()));
+        provider.registerFactory(new GitHubRemoteUrlFactory());
 
-        return compoundFactory;
+        return provider;
     }
 
     public Logger logger(Project project)

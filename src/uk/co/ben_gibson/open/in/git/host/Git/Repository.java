@@ -42,11 +42,6 @@ public class Repository
         return file.path().substring(this.root().getPath().length());
     }
 
-    public String originUrl() throws RemoteException
-    {
-        return this.origin().url();
-    }
-
     public String currentBranch()
     {
         GitLocalBranch localBranch = this.repository.getCurrentBranch();
@@ -70,7 +65,7 @@ public class Repository
         return this.defaultBranch();
     }
 
-    private Remote origin() throws RemoteException
+    public Remote origin() throws RemoteException
     {
         if (this.origin == null) {
 

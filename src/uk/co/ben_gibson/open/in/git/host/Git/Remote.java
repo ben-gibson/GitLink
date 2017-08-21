@@ -1,11 +1,15 @@
 package uk.co.ben_gibson.open.in.git.host.Git;
 
+import com.intellij.openapi.util.text.StringUtil;
 import git4idea.GitLocalBranch;
 import git4idea.commands.Git;
 import git4idea.commands.GitCommandResult;
 import git4idea.repo.GitRemote;
 import uk.co.ben_gibson.open.in.git.host.Git.Exception.BranchException;
 import uk.co.ben_gibson.open.in.git.host.Git.Exception.RemoteException;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class Remote
 {
@@ -23,7 +27,7 @@ public class Remote
         return remote.getName();
     }
 
-    public String url() throws RemoteException
+    public URL url() throws RemoteException
     {
         String url = this.remote.getFirstUrl();
 
@@ -31,7 +35,26 @@ public class Remote
             throw RemoteException.urlNotFoundForRemote(this);
         }
 
-        return url;
+        url = StringUtil.trimEnd(url, ".git");
+
+        url = url.replaceAll(":\\d{1,4}", ""); // remove port
+
+        if (!url.startsWith("http")) {
+            url = StringUtil.replace(url, "git@", "");
+            url = StringUtil.replace(url, "ssh://", "");
+            url = StringUtil.replace(url, "git://", "");
+            url = String.format(
+                "%s://%s",
+                "http",
+                StringUtil.replace(url, ":", "/")
+            );
+        }
+
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw RemoteException.urlNotFoundForRemote(this);
+        }
     }
 
     /**

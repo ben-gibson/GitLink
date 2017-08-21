@@ -9,6 +9,7 @@ import uk.co.ben_gibson.open.in.git.host.Extension.Extension;
 import uk.co.ben_gibson.open.in.git.host.Logger.Logger;
 import uk.co.ben_gibson.open.in.git.host.OpenInGitHostException;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactoryProvider;
 import uk.co.ben_gibson.open.in.git.host.Settings;
 import java.net.URL;
 
@@ -32,12 +33,12 @@ abstract class Action extends AnAction
 
         Container container= ServiceManager.getService(Container.class);
 
-        // Dody hack as I don't have control of the initialisation of this class!
-        this.logger           = container.logger(project);
-        this.settings         = container.settings(project);
-        this.remoteUrlFactory = container.remoteUrlFactory(project);
+        this.logger = container.logger(project);
 
         try {
+            // Dody hack as I don't have control of the initialisation of this class!
+            this.settings         = container.settings(project);
+            this.remoteUrlFactory = container.remoteUrlFactoryProvider().remoteUrlFactoryForHost(this.settings.getRemoteHost());
 
             this.logger.notice(String.format("%s - has been triggered", this.getClass().getName()));
 
@@ -60,6 +61,7 @@ abstract class Action extends AnAction
                     extension.handle(remoteUrl);
                 }
             }
+
         } catch (OpenInGitHostException exception) {
             this.logger.error(String.format("Could not open file in remote repository ('%s')", exception.getMessage()));
         }

@@ -13,6 +13,7 @@ import uk.co.ben_gibson.open.in.git.host.Action.Exception.ActionException;
 import uk.co.ben_gibson.open.in.git.host.Git.File;
 import uk.co.ben_gibson.open.in.git.host.Git.Repository;
 import uk.co.ben_gibson.open.in.git.host.OpenInGitHostException;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
 
 import java.net.URL;
 
@@ -41,10 +42,10 @@ public class ActiveFileAction extends Action
         Integer caretPosition = (editor != null) ? editor.getCaretModel().getLogicalPosition().line + 1 : null;
 
         return this.remoteUrlFactory.createRemoteUrlToFile(
-            this.settings.getRemoteHost(),
             new Repository(new GitImpl(), repository, "master"),
             new File(file),
-            caretPosition
+            caretPosition,
+            this.settings.getForceSSL()
         );
     }
 
