@@ -33,6 +33,11 @@ public enum RemoteHost
         return (this == GIT_HUB);
     }
 
+    public boolean bitbucket()
+    {
+        return (this == BITBUCKET);
+    }
+
     public Icon icon()
     {
         return IconLoader.getIcon(this.icon);

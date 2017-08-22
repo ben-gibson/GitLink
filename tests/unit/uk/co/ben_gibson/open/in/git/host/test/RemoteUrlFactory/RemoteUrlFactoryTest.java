@@ -11,8 +11,6 @@ import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.Exception.RemoteUrlFac
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

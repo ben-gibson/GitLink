@@ -49,7 +49,23 @@ public class GitHubRemoteUrlFactoryTest extends RemoteUrlFactoryTest
                 "/src/Bar.java",
                 "https://github.com/foo/bar/blob/master/src/Bar.java#L10",
                 false
-            }
+            },
+            {
+                "https://github.com/foo/bar",
+                new Branch("feature-foo-[PRO-123]"),
+                null,
+                "/src/Bar Bar/Baz.java",
+                "https://github.com/foo/bar/blob/feature-foo-%5BPRO-123%5D/src/Bar%20Bar/Baz.java",
+                false
+            },
+            {
+                "http://github.com/foo/bar",
+                Branch.master(),
+                null,
+                "Bar.java",
+                "https://github.com/foo/bar/blob/master/Bar.java",
+                true
+            },
         };
     }
 

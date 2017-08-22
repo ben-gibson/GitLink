@@ -15,6 +15,9 @@ import java.util.List;
     storages = {@Storage(id = "default", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/settings.xml")}
 )
 
+/*
+ * Plugin settings - Getters and Setters required by PersistentStateComponent
+ */
 public class Settings implements PersistentStateComponent<Settings>
 {
     private RemoteHost remoteHost             = RemoteHost.GIT_HUB;
@@ -22,14 +25,19 @@ public class Settings implements PersistentStateComponent<Settings>
     private boolean forceSSL                  = false;
     private List<Extension> enabledExtensions = new ArrayList<>();
 
-    public boolean hasEnabledExtensions()
+    public boolean hasExtensionsEnabled()
     {
         return !this.enabledExtensions.isEmpty();
     }
 
-    public boolean getEnabledExtensions(Extension extension)
+    public boolean isExtensionEnabled(Extension extension)
     {
         return this.enabledExtensions.contains(extension);
+    }
+
+    public List<Extension> getEnabledExtensions(List<Extension> enabledExtensions)
+    {
+        return this.enabledExtensions;
     }
 
     public void setEnabledExtensions(List<Extension> enabledExtensions)

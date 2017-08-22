@@ -85,7 +85,7 @@ public class Configuration implements Configurable
             Extension extension = entry.getKey();
             JBCheckBox checkBox = entry.getValue();
 
-            if (checkBox.isSelected() != this.settings.getEnabledExtensions(extension)) {
+            if (checkBox.isSelected() != this.settings.isExtensionEnabled(extension)) {
                 return true;
             }
         }
@@ -127,7 +127,7 @@ public class Configuration implements Configurable
             Extension extension = entry.getKey();
             JBCheckBox checkBox = entry.getValue();
 
-            checkBox.setSelected(this.settings.getEnabledExtensions(extension));
+            checkBox.setSelected(this.settings.isExtensionEnabled(extension));
         }
     }
 

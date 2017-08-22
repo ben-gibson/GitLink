@@ -9,7 +9,6 @@ import uk.co.ben_gibson.open.in.git.host.Extension.Extension;
 import uk.co.ben_gibson.open.in.git.host.Logger.Logger;
 import uk.co.ben_gibson.open.in.git.host.OpenInGitHostException;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
-import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactoryProvider;
 import uk.co.ben_gibson.open.in.git.host.Settings;
 import java.net.URL;
 
@@ -51,12 +50,12 @@ abstract class Action extends AnAction
 
             this.logger.notice(String.format("Created remote url '%s'", remoteUrl.toString()));
 
-            if (!this.settings.hasEnabledExtensions()) {
+            if (!this.settings.hasExtensionsEnabled()) {
                 this.logger.warning("You have no extensions enabled, enable some: Preferences → Open in Git host");
             }
 
             for (Extension extension: container.registeredExtensions()) {
-                if (this.settings.getEnabledExtensions(extension)) {
+                if (this.settings.isExtensionEnabled(extension)) {
                     this.logger.notice(String.format("Running extension '%s'", extension.displayName()));
                     extension.handle(remoteUrl);
                 }

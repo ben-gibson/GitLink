@@ -1,21 +1,18 @@
 package uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory;
 
-import uk.co.ben_gibson.open.in.git.host.Git.*;
+import uk.co.ben_gibson.open.in.git.host.Git.Branch;
+import uk.co.ben_gibson.open.in.git.host.Git.Commit;
 import uk.co.ben_gibson.open.in.git.host.Git.Exception.RemoteException;
+import uk.co.ben_gibson.open.in.git.host.Git.Remote;
+import uk.co.ben_gibson.open.in.git.host.Git.RemoteHost;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.Exception.RemoteUrlFactoryException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
-/**
- * Creates URLs to Github.
- */
-public class GitHubRemoteUrlFactory extends AbstractRemoteUrlFactory
+public class BitBucketRemoteUrlFactory extends AbstractRemoteUrlFactory
 {
     public URL createUrlToRemoteCommit(Remote remote, Commit commit, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException
     {
-        String path = String.format("commit/%s", commit.hash());
+        String path = String.format("commits/%s", commit.hash());
 
         return this.buildURL(remote, path, null, null, forceSSL);
     }
@@ -23,17 +20,18 @@ public class GitHubRemoteUrlFactory extends AbstractRemoteUrlFactory
     public URL createUrlToRemotePath(Remote remote, Branch branch, String filePath, Integer lineNumber, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException
     {
         String path     = String.format("blob/%s/%s", branch, filePath);
+        String query    = String.format("at=%s", branch);
         String fragment = null;
 
         if (lineNumber != null) {
-            fragment = String.format("L%d", lineNumber);
+            fragment = String.format("%s-%s", "s", lineNumber);
         }
 
-        return this.buildURL(remote, path, null, fragment, forceSSL);
+        return this.buildURL(remote, path, query, fragment, forceSSL);
     }
 
     public boolean supports(RemoteHost host)
     {
-        return host.gitHub();
+        return host.bitbucket();
     }
 }
