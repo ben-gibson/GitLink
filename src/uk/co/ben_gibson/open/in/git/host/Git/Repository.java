@@ -15,12 +15,12 @@ import uk.co.ben_gibson.open.in.git.host.Git.Exception.RemoteException;
  */
 public class Repository
 {
-    private final String defaultBranch;
+    private final Branch defaultBranch;
     private final GitRepository repository;
     private final Git git;
     private Remote origin;
 
-    public Repository(Git git, GitRepository repository, String defaultBranch)
+    public Repository(Git git, GitRepository repository, Branch defaultBranch)
     {
         this.git           = git;
         this.repository    = repository;
@@ -37,12 +37,12 @@ public class Repository
         return this.repository.getRoot();
     }
 
-    public String getRelativePath(File file)
+    public String relativePath(File file)
     {
         return file.path().substring(this.root().getPath().length());
     }
 
-    public String currentBranch()
+    public Branch currentBranch()
     {
         GitLocalBranch localBranch = this.repository.getCurrentBranch();
 
@@ -52,12 +52,12 @@ public class Repository
         if (localBranch != null) {
             try {
                 if (this.origin.hasBranch(this, localBranch)) {
-                    return localBranch.getName();
+                    return new Branch(localBranch.getName());
                 }
             } catch (BranchException exception) {
                 GitRemoteBranch trackedBranch = localBranch.findTrackedBranch(this.repository);
                 if (trackedBranch != null) {
-                    return trackedBranch.getName();
+                    return new Branch(trackedBranch.getName());
                 }
             }
         }
@@ -69,11 +69,9 @@ public class Repository
     {
         if (this.origin == null) {
 
-            for (GitRemote remote : this.repository.getRemotes()) {
-                if (remote.getName().equals("origin")) {
-                    this.origin = new Remote(this.git, remote);
-                }
-            }
+            this.repository.getRemotes().stream().filter(remote -> remote.getName().equals("origin")).forEach(remote -> {
+                this.origin = new Remote(this.git, remote);
+            });
 
             if (this.origin == null) {
                 throw RemoteException.originNotFound();
@@ -83,7 +81,7 @@ public class Repository
         return this.origin;
     }
 
-    private String defaultBranch()
+    private Branch defaultBranch()
     {
         return this.defaultBranch;
     }

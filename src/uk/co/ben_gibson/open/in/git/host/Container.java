@@ -28,6 +28,7 @@ public class Container
 {
     private Plugin plugin;
     private List<Extension> extensions;
+    private RemoteUrlFactoryProvider remoteUrlFactoryProvider;
 
     public Plugin plugin()
     {
@@ -48,11 +49,14 @@ public class Container
 
     public RemoteUrlFactoryProvider remoteUrlFactoryProvider()
     {
-        RemoteUrlFactoryProvider provider = new RemoteUrlFactoryProvider();
+        if (this.remoteUrlFactoryProvider == null) {
 
-        provider.registerFactory(new GitHubRemoteUrlFactory());
+            this.remoteUrlFactoryProvider = new RemoteUrlFactoryProvider();
 
-        return provider;
+            this.remoteUrlFactoryProvider.registerFactory(new GitHubRemoteUrlFactory());
+        }
+
+        return this.remoteUrlFactoryProvider;
     }
 
     public Logger logger(Project project)

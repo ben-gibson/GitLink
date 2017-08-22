@@ -10,15 +10,15 @@ import git4idea.GitUtil;
 import git4idea.commands.GitImpl;
 import git4idea.repo.GitRepository;
 import uk.co.ben_gibson.open.in.git.host.Action.Exception.ActionException;
+import uk.co.ben_gibson.open.in.git.host.Git.Branch;
 import uk.co.ben_gibson.open.in.git.host.Git.File;
 import uk.co.ben_gibson.open.in.git.host.Git.Repository;
 import uk.co.ben_gibson.open.in.git.host.OpenInGitHostException;
-import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
 
 import java.net.URL;
 
 /**
- * An action that, when triggered, builds a url to the remote repository from the active file and runs it though the registered extensions.
+ * An action triggered from an active file in the editor.
  */
 public class ActiveFileAction extends Action
 {
@@ -41,9 +41,12 @@ public class ActiveFileAction extends Action
 
         Integer caretPosition = (editor != null) ? editor.getCaretModel().getLogicalPosition().line + 1 : null;
 
-        return this.remoteUrlFactory.createRemoteUrlToFile(
-            new Repository(new GitImpl(), repository, "master"),
-            new File(file),
+        Repository repo = new Repository(new GitImpl(), repository, Branch.master());
+
+        return this.remoteUrlFactory.createUrlToRemotePath(
+            repo.origin(),
+            repo.currentBranch(),
+            repo.relativePath(new File(file)),
             caretPosition,
             this.settings.getForceSSL()
         );

@@ -9,6 +9,7 @@ import git4idea.GitUtil;
 import git4idea.commands.GitImpl;
 import git4idea.repo.GitRepository;
 import uk.co.ben_gibson.open.in.git.host.Action.Exception.ActionException;
+import uk.co.ben_gibson.open.in.git.host.Git.Branch;
 import uk.co.ben_gibson.open.in.git.host.Git.Commit;
 import uk.co.ben_gibson.open.in.git.host.Git.Repository;
 import uk.co.ben_gibson.open.in.git.host.OpenInGitHostException;
@@ -16,9 +17,9 @@ import java.net.URL;
 import java.util.List;
 
 /**
- * An action that, when triggered, builds a url to the remote repository from the commit and runs it though the registered extensions.
+ * An action triggered from an VCS log toolbar.
  */
-public class CommitAction extends Action
+public class VcsLogAction extends Action
 {
     protected URL handleAction(Project project, AnActionEvent event) throws OpenInGitHostException
     {
@@ -37,8 +38,10 @@ public class CommitAction extends Action
             return null;
         }
 
-        return this.remoteUrlFactory.createRemoteUrlToCommit(
-            new Repository(new GitImpl(), repository, "master"),
+        Repository repo = new Repository(new GitImpl(), repository, Branch.master());
+
+        return this.remoteUrlFactory.createUrlToRemoteCommit(
+            repo.origin(),
             new Commit(commit),
             this.settings.getForceSSL()
         );

@@ -5,9 +5,6 @@ import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.Exception.RemoteUrlFac
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Provides remote url factories based on the remote host.
- */
 public class RemoteUrlFactoryProvider
 {
     private List<RemoteUrlFactory> factories = new ArrayList<RemoteUrlFactory>();

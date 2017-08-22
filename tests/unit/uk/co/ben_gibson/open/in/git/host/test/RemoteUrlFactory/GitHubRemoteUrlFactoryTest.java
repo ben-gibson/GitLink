@@ -1,6 +1,7 @@
 package uk.co.ben_gibson.open.in.git.host.test.RemoteUrlFactory;
 
 import com.tngtech.java.junit.dataprovider.DataProvider;
+import uk.co.ben_gibson.open.in.git.host.Git.Branch;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.GitHubRemoteUrlFactory;
 
@@ -42,11 +43,11 @@ public class GitHubRemoteUrlFactoryTest extends RemoteUrlFactoryTest
     {
         return new Object[][] {
             {
-                "master",
                 "https://github.com/foo/bar",
+                Branch.master(),
                 10,
-                RemoteUrlFactoryTest.mockFile("/src/Bar.java"),
-                "https://github.com/foo/bar/blob/master/src/Bar.java",
+                "/src/Bar.java",
+                "https://github.com/foo/bar/blob/master/src/Bar.java#L10",
                 false
             }
         };

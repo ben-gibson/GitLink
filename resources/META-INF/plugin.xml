@@ -66,7 +66,7 @@
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
         </action>
 
-        <action id="RemoteRepositoryMapper.Open.Commit.In.Git.Host" class="uk.co.ben_gibson.open.in.git.host.Action.CommitAction" text="Open in Git host"
+        <action id="RemoteRepositoryMapper.Open.Commit.In.Git.Host" class="uk.co.ben_gibson.open.in.git.host.Action.VcsLogAction" text="Open in Git host"
                 description="Opens the commit in the Git host using the default browser">
             <add-to-group group-id="Git.LogContextMenu" />
             <add-to-group group-id="Vcs.Log.ContextMenu" />
