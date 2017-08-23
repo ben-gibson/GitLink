@@ -18,7 +18,7 @@ import java.util.Map;
 public class Configuration implements Configurable
 {
     private static final String LABEL_HOSTS      = "Hosts";
-    private static final String FORCE_SSL        = "Force SSL if the HTTP protocol is not used in origin";
+    private static final String FORCE_SSL        = "Force SSL";
     private static final String EVENT_LOGGING    = "Enable verbose event logging";
     private static final String LABEL_EXTENSIONS = "Extensions";
     private static final String LABEL_OPTIONS    = "Options";

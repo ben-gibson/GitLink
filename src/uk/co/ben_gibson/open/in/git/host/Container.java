@@ -11,7 +11,6 @@ import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.*;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.DiagnosticLogHandler;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.EventLogHandler;
 import uk.co.ben_gibson.open.in.git.host.Logger.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 

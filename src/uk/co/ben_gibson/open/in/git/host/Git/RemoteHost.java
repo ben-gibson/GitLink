@@ -8,8 +8,8 @@ import javax.swing.*;
  */
 public enum RemoteHost
 {
-    STASH("Stash", "/Icons/Bitbucket/Bitbucket.png"),
     GIT_HUB("GitHub", "/Icons/GitHub/GitHub.png"),
+    STASH("Stash", "/Icons/Bitbucket/Bitbucket.png"),
     BITBUCKET("Bitbucket", "/Icons/Bitbucket/Bitbucket.png"),
     GITLAB("GitLab", "/Icons/GitLab/GitLab.png");
 
