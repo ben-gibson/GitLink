@@ -48,3 +48,7 @@ All Notable changes to `Open in Git host` will be documented in this file
 ## 1.6.6 - 2017-04-12
 
 - Fixed incompatibility issue with save actions plugin. Note that you have to configure the plugin again!
+
+## 2.0.0 - 2017-09-17
+
+- Rebuilt the entire plugin! Note that you have to configure the plugin again!
