@@ -28,6 +28,6 @@ public class GitHubRemoteUrlFactory extends AbstractRemoteUrlFactory
 
     public boolean supports(RemoteHost host)
     {
-        return host.gitHub();
+        return host.gitHub() || host.gitLab();
     }
 }

@@ -11,8 +11,7 @@ public enum RemoteHost
     STASH("Stash", "/Icons/Bitbucket/Bitbucket.png"),
     GIT_HUB("GitHub", "/Icons/GitHub/GitHub.png"),
     BITBUCKET("Bitbucket", "/Icons/Bitbucket/Bitbucket.png"),
-    GITLAB("GitLab", "/Icons/GitLab/GitLab.png"),
-    GITBLIT("GitBlit", "/Icons/GitHub/GitHub.png");
+    GITLAB("GitLab", "/Icons/GitLab/GitLab.png");
 
     private final String name;
     private final String icon;
@@ -31,6 +30,11 @@ public enum RemoteHost
     public boolean gitHub()
     {
         return (this == GIT_HUB);
+    }
+
+    public boolean gitLab()
+    {
+        return (this == GITLAB);
     }
 
     public boolean bitbucket()
