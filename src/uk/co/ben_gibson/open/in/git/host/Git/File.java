@@ -7,18 +7,22 @@ import com.intellij.openapi.vfs.VirtualFile;
  */
 public class File
 {
-    private String repositoryPath; // the path relative to the repository.
-    private VirtualFile file;
+    private String path; // A path from the root of the repository.
+    private VirtualFile file; // The underlying file.
 
-    public File(String relativePath, VirtualFile file)
+    public File(String path, VirtualFile file)
     {
-        this.repositoryPath = relativePath;
-        this.file         = file;
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+
+        this.path = path;
+        this.file = file;
     }
 
-    public String repositoryPath()
+    public String path()
     {
-        return this.repositoryPath;
+        return this.path;
     }
 
     public String name()

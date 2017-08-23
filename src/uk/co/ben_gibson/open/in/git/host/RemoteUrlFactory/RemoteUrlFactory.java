@@ -8,7 +8,7 @@ import java.net.URL;
 
 public interface RemoteUrlFactory
 {
-    URL createUrlToRemoteCommit(Remote remote, Commit commit, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException;
-    URL createUrlToRemotePath(Remote remote, Branch branch, String path, Integer lineNumber, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException;
+    URL createUrlToCommit(Remote remote, Commit commit, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException;
+    URL createUrlToFile(Remote remote, Branch branch, File file, Integer lineNumber, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException;
     boolean supports(RemoteHost host);
 }

@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import uk.co.ben_gibson.open.in.git.host.Extension.CopyToClipboardExtension;
 import uk.co.ben_gibson.open.in.git.host.Extension.Extension;
 import uk.co.ben_gibson.open.in.git.host.Extension.OpenInBrowserExtension;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.BitBucketRemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactoryProvider;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.GitHubRemoteUrlFactory;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
@@ -54,6 +55,7 @@ public class Container
             this.remoteUrlFactoryProvider = new RemoteUrlFactoryProvider();
 
             this.remoteUrlFactoryProvider.registerFactory(new GitHubRemoteUrlFactory());
+            this.remoteUrlFactoryProvider.registerFactory(new BitBucketRemoteUrlFactory());
         }
 
         return this.remoteUrlFactoryProvider;

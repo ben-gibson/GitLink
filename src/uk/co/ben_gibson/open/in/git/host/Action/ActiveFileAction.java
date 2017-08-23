@@ -11,7 +11,6 @@ import git4idea.commands.GitImpl;
 import git4idea.repo.GitRepository;
 import uk.co.ben_gibson.open.in.git.host.Action.Exception.ActionException;
 import uk.co.ben_gibson.open.in.git.host.Git.Branch;
-import uk.co.ben_gibson.open.in.git.host.Git.File;
 import uk.co.ben_gibson.open.in.git.host.Git.Repository;
 import uk.co.ben_gibson.open.in.git.host.OpenInGitHostException;
 
@@ -43,10 +42,10 @@ public class ActiveFileAction extends Action
 
         Repository repo = new Repository(new GitImpl(), repository, Branch.master());
 
-        return this.remoteUrlFactory.createUrlToRemotePath(
+        return this.remoteUrlFactory.createUrlToFile(
             repo.origin(),
             repo.currentBranch(),
-            repo.relativePath(new File(file)),
+            repo.fileFromVirtualFile(file),
             caretPosition,
             this.settings.getForceSSL()
         );

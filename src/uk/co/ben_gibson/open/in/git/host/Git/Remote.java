@@ -15,6 +15,7 @@ public class Remote
 {
     private GitRemote remote;
     private final Git git;
+    private URL url;
 
     public Remote(Git git, GitRemote remote)
     {
@@ -29,32 +30,36 @@ public class Remote
 
     public URL url() throws RemoteException
     {
-        String url = this.remote.getFirstUrl();
+        if (this.url == null) {
+            String url = this.remote.getFirstUrl();
 
-        if (url == null) {
-            throw RemoteException.urlNotFoundForRemote(this);
+            if (url == null) {
+                throw RemoteException.urlNotFoundForRemote(this);
+            }
+
+            url = StringUtil.trimEnd(url, ".git");
+
+            url = url.replaceAll(":\\d{1,4}", ""); // remove port
+
+            if (!url.startsWith("http")) {
+                url = StringUtil.replace(url, "git@", "");
+                url = StringUtil.replace(url, "ssh://", "");
+                url = StringUtil.replace(url, "git://", "");
+                url = String.format(
+                    "%s://%s",
+                    "http",
+                    StringUtil.replace(url, ":", "/")
+                );
+            }
+
+            try {
+                this.url = new URL(url);
+            } catch (MalformedURLException e) {
+                throw RemoteException.urlNotFoundForRemote(this);
+            }
         }
 
-        url = StringUtil.trimEnd(url, ".git");
-
-        url = url.replaceAll(":\\d{1,4}", ""); // remove port
-
-        if (!url.startsWith("http")) {
-            url = StringUtil.replace(url, "git@", "");
-            url = StringUtil.replace(url, "ssh://", "");
-            url = StringUtil.replace(url, "git://", "");
-            url = String.format(
-                "%s://%s",
-                "http",
-                StringUtil.replace(url, ":", "/")
-            );
-        }
-
-        try {
-            return new URL(url);
-        } catch (MalformedURLException e) {
-            throw RemoteException.urlNotFoundForRemote(this);
-        }
+        return this.url;
     }
 
     /**

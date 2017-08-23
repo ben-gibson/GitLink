@@ -8,15 +8,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public abstract class AbstractRemoteUrlFactory implements RemoteUrlFactory
+abstract class AbstractRemoteUrlFactory implements RemoteUrlFactory
 {
     URL buildURL(Remote remote, String path, String query, String fragment, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException
     {
         URL host = remote.url();
 
         String protocol = (forceSSL) ? "https" : host.getProtocol();
-
-        path = String.format("%s/%s", host.getPath(), path);
 
         try {
 
@@ -27,5 +25,18 @@ public abstract class AbstractRemoteUrlFactory implements RemoteUrlFactory
         } catch (URISyntaxException | MalformedURLException e) {
             throw RemoteUrlFactoryException.cannotCreateRemoteUrl(e.getMessage());
         }
+    }
+
+    String cleanPath(String path)
+    {
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+
+        if (path.endsWith("/")) {
+            path = path.substring(0, (path.length() - 1));
+        }
+
+        return path;
     }
 }

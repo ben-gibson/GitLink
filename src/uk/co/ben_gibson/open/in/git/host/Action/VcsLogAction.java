@@ -40,7 +40,7 @@ public class VcsLogAction extends Action
 
         Repository repo = new Repository(new GitImpl(), repository, Branch.master());
 
-        return this.remoteUrlFactory.createUrlToRemoteCommit(
+        return this.remoteUrlFactory.createUrlToCommit(
             repo.origin(),
             new Commit(commit),
             this.settings.getForceSSL()

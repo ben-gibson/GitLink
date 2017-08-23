@@ -21,26 +21,26 @@ public abstract class RemoteUrlFactoryTest extends TestCase
 
     @Test
     @UseDataProvider("commitProvider")
-    public void testCanCreateUrlToRemoteCommit(String originUrl, Commit commit, String expected, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException, MalformedURLException
+    public void testCanCreateUrlToCommit(String originUrl, Commit commit, String expected, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException, MalformedURLException
     {
         RemoteUrlFactory factory = this.remoteUrlFactory();
 
         Remote remote = this.mockRemote(originUrl);
 
-        URL url = factory.createUrlToRemoteCommit(remote, commit, forceSSL);
+        URL url = factory.createUrlToCommit(remote, commit, forceSSL);
 
         assertEquals(expected, url.toString());
     }
 
     @Test
     @UseDataProvider("fileProvider")
-    public void testCanCreateUrlToRemotePath(String originUrl, Branch branch, Integer lineNumber, String path, String expected, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException, MalformedURLException
+    public void testCanCreateUrlToFile(String originUrl, Branch branch, Integer lineNumber, File file, String expected, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException, MalformedURLException
     {
         RemoteUrlFactory factory = this.remoteUrlFactory();
 
         Remote remote = this.mockRemote(originUrl);
 
-        URL url = factory.createUrlToRemotePath(remote, branch, path, lineNumber, forceSSL);
+        URL url = factory.createUrlToFile(remote, branch, file, lineNumber, forceSSL);
 
         assertEquals(expected, url.toString());
     }
@@ -61,5 +61,15 @@ public abstract class RemoteUrlFactoryTest extends TestCase
         when(commit.hash()).thenReturn(hash);
 
         return commit;
+    }
+
+    static File mockFile(String path, String name)
+    {
+        File file = mock(File.class);
+
+        when(file.name()).thenReturn(name);
+        when(file.path()).thenReturn(path);
+
+        return file;
     }
 }

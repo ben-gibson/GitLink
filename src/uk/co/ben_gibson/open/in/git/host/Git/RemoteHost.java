@@ -38,6 +38,11 @@ public enum RemoteHost
         return (this == BITBUCKET);
     }
 
+    public boolean stash()
+    {
+        return (this == STASH);
+    }
+
     public Icon icon()
     {
         return IconLoader.getIcon(this.icon);

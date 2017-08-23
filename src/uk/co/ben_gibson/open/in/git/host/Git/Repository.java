@@ -37,9 +37,18 @@ public class Repository
         return this.repository.getRoot();
     }
 
-    public String relativePath(File file)
+    /**
+     * Takes a virtual file and returns a repository file
+     *
+     * Unlike the virtual file a repository files root is from the repositories root e.g.
+     * VirtualFile: /Users/Foo/Projects/acme-demo/src/bar.java
+     * RepositoryFile: src/bar.java
+     */
+    public File fileFromVirtualFile(VirtualFile file)
     {
-        return file.path().substring(this.root().getPath().length());
+        String pathRelativeToRepository = file.getPath().substring(this.root().getPath().length());
+
+        return new File(pathRelativeToRepository, file);
     }
 
     public Branch currentBranch()

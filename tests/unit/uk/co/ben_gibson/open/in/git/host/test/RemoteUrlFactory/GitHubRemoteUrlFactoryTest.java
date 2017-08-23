@@ -46,7 +46,7 @@ public class GitHubRemoteUrlFactoryTest extends RemoteUrlFactoryTest
                 "https://github.com/foo/bar",
                 Branch.master(),
                 10,
-                "/src/Bar.java",
+                RemoteUrlFactoryTest.mockFile("src/Bar.java", "Bar.java"),
                 "https://github.com/foo/bar/blob/master/src/Bar.java#L10",
                 false
             },
@@ -54,16 +54,24 @@ public class GitHubRemoteUrlFactoryTest extends RemoteUrlFactoryTest
                 "https://github.com/foo/bar",
                 new Branch("feature-foo-[PRO-123]"),
                 null,
-                "/src/Bar Bar/Baz.java",
+                RemoteUrlFactoryTest.mockFile("/src/Bar Bar/Baz.java", "Baz.java"),
                 "https://github.com/foo/bar/blob/feature-foo-%5BPRO-123%5D/src/Bar%20Bar/Baz.java",
                 false
             },
             {
                 "http://github.com/foo/bar",
+                new Branch("dev"),
+                null,
+                RemoteUrlFactoryTest.mockFile("/src/Bar Bar/Baz.java", "Baz.java"),
+                "http://github.com/foo/bar/blob/dev/src/Bar%20Bar/Baz.java",
+                false
+            },
+            {
+                "https://github.com/foo bar/baz",
                 Branch.master(),
                 null,
-                "Bar.java",
-                "https://github.com/foo/bar/blob/master/Bar.java",
+                RemoteUrlFactoryTest.mockFile("resources/Bar Baz.java", "Bar Baz.java"),
+                "https://github.com/foo%20bar/baz/blob/master/resources/Bar%20Baz.java",
                 true
             },
         };
