@@ -9,9 +9,16 @@ import java.net.URL;
  */
 public class CopyToClipboardExtension implements Extension
 {
-    public void handle(URL remoteUrl)
+    private Toolkit toolkit;
+
+    public CopyToClipboardExtension(Toolkit toolkit)
     {
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(remoteUrl.toString()), null);
+        this.toolkit = toolkit;
+    }
+
+    public void run(URL remoteUrl)
+    {
+        this.toolkit.getSystemClipboard().setContents(new StringSelection(remoteUrl.toString()), null);
     }
 
     public String displayName()

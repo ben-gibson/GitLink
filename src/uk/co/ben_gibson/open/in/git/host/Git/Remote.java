@@ -7,7 +7,6 @@ import git4idea.commands.GitCommandResult;
 import git4idea.repo.GitRemote;
 import uk.co.ben_gibson.open.in.git.host.Git.Exception.BranchException;
 import uk.co.ben_gibson.open.in.git.host.Git.Exception.RemoteException;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -63,7 +62,7 @@ public class Remote
     }
 
     /**
-     * Makes a call to the remote createHostUrl to determine if the given branch exists there.
+     * Asks the remote repository if it's aware of a given branch.
      */
     public boolean hasBranch(Repository repository, GitLocalBranch branch) throws BranchException
     {

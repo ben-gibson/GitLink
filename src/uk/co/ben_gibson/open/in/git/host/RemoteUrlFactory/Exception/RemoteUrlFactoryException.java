@@ -1,7 +1,7 @@
 package uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.Exception;
 
 import uk.co.ben_gibson.open.in.git.host.Git.RemoteHost;
-import uk.co.ben_gibson.open.in.git.host.OpenInGitHostException;
+import uk.co.ben_gibson.open.in.git.host.Exception.OpenInGitHostException;
 
 public class RemoteUrlFactoryException extends OpenInGitHostException
 {

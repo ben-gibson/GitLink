@@ -102,14 +102,14 @@ public class Configuration implements Configurable
         this.settings.setEnableVerboseEventLog(this.enableVerboseEventLogging.isSelected());
         this.settings.setRemoteHost((RemoteHost) this.hostsComboBox.getSelectedItem());
 
-        List<Extension> enabledExtensions = new ArrayList<>();
+        List<String> enabledExtensions = new ArrayList<>();
 
         for (Map.Entry<Extension, JBCheckBox> entry : this.extensionCheckBoxes.entrySet()) {
             Extension extension = entry.getKey();
             JBCheckBox checkBox = entry.getValue();
 
             if (checkBox.isSelected()) {
-                enabledExtensions.add(extension);
+                enabledExtensions.add(extension.getClass().getName());
             }
         }
 
@@ -141,7 +141,7 @@ public class Configuration implements Configurable
 
     public String getHelpTopic()
     {
-        return "Foo bar";
+        return "Open In Git Host";
     }
 
     public String getDisplayName()

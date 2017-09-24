@@ -2,8 +2,6 @@ package uk.co.ben_gibson.open.in.git.host.Extension;
 
 import com.intellij.ide.browsers.BrowserLauncher;
 import uk.co.ben_gibson.open.in.git.host.Extension.Exception.ExtensionException;
-
-import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -11,13 +9,16 @@ import java.net.URL;
  */
 public class OpenInBrowserExtension implements Extension
 {
-    public void handle(URL remoteUrl) throws ExtensionException
+    private BrowserLauncher browserLauncher;
+
+    public OpenInBrowserExtension(BrowserLauncher browserLauncher)
     {
-        try {
-            BrowserLauncher.getInstance().open(remoteUrl.toURI().toString());
-        } catch (URISyntaxException e) {
-            throw ExtensionException.couldNotHandleRemoteUrl(this, remoteUrl);
-        }
+        this.browserLauncher = browserLauncher;
+    }
+
+    public void run(URL remoteUrl) throws ExtensionException
+    {
+        this.browserLauncher.open(remoteUrl.toString());
     }
 
     public String displayName()

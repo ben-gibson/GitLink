@@ -1,16 +1,21 @@
 package uk.co.ben_gibson.open.in.git.host;
 
+import com.intellij.ide.browsers.BrowserLauncher;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import uk.co.ben_gibson.open.in.git.host.Extension.CopyToClipboardExtension;
 import uk.co.ben_gibson.open.in.git.host.Extension.Extension;
+import uk.co.ben_gibson.open.in.git.host.Extension.ExtensionRunner;
 import uk.co.ben_gibson.open.in.git.host.Extension.OpenInBrowserExtension;
+import uk.co.ben_gibson.open.in.git.host.Git.RemoteHost;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.*;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.DiagnosticLogHandler;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.EventLogHandler;
 import uk.co.ben_gibson.open.in.git.host.Logger.Logger;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.Exception.RemoteUrlFactoryException;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +63,16 @@ public class Container
         return this.remoteUrlFactoryProvider;
     }
 
+    public RemoteUrlFactory remoteUrlFactory(Project project) throws RemoteUrlFactoryException
+    {
+        return this.remoteUrlFactoryProvider().remoteUrlFactoryForHost(this.remoteHost(project));
+    }
+
+    public RemoteHost remoteHost(Project project)
+    {
+        return this.settings(project).getRemoteHost();
+    }
+
     public Logger logger(Project project)
     {
         Logger logger = new Logger();
@@ -75,10 +90,30 @@ public class Container
     {
         if (this.extensions == null) {
             this.extensions = new ArrayList<>();
-            this.extensions.add(new OpenInBrowserExtension());
-            this.extensions.add(new CopyToClipboardExtension());
+            this.extensions.add(new OpenInBrowserExtension(BrowserLauncher.getInstance()));
+            this.extensions.add(new CopyToClipboardExtension(Toolkit.getDefaultToolkit()));
         }
 
         return this.extensions;
+    }
+
+    public List<Extension> enabledExtensions(Project project)
+    {
+        Settings settings = this.settings(project);
+
+        List<Extension> enabledExtensions = new ArrayList<>();
+
+        for (Extension extension: this.registeredExtensions()) {
+            if (settings.isExtensionEnabled(extension)) {
+                enabledExtensions.add(extension);
+            }
+        }
+
+        return enabledExtensions;
+    }
+
+    public ExtensionRunner extensionRunner(Project project)
+    {
+        return new ExtensionRunner(this.logger(project), this.enabledExtensions(project));
     }
 }

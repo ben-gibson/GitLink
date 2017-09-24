@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.open.in.git.host.Logger;
 
+import uk.co.ben_gibson.open.in.git.host.Exception.InvalidConfigurationException;
 import uk.co.ben_gibson.open.in.git.host.Logger.Handlers.LogHandler;
 
 import java.util.ArrayList;
@@ -25,6 +26,15 @@ public class Logger
     public void error(String message)
     {
         this.log(LogMessage.error(message));
+    }
+
+    public void exception(Exception exception)
+    {
+        if (exception instanceof InvalidConfigurationException) {
+            this.log(LogMessage.warning(exception.getMessage()));
+        } else {
+            this.log(LogMessage.error(exception.getMessage()));
+        }
     }
 
     public void registerHandler(LogHandler handler)

@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.open.in.git.host;
+package uk.co.ben_gibson.open.in.git.host.Exception;
 
 /**
  * A base exception from which all exceptions from this library should extend!

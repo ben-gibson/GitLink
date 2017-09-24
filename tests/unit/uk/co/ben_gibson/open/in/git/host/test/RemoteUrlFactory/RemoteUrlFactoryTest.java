@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.ben_gibson.open.in.git.host.Git.*;
 import uk.co.ben_gibson.open.in.git.host.Git.Exception.RemoteException;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.Description.RemoteCommitDescription;
+import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.Description.RemoteFileDescription;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.Exception.RemoteUrlFactoryException;
 import uk.co.ben_gibson.open.in.git.host.RemoteUrlFactory.RemoteUrlFactory;
 import java.net.MalformedURLException;
@@ -21,31 +23,27 @@ public abstract class RemoteUrlFactoryTest extends TestCase
 
     @Test
     @UseDataProvider("commitProvider")
-    public void testCanCreateUrlToCommit(String originUrl, Commit commit, String expected, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException, MalformedURLException
+    public void testCanCreateUrlToCommit(RemoteCommitDescription description, String expected, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException, MalformedURLException
     {
         RemoteUrlFactory factory = this.remoteUrlFactory();
 
-        Remote remote = this.mockRemote(originUrl);
-
-        URL url = factory.createUrlToCommit(remote, commit, forceSSL);
+        URL url = factory.createUrl(description, forceSSL);
 
         assertEquals(expected, url.toString());
     }
 
     @Test
     @UseDataProvider("fileProvider")
-    public void testCanCreateUrlToFile(String originUrl, Branch branch, Integer lineNumber, File file, String expected, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException, MalformedURLException
+    public void testCanCreateUrlToFile(RemoteFileDescription description, String expected, boolean forceSSL) throws RemoteUrlFactoryException, RemoteException, MalformedURLException
     {
         RemoteUrlFactory factory = this.remoteUrlFactory();
 
-        Remote remote = this.mockRemote(originUrl);
-
-        URL url = factory.createUrlToFile(remote, branch, file, lineNumber, forceSSL);
+        URL url = factory.createUrl(description, forceSSL);
 
         assertEquals(expected, url.toString());
     }
 
-    private Remote mockRemote(String originUrl) throws MalformedURLException, RemoteException
+    static Remote mockRemote(String originUrl) throws MalformedURLException, RemoteException
     {
         Remote remote = mock(Remote.class);
 

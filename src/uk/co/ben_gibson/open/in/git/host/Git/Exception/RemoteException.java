@@ -1,7 +1,7 @@
 package uk.co.ben_gibson.open.in.git.host.Git.Exception;
 
 import uk.co.ben_gibson.open.in.git.host.Git.Remote;
-import uk.co.ben_gibson.open.in.git.host.OpenInGitHostException;
+import uk.co.ben_gibson.open.in.git.host.Exception.OpenInGitHostException;
 
 /**
  * Thrown when a remote could not be found.

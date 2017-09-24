@@ -7,11 +7,10 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@State(name = "Settings",
+@State(name = "uk.co.ben_gibson.open.in.git.host.Settings",
     storages = {@Storage(id = "default", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/settings.xml")}
 )
 
@@ -20,27 +19,22 @@ import java.util.List;
  */
 public class Settings implements PersistentStateComponent<Settings>
 {
-    private RemoteHost remoteHost             = RemoteHost.GIT_HUB;
-    private boolean enableVerboseEventLog     = false;
-    private boolean forceSSL                  = false;
-    private List<Extension> enabledExtensions = new ArrayList<>();
-
-    public boolean hasExtensionsEnabled()
-    {
-        return !this.enabledExtensions.isEmpty();
-    }
+    private RemoteHost remoteHost          = RemoteHost.GIT_HUB;
+    private boolean enableVerboseEventLog  = false;
+    private boolean forceSSL               = false;
+    private List<String> enabledExtensions = new ArrayList<>();
 
     public boolean isExtensionEnabled(Extension extension)
     {
-        return this.enabledExtensions.contains(extension);
+        return this.enabledExtensions.contains(extension.getClass().getName());
     }
 
-    public List<Extension> getEnabledExtensions(List<Extension> enabledExtensions)
+    public List<String> getEnabledExtensions()
     {
         return this.enabledExtensions;
     }
 
-    public void setEnabledExtensions(List<Extension> enabledExtensions)
+    public void setEnabledExtensions(List<String> enabledExtensions)
     {
         this.enabledExtensions = enabledExtensions;
     }

@@ -9,7 +9,7 @@ import java.net.URL;
  */
 public interface Extension
 {
-    void handle(URL remoteUrl) throws ExtensionException;
+    void run(URL remoteUrl) throws ExtensionException;
 
     String displayName();
 }
