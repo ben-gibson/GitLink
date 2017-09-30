@@ -18,7 +18,12 @@ public class OpenInBrowserExtension implements Extension
 
     public void run(URL remoteUrl) throws ExtensionException
     {
-        this.browserLauncher.open(remoteUrl.toString());
+        try {
+            this.browserLauncher.open(remoteUrl.toURI().toASCIIString());
+        } catch (Exception e) {
+            throw new ExtensionException(e.getMessage());
+        }
+
     }
 
     public String displayName()
