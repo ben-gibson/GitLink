@@ -95,6 +95,16 @@ public class GitHubRemoteUrlFactoryTest extends RemoteUrlFactoryTest
                 "https://github.com/foo%20bar/baz/blob/master/resources/Bar%20Baz.java",
                 true
             },
+            {
+                new RemoteFileDescription(
+                    RemoteUrlFactoryTest.mockRemote("https://github.com/foo bar/baz"),
+                    Branch.master(),
+                    RemoteUrlFactoryTest.mockFile("需求0920-2017/0928.sql", "0928.sql"),
+                    15
+                ),
+                "https://github.com/foo%20bar/baz/blob/master/需求0920-2017/0928.sql#L15",
+                true
+            },
         };
     }
 
