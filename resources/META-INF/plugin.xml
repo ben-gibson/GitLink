@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/ben-gibson/jetbrains-open-in-git-host">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>Open in Git host</name>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
     <description><![CDATA[
       Determines the remote URL of a git commit or file and runs it through enabled extensions. Extensions allow the URL to be
@@ -25,13 +25,7 @@
     <change-notes><![CDATA[
     <ul>
       <li>
-          Rebuilt code base for a cleaner more modular plugin that will scale better in future updates!
-      </li>
-      <li>
-          Note: Plugin settings will need to be reconfigured!
-      </li>
-      <li>
-          Note: No support for GitBlit - to be re-added in upcoming update.
+          Fixed encoding issue when URL contains non-ASCII characters. <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/40">#40</a>
       </li>
      </ul>
     ]]>
