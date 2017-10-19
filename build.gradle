@@ -36,10 +36,10 @@ sourceSets {
 
 intellij {
     plugins 'git4idea'
-    pluginName 'Open in Git host'
+    pluginName 'GitLink'
     updateSinceUntilBuild false
     sameSinceUntilBuild false
 }
 
 group 'org.jetbrains'
-version '2.0.1'
+version '2.1.0'
