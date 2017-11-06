@@ -1,32 +1,33 @@
-<idea-plugin url="https://github.com/ben-gibson/jetbrains-open-in-git-host">
+<idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
-    <name>Open in Git host</name>
-    <version>2.0.1</version>
-    <vendor url="https://github.com/ben-gibson/jetbrains-open-in-git-host">Ben Gibson</vendor>
+    <name>GitLink</name>
+    <version>2.1.0</version>
+    <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
-      Determines the remote URL of a git commit or file and runs it through enabled extensions. Extensions allow the URL to be
-      opened in the default browser and copied to the clipboard etc.
+      Provides shortcuts to open a file or commit in Stash, GitHub, BitBucket or GitLab using the default browser or copy the link to the clipboard.
       <br />
       <br />
-      After installing select your remote host and the extensions you want enabled in Settings &rarr; Other Settings &rarr; Open in Git host
-      (currently supports the hosts GitHub, Stash, BitBucket and GitLab). Make sure you have registered your project's root under the version control settings.
+      After installing select your remote host in Settings &rarr; Other Settings &rarr; GitLink
+      (currently supports GitHub, Stash, BitBucket and GitLab). Make sure you have registered your project's root under the version control settings.
       Preferences → Version Control (see unregistered roots)
       <br />
       <br />
-      To use, open a file that is under Git version control in the editor and select View &rarr; Open in Git host. You can
+      To open a file in the default browser select View &rarr; Open in (your selected host). You can
       also access this action through the <i>Select target</i> menu under Navigate &rarr; Select in. If you want to view
       a specific commit, you can do this by right clicking the commit from the <i>VCS log tool window</i> and selecting
-      Open in Git host.
+      Open in (your selected host).
       <br />
       <br />
-      Note: The current branch is used unless it does not exist in your remote host in which case it defaults to the
-      master branch.
+      Note: The current branch is used unless it does not exist on the remote in which case your preferred default,
+      defined in the settings, is used.
     ]]></description>
     <change-notes><![CDATA[
     <ul>
-      <li>
-          Fixed encoding issue when URL contains non-ASCII characters. <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/40">#40</a>
-      </li>
+      <li>Code refactor</li>
+      <li>Separate shortcuts for opening in the browser and copying to the clipboard <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/47">#47</a>.</li>
+      <li>Rename project to GitLink <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/46">#46</a>.</li>
+      <li>Make default branch customisable <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/45">#45</a>.</li>
+      <li>Add custom URL factory <a href="https://github.com/ben-gibson/jetbrains-open-in-git-host/issues/44">#44</a>.</li>
      </ul>
     ]]>
     </change-notes>
@@ -44,31 +45,51 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService
-            serviceInterface="uk.co.ben_gibson.open.in.git.host.Container"
-            serviceImplementation="uk.co.ben_gibson.open.in.git.host.Container"
+            serviceInterface="uk.co.ben_gibson.git.link.Container"
+            serviceImplementation="uk.co.ben_gibson.git.link.Container"
         />
-        <projectService serviceImplementation="uk.co.ben_gibson.open.in.git.host.Settings"/>
-        <projectConfigurable instance="uk.co.ben_gibson.open.in.git.host.Configuration"/>
-        <selectInTarget implementation="uk.co.ben_gibson.open.in.git.host.UI.Target.SelectInTarget"/>
+        <projectService serviceImplementation="uk.co.ben_gibson.git.link.Preferences"/>
+        <projectConfigurable instance="uk.co.ben_gibson.git.link.UI.Settings.ConfigurableSettings"/>
+        <selectInTarget implementation="uk.co.ben_gibson.git.link.UI.Target.BrowserSelectInTarget"/>
     </extensions>
 
     <actions>
 
         <action
-            id="uk.co.ben_gibson.open.in.git.host.UI.Action.MenuAction.FileAction"
-            class="uk.co.ben_gibson.open.in.git.host.UI.Action.MenuAction"
-            text="Open in Git host"
-            description="Opens the version controlled file in the Git host using the default browser"
+            id="uk.co.ben_gibson.git.link.UI.Action.Menu.MenuAction.Browser"
+            class="uk.co.ben_gibson.git.link.UI.Action.Menu.BrowserMenuAction"
+            text="Open in git host"
+            description="Opens the file in the remote git host using the default browser"
         >
             <add-to-group group-id="ViewMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu"/>
             <add-to-group group-id="ProjectViewPopupMenu"/>
             <add-to-group group-id="EditorTabPopupMenu"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl M"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl O"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
+        </action>
+        <action
+                id="uk.co.ben_gibson.git.link.UI.Action.Menu.MenuAction.Clipboard"
+                class="uk.co.ben_gibson.git.link.UI.Action.Menu.ClipboardMenuAction"
+                text="Copy link to git host"
+                description="Copies a link to the file in the remote git host"
+        >
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl C"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
         </action>
 
-        <action id="RemoteRepositoryMapper.Open.Commit.In.Git.Host" class="uk.co.ben_gibson.open.in.git.host.UI.Action.VcsLogAction" text="Open in Git host"
-                description="Opens the commit in the Git host using the default browser">
+        <action id="uk.co.ben_gibson.git.link.UI.Action.Menu.VcsAction.Browser" class="uk.co.ben_gibson.git.link.UI.Action.Vcs.BrowserVcsAction" text="Open in git host"
+                description="Opens the commit in the remote git host using the default browser">
+            <add-to-group group-id="Git.LogContextMenu" />
+            <add-to-group group-id="Vcs.Log.ContextMenu" />
+        </action>
+
+        <action id="uk.co.ben_gibson.git.link.UI.Action.Menu.VcsAction.Clipboard" class="uk.co.ben_gibson.git.link.UI.Action.Vcs.ClipboardVcsAction" text="Copy link to git host"
+                description="Copies a link to the commit in the remote git host">
             <add-to-group group-id="Git.LogContextMenu" />
             <add-to-group group-id="Vcs.Log.ContextMenu" />
         </action>

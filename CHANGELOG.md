@@ -56,3 +56,11 @@ All Notable changes to `Open in Git host` will be documented in this file
 ## 2.0.1 - 2017-09-30
 
 - Fixed encoding issue when URL contains non-ASCII characters. #40
+
+## 2.1.0 - 2017-11-05
+
+- Code refactor
+- Separated shortcuts for opening in the browser and copying to the clipboard #47
+- Rename plugin to GitLink #46
+- Make default branch customisable #45
+- Add custom URL factory #44
