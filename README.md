@@ -8,8 +8,8 @@
 </h4>
 
 <p align="center">
-  <a href="https://travis-ci.org/ben-gibson/jetbrains-open-in-git-host">
-    <img src="https://travis-ci.org/ben-gibson/jetbrains-open-in-git-host.svg?branch=master"
+  <a href="https://travis-ci.org/ben-gibson/GitLink">
+    <img src="https://travis-ci.org/ben-gibson/GitLink.svg?branch=master"
          alt="Gitter">
   </a>
   <a href="https://gitter.im/jetbrains-open-in-git-host/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/jetbrains-open-in-git-host/Lobby.svg"></a>
