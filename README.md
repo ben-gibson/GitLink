@@ -13,6 +13,8 @@
          alt="Gitter">
   </a>
   <a href="https://gitter.im/jetbrains-open-in-git-host/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/jetbrains-open-in-git-host/Lobby.svg"></a>
+  <br>
+  <img src="gitlink-demo.gif" alt="demo">
 </p>
 <br>
 
