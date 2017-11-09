@@ -102,7 +102,7 @@ public class Runner
 
                     logger.notice(String.format("Running URL handler '%s'", handler.name()));
 
-                    handler.handle(generator.generateRemoteURL());
+                    handler.handle(remoteUrl);
 
                 }  catch (GitLinkException e) {
                     logger.exception(e);
