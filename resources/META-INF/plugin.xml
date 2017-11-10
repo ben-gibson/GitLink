@@ -1,14 +1,14 @@
 <idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <version>2.1.2</version>
+    <version>2.2.0</version>
     <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
-      Provides shortcuts to open a file or commit in Stash, GitHub, BitBucket or GitLab using the default browser or copy the link to the clipboard.
+      Provides shortcuts to open a file or commit in Stash, GitHub, BitBucket, GitLab or GitBlit using the default browser or copy the link to the clipboard.
       <br />
       <br />
       After installing select your remote host in Settings &rarr; Other Settings &rarr; GitLink
-      (currently supports GitHub, Stash, BitBucket and GitLab). Make sure you have registered your project's root under the version control settings.
+      (currently supports GitHub, Stash, BitBucket, GitLab and GitBlit). Make sure you have registered your project's root under the version control settings.
       Preferences → Version Control (see unregistered roots)
       <br />
       <br />
@@ -23,7 +23,7 @@
     ]]></description>
     <change-notes><![CDATA[
     <ul>
-      <li>Fixed issue preventing port numbers with more than 4 digits being removed <a href="https://github.com/ben-gibson/GitLink/issues/52">#52</a>.</li>
+      <li>Added support for GitBlit. <a href="https://github.com/ben-gibson/GitLink/issues/41">#41</a></li>
      </ul>
     ]]>
     </change-notes>

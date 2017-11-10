@@ -70,6 +70,7 @@ public class Container
             UrlFactoryProvider provider = new UrlFactoryProvider();
 
             provider.registerFactory(new GitHubUrlFactory());
+            provider.registerFactory(new GitBlitUrlFactory());
             provider.registerFactory(new BitBucketUrlFactory());
             provider.registerFactory(new StashUrlFactory());
             provider.registerFactory(
