@@ -39,7 +39,7 @@ public class Remote
 
             url = StringUtil.trimEnd(url, ".git");
 
-            url = url.replaceAll(":\\d{1,4}", ""); // remove port
+            url = url.replaceAll(":\\d{1,5}", ""); // remove port
 
             if (!url.startsWith("http")) {
                 url = StringUtil.replace(url, "git@", "");

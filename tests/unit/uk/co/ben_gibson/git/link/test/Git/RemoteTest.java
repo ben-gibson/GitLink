@@ -64,6 +64,10 @@ public class RemoteTest extends TestCase
                 "git://github.com/foo/bar",
                 "http://github.com/foo/bar"
             },
+            {
+                "ssh://git@custom.gitlab.url:10022/group/project.git",
+                "http://custom.gitlab.url/group/project"
+            },
         };
     }
 
