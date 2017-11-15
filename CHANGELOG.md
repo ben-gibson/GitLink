@@ -64,3 +64,11 @@ All Notable changes to `Open in Git host` will be documented in this file
 - Rename plugin to GitLink #46
 - Make default branch customisable #45
 - Add custom URL factory #44
+
+## 2.1.1 - 2017-11-09
+
+- Fixed force HTTPS option.
+
+## 2.1.2 - 2017-11-15
+
+- Fixed issue preventing port numbers with more than 4 digits being removed #52.
