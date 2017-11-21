@@ -72,3 +72,8 @@ All Notable changes to `Open in Git host` will be documented in this file
 ## 2.1.2 - 2017-11-15
 
 - Fixed issue preventing port numbers with more than 4 digits being removed #52.
+
+
+## 2.2.0 - 2017-11-10
+
+- Added support for GitBlit. #41

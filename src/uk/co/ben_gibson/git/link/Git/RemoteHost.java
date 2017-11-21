@@ -12,6 +12,7 @@ public enum RemoteHost
     STASH("Stash", "/Icons/Bitbucket/Bitbucket.png"),
     BITBUCKET("Bitbucket", "/Icons/Bitbucket/Bitbucket.png"),
     GITLAB("GitLab", "/Icons/GitLab/GitLab.png"),
+    GITBLIT("GitBlit", ""),
     CUSTOM("Custom", "/Icons/Custom/Custom.png");
 
     private final String name;
@@ -31,6 +32,11 @@ public enum RemoteHost
     public boolean custom()
     {
         return (this == CUSTOM);
+    }
+
+    public boolean gitBlit()
+    {
+        return (this == GITBLIT);
     }
 
     public boolean gitHub()
