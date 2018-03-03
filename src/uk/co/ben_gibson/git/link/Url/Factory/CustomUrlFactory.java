@@ -1,27 +1,32 @@
 package uk.co.ben_gibson.git.link.Url.Factory;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import uk.co.ben_gibson.git.link.Git.*;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
-import uk.co.ben_gibson.git.link.Git.RemoteHost;
-import uk.co.ben_gibson.git.link.Url.Factory.Description.CommitDescription;
-import uk.co.ben_gibson.git.link.Url.Factory.Description.FileDescription;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class CustomUrlFactory extends AbstractUrlFactory
 {
-    private String fileUrlTemplate;
+    private String fileOnBranchUrlTemplate;
+    private String fileAtCommitUrlTemplate;
     private String commitUrlTemplate;
 
-    public CustomUrlFactory(String fileUrlTemplate, String commitUrlTemplate)
+
+    public CustomUrlFactory(String fileOnBranchUrlTemplate, String fileAtCommitUrlTemplate, String commitUrlTemplate)
     {
-        this.fileUrlTemplate   = fileUrlTemplate;
+        this.fileOnBranchUrlTemplate = fileOnBranchUrlTemplate;
+        this.fileAtCommitUrlTemplate = fileAtCommitUrlTemplate;
         this.commitUrlTemplate = commitUrlTemplate;
     }
 
-    public URL createUrl(CommitDescription description) throws UrlFactoryException, RemoteException
+
+    public URL createUrlToCommit(@NotNull Remote remote, @NotNull Commit commit) throws UrlFactoryException
     {
-        String url = this.commitUrlTemplate.replace("{commit}", description.commitHash());
+        String url = this.commitUrlTemplate.replace("{commit}", commit.hash());
 
         try {
             return new URL(url);
@@ -30,22 +35,69 @@ public class CustomUrlFactory extends AbstractUrlFactory
         }
     }
 
-    public URL createUrl(FileDescription description) throws UrlFactoryException, RemoteException
-    {
-        String url = this.fileUrlTemplate.replace("{branch}", description.branch().toString());
-        url = url.replace("{filePath}", this.cleanPath(description.file().path()));
-        url = url.replace("{fileName}", description.file().name());
-        url = url.replace("{line}", description.hasLineNumber() ? description.lineNumber().toString() : "");
 
+    public URL createUrlToFileOnBranch(
+        @NotNull Remote remote,
+        @NotNull File file,
+        @NotNull Branch branch,
+        @Nullable Integer lineNumber
+    ) throws UrlFactoryException, RemoteException
+    {
+        String template = this.fileOnBranchUrlTemplate.replace("{branch}", branch.toString());
+
+        template = template.replace("{filePath}", this.cleanPath(file.directoryPath()));
+        template = template.replace("{fileName}", file.name());
+        template = template.replace("{line}", (lineNumber != null) ? lineNumber.toString() : "");
+
+        return this.createUrlFromTemplate(template);
+    }
+
+
+    public URL createUrlToFileAtCommit(@NotNull Remote remote, @NotNull File file, @NotNull Commit commit, @Nullable Integer lineNumber) throws UrlFactoryException, RemoteException
+    {
+        String template = this.fileAtCommitUrlTemplate.replace("{commit}", commit.hash());
+
+        template = template.replace("{filePath}", this.cleanPath(file.directoryPath()));
+        template = template.replace("{fileName}", file.name());
+        template = template.replace("{line}", (lineNumber != null) ? lineNumber.toString() : "");
+
+        return this.createUrlFromTemplate(template);
+    }
+
+
+    @NotNull
+    private URL createUrlFromTemplate(String template) throws UrlFactoryException
+    {
         try {
-            return new URL(url);
+            URL url = new URL(template);
+
+            String path = url.getPath().replace("//", "/");
+
+            if (url.getQuery() != null && !url.getQuery().isEmpty()) {
+                path = path.concat("?" + url.getQuery());
+            }
+
+            if (url.getRef() != null && !url.getRef().isEmpty()) {
+                path = path.concat("#" + url.getRef());
+            }
+
+            return new URL(url.getProtocol(), url.getHost(), url.getPort(), path);
+
         } catch (MalformedURLException e) {
-            throw UrlFactoryException.cannotCreateUrl(String.format("Custom url '%s' is invalid.", url));
+            throw UrlFactoryException.cannotCreateUrl(String.format("Custom url '%s' is invalid.", template));
         }
     }
+
 
     public boolean supports(RemoteHost host)
     {
-        return host.custom();
+        return host.isCustom();
+    }
+
+
+    @Override
+    public boolean canOpenFileAtCommit()
+    {
+        return (!this.fileAtCommitUrlTemplate.isEmpty());
     }
 }

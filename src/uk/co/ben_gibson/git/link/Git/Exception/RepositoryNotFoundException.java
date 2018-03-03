@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.git.link.Git.Exception;
 
+import uk.co.ben_gibson.git.link.Exception.Codes;
 import uk.co.ben_gibson.git.link.Exception.GitLinkException;
 
 /**
@@ -9,6 +10,6 @@ public class RepositoryNotFoundException extends GitLinkException
 {
     public RepositoryNotFoundException()
     {
-        super("Git repository not found!");
+        super("Git repository not found", Codes.GIT_REPOSITORY_NOT_FOUND);
     }
 }

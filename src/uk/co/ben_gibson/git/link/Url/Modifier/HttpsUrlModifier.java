@@ -2,8 +2,6 @@ package uk.co.ben_gibson.git.link.Url.Modifier;
 
 import uk.co.ben_gibson.git.link.Url.Modifier.Exception.ModifierException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -27,7 +25,7 @@ public class HttpsUrlModifier implements UrlModifier
 
             return new URL("https", url.getHost(), url.getPort(), file);
         } catch (MalformedURLException e) {
-            throw new ModifierException(e.getMessage());
+            throw ModifierException.invalidUrlAfterModification(url);
         }
     }
 

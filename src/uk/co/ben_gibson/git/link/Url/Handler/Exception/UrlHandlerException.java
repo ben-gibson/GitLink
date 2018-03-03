@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.git.link.Url.Handler.Exception;
 
+import uk.co.ben_gibson.git.link.Exception.Codes;
 import uk.co.ben_gibson.git.link.Exception.GitLinkException;
 
 /**
@@ -9,6 +10,6 @@ public class UrlHandlerException extends GitLinkException
 {
     public UrlHandlerException(String message)
     {
-        super(message);
+        super(message, Codes.URL_CANNOT_BE_HANDLED);
     }
 }

@@ -11,15 +11,18 @@ public class CopyToClipboardHandler implements UrlHandler
 {
     private Toolkit toolkit;
 
+
     public CopyToClipboardHandler(Toolkit toolkit)
     {
         this.toolkit = toolkit;
     }
 
+
     public void handle(URL url)
     {
         this.toolkit.getSystemClipboard().setContents(new StringSelection(url.toString()), null);
     }
+
 
     public String name()
     {

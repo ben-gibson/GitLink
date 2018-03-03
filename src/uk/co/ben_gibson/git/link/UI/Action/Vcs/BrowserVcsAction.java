@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.git.link.UI.Action.Vcs;
 
+import uk.co.ben_gibson.git.link.Container;
 import uk.co.ben_gibson.git.link.Git.RemoteHost;
 import uk.co.ben_gibson.git.link.Url.Handler.UrlHandler;
 
@@ -10,8 +11,9 @@ public class BrowserVcsAction extends VcsLogAction
         return String.format("Open commit in %s", remoteHost.toString());
     }
 
-    UrlHandler remoteUrlHandler()
+
+    UrlHandler urlHandler()
     {
-        return container().openInBrowserHandler();
+        return Container.getInstance().openInBrowserHandler();
     }
 }

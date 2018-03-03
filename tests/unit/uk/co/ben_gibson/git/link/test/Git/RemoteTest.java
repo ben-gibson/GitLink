@@ -77,6 +77,7 @@ public class RemoteTest extends TestCase
         GitRemote gitRemote = mock(GitRemote.class);
         Git git = mock(Git.class);
 
+        when(gitRemote.getName()).thenReturn("");
         when(gitRemote.getFirstUrl()).thenReturn(null);
 
         Remote remote = new Remote(git, gitRemote);

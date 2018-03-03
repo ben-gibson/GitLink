@@ -1,6 +1,6 @@
 # Changelog
 
-All Notable changes to `Open in Git host` will be documented in this file
+All Notable changes to `GitLink` will be documented in this file
 
 ## 1.5.4 - 2016-07-29
 
@@ -77,3 +77,10 @@ All Notable changes to `Open in Git host` will be documented in this file
 ## 2.2.0 - 2017-11-10
 
 - Added support for GitBlit. #41
+
+## 2.3.0 - 2018-03-17
+
+- Generate link to file at commit instead of branch where possible. #61
+- Added actions to annotation gutter. #57
+- Allow remote name to be configured from the preferences. #60
+- Minor bug fixes and improvements.

@@ -5,7 +5,13 @@ import com.intellij.openapi.vfs.VirtualFile;
 import git4idea.GitLocalBranch;
 import git4idea.GitRemoteBranch;
 import git4idea.commands.Git;
+import git4idea.commands.GitCommand;
+import git4idea.commands.GitCommandResult;
+import git4idea.commands.GitLineHandler;
+import git4idea.repo.GitRemote;
 import git4idea.repo.GitRepository;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
 import uk.co.ben_gibson.git.link.Git.Exception.BranchException;
 
@@ -14,23 +20,26 @@ import uk.co.ben_gibson.git.link.Git.Exception.BranchException;
  */
 public class Repository
 {
+    private final String defaultRemoteName;
     private final Branch defaultBranch;
     private final GitRepository repository;
     private final Git git;
-    private Remote origin;
 
-    public Repository(Git git, GitRepository repository, Branch defaultBranch)
+    Repository(@NotNull Git git, @NotNull GitRepository repository, @NotNull Branch defaultBranch, @NotNull String defaultRemoteName)
     {
-        this.git           = git;
-        this.repository    = repository;
-        this.defaultBranch = defaultBranch;
+        this.git               = git;
+        this.repository        = repository;
+        this.defaultBranch     = defaultBranch;
+        this.defaultRemoteName = defaultRemoteName;
     }
 
+    @NotNull
     Project project()
     {
         return this.repository.getProject();
     }
 
+    @NotNull
     VirtualFile root()
     {
         return this.repository.getRoot();
@@ -38,19 +47,21 @@ public class Repository
 
     /**
      * Takes a virtual file and returns a repository file
-     *
+     * <p>
      * Unlike the virtual file a repository files root is from the repositories root e.g.
      * VirtualFile: /Users/Foo/Projects/acme-demo/src/bar.java
      * RepositoryFile: src/bar.java
      */
-    public File fileFromVirtualFile(VirtualFile file)
+    @NotNull
+    public File repositoryFileFromVirtualFile(VirtualFile file)
     {
         String pathRelativeToRepository = file.getPath().substring(this.root().getPath().length());
 
-        return new File(pathRelativeToRepository, file);
+        return new File(pathRelativeToRepository, file.getName());
     }
 
-    public Branch currentBranch()
+    @NotNull
+    public Branch currentBranch() throws RemoteException
     {
         GitLocalBranch localBranch = this.repository.getCurrentBranch();
 
@@ -59,7 +70,7 @@ public class Repository
 
         if (localBranch != null) {
             try {
-                if (this.origin.hasBranch(this, localBranch)) {
+                if (this.remote().hasBranch(this, localBranch)) {
                     return new Branch(localBranch.getName());
                 }
             } catch (BranchException exception) {
@@ -73,22 +84,61 @@ public class Repository
         return this.defaultBranch();
     }
 
-    public Remote origin() throws RemoteException
+
+    public boolean isCurrentCommitOnRemote()
     {
-        if (this.origin == null) {
+        Commit commit = this.currentCommit();
 
-            this.repository.getRemotes().stream().filter(remote -> remote.getName().equals("origin")).forEach(remote -> {
-                this.origin = new Remote(this.git, remote);
-            });
+        if (commit == null) {
+            return false;
+        }
 
-            if (this.origin == null) {
-                throw RemoteException.originNotFound();
+        final GitLineHandler handler = new GitLineHandler(this.project(), this.root(), GitCommand.BRANCH);
+
+        handler.addParameters("-r", "--contains", commit.hash());
+
+        GitCommandResult result = this.git.runCommand(handler);
+
+        if (!result.success()) {
+            return false; // throw?
+        }
+
+        for(String output : result.getOutput()) {
+            if (output.trim().startsWith(this.defaultRemoteName)) {
+                return true;
             }
         }
 
-        return this.origin;
+        return false;
     }
 
+
+    @Nullable
+    public Commit currentCommit()
+    {
+        String revision = this.repository.getCurrentRevision();
+
+        if (revision == null) {
+            return null;
+        }
+
+        return new Commit(revision);
+    }
+
+    @NotNull
+    public Remote remote() throws RemoteException
+    {
+        for (GitRemote remote : this.repository.getRemotes()) {
+            if (remote.getName().equals(this.defaultRemoteName)) {
+                return new Remote(this.git, remote);
+            }
+        }
+
+        throw RemoteException.remoteNotFound(this.defaultRemoteName);
+    }
+
+
+    @NotNull
     private Branch defaultBranch()
     {
         return this.defaultBranch;

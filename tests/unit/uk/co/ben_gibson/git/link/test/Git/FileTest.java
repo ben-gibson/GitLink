@@ -1,10 +1,7 @@
 package uk.co.ben_gibson.git.link.test.Git;
 
-import com.intellij.openapi.vfs.VirtualFile;
 import junit.framework.TestCase;
 import uk.co.ben_gibson.git.link.Git.File;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class FileTest extends TestCase
 {
@@ -12,7 +9,7 @@ public class FileTest extends TestCase
     {
         File file = file("foo/bar.java", "bar.java");
 
-        assertSame("foo/bar.java", file.pathWithName());
+        assertSame("foo/bar.java", file.path());
     }
 
     public void testReturnsName()
@@ -24,10 +21,6 @@ public class FileTest extends TestCase
 
     private File file(String path, String name)
     {
-        VirtualFile virtualFile = mock(VirtualFile.class);
-
-        when(virtualFile.getName()).thenReturn(name);
-
-        return new File(path, virtualFile);
+        return new File(path, name);
     }
 }

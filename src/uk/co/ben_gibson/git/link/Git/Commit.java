@@ -1,21 +1,22 @@
 package uk.co.ben_gibson.git.link.Git;
 
-import com.intellij.vcs.log.VcsFullCommitDetails;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A git commit.
  */
 public class Commit
 {
-    private VcsFullCommitDetails details;
+    private String hash;
 
-    public Commit(VcsFullCommitDetails details)
+    public Commit(@NotNull String hash)
     {
-        this.details = details;
+        this.hash = hash;
     }
 
+    @NotNull
     public String hash()
     {
-        return this.details.getId().toString();
+        return this.hash;
     }
 }

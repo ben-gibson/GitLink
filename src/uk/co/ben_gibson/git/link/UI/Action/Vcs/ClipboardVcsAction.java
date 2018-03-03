@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.git.link.UI.Action.Vcs;
 
+import uk.co.ben_gibson.git.link.Container;
 import uk.co.ben_gibson.git.link.Git.RemoteHost;
 import uk.co.ben_gibson.git.link.Url.Handler.UrlHandler;
 
@@ -10,8 +11,9 @@ public class ClipboardVcsAction extends VcsLogAction
         return String.format("Copy %s commit link to clipboard", remoteHost.toString());
     }
 
-    UrlHandler remoteUrlHandler()
+
+    UrlHandler urlHandler()
     {
-        return container().copyToClipboardHandler();
+        return Container.getInstance().copyToClipboardHandler();
     }
 }
