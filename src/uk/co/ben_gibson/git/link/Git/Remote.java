@@ -5,6 +5,7 @@ import git4idea.GitLocalBranch;
 import git4idea.commands.Git;
 import git4idea.commands.GitCommandResult;
 import git4idea.repo.GitRemote;
+import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
 import uk.co.ben_gibson.git.link.Git.Exception.BranchException;
 
@@ -17,17 +18,19 @@ public class Remote
     private final Git git;
     private URL url;
 
-    public Remote(Git git, GitRemote remote)
+    public Remote(@NotNull Git git, @NotNull GitRemote remote)
     {
         this.git    = git;
         this.remote = remote;
     }
 
+    @NotNull
     public String name()
     {
         return remote.getName();
     }
 
+    @NotNull
     public URL url() throws RemoteException
     {
         if (this.url == null) {

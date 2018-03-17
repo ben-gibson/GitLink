@@ -1,10 +1,11 @@
-package uk.co.ben_gibson.git.link.UI.Target;
+package uk.co.ben_gibson.git.link.UI.Extensions;
 
 import com.intellij.ide.SelectInContext;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import uk.co.ben_gibson.git.link.Container;
+import uk.co.ben_gibson.git.link.Manager;
+import uk.co.ben_gibson.git.link.Url.Handler.OpenInBrowserHandler;
 
 public class BrowserSelectInTarget implements com.intellij.ide.SelectInTarget
 {
@@ -13,34 +14,35 @@ public class BrowserSelectInTarget implements com.intellij.ide.SelectInTarget
         return true;
     }
 
+
     public void selectIn(SelectInContext context, boolean requestFocus)
     {
-        Container container = this.container();
-        Project project     = context.getProject();
-        VirtualFile file    = context.getVirtualFile();
+        Project project = context.getProject();
+        VirtualFile file = context.getVirtualFile();
+        Manager manager  = Container.getInstance().manager();
+        OpenInBrowserHandler handler  = Container.getInstance().openInBrowserHandler();
 
-        container.runner().runForFile(project, file, this.container().openInBrowserHandler());
+        manager.handleFile(handler, project, file, null, null);
     }
 
-    protected Container container()
-    {
-        return ServiceManager.getService(Container.class);
-    }
 
     public String getToolWindowId()
     {
         return null;
     }
 
+
     public String getMinorViewId()
     {
         return null;
     }
 
+
     public float getWeight()
     {
         return 0;
     }
+
 
     public String toString()
     {

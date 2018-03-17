@@ -11,10 +11,12 @@ public class OpenInBrowserHandler implements UrlHandler
 {
     private BrowserLauncher browserLauncher;
 
+
     public OpenInBrowserHandler(BrowserLauncher browserLauncher)
     {
         this.browserLauncher = browserLauncher;
     }
+
 
     public void handle(URL url) throws UrlHandlerException
     {
@@ -24,6 +26,7 @@ public class OpenInBrowserHandler implements UrlHandler
             throw new UrlHandlerException(e.getMessage());
         }
     }
+
 
     public String name()
     {

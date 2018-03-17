@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
     <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
       Provides shortcuts to open a file or commit in Stash, GitHub, BitBucket, GitLab or GitBlit using the default browser or copy the link to the clipboard.
@@ -23,7 +23,10 @@
     ]]></description>
     <change-notes><![CDATA[
     <ul>
-      <li>Added support for GitBlit. <a href="https://github.com/ben-gibson/GitLink/issues/41">#41</a></li>
+      <li>Generate link to file at commit instead of branch where possible. <a href="https://github.com/ben-gibson/GitLink/issues/61">#61</a></li>
+      <li>Added actions to annotation gutter. <a href="https://github.com/ben-gibson/GitLink/issues/57">#57</a></li>
+      <li>Allow remote name to be configured from the preferences. <a href="https://github.com/ben-gibson/GitLink/issues/60">#60</a></li>
+      <li>Minor bug fixes and improvements.</li>
      </ul>
     ]]>
     </change-notes>
@@ -40,13 +43,12 @@
     <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService
-            serviceInterface="uk.co.ben_gibson.git.link.Container"
-            serviceImplementation="uk.co.ben_gibson.git.link.Container"
-        />
+        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Container"/>
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.Preferences"/>
         <projectConfigurable instance="uk.co.ben_gibson.git.link.UI.Settings.ConfigurableSettings"/>
-        <selectInTarget implementation="uk.co.ben_gibson.git.link.UI.Target.BrowserSelectInTarget"/>
+        <selectInTarget implementation="uk.co.ben_gibson.git.link.UI.Extensions.BrowserSelectInTarget"/>
+        <vcsAnnotationGutterActionProvider implementation="uk.co.ben_gibson.git.link.UI.Extensions.BrowserAnnotationGutterActionProvider" />
+        <vcsAnnotationGutterActionProvider implementation="uk.co.ben_gibson.git.link.UI.Extensions.ClipboardAnnotationGutterActionProvider" />
     </extensions>
 
     <actions>

@@ -1,37 +1,40 @@
 package uk.co.ben_gibson.git.link.Git;
 
-import com.intellij.openapi.vfs.VirtualFile;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a file under version control.
  */
 public class File
 {
-    private String path; // A pathWithName from the root of the repository.
-    private VirtualFile file; // The underlying file.
+    private String path; // A path from the root of the repository.
+    private String name;
 
-    public File(String path, VirtualFile file)
+    public File(@NotNull String path, @NotNull String name)
     {
         if (path.startsWith("/")) {
             path = path.substring(1);
         }
 
         this.path = path;
-        this.file = file;
+        this.name = name;
     }
 
-    public String path()
+    @NotNull
+    public String directoryPath()
     {
         return this.path.substring(0, (this.path.length() - this.name().length()));
     }
 
-    public String pathWithName()
+    @NotNull
+    public String path()
     {
         return this.path;
     }
 
+    @NotNull
     public String name()
     {
-        return this.file.getName();
+        return this.name;
     }
 }

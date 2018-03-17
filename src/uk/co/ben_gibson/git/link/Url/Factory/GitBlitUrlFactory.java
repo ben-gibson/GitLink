@@ -7,19 +7,17 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import uk.co.ben_gibson.git.link.Git.*;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
-import uk.co.ben_gibson.git.link.Git.Remote;
-import uk.co.ben_gibson.git.link.Git.RemoteHost;
-import uk.co.ben_gibson.git.link.Url.Factory.Description.CommitDescription;
-import uk.co.ben_gibson.git.link.Url.Factory.Description.FileDescription;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
 
-public class GitBlitUrlFactory extends AbstractUrlFactory {
+public class GitBlitUrlFactory extends AbstractUrlFactory
+{
     @Override
-    public URL createUrl(CommitDescription description) throws RemoteException, UrlFactoryException {
-        Remote remote = description.remote();
-
-        String remoteUrl = description.remote().url().getPath();
+    public URL createUrlToCommit(@NotNull Remote remote, @NotNull Commit commit) throws UrlFactoryException, RemoteException
+    {
+        String remoteUrl = remote.url().getPath();
 
         Map<String, String> patterns = new LinkedHashMap<>();
 
@@ -37,7 +35,7 @@ public class GitBlitUrlFactory extends AbstractUrlFactory {
                 Map<String, String> placeholders = new HashMap<>();
                 placeholders.put("<context>", getContext(matcher));
                 placeholders.put("<repo>", this.replaceSlashWithBang(this.getGroupFromMatcher(matcher, "repo")));
-                placeholders.put("<revision>", description.commitHash());
+                placeholders.put("<revision>", commit.hash());
 
                 // Replace the URL placeholders
                 for (Map.Entry<String, String> placeHolder : placeholders.entrySet()) {
@@ -51,11 +49,14 @@ public class GitBlitUrlFactory extends AbstractUrlFactory {
         throw UrlFactoryException.cannotCreateUrl(String.format("Repository URL %s is not supported", remoteUrl));
     }
 
-    @Override
-    public URL createUrl(FileDescription description) throws RemoteException, UrlFactoryException {
-        Remote remote = description.remote();
-
-        String remoteUrl = description.remote().url().getPath();
+    public URL createUrlToFileOnBranch(
+        @NotNull Remote remote,
+        @NotNull File file,
+        @NotNull Branch branch,
+        @Nullable Integer lineNumber
+    ) throws UrlFactoryException, RemoteException
+    {
+        String remoteUrl = remote.url().getPath();
 
         Map<String, String> patterns = new LinkedHashMap<>();
 
@@ -75,8 +76,8 @@ public class GitBlitUrlFactory extends AbstractUrlFactory {
                 Map<String, String> placeholders = new HashMap<>();
                 placeholders.put("<context>", getContext(matcher));
                 placeholders.put("<repo>", this.replaceSlashWithBang(this.getGroupFromMatcher(matcher, "repo")));
-                placeholders.put("<branch>", this.replaceSlashWithBang(description.branch().toString()));
-                placeholders.put("<fullfilepath>", this.replaceSlashWithBang(description.file().pathWithName()));
+                placeholders.put("<branch>", this.replaceSlashWithBang(branch.toString()));
+                placeholders.put("<fullfilepath>", this.replaceSlashWithBang(file.path()));
 
                 // Replace the URL placeholders
                 for (Map.Entry<String, String> placeHolder : placeholders.entrySet()) {
@@ -84,8 +85,8 @@ public class GitBlitUrlFactory extends AbstractUrlFactory {
                 }
 
                 String fragment = null;
-                if (description.hasLineNumber()) {
-                    fragment = String.format("L%d", description.lineNumber());
+                if (lineNumber != null) {
+                    fragment = String.format("L%d", lineNumber);
                 }
 
                 return this.buildURL(remote, url, null, fragment);
@@ -95,12 +96,21 @@ public class GitBlitUrlFactory extends AbstractUrlFactory {
         throw UrlFactoryException.cannotCreateUrl(String.format("Repository URL %s is not supported", remoteUrl));
     }
 
+
     @Override
-    public boolean supports(RemoteHost host) {
-        return host.gitBlit();
+    public URL createUrlToFileAtCommit(@NotNull Remote remote, @NotNull File file, @NotNull Commit commit, @Nullable Integer lineNumber) throws UrlFactoryException, RemoteException
+    {
+        throw UrlFactoryException.cannotCreateUrl("GitBlit does not support this action!");
     }
 
-    private String getContext(Matcher matcher) {
+    @Override
+    public boolean supports(RemoteHost host)
+    {
+        return host.isGitBlit();
+    }
+
+    private String getContext(Matcher matcher)
+    {
         String context = this.getGroupFromMatcher(matcher, "context");
         if (context != null) {
             return context;
@@ -115,7 +125,8 @@ public class GitBlitUrlFactory extends AbstractUrlFactory {
      * @param name    The group to get from the matcher.
      * @return String
      */
-    private String getGroupFromMatcher(Matcher matcher, String name) {
+    private String getGroupFromMatcher(Matcher matcher, String name)
+    {
         try {
             return matcher.group(name);
         } catch (IllegalArgumentException | IllegalStateException e) {
@@ -130,7 +141,15 @@ public class GitBlitUrlFactory extends AbstractUrlFactory {
      * @return String
      */
     @NotNull
-    private String replaceSlashWithBang(@NotNull String string) {
+    private String replaceSlashWithBang(@NotNull String string)
+    {
         return string.replaceAll("/", "!");
+    }
+
+
+    @Override
+    public boolean canOpenFileAtCommit()
+    {
+        return false;
     }
 }

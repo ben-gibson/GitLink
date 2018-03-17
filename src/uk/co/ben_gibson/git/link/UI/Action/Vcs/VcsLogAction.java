@@ -5,8 +5,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.vcs.log.VcsFullCommitDetails;
 import com.intellij.vcs.log.VcsLog;
 import com.intellij.vcs.log.VcsLogDataKeys;
+import uk.co.ben_gibson.git.link.Container;
+import uk.co.ben_gibson.git.link.Git.Commit;
 import uk.co.ben_gibson.git.link.Url.Handler.UrlHandler;
 import uk.co.ben_gibson.git.link.UI.Action.Action;
+
 import java.util.List;
 
 /**
@@ -14,7 +17,8 @@ import java.util.List;
  */
 abstract class VcsLogAction extends Action
 {
-    abstract UrlHandler remoteUrlHandler();
+    abstract UrlHandler urlHandler();
+
 
     public void actionPerformed(Project project, AnActionEvent event)
     {
@@ -24,10 +28,12 @@ abstract class VcsLogAction extends Action
             return;
         }
 
-        VcsFullCommitDetails commit = vcsLog.getSelectedDetails().get(0);
+        VcsFullCommitDetails vcsCommit = vcsLog.getSelectedDetails().get(0);
+        Commit commit = new Commit(vcsCommit.toString());
 
-        this.container().runner().runForCommit(project, commit, this.remoteUrlHandler());
+        this.getManager().handleCommit(this.urlHandler(), project, commit, vcsCommit.getRoot());
     }
+
 
     protected boolean shouldActionBeEnabled(AnActionEvent event)
     {

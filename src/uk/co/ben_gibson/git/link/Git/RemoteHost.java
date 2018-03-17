@@ -1,6 +1,8 @@
 package uk.co.ben_gibson.git.link.Git;
 
 import com.intellij.openapi.util.IconLoader;
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 
 /**
@@ -18,47 +20,49 @@ public enum RemoteHost
     private final String name;
     private final String icon;
 
-    RemoteHost(String name, String icon)
+    RemoteHost(@NotNull String name, @NotNull String icon)
     {
         this.name = name;
         this.icon = icon;
     }
 
+    @NotNull
     public String toString()
     {
         return this.name;
     }
 
-    public boolean custom()
+    public boolean isCustom()
     {
         return (this == CUSTOM);
     }
 
-    public boolean gitBlit()
+    public boolean isGitBlit()
     {
         return (this == GITBLIT);
     }
 
-    public boolean gitHub()
+    public boolean isGitHub()
     {
         return (this == GIT_HUB);
     }
 
-    public boolean gitLab()
+    public boolean isGitLab()
     {
         return (this == GITLAB);
     }
 
-    public boolean bitbucket()
+    public boolean isBitbucket()
     {
         return (this == BITBUCKET);
     }
 
-    public boolean stash()
+    public boolean isStash()
     {
         return (this == STASH);
     }
 
+    @NotNull
     public Icon icon()
     {
         return IconLoader.getIcon(this.icon);

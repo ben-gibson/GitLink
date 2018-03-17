@@ -1,191 +1,130 @@
 package uk.co.ben_gibson.git.link;
 
 import com.intellij.ide.browsers.BrowserLauncher;
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.extensions.PluginId;
-import com.intellij.openapi.project.Project;
 import uk.co.ben_gibson.git.link.Git.RepositoryFactory;
-import uk.co.ben_gibson.git.link.Logger.Handlers.DiagnosticLogHandler;
-import uk.co.ben_gibson.git.link.Logger.Logger;
+import uk.co.ben_gibson.git.link.UI.ExceptionRenderer;
 import uk.co.ben_gibson.git.link.Url.Modifier.HttpsUrlModifier;
-import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifier;
-import uk.co.ben_gibson.git.link.Url.Factory.*;
-import uk.co.ben_gibson.git.link.Logger.Handlers.EventLogHandler;
 import uk.co.ben_gibson.git.link.Url.Handler.CopyToClipboardHandler;
 import uk.co.ben_gibson.git.link.Url.Handler.OpenInBrowserHandler;
+import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifierProvider;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 /**
  * Dependency container.
  *
  * There doesn't seem to be much documentation around Intellij's service manager. Services seem to be
- * registered through the plugin.xml but there isn't any information about handling services that have complex dependencies.
- * This acts as a simple alternative.
+ * registered through the plugin.xml but there isn't any information about handling services that have dependencies.
  */
 public class Container
 {
-    private Hashtable<Class, Object> applicationServices;
-    private Hashtable<Project, Hashtable<Class, Object>> projectServices;
+    private Hashtable<Class, Object> services = new Hashtable<>();
 
-    public Container()
+
+    public static Container getInstance()
     {
-        this.applicationServices = new Hashtable<>();
-        this.projectServices     = new Hashtable<>();
+        return ServiceManager.getService(Container.class);
     }
 
-    /**
-     * If the plugins project configuration changes we need to flush the lazy load cache.
-     */
-    public void flushProjectCache(Project project)
+
+    public Manager manager()
     {
-        this.projectServices.remove(project);
+        if (!this.hasService(Manager.class)) {
+            this.registerService(
+                new Manager(
+                    this.repositoryFactory(),
+                    this.exceptionRenderer(),
+                    this.urlModifierProvider()
+                )
+            );
+        }
+
+        return (Manager) this.service(Manager.class);
     }
+
 
     public Plugin plugin()
     {
-        if (!this.hasApplicationService(Plugin.class)) {
-            this.registerApplicationService(
-                new Plugin(PluginManager.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper")))
-            );
+        if (!this.hasService(Plugin.class)) {
+            this.registerService(Plugin.createDefault());
         }
 
-        return (Plugin)this.applicationService(Plugin.class);
+        return (Plugin) this.service(Plugin.class);
     }
 
-    public Preferences preferences(Project project)
+
+    public ExceptionRenderer exceptionRenderer()
     {
-       return ServiceManager.getService(project, Preferences.class);
-    }
-
-    public UrlFactoryProvider urlFactoryProvider(Project project)
-    {
-        if (!this.hasProjectService(project, UrlFactoryProvider.class)) {
-
-            Preferences preferences = this.preferences(project);
-
-            UrlFactoryProvider provider = new UrlFactoryProvider();
-
-            provider.registerFactory(new GitHubUrlFactory());
-            provider.registerFactory(new GitBlitUrlFactory());
-            provider.registerFactory(new BitBucketUrlFactory());
-            provider.registerFactory(new StashUrlFactory());
-            provider.registerFactory(
-                new CustomUrlFactory(preferences.getCustomFileUrlTemplate(), preferences.getCustomCommitUrlTemplate())
-            );
-
-            this.registerProjectService(project, provider);
+        if (!this.hasService(ExceptionRenderer.class)) {
+            this.registerService(new ExceptionRenderer(this.plugin()));
         }
 
-        return (UrlFactoryProvider)this.projectService(project, UrlFactoryProvider.class);
+        return (ExceptionRenderer) this.service(ExceptionRenderer.class);
     }
+
 
     public OpenInBrowserHandler openInBrowserHandler()
     {
-        if (!this.hasApplicationService(OpenInBrowserHandler.class)) {
-            this.registerApplicationService(new OpenInBrowserHandler(BrowserLauncher.getInstance()));
+        if (!this.hasService(OpenInBrowserHandler.class)) {
+            this.registerService(new OpenInBrowserHandler(BrowserLauncher.getInstance()));
         }
 
-        return (OpenInBrowserHandler)this.applicationService(OpenInBrowserHandler.class);
+        return (OpenInBrowserHandler) this.service(OpenInBrowserHandler.class);
     }
+
 
     public CopyToClipboardHandler copyToClipboardHandler()
     {
-        if (!this.hasApplicationService(CopyToClipboardHandler.class)) {
-            this.registerApplicationService(new CopyToClipboardHandler(Toolkit.getDefaultToolkit()));
+        if (!this.hasService(CopyToClipboardHandler.class)) {
+            this.registerService(new CopyToClipboardHandler(Toolkit.getDefaultToolkit()));
         }
 
-        return (CopyToClipboardHandler)this.applicationService(CopyToClipboardHandler.class);
+        return (CopyToClipboardHandler) this.service(CopyToClipboardHandler.class);
     }
 
-    public Logger logger(Project project)
+
+    public UrlModifierProvider urlModifierProvider()
     {
-        if (!this.hasProjectService(project, Logger.class)) {
+        if (!this.hasService(UrlModifierProvider.class)) {
 
-            Logger logger = new Logger();
-
-            logger.registerHandler(new EventLogHandler(this.plugin(), this.preferences(project).getEnableVerboseEventLog()));
-
-            logger.registerHandler(
-                new DiagnosticLogHandler(com.intellij.openapi.diagnostic.Logger.getInstance(this.plugin().displayName()))
+            UrlModifierProvider provider = new UrlModifierProvider(
+                Collections.singletonList(
+                    new HttpsUrlModifier()
+                )
             );
 
-            this.registerProjectService(project, logger);
+            this.registerService(provider);
         }
 
-        return (Logger)this.projectService(project, Logger.class);
+        return (UrlModifierProvider) this.service(UrlModifierProvider.class);
     }
 
-    public List<UrlModifier> urlModifiers()
-    {
-        if (!this.hasApplicationService(UrlModifier.class)) {
-
-            List<UrlModifier> modifiers = new ArrayList<>();
-
-            modifiers.add(new HttpsUrlModifier());
-
-            this.applicationServices.put(UrlModifier.class, modifiers);
-        }
-
-        return (List<UrlModifier>)this.applicationService(UrlModifier.class);
-    }
-
-    public Runner runner()
-    {
-        if (!this.hasApplicationService(Runner.class)) {
-            this.registerApplicationService(new Runner());
-        }
-
-        return (Runner)this.applicationService(Runner.class);
-    }
 
     public RepositoryFactory repositoryFactory()
     {
-        if (!this.hasApplicationService(RepositoryFactory.class)) {
-            this.registerApplicationService(new RepositoryFactory());
+        if (!this.hasService(RepositoryFactory.class)) {
+            this.registerService(new RepositoryFactory());
         }
 
-        return (RepositoryFactory)this.applicationService(RepositoryFactory.class);
+        return (RepositoryFactory)this.service(RepositoryFactory.class);
     }
 
-    private void registerApplicationService(Object service)
+
+    private void registerService(Object service)
     {
-        this.applicationServices.put(service.getClass(), service);
+        this.services.put(service.getClass(), service);
     }
 
-    private Object applicationService(Class serviceClass)
+
+    private Object service(Class serviceClass)
     {
-        return this.applicationServices.get(serviceClass);
+        return this.services.get(serviceClass);
     }
 
-    private Boolean hasApplicationService(Class serviceClass)
+
+    private Boolean hasService(Class serviceClass)
     {
-        return this.applicationServices.containsKey(serviceClass);
-    }
-
-    private void registerProjectService(Project project, Object service)
-    {
-        if (!this.projectServices.containsKey(project)) {
-            this.projectServices.put(project, new Hashtable<>());
-        }
-
-        this.projectServices.get(project).put(service.getClass(), service);
-    }
-
-    private Object projectService(Project project, Class serviceClass)
-    {
-        if (!this.projectServices.containsKey(project)) {
-            return null;
-        }
-
-        return this.projectServices.get(project).get(serviceClass);
-    }
-
-    private Boolean hasProjectService(Project project, Class serviceClass)
-    {
-        return this.projectServices.containsKey(project) && this.projectServices.get(project).containsKey(serviceClass);
+        return this.services.containsKey(serviceClass);
     }
 }

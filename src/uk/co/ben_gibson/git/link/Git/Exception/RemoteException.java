@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.git.link.Git.Exception;
 
+import uk.co.ben_gibson.git.link.Exception.Codes;
 import uk.co.ben_gibson.git.link.Git.Remote;
 import uk.co.ben_gibson.git.link.Exception.GitLinkException;
 
@@ -8,18 +9,24 @@ import uk.co.ben_gibson.git.link.Exception.GitLinkException;
  */
 public class RemoteException extends GitLinkException
 {
-    private RemoteException(String message)
+    private RemoteException(String message, int code)
     {
-        super(message);
+        super(message, code);
     }
 
-    public static RemoteException originNotFound()
+    public static RemoteException remoteNotFound(String remoteName)
     {
-        return new RemoteException("Could not find the remote 'origin'");
+        return new RemoteException(
+            String.format("Could not find the remote '%s'", remoteName),
+            Codes.GIT_COULD_NOT_FIND_REMOTE
+        );
     }
 
     public static RemoteException urlNotFoundForRemote(Remote remote)
     {
-        return new RemoteException("Could not determine the url associated with remote " + remote.name());
+        return new RemoteException(
+            String.format("Could not determine the url associated with remote '%s'", remote.name()),
+            Codes.GIT_COULD_NOT_FIND_URL_FOR_REMOTE
+        );
     }
 }
