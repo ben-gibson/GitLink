@@ -29,7 +29,7 @@ abstract class VcsLogAction extends Action
         }
 
         VcsFullCommitDetails vcsCommit = vcsLog.getSelectedDetails().get(0);
-        Commit commit = new Commit(vcsCommit.toString());
+        Commit commit = new Commit(vcsCommit.getId().toShortString());
 
         this.getManager().handleCommit(this.urlHandler(), project, commit, vcsCommit.getRoot());
     }
