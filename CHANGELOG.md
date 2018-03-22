@@ -84,3 +84,8 @@ All Notable changes to `GitLink` will be documented in this file
 - Added actions to annotation gutter. #57
 - Allow remote name to be configured from the preferences. #60
 - Minor bug fixes and improvements.
+
+## 2.3.1 - 2018-03-22
+
+- Fixed bug which caused an incorrect URL to be created from the VCS log.
+- Added GitBlit support to open a file at a specific commit. #65.

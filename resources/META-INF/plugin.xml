@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
     <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
       Provides shortcuts to open a file or commit in Stash, GitHub, BitBucket, GitLab or GitBlit using the default browser or copy the link to the clipboard.
@@ -23,10 +23,8 @@
     ]]></description>
     <change-notes><![CDATA[
     <ul>
-      <li>Generate link to file at commit instead of branch where possible. <a href="https://github.com/ben-gibson/GitLink/issues/61">#61</a></li>
-      <li>Added actions to annotation gutter. <a href="https://github.com/ben-gibson/GitLink/issues/57">#57</a></li>
-      <li>Allow remote name to be configured from the preferences. <a href="https://github.com/ben-gibson/GitLink/issues/60">#60</a></li>
-      <li>Minor bug fixes and improvements.</li>
+      <li>Fixed bug which caused an incorrect URL to be created from the VCS log.</li>
+      <li>Added GitBlit support to open a file at a specific commit. <a href="https://github.com/ben-gibson/GitLink/issues/65">#65</a></li>
      </ul>
     ]]>
     </change-notes>
