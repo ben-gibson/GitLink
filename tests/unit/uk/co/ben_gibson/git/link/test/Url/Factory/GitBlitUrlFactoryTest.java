@@ -6,10 +6,7 @@ import uk.co.ben_gibson.git.link.Git.Branch;
 import uk.co.ben_gibson.git.link.Git.Commit;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
 import uk.co.ben_gibson.git.link.Git.File;
-import uk.co.ben_gibson.git.link.Git.Remote;
-import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
 import uk.co.ben_gibson.git.link.Url.Factory.GitBlitUrlFactory;
-import uk.co.ben_gibson.git.link.Url.Factory.UrlFactory;
 
 import java.net.MalformedURLException;
 
@@ -18,7 +15,7 @@ public class GitBlitUrlFactoryTest extends UrlFactoryTest
     @Test
     public void testCanDetermineIfFileAtCommitIsSupported()
     {
-        assertFalse(new GitBlitUrlFactory().canOpenFileAtCommit());
+        assertTrue(new GitBlitUrlFactory().canOpenFileAtCommit());
     }
 
 
@@ -65,7 +62,7 @@ public class GitBlitUrlFactoryTest extends UrlFactoryTest
                 new File("src/com/foo/FooTest.java", "FooTest.java"),
                 new Commit("bd7ab0f04151e7409d77caa296617f97352f36d3"),
                 32,
-                "http://my.company.com/gitblit/blob/category!my.complex.repo.git/feature!feature42D/src!com!foo!FooTest.java#L32",
+                "http://my.company.com/gitblit/blob/category!my.complex.repo.git/bd7ab0f04151e7409d77caa296617f97352f36d3/src!com!foo!FooTest.java#L32",
             },
         };
     }
@@ -112,10 +109,4 @@ public class GitBlitUrlFactoryTest extends UrlFactoryTest
         };
     }
 
-
-    @Override
-    public void testCanCreateUrlToFileAtCommit(UrlFactory urlFactory, Remote remote, File file, Commit commit, Integer lineNumber, String expected) throws UrlFactoryException, RemoteException
-    {
-        // tmp until support can be added
-    }
 }

@@ -100,7 +100,44 @@ public class GitBlitUrlFactory extends AbstractUrlFactory
     @Override
     public URL createUrlToFileAtCommit(@NotNull Remote remote, @NotNull File file, @NotNull Commit commit, @Nullable Integer lineNumber) throws UrlFactoryException, RemoteException
     {
-        throw UrlFactoryException.cannotCreateUrl("GitBlit does not support this action!");
+        String remoteUrl = remote.url().getPath();
+
+        Map<String, String> patterns = new LinkedHashMap<>();
+
+        patterns.put("(?<context>/.+?)?/(git/r)/(?<repo>.+)", "<context>/git/blob/<repo>.git/<commit>/<fullfilepath>");
+        patterns.put("(?<context>/.+?)?/(git|r)/(?<repo>.+)", "<context>/blob/<repo>.git/<commit>/<fullfilepath>");
+
+        for (Map.Entry<String, String> urlPattern : patterns.entrySet()) {
+
+            String pattern = urlPattern.getKey();
+            String url = urlPattern.getValue();
+
+            Matcher matcher = Pattern.compile(pattern).matcher(remoteUrl);
+
+            if (matcher.matches()) {
+
+                // Get the placeholder values for the URL
+                Map<String, String> placeholders = new HashMap<>();
+                placeholders.put("<context>", getContext(matcher));
+                placeholders.put("<repo>", this.replaceSlashWithBang(this.getGroupFromMatcher(matcher, "repo")));
+                placeholders.put("<commit>", commit.hash());
+                placeholders.put("<fullfilepath>", this.replaceSlashWithBang(file.path()));
+
+                // Replace the URL placeholders
+                for (Map.Entry<String, String> placeHolder : placeholders.entrySet()) {
+                    url = url.replaceAll(placeHolder.getKey(), placeHolder.getValue());
+                }
+
+                String fragment = null;
+                if (lineNumber != null) {
+                    fragment = String.format("L%d", lineNumber);
+                }
+
+                return this.buildURL(remote, url, null, fragment);
+            }
+        }
+
+        throw UrlFactoryException.cannotCreateUrl(String.format("Repository URL %s is not supported", remoteUrl));
     }
 
     @Override
@@ -150,6 +187,6 @@ public class GitBlitUrlFactory extends AbstractUrlFactory
     @Override
     public boolean canOpenFileAtCommit()
     {
-        return false;
+        return true;
     }
 }
