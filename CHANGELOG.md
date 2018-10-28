@@ -88,4 +88,10 @@ All Notable changes to `GitLink` will be documented in this file
 ## 2.3.1 - 2018-03-22
 
 - Fixed bug which caused an incorrect URL to be created from the VCS log.
-- Added GitBlit support to open a file at a specific commit. #65.
+- Added GitBlit support to open a file at a specific commit. #65
+
+## 2.4.0 - 2018-10-28
+
+- Add open commit action to annotation gutter. #70
+- Respect line number when using from the annotation gutter. #68
+- Removed copy link action from annotation gutter.

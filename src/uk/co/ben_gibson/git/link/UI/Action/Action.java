@@ -49,7 +49,6 @@ public abstract class Action extends AnAction
 
         Preferences preferences = Preferences.getInstance(event.getProject());
         Presentation presentation = event.getPresentation();
-
         presentation.setText(this.displayName(preferences.remoteHost));
         presentation.setIcon(preferences.remoteHost.icon());
 
