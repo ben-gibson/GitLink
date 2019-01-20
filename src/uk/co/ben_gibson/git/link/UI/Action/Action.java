@@ -3,17 +3,17 @@ package uk.co.ben_gibson.git.link.UI.Action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import uk.co.ben_gibson.git.link.Container;
 import uk.co.ben_gibson.git.link.Git.RemoteHost;
-import uk.co.ben_gibson.git.link.Manager;
+import uk.co.ben_gibson.git.link.GitLink;
 import uk.co.ben_gibson.git.link.Plugin;
 import uk.co.ben_gibson.git.link.Preferences;
 
 public abstract class Action extends AnAction
 {
-    private Logger logger = Logger.getInstance(Plugin.createDefault().displayName());
+    private Logger logger = Logger.getInstance(ServiceManager.getService(Plugin.class).displayName());
 
     protected abstract boolean shouldActionBeEnabled(AnActionEvent event);
 
@@ -47,8 +47,14 @@ public abstract class Action extends AnAction
             return;
         }
 
-        Preferences preferences = Preferences.getInstance(event.getProject());
         Presentation presentation = event.getPresentation();
+        Preferences preferences   = Preferences.getInstance(event.getProject());
+
+        if (!preferences.isEnabled()) {
+            presentation.setEnabledAndVisible(false);
+            return;
+        }
+
         presentation.setText(this.displayName(preferences.remoteHost));
         presentation.setIcon(preferences.remoteHost.icon());
 
@@ -56,8 +62,8 @@ public abstract class Action extends AnAction
     }
 
 
-    protected Manager getManager()
+    protected GitLink gitLink()
     {
-        return Container.getInstance().manager();
+        return ServiceManager.getService(GitLink.class);
     }
 }

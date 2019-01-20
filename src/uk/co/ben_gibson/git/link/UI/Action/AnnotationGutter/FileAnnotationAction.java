@@ -8,7 +8,6 @@ import com.intellij.openapi.vcs.annotate.UpToDateLineNumberListener;
 import com.intellij.openapi.vcs.history.VcsRevisionNumber;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
-import uk.co.ben_gibson.git.link.Container;
 import uk.co.ben_gibson.git.link.Git.Commit;
 import uk.co.ben_gibson.git.link.Git.RemoteHost;
 import uk.co.ben_gibson.git.link.UI.Action.Action;
@@ -22,6 +21,7 @@ public class FileAnnotationAction extends Action implements UpToDateLineNumberLi
     {
         this.annotation = annotation;
     }
+
 
     public void actionPerformed(Project project, AnActionEvent event)
     {
@@ -39,7 +39,7 @@ public class FileAnnotationAction extends Action implements UpToDateLineNumberLi
 
         Commit commit = new Commit(revisionNumber.asString());
 
-        this.getManager().handleFile(Container.getInstance().openInBrowserHandler(), project, file, commit, (this.lineNumber + 1));
+        this.gitLink().openFile(project, file, commit, (this.lineNumber + 1));
     }
 
 
@@ -47,6 +47,7 @@ public class FileAnnotationAction extends Action implements UpToDateLineNumberLi
     {
         return String.format("Open file in %s", remoteHost.toString());
     }
+
 
     protected boolean shouldActionBeEnabled(AnActionEvent event)
     {

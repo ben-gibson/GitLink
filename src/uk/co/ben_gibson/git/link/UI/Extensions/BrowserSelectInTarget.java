@@ -1,28 +1,33 @@
 package uk.co.ben_gibson.git.link.UI.Extensions;
 
 import com.intellij.ide.SelectInContext;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import uk.co.ben_gibson.git.link.Container;
-import uk.co.ben_gibson.git.link.Manager;
-import uk.co.ben_gibson.git.link.Url.Handler.OpenInBrowserHandler;
+import uk.co.ben_gibson.git.link.GitLink;
+import uk.co.ben_gibson.git.link.Preferences;
 
 public class BrowserSelectInTarget implements com.intellij.ide.SelectInTarget
 {
     public boolean canSelect(SelectInContext context)
     {
+        Preferences preferences = Preferences.getInstance(context.getProject());
+
+        if (!preferences.isEnabled()) {
+            return false;
+        }
+
         return true;
     }
 
 
     public void selectIn(SelectInContext context, boolean requestFocus)
     {
-        Project project = context.getProject();
+        Project project  = context.getProject();
         VirtualFile file = context.getVirtualFile();
-        Manager manager  = Container.getInstance().manager();
-        OpenInBrowserHandler handler  = Container.getInstance().openInBrowserHandler();
+        GitLink gitLink  = ServiceManager.getService(GitLink.class);
 
-        manager.handleFile(handler, project, file, null, null);
+        gitLink.openFile(project, file, null, null);
     }
 
 

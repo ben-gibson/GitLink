@@ -40,6 +40,7 @@ public class Settings
     private JFormattedTextField customFileUrlAtCommitTemplateTextField;
     private JLabel customFileUrlAtCommitLabel;
     private JTextField remoteNameTextField;
+    private JCheckBox enabledCheckBox;
     private Preferences preferences;
     private Map<UrlModifier, JBCheckBox> urlModifierCheckBoxes = new HashMap<>();
 
@@ -48,6 +49,7 @@ public class Settings
         this.preferences = preferences;
 
         $$$setupUI$$$();
+        this.enabledCheckBox.setSelected(this.preferences.enabled);
         this.hostSelect.setModel(new EnumComboBoxModel<>(RemoteHost.class));
         this.defaultBranchTextField.setText(this.preferences.defaultBranch.toString());
         this.remoteNameTextField.setText(this.preferences.remoteName);
@@ -91,6 +93,7 @@ public class Settings
         }
 
         return
+            this.preferences.isEnabled() != this.enabledCheckBox.isSelected() ||
             this.hostSelect.getSelectedItem() != this.preferences.remoteHost ||
             !this.preferences.remoteName.equals(this.remoteNameTextField.getText()) ||
             !this.preferences.defaultBranch.equals(new Branch(this.defaultBranchTextField.getText())) ||
@@ -101,6 +104,8 @@ public class Settings
 
     public void apply() throws ConfigurationException
     {
+        this.preferences.enabled = this.enabledCheckBox.isSelected();
+
         RemoteHost remoteHost = (RemoteHost) this.hostSelect.getSelectedItem();
 
         if (remoteHost != null && remoteHost.isCustom()) {
@@ -150,6 +155,7 @@ public class Settings
 
     public void reset()
     {
+        this.enabledCheckBox.setSelected(this.preferences.isEnabled());
         this.remoteNameTextField.setText(this.preferences.remoteName);
         this.defaultBranchTextField.setText(this.preferences.defaultBranch.toString());
         this.hostSelect.setSelectedItem(this.preferences.remoteHost);

@@ -2,9 +2,7 @@ package uk.co.ben_gibson.git.link.Git;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A git commit.
- */
+
 public class Commit
 {
     private String hash;

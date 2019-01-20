@@ -15,9 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
 import uk.co.ben_gibson.git.link.Git.Exception.BranchException;
 
-/**
- * Represents a git repository.
- */
 public class Repository
 {
     private final String defaultRemoteName;

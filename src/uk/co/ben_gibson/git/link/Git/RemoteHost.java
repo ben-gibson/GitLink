@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-/**
- * Represents a remote git createHostUrl (GitHub, BitBucket, GitLab etc).
- */
 public enum RemoteHost
 {
     GIT_HUB("GitHub", "/Icons/GitHub/GitHub.png"),

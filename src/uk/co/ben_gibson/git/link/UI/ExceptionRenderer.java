@@ -26,7 +26,6 @@ public class ExceptionRenderer
         errorMap.put("0x01000001", "Could not find the remote, check your preferences!");
 
         // URL
-
         errorMap.put("0x02000003", "Could not create valid URL!");
     }
 

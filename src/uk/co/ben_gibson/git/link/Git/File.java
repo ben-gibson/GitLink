@@ -2,9 +2,6 @@ package uk.co.ben_gibson.git.link.Git;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Represents a file under version control.
- */
 public class File
 {
     private String path; // A path from the root of the repository.
