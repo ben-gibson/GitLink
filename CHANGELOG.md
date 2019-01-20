@@ -95,3 +95,10 @@ All Notable changes to `GitLink` will be documented in this file
 - Add open commit action to annotation gutter. #70
 - Respect line number when using from the annotation gutter. #68
 - Removed copy link action from annotation gutter.
+
+## 3.0.0 - 2019-01-20
+
+- Added ability to disable the plugin per project. #79
+- Added support for hosts Giea and Gogs. #80
+- Removed copy link action.
+- Code base cleanup.
