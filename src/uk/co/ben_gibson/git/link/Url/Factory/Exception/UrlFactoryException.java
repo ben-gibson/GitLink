@@ -16,7 +16,7 @@ public class UrlFactoryException extends GitLinkException
     {
         return new UrlFactoryException(
             String.format("The remote host '%s' is not supported", host.name()),
-            Codes.URL_UNSUPPORTED_REMOTE_HOST
+            Codes.URL_FACTORY_UNSUPPORTED_REMOTE_HOST
         );
     }
 
@@ -25,7 +25,7 @@ public class UrlFactoryException extends GitLinkException
     {
         return new UrlFactoryException(
             String.format("Cannot create url (%s)", reason),
-            Codes.URL_CANNOT_CREATE_URL
+            Codes.URL_FACTORY_CANNOT_CREATE_URL
         );
     }
 }

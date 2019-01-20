@@ -1,23 +1,26 @@
 package uk.co.ben_gibson.git.link.UI.Settings;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import uk.co.ben_gibson.git.link.Container;
 import uk.co.ben_gibson.git.link.Plugin;
 import uk.co.ben_gibson.git.link.Preferences;
 import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifierProvider;
+
 import javax.swing.*;
 
 public class ConfigurableSettings implements Configurable
 {
     private final Project project;
     private uk.co.ben_gibson.git.link.UI.Settings.Settings ui;
+    private UrlModifierProvider urlModifierProvider;
 
 
-    public ConfigurableSettings(Project project)
+    public ConfigurableSettings(Project project, UrlModifierProvider urlModifierProvider)
     {
-        this.project = project;
+        this.urlModifierProvider = urlModifierProvider;
+        this.project             = project;
     }
 
 
@@ -25,8 +28,8 @@ public class ConfigurableSettings implements Configurable
     {
         this.ui = new uk.co.ben_gibson.git.link.UI.Settings.Settings(
             Preferences.getInstance(project),
-            Container.getInstance().urlModifierProvider().modifiers(),
-            Plugin.createDefault()
+            urlModifierProvider.modifiers(),
+            ServiceManager.getService(Plugin.class)
         );
 
         return ui.getRootPanel();
@@ -42,13 +45,13 @@ public class ConfigurableSettings implements Configurable
 
     public String getHelpTopic()
     {
-        return Plugin.createDefault().displayName();
+        return ServiceManager.getService(Plugin.class).displayName();
     }
 
 
     public String getDisplayName()
     {
-        return Plugin.createDefault().displayName();
+        return ServiceManager.getService(Plugin.class).displayName();
     }
 
 

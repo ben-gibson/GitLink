@@ -5,9 +5,7 @@ import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Represents the plugin.
- */
+
 public class Plugin
 {
     private IdeaPluginDescriptor pluginDescriptor;
@@ -19,10 +17,9 @@ public class Plugin
     }
 
 
-    @NotNull
-    public static Plugin createDefault()
+    public Plugin()
     {
-        return new Plugin(PluginManager.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper")));
+        this.pluginDescriptor = PluginManager.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper"));
     }
 
 

@@ -11,32 +11,38 @@ public class UrlFactoryProvider
 {
     private List<UrlFactory> factories;
 
-
     public UrlFactoryProvider(List<UrlFactory> factories)
     {
         this.factories = factories;
     }
 
 
-    public static UrlFactoryProvider fromPrefernces(Preferences preferences)
+    /**
+     * I have no idea how to source this from the service manager and there's very little documentation around
+     * plugin development in general so this has to be called each time the plugin is triggered to build
+     * the correct factory provider using the current project's preferences.
+     */
+    public static UrlFactoryProvider fromPreferences(Preferences preferences)
     {
+        CustomUrlFactory customUrlFactory = new CustomUrlFactory(
+            preferences.customFileUrlOnBranchTemplate,
+            preferences.customFileUrlAtCommitTemplate,
+            preferences.customCommitUrlTemplate
+        );
+
         return new UrlFactoryProvider(
             Arrays.asList(
                 new GitHubUrlFactory(),
                 new BitBucketUrlFactory(),
                 new StashUrlFactory(),
                 new GitBlitUrlFactory(),
-                new CustomUrlFactory(
-                    preferences.customFileUrlOnBranchTemplate,
-                    preferences.customFileUrlAtCommitTemplate,
-                    preferences.customCommitUrlTemplate
-                )
+                customUrlFactory
             )
         );
     }
 
 
-    public UrlFactory forRemoteHost(RemoteHost host) throws UrlFactoryException
+    public UrlFactory urlFactoryForHost(RemoteHost host) throws UrlFactoryException
     {
         for (UrlFactory factory : this.factories) {
             if (factory.supports(host)) {

@@ -22,6 +22,7 @@ import java.util.List;
  */
 public class Preferences implements PersistentStateComponent<Preferences>
 {
+    public boolean enabled       = true;
     public RemoteHost remoteHost = RemoteHost.GIT_HUB;
     public List<String> enabledModifiers = new ArrayList<>();
     public Branch defaultBranch = new Branch("master");
@@ -32,6 +33,12 @@ public class Preferences implements PersistentStateComponent<Preferences>
 
     /** @deprecated **/
     private String customFileUrlTemplate = "";
+
+
+    public boolean isEnabled()
+    {
+        return this.enabled;
+    }
 
 
     public boolean isModifierEnabled(UrlModifier modifier)
