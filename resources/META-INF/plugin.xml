@@ -1,31 +1,31 @@
 <idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <version>2.4.0</version>
+    <version>3.0.0</version>
     <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
-      Provides shortcuts to open a file or commit in Stash, GitHub, BitBucket, GitLab or GitBlit using the default browser or copy the link to the clipboard.
+      Provides shortcuts to open a file or commit in Stash, GitHub, BitBucket, GitLab, Gitea, Gogs or GitBlit using the default browser.
       <br />
       <br />
-      After installing select your remote host in Settings &rarr; Other Settings &rarr; GitLink
-      (currently supports GitHub, Stash, BitBucket, GitLab and GitBlit). Make sure you have registered your project's root under the version control settings.
+      After installing select your remote host in Settings &rarr; Other Settings &rarr; GitLink.
+      Make sure you have registered your project's root under the version control settings.
       Preferences → Version Control (see unregistered roots)
       <br />
       <br />
       To open a file in the default browser select View &rarr; Open in (your selected host). You can
-      also access this action through the <i>Select target</i> menu under Navigate &rarr; Select in. If you want to view
-      a specific commit, you can do this by right clicking the commit from the <i>VCS log tool window</i> and selecting
-      Open in (your selected host).
+      also find shortcuts to this action from the Select target menu, Annotation Gutter, and VCS log.
       <br />
       <br />
-      Note: The current branch is used unless it does not exist on the remote in which case your preferred default,
-      defined in the settings, is used.
+      Note: When viewing a file, the URL generated references the current commit unless that commit does not exist on the remote
+      repository in which case it references the current branch instead. If the current branch also does not exist on the remote
+      repository the default branch defined in the plugin configuration is used instead.
     ]]></description>
     <change-notes><![CDATA[
     <ul>
-      <li>Add open commit action to annotation gutter. <a href="https://github.com/ben-gibson/GitLink/issues/70">#70</a></li>
-      <li>Respect line number when using from the annotation gutter. <a href="https://github.com/ben-gibson/GitLink/issues/68">#68</a></li>
-      <li>Removed copy link action from annotation gutter.</li>
+      <li>Added ability to disable the plugin per project. <a href="https://github.com/ben-gibson/GitLink/issues/79">#79</a></li>
+      <li>Added support for hosts <i>Giea</i> and <i>Gogs</i>. <a href="https://github.com/ben-gibson/GitLink/issues/80">#80</a></li>
+      <li>Removed copy link action.</li>
+      <li>Code base cleanup.</li>
     </ul>
     ]]>
     </change-notes>
