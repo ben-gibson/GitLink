@@ -36,6 +36,7 @@ public class UrlFactoryProvider
                 new BitBucketUrlFactory(),
                 new StashUrlFactory(),
                 new GitBlitUrlFactory(),
+                new GogsUrlFactory(),
                 customUrlFactory
             )
         );
