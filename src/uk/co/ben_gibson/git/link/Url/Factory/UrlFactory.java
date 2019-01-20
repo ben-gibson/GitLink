@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.git.link.Git.*;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
+import uk.co.ben_gibson.git.link.UI.LineSelection;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
 import java.net.URL;
 
@@ -16,7 +17,7 @@ public interface UrlFactory
         @NotNull Remote remote,
         @NotNull File file,
         @NotNull Branch branch,
-        @Nullable Integer lineNumber
+        @Nullable LineSelection lineSelection
     ) throws UrlFactoryException, RemoteException;
 
 
@@ -24,11 +25,9 @@ public interface UrlFactory
         @NotNull Remote remote,
         @NotNull File file,
         @NotNull Commit commit,
-        @Nullable Integer lineNumber
+        @Nullable LineSelection lineSelection
     ) throws UrlFactoryException, RemoteException;
 
 
     boolean supports(RemoteHost host);
-
-    boolean canOpenFileAtCommit();
 }

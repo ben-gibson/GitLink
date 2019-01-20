@@ -8,27 +8,27 @@ import javax.swing.*;
 public enum RemoteHost
 {
     GIT_HUB("GitHub", "/Icons/GitHub/GitHub.png"),
-    STASH("Stash", "/Icons/Bitbucket/Bitbucket.png"),
-    BITBUCKET("Bitbucket", "/Icons/Bitbucket/Bitbucket.png"),
+    BITBUCKET_SERVER("Bitbucket Server", "/Icons/Bitbucket/Bitbucket.png"),
+    BITBUCKET_CLOUD("Bitbucket Cloud", "/Icons/Bitbucket/Bitbucket.png"),
     GITLAB("GitLab", "/Icons/GitLab/GitLab.png"),
     GITBLIT("GitBlit", ""),
     GITEA("Gitea", "/Icons/Gitea/Gitea.png"),
     GOGS("Gogs", "/Icons/Gogs/Gogs.png"),
     CUSTOM("Custom", "/Icons/Custom/Custom.png");
 
-    private final String name;
+    private final String displayName;
     private final String icon;
 
-    RemoteHost(@NotNull String name, @NotNull String icon)
+    RemoteHost(@NotNull String displayName, @NotNull String icon)
     {
-        this.name = name;
-        this.icon = icon;
+        this.displayName = displayName;
+        this.icon        = icon;
     }
 
     @NotNull
     public String toString()
     {
-        return this.name;
+        return this.displayName;
     }
 
     public boolean isCustom()
@@ -51,14 +51,14 @@ public enum RemoteHost
         return (this == GITLAB);
     }
 
-    public boolean isBitbucket()
+    public boolean isBitbucketCloud()
     {
-        return (this == BITBUCKET);
+        return (this == BITBUCKET_CLOUD);
     }
 
-    public boolean isStash()
+    public boolean isBitbucketServer()
     {
-        return (this == STASH);
+        return (this == BITBUCKET_SERVER);
     }
 
     public boolean isGitea()

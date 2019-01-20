@@ -32,7 +32,7 @@ public abstract class Action extends AnAction
 
         Preferences preferences = Preferences.getInstance(project);
 
-        this.logger.info(String.format("Running '%s' action.", this.displayName(preferences.remoteHost)));
+        this.logger.info(String.format("Running '%s' action.", this.displayName(preferences.getRemoteHost())));
 
         this.actionPerformed(project, event);
     }
@@ -55,8 +55,10 @@ public abstract class Action extends AnAction
             return;
         }
 
-        presentation.setText(this.displayName(preferences.remoteHost));
-        presentation.setIcon(preferences.remoteHost.icon());
+        RemoteHost remoteHost = preferences.getRemoteHost();
+
+        presentation.setText(this.displayName(remoteHost));
+        presentation.setIcon(remoteHost.icon());
 
         presentation.setEnabledAndVisible(this.shouldActionBeEnabled(event));
     }

@@ -9,7 +9,6 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import uk.co.ben_gibson.git.link.Git.Branch;
 import uk.co.ben_gibson.git.link.Plugin;
 import uk.co.ben_gibson.git.link.Preferences;
 import uk.co.ben_gibson.git.link.Git.RemoteHost;
@@ -51,9 +50,9 @@ public class Settings
         $$$setupUI$$$();
         this.enabledCheckBox.setSelected(this.preferences.enabled);
         this.hostSelect.setModel(new EnumComboBoxModel<>(RemoteHost.class));
-        this.defaultBranchTextField.setText(this.preferences.defaultBranch.toString());
+        this.defaultBranchTextField.setText(this.preferences.defaultBranchName);
         this.remoteNameTextField.setText(this.preferences.remoteName);
-        this.customURLPanel.setVisible(this.preferences.remoteHost.isCustom());
+        this.customURLPanel.setVisible(this.preferences.getRemoteHost().isCustom());
 
         this.applyLabelHelpTextStlye(this.customFileUrlAtCommitLabel);
         this.applyLabelHelpTextStlye(this.customFileUrlOnBranchLabel);
@@ -94,9 +93,9 @@ public class Settings
 
         return
             this.preferences.isEnabled() != this.enabledCheckBox.isSelected() ||
-            this.hostSelect.getSelectedItem() != this.preferences.remoteHost ||
+            !this.preferences.getRemoteHost().equals(this.hostSelect.getSelectedItem()) ||
             !this.preferences.remoteName.equals(this.remoteNameTextField.getText()) ||
-            !this.preferences.defaultBranch.equals(new Branch(this.defaultBranchTextField.getText())) ||
+            !this.preferences.defaultBranchName.equals(this.defaultBranchTextField.getText()) ||
             !this.preferences.customFileUrlAtCommitTemplate.equals(this.customFileUrlAtCommitTemplateTextField.getText()) ||
             !this.preferences.customFileUrlOnBranchTemplate.equals(this.customFileUrlOnBranchTemplateTextField.getText()) ||
             !this.preferences.customCommitUrlTemplate.equals(this.customCommitUrlTemplateTextField.getText());
@@ -108,7 +107,7 @@ public class Settings
 
         RemoteHost remoteHost = (RemoteHost) this.hostSelect.getSelectedItem();
 
-        if (remoteHost != null && remoteHost.isCustom()) {
+        if (remoteHost.equals(RemoteHost.CUSTOM)) {
 
             try {
                 URL url = new URL(this.customFileUrlOnBranchTemplateTextField.getText());
@@ -140,9 +139,9 @@ public class Settings
             throw new ConfigurationException("Remote name is required");
         }
 
-        this.preferences.remoteName    = this.remoteNameTextField.getText();
-        this.preferences.defaultBranch = new Branch(this.defaultBranchTextField.getText());
-        this.preferences.remoteHost    = remoteHost;
+        this.preferences.remoteName        = this.remoteNameTextField.getText();
+        this.preferences.defaultBranchName = this.defaultBranchTextField.getText();
+        this.preferences.remoteHostId      = remoteHost.name();
 
         for (Map.Entry<UrlModifier, JBCheckBox> entry : this.urlModifierCheckBoxes.entrySet()) {
             if (entry.getValue().isSelected()) {
@@ -157,8 +156,8 @@ public class Settings
     {
         this.enabledCheckBox.setSelected(this.preferences.isEnabled());
         this.remoteNameTextField.setText(this.preferences.remoteName);
-        this.defaultBranchTextField.setText(this.preferences.defaultBranch.toString());
-        this.hostSelect.setSelectedItem(this.preferences.remoteHost);
+        this.defaultBranchTextField.setText(this.preferences.defaultBranchName);
+        this.hostSelect.setSelectedItem(this.preferences.getRemoteHost());
         this.customFileUrlAtCommitTemplateTextField.setText(this.preferences.customFileUrlAtCommitTemplate);
         this.customFileUrlOnBranchTemplateTextField.setText(this.preferences.customFileUrlOnBranchTemplate);
         this.customCommitUrlTemplateTextField.setText(this.preferences.customCommitUrlTemplate);

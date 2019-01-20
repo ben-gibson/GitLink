@@ -10,6 +10,7 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifier;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,27 +18,35 @@ import java.util.List;
     storages = {@Storage("GitLinkConfig.xml")}
 )
 
-/*
- * Plugin preferences - Getters and Setters required by PersistentStateComponent
- */
 public class Preferences implements PersistentStateComponent<Preferences>
 {
-    public boolean enabled       = true;
-    public RemoteHost remoteHost = RemoteHost.GIT_HUB;
-    public List<String> enabledModifiers = new ArrayList<>();
-    public Branch defaultBranch = new Branch("master");
-    public String remoteName = "origin";
-    public String customFileUrlAtCommitTemplate = "";
-    public String customFileUrlOnBranchTemplate = "";
-    public String customCommitUrlTemplate = "";
-
-    /** @deprecated **/
-    private String customFileUrlTemplate = "";
+    public boolean      enabled                       = true;
+    public String       remoteHostId                  = RemoteHost.GIT_HUB.name();
+    public List<String> enabledModifiers              = new ArrayList<>();
+    public String       defaultBranchName             = "master";
+    public String       remoteName                    = "origin";
+    public String       customFileUrlAtCommitTemplate = "";
+    public String       customFileUrlOnBranchTemplate = "";
+    public String       customCommitUrlTemplate       = "";
 
 
     public boolean isEnabled()
     {
         return this.enabled;
+    }
+
+
+    @NotNull
+    public RemoteHost getRemoteHost()
+    {
+        return RemoteHost.valueOf(this.remoteHostId);
+    }
+
+
+    @NotNull
+    public Branch getDefaultBranch()
+    {
+        return new Branch(this.defaultBranchName);
     }
 
 
@@ -62,11 +71,6 @@ public class Preferences implements PersistentStateComponent<Preferences>
     public void loadState(@NotNull Preferences state)
     {
         XmlSerializerUtil.copyBean(state, this);
-
-        if (!state.customFileUrlTemplate.equals("")) {
-            this.customFileUrlOnBranchTemplate = state.customFileUrlTemplate;
-            this.customFileUrlTemplate = "";
-        }
     }
 
 

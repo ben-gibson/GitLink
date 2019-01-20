@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.git.link.Git.*;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
+import uk.co.ben_gibson.git.link.UI.LineSelection;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
 
 import java.net.MalformedURLException;
@@ -40,26 +41,31 @@ public class CustomUrlFactory extends AbstractUrlFactory
         @NotNull Remote remote,
         @NotNull File file,
         @NotNull Branch branch,
-        @Nullable Integer lineNumber
+        @Nullable LineSelection lineSelection
     ) throws UrlFactoryException, RemoteException
     {
         String template = this.fileOnBranchUrlTemplate.replace("{branch}", branch.toString());
 
         template = template.replace("{filePath}", this.cleanPath(file.directoryPath()));
         template = template.replace("{fileName}", file.name());
-        template = template.replace("{line}", (lineNumber != null) ? lineNumber.toString() : "");
+        template = template.replace("{line}", (lineSelection != null) ? Integer.toString(lineSelection.start()) : "");
 
         return this.createUrlFromTemplate(template);
     }
 
 
-    public URL createUrlToFileAtCommit(@NotNull Remote remote, @NotNull File file, @NotNull Commit commit, @Nullable Integer lineNumber) throws UrlFactoryException, RemoteException
+    public URL createUrlToFileAtCommit(
+        @NotNull Remote remote,
+        @NotNull File file,
+        @NotNull Commit commit,
+        @Nullable LineSelection lineSelection
+    ) throws UrlFactoryException, RemoteException
     {
         String template = this.fileAtCommitUrlTemplate.replace("{commit}", commit.hash());
 
         template = template.replace("{filePath}", this.cleanPath(file.directoryPath()));
         template = template.replace("{fileName}", file.name());
-        template = template.replace("{line}", (lineNumber != null) ? lineNumber.toString() : "");
+        template = template.replace("{line}", (lineSelection != null) ? Integer.toString(lineSelection.start()) : "");
 
         return this.createUrlFromTemplate(template);
     }
@@ -92,12 +98,5 @@ public class CustomUrlFactory extends AbstractUrlFactory
     public boolean supports(RemoteHost host)
     {
         return host.isCustom();
-    }
-
-
-    @Override
-    public boolean canOpenFileAtCommit()
-    {
-        return (!this.fileAtCommitUrlTemplate.isEmpty());
     }
 }

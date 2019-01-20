@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.ben_gibson.git.link.Git.*;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
+import uk.co.ben_gibson.git.link.UI.LineSelection;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
 import uk.co.ben_gibson.git.link.Url.Factory.UrlFactory;
 import java.net.MalformedURLException;
@@ -28,9 +29,9 @@ public abstract class UrlFactoryTest extends TestCase
 
     @Test
     @UseDataProvider("fileAtCommitProvider")
-    public void testCanCreateUrlToFileAtCommit(UrlFactory urlFactory, Remote remote, File file, Commit commit, Integer lineNumber, String expected) throws UrlFactoryException, RemoteException
+    public void testCanCreateUrlToFileAtCommit(UrlFactory urlFactory, Remote remote, File file, Commit commit, LineSelection lineSelection, String expected) throws UrlFactoryException, RemoteException
     {
-        URL url = urlFactory.createUrlToFileAtCommit(remote, file, commit, lineNumber);
+        URL url = urlFactory.createUrlToFileAtCommit(remote, file, commit, lineSelection);
 
         assertEquals(expected, url.toString());
     }
@@ -42,11 +43,11 @@ public abstract class UrlFactoryTest extends TestCase
         Remote remote,
         File file,
         Branch branch,
-        Integer lineNumber,
+        LineSelection lineSelection,
         String expected
     ) throws UrlFactoryException, RemoteException
     {
-        URL url = urlFactory.createUrlToFileOnBranch(remote, file, branch, lineNumber);
+        URL url = urlFactory.createUrlToFileOnBranch(remote, file, branch, lineSelection);
 
         assertEquals(expected, url.toString());
     }

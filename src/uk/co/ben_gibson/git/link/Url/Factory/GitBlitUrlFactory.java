@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.git.link.Git.*;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
+import uk.co.ben_gibson.git.link.UI.LineSelection;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
 
 public class GitBlitUrlFactory extends AbstractUrlFactory
@@ -53,7 +54,7 @@ public class GitBlitUrlFactory extends AbstractUrlFactory
         @NotNull Remote remote,
         @NotNull File file,
         @NotNull Branch branch,
-        @Nullable Integer lineNumber
+        @Nullable LineSelection lineSelection
     ) throws UrlFactoryException, RemoteException
     {
         String remoteUrl = remote.url().getPath();
@@ -85,8 +86,8 @@ public class GitBlitUrlFactory extends AbstractUrlFactory
                 }
 
                 String fragment = null;
-                if (lineNumber != null) {
-                    fragment = String.format("L%d", lineNumber);
+                if (lineSelection != null) {
+                    fragment = String.format("L%d", lineSelection.start());
                 }
 
                 return this.buildURL(remote, url, null, fragment);
@@ -98,7 +99,12 @@ public class GitBlitUrlFactory extends AbstractUrlFactory
 
 
     @Override
-    public URL createUrlToFileAtCommit(@NotNull Remote remote, @NotNull File file, @NotNull Commit commit, @Nullable Integer lineNumber) throws UrlFactoryException, RemoteException
+    public URL createUrlToFileAtCommit(
+        @NotNull Remote remote,
+        @NotNull File file,
+        @NotNull Commit commit,
+        @Nullable LineSelection lineSelection
+    ) throws UrlFactoryException, RemoteException
     {
         String remoteUrl = remote.url().getPath();
 
@@ -129,8 +135,8 @@ public class GitBlitUrlFactory extends AbstractUrlFactory
                 }
 
                 String fragment = null;
-                if (lineNumber != null) {
-                    fragment = String.format("L%d", lineNumber);
+                if (lineSelection != null) {
+                    fragment = String.format("L%d", lineSelection.start());
                 }
 
                 return this.buildURL(remote, url, null, fragment);
@@ -181,12 +187,5 @@ public class GitBlitUrlFactory extends AbstractUrlFactory
     private String replaceSlashWithBang(@NotNull String string)
     {
         return string.replaceAll("/", "!");
-    }
-
-
-    @Override
-    public boolean canOpenFileAtCommit()
-    {
-        return true;
     }
 }

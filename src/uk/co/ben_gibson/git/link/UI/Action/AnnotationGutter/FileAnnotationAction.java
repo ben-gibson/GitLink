@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.git.link.Git.Commit;
 import uk.co.ben_gibson.git.link.Git.RemoteHost;
 import uk.co.ben_gibson.git.link.UI.Action.Action;
+import uk.co.ben_gibson.git.link.UI.LineSelection;
 
 public class FileAnnotationAction extends Action implements UpToDateLineNumberListener
 {
@@ -39,7 +40,7 @@ public class FileAnnotationAction extends Action implements UpToDateLineNumberLi
 
         Commit commit = new Commit(revisionNumber.asString());
 
-        this.gitLink().openFile(project, file, commit, (this.lineNumber + 1));
+        this.gitLink().openFile(project, file, commit, new LineSelection(this.lineNumber + 1));
     }
 
 
