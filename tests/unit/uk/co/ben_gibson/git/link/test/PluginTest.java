@@ -13,7 +13,7 @@ public class PluginTest extends TestCase
     {
         Plugin plugin = new Plugin(this.mockPluginDescription("foo", "v2.2", "https://example.com"));
 
-        assertEquals(plugin.toString(), "foo(v2.2)");
+        assertEquals(plugin.toString(), "fail");
     }
 
     public void testReturnsVersion()

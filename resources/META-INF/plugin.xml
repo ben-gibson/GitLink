@@ -6,15 +6,12 @@
     <description><![CDATA[
       Provides shortcuts to open a file or commit in Stash, GitHub, BitBucket, GitLab, Gitea, Gogs or GitBlit using the default browser.
       <br />
-      <br />
       After installing select your remote host in Settings &rarr; Other Settings &rarr; GitLink.
       Make sure you have registered your project's root under the version control settings.
       Preferences → Version Control (see unregistered roots)
       <br />
-      <br />
       To open a file in the default browser select View &rarr; Open in (your selected host). You can
       also find shortcuts to this action from the Select target menu, Annotation Gutter, and VCS log.
-      <br />
       <br />
       Note: When viewing a file, the URL generated references the current commit unless that commit does not exist on the remote
       repository in which case it references the current branch instead. If the current branch also does not exist on the remote
