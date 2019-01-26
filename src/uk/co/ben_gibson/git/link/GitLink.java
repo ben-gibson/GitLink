@@ -11,10 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.git.link.Exception.Codes;
 import uk.co.ben_gibson.git.link.Exception.GitLinkException;
+import uk.co.ben_gibson.git.link.Git.Branch;
 import uk.co.ben_gibson.git.link.Git.Commit;
 import uk.co.ben_gibson.git.link.Git.Repository;
 import uk.co.ben_gibson.git.link.Git.RepositoryFactory;
 import uk.co.ben_gibson.git.link.UI.ExceptionRenderer;
+import uk.co.ben_gibson.git.link.UI.LineSelection;
 import uk.co.ben_gibson.git.link.Url.Factory.*;
 import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifier;
 import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifierProvider;
@@ -25,9 +27,9 @@ import java.util.Objects;
 
 public class GitLink
 {
-    private Logger logger = Logger.getInstance(ServiceManager.getService(Plugin.class).displayName());
-    private RepositoryFactory repositoryFactory;
-    private ExceptionRenderer exceptionRenderer;
+    private Logger              logger = Logger.getInstance(ServiceManager.getService(Plugin.class).displayName());
+    private RepositoryFactory   repositoryFactory;
+    private ExceptionRenderer   exceptionRenderer;
     private UrlModifierProvider urlModifierProvider;
 
 
@@ -35,9 +37,10 @@ public class GitLink
         RepositoryFactory repositoryFactory,
         ExceptionRenderer exceptionRenderer,
         UrlModifierProvider urlModifierProvider
-    ) {
-        this.repositoryFactory   = repositoryFactory;
-        this.exceptionRenderer   = exceptionRenderer;
+    )
+    {
+        this.repositoryFactory = repositoryFactory;
+        this.exceptionRenderer = exceptionRenderer;
         this.urlModifierProvider = urlModifierProvider;
     }
 
@@ -46,12 +49,13 @@ public class GitLink
         @NotNull Project project,
         @NotNull VirtualFile file,
         @Nullable Commit commit,
-        @Nullable Integer caretPosition
-    ) {
+        @Nullable LineSelection lineSelection
+    )
+    {
         try {
-            Preferences preferences = Preferences.getInstance(project);
-            Repository repository = this.repositoryFactory.create(project, file, preferences.defaultBranch, preferences.remoteName);
-            UrlFactory urlFactory = UrlFactoryProvider.fromPreferences(preferences).urlFactoryForHost(preferences.remoteHost);
+            Preferences preferences   = Preferences.getInstance(project);
+            Repository  repository    = this.repositoryFactory.create(project, file, preferences.getDefaultBranch(), preferences.remoteName);
+            UrlFactory  urlFactory    = UrlFactoryProvider.fromPreferences(preferences).urlFactoryForHost(preferences.getRemoteHost());
 
             Task.Backgroundable task = new Task.Backgroundable(project, "GitLink - Opening file")
             {
@@ -62,19 +66,21 @@ public class GitLink
 
                         URL url;
 
-                        if (!urlFactory.canOpenFileAtCommit() || (commit == null && !repository.isCurrentCommitOnRemote())) {
-                            url = urlFactory.createUrlToFileOnBranch(
-                                repository.remote(),
-                                repository.repositoryFileFromVirtualFile(file),
-                                repository.currentBranch(),
-                                caretPosition
-                            );
-                        } else {
+                        // If we have explicitly been given a commit or the current commit exists on the remote
+                        // repository then open the file at that commit otherwise use the branch.
+                        if (commit != null || repository.isCurrentCommitOnRemote()) {
                             url = urlFactory.createUrlToFileAtCommit(
                                 repository.remote(),
                                 repository.repositoryFileFromVirtualFile(file),
                                 Objects.requireNonNull((commit != null) ? commit : repository.currentCommit()),
-                                caretPosition
+                                lineSelection
+                            );
+                        } else {
+                            url = urlFactory.createUrlToFileOnBranch(
+                                repository.remote(),
+                                repository.repositoryFileFromVirtualFile(file),
+                                repository.currentBranch(),
+                                lineSelection
                             );
                         }
 
@@ -97,9 +103,10 @@ public class GitLink
     public void openCommit(@NotNull Project project, @NotNull Commit commit, @NotNull VirtualFile file)
     {
         try {
-            Preferences preferences = Preferences.getInstance(project);
-            Repository repository   = this.repositoryFactory.create(project, file, preferences.defaultBranch, preferences.remoteName);
-            UrlFactory urlFactory   = UrlFactoryProvider.fromPreferences(preferences).urlFactoryForHost(preferences.remoteHost);
+            Preferences preferences   = Preferences.getInstance(project);
+            Branch      defaultBranch = new Branch(preferences.defaultBranchName);
+            Repository  repository    = this.repositoryFactory.create(project, file, defaultBranch, preferences.remoteName);
+            UrlFactory  urlFactory    = UrlFactoryProvider.fromPreferences(preferences).urlFactoryForHost(preferences.getRemoteHost());
 
             Task.Backgroundable task = new Task.Backgroundable(project, "GitLink - Opening commit")
             {

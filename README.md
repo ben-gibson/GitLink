@@ -4,7 +4,8 @@
 </h1>
 
 <h4 align="center">
-    A Jetbrains plugin that provides shortcuts to open a file or commit in Stash, GitHub, BitBucket or GitLab using the default browser or copy the link to the clipboard.
+    A Jetbrains plugin that provides shortcuts to open a file or commit in GitHub, Bitbucket, GitLab, Gitea,
+    Gogs or GitBlit using the default browser.
 </h4>
 
 <p align="center">
@@ -41,7 +42,7 @@ Build the plugin zip file:
 
     $ ./gradlew buildPlugin
 
-Install the plugin from `./build/distributions/GitLink-2.*.zip`:
+Install the plugin from `./build/distributions/GitLink-*.zip`:
 
     Preferences → Plugins → Install plugin from disk
 
@@ -64,7 +65,7 @@ Run the tests:
 Usage
 -------------------------------------------------------------------------------
 
-After installing the plugin set your remote host (GitHub, GitLab, BitBucket, Stash) and enabled extensions in the preferences:
+After installing the plugin set your remote host and enabled extensions in the preferences:
 
       Preferences → Other Settings → GitLink
       
@@ -77,11 +78,11 @@ To open the current file in the default browser:
       View → Open in (your selected host) or
       Select in... → Browser (GitLink)
 
-To copy the link to you clipboard:
+Shortcuts are also available on the annotation gutter and VCS log window.
 
-    View → Copy (your selected host) link to clipboard
-
-The current branch is used unless it does not exist on the remote in which case it defaults to your preferred branch as defined in the plugin settings.
+When viewing a file, the URL generated references the current commit unless that commit does not exist on the remote
+repository in which case it references the current branch instead. If the current branch also does not exist on the
+remote repository the default branch defined in the plugin configuration is used instead.
 
 Change log
 -------------------------------------------------------------------------------

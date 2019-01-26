@@ -1,12 +1,12 @@
 package uk.co.ben_gibson.git.link.test.Url.Factory;
 
 import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
 import uk.co.ben_gibson.git.link.Git.Branch;
 import uk.co.ben_gibson.git.link.Git.Commit;
 import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
 import uk.co.ben_gibson.git.link.Git.File;
+import uk.co.ben_gibson.git.link.UI.LineSelection;
 import uk.co.ben_gibson.git.link.Url.Factory.CustomUrlFactory;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
 
@@ -51,14 +51,6 @@ public class CustomUrlFactoryTest extends UrlFactoryTest
             Branch.master(),
             null
         );
-    }
-
-
-    @Test
-    @UseDataProvider("canDetermineIfFileAtCommitIsSupportedProvider")
-    public void testCanDetermineIfFileAtCommitIsSupported(CustomUrlFactory factory, boolean expected)
-    {
-        assertSame(expected, factory.canOpenFileAtCommit());
     }
 
 
@@ -107,7 +99,7 @@ public class CustomUrlFactoryTest extends UrlFactoryTest
                 mockRemote("http://custom.example.com/foo/bar"),
                 new File("src/Bar.java", "Bar.java"),
                 new Commit("f7c244eeea9f8e4ebbeabc1500b90e656f5d0328"),
-                10,
+                new LineSelection(10),
                 "https://custom.host.com/custom-project/src/Bar.java/commit/f7c244eeea9f8e4ebbeabc1500b90e656f5d0328#10"
             },
         };
@@ -123,7 +115,7 @@ public class CustomUrlFactoryTest extends UrlFactoryTest
                 UrlFactoryTest.mockRemote("https://example.com/foo/bar"),
                 new File("src/Bar.java", "Bar.java"),
                 Branch.master(),
-                10,
+                new LineSelection(10),
                 "https://custom.host.com/custom-project/master/src/Bar.java#10"
             },
             {
@@ -139,7 +131,7 @@ public class CustomUrlFactoryTest extends UrlFactoryTest
                 UrlFactoryTest.mockRemote("https://example.com/foo/bar"),
                 new File(".gitignore", ".gitignore"),
                 Branch.master(),
-                10,
+                new LineSelection(10),
                 "https://custom.host.com/custom-project/master/.gitignore#10"
             },
             {
@@ -147,7 +139,7 @@ public class CustomUrlFactoryTest extends UrlFactoryTest
                 UrlFactoryTest.mockRemote("https://example.com/foo/bar"),
                 new File(".gitignore", ".gitignore"),
                 Branch.master(),
-                10,
+                new LineSelection(10),
                 "https://custom.host.com/custom-project/master/.gitignore?line=10"
             },
         };
