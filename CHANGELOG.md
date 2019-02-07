@@ -103,7 +103,7 @@ All Notable changes to `GitLink` will be documented in this file
 - Removed copy link action.
 - Code base cleanup.
 
-## 3.1.0 - 2019-01-20
+## 3.1.0 - 2019-01-26
 
 - Support for multiline selection. #77
 - Renamed the host Stash to Bitbucket Server
