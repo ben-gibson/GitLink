@@ -33,6 +33,7 @@ public class UrlFactoryProvider
         return new UrlFactoryProvider(
             Arrays.asList(
                 new GitHubUrlFactory(),
+                new GitLabUrlFactory(),
                 new BitbucketCloudUrlFactory(),
                 new BitbucketServerUrlFactory(),
                 new GitBlitUrlFactory(),

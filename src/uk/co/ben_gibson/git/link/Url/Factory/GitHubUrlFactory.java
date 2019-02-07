@@ -59,7 +59,7 @@ public class GitHubUrlFactory extends AbstractUrlFactory
 
     public boolean supports(RemoteHost host)
     {
-        return host.isGitHub() || host.isGitLab();
+        return host.isGitHub();
     }
 
 
