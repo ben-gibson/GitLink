@@ -1,23 +1,27 @@
-<h1 align="center">
-  GitLink
-  <br>
-</h1>
-
-<h4 align="center">
-    A Jetbrains plugin that provides shortcuts to open a file or commit in GitHub, Bitbucket, GitLab, Gitea,
-    Gogs or GitBlit using the default browser.
-</h4>
+<h1 align="center">GitLink</h1>
 
 <p align="center">
-  <a href="https://travis-ci.org/ben-gibson/GitLink">
-    <img src="https://travis-ci.org/ben-gibson/GitLink.svg?branch=master"
-         alt="Gitter">
-  </a>
-  <a href="https://gitter.im/jetbrains-open-in-git-host/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/jetbrains-open-in-git-host/Lobby.svg"></a>
-  <br>
-  <img src="gitlink-demo.gif" alt="demo">
+    <strong>A Jetbrains plugin that provides shortcuts to open a file or commit in GitHub, Bitbucket, GitLab, Gitea,
+    Gogs or GitBlit using the default browser.</strong>
 </p>
-<br>
+
+<div align="center">
+    <a href="https://travis-ci.org/ben-gibson/GitLink">
+        <img src="https://img.shields.io/travis/ben-gibson/GitLink.svg?style=for-the-badge" />
+    </a>
+    <img src="https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg?label=plugin%20downloads&style=for-the-badge" />
+    <a href="https://github.com/ben-gibson/GitLink/issues">
+        <img src="https://img.shields.io/github/issues/ben-gibson/GitLink.svg?style=for-the-badge" />
+    </a>
+    <a href="https://github.com/ben-gibson/GitLink/stargazers">
+        <img src="https://img.shields.io/github/stars/ben-gibson/GitLink.svg?style=for-the-badge" />
+    </a>
+    <img src="https://img.shields.io/github/tag/ben-gibson/GitLink.svg?style=for-the-badge" />
+    <img src="https://img.shields.io/jetbrains/plugin/v/8183-gitlink.svg?style=for-the-badge" />
+</div>
+<div align="center">
+  <img src="gitlink-demo.gif" alt="demo">
+</div>
 
 Installation
 -------------------------------------------------------------------------------
