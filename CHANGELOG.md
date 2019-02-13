@@ -108,3 +108,7 @@ All Notable changes to `GitLink` will be documented in this file
 - Support for multiline selection. #77
 - Renamed the host Stash to Bitbucket Server
 
+## 3.1.1 - 2019-02-13
+
+- Fix multi-line selection in GitLab. #86
+
