@@ -63,7 +63,7 @@ public class GitHubUrlFactory extends AbstractUrlFactory
     }
 
 
-    private String formatLineSelection(LineSelection lineSelection)
+    protected String formatLineSelection(LineSelection lineSelection)
     {
         if (lineSelection.isMultiLineSelection()) {
             return String.format("L%d-L%d", lineSelection.start(), lineSelection.end());
