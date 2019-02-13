@@ -12,7 +12,7 @@ public class GitLabUrlFactory extends GitHubUrlFactory
         return host.isGitLab();
     }
 
-    private String formatLineSelection(LineSelection lineSelection)
+    protected String formatLineSelection(LineSelection lineSelection)
     {
         if (lineSelection.isMultiLineSelection()) {
             return String.format("L%d-%d", lineSelection.start(), lineSelection.end());
