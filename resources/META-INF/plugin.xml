@@ -55,6 +55,7 @@
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.UI.ExceptionRenderer" />
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Modifier.UrlModifierProvider" />
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Plugin"/>
+        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Substitution.URLTemplateProcessor"/>
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.Preferences"/>
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.GitLink" />
         <projectConfigurable instance="uk.co.ben_gibson.git.link.UI.Settings.ConfigurableSettings"/>

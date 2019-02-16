@@ -1,8 +1,10 @@
 package uk.co.ben_gibson.git.link.Url.Factory;
 
+import com.intellij.openapi.components.ServiceManager;
 import uk.co.ben_gibson.git.link.Git.RemoteHost;
 import uk.co.ben_gibson.git.link.Preferences;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
+import uk.co.ben_gibson.git.link.Url.Substitution.URLTemplateProcessor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +26,10 @@ public class UrlFactoryProvider
      */
     public static UrlFactoryProvider fromPreferences(Preferences preferences)
     {
+        URLTemplateProcessor urlTemplateProcessor = ServiceManager.getService(URLTemplateProcessor.class);
+
         CustomUrlFactory customUrlFactory = new CustomUrlFactory(
+            urlTemplateProcessor,
             preferences.customFileUrlOnBranchTemplate,
             preferences.customFileUrlAtCommitTemplate,
             preferences.customCommitUrlTemplate
@@ -32,12 +37,12 @@ public class UrlFactoryProvider
 
         return new UrlFactoryProvider(
             Arrays.asList(
-                new GitHubUrlFactory(),
-                new GitLabUrlFactory(),
-                new BitbucketCloudUrlFactory(),
-                new BitbucketServerUrlFactory(),
+                new GitHubUrlFactory(urlTemplateProcessor),
+                new GitLabUrlFactory(urlTemplateProcessor),
+                new BitbucketCloudUrlFactory(urlTemplateProcessor),
+                new BitbucketServerUrlFactory(urlTemplateProcessor),
                 new GitBlitUrlFactory(),
-                new GogsUrlFactory(),
+                new GogsUrlFactory(urlTemplateProcessor),
                 customUrlFactory
             )
         );
