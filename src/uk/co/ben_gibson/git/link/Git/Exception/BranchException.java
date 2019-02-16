@@ -1,20 +1,16 @@
 package uk.co.ben_gibson.git.link.Git.Exception;
 
-import uk.co.ben_gibson.git.link.Exception.Codes;
 import uk.co.ben_gibson.git.link.Exception.GitLinkException;
 
 public class BranchException extends GitLinkException
 {
-    private BranchException(String message, int code)
+    private BranchException(String message)
     {
-        super(message, code);
+        super(message);
     }
 
     public static BranchException couldNotFetchBranchesFromRemoteRepository(String reason)
     {
-        return new BranchException(
-            String.format("Could not fetch branches from the remote repository - '%s'", reason),
-            Codes.GIT_COULD_NOT_FETCH_BRANCH_FROM_REMOTE
-        );
+        return new BranchException(String.format("Could not fetch branches from the remote repository - '%s'", reason));
     }
 }

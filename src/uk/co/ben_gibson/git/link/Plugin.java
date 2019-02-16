@@ -49,4 +49,11 @@ public class Plugin
     {
         return this.pluginDescriptor.getVendorUrl().concat("/issues");
     }
+
+
+    @NotNull
+    public String customHostDocs()
+    {
+        return this.pluginDescriptor.getVendorUrl().concat("/wiki/Custom-Host");
+    }
 }

@@ -12,6 +12,14 @@ public class Commit
         this.hash = hash;
     }
 
+
+    @NotNull
+    public String shortHash()
+    {
+        return this.hash.substring(0, 6);
+    }
+
+
     @NotNull
     public String hash()
     {

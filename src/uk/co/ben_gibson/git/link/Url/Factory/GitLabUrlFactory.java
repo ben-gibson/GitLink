@@ -1,23 +1,22 @@
 package uk.co.ben_gibson.git.link.Url.Factory;
 
 import uk.co.ben_gibson.git.link.Git.*;
-import uk.co.ben_gibson.git.link.UI.LineSelection;
+import uk.co.ben_gibson.git.link.Url.Substitution.URLTemplateProcessor;
 
-import java.net.URL;
-
-public class GitLabUrlFactory extends GitHubUrlFactory
+public class GitLabUrlFactory extends TemplatedUrlFactory
 {
+    public GitLabUrlFactory(URLTemplateProcessor urlTemplateProcessor)
+    {
+        super(
+            urlTemplateProcessor,
+            "{remote:url}/blob/{branch}/{file:path}/{file:name}#L{line:start}-{line:end}",
+            "{remote:url}/blob/{commit}/{file:path}/{file:name}#L{line:start}-{line:end}",
+            "{remote:url}/commit/{commit}"
+        );
+    }
+
     public boolean supports(RemoteHost host)
     {
         return host.isGitLab();
-    }
-
-    protected String formatLineSelection(LineSelection lineSelection)
-    {
-        if (lineSelection.isMultiLineSelection()) {
-            return String.format("L%d-%d", lineSelection.start(), lineSelection.end());
-        }
-
-        return String.format("L%d", lineSelection.start());
     }
 }

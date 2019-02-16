@@ -7,30 +7,36 @@ import uk.co.ben_gibson.git.link.Git.Exception.RemoteException;
 import uk.co.ben_gibson.git.link.Git.File;
 import uk.co.ben_gibson.git.link.UI.LineSelection;
 import uk.co.ben_gibson.git.link.Url.Factory.GitHubUrlFactory;
+import uk.co.ben_gibson.git.link.Url.Substitution.URLTemplateProcessor;
 
 import java.net.MalformedURLException;
 
 public class GitHubUrlFactoryTest extends UrlFactoryTest
 {
+    public static GitHubUrlFactory factory()
+    {
+        return new GitHubUrlFactory(new URLTemplateProcessor());
+    }
+
 
     @DataProvider
     public static Object[][] commitProvider() throws MalformedURLException, RemoteException
     {
         return new Object[][]{
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("https://github.com/foo/bar"),
                 new Commit("bd7ab0f04151e7409d77caa296617f97352f36d3"),
                 "https://github.com/foo/bar/commit/bd7ab0f04151e7409d77caa296617f97352f36d3"
             },
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("https://github.com/foo bar/baz"),
                 new Commit("40ec791cdd904557793e200c93f3118043ec18af"),
                 "https://github.com/foo%20bar/baz/commit/40ec791cdd904557793e200c93f3118043ec18af"
             },
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("http://github.com/foo/bar"),
                 new Commit("0df948a98048a3b30911d974414dfe0ef22a1724"),
                 "http://github.com/foo/bar/commit/0df948a98048a3b30911d974414dfe0ef22a1724"
@@ -44,15 +50,15 @@ public class GitHubUrlFactoryTest extends UrlFactoryTest
     {
         return new Object[][]{
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("http://github.com/foo/bar"),
                 new File("src/Bar.java", "Bar.java"),
                 new Commit("f7c244eeea9f8e4ebbeabc1500b90e656f5d0328"),
                 new LineSelection(10),
-                "http://github.com/foo/bar/blob/f7c244eeea9f8e4ebbeabc1500b90e656f5d0328/src/Bar.java#L10"
+                "http://github.com/foo/bar/blob/f7c244eeea9f8e4ebbeabc1500b90e656f5d0328/src/Bar.java#L10-L10"
             },
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("http://github.com/foo/bar"),
                 new File("src/Bar.java", "Bar.java"),
                 new Commit("f7c244eeea9f8e4ebbeabc1500b90e656f5d0328"),
@@ -68,15 +74,15 @@ public class GitHubUrlFactoryTest extends UrlFactoryTest
     {
         return new Object[][]{
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("https://github.com/foo/bar"),
                 new File("src/Bar.java", "Bar.java"),
                 Branch.master(),
                 new LineSelection(10),
-                "https://github.com/foo/bar/blob/master/src/Bar.java#L10"
+                "https://github.com/foo/bar/blob/master/src/Bar.java#L10-L10"
             },
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("https://github.com/foo/bar"),
                 new File("src/Bar.java", "Bar.java"),
                 Branch.master(),
@@ -84,28 +90,28 @@ public class GitHubUrlFactoryTest extends UrlFactoryTest
                 "https://github.com/foo/bar/blob/master/src/Bar.java#L10-L20"
             },
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("https://github.com/foo/bar"),
                 new File("/src/Bar Bar/Baz.java", "Baz.java"),
                 new Branch("feature-foo-[PRO-123]"),
                 null,
-                "https://github.com/foo/bar/blob/feature-foo-%5BPRO-123%5D/src/Bar%20Bar/Baz.java"
+                "https://github.com/foo/bar/blob/feature-foo-%5BPRO-123%5D/src/Bar%20Bar/Baz.java#L0-L0"
             },
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("http://github.com/foo/bar"),
                 new File("/src/Bar Bar/Baz.java", "Baz.java"),
                 new Branch("dev"),
                 null,
-                "http://github.com/foo/bar/blob/dev/src/Bar%20Bar/Baz.java"
+                "http://github.com/foo/bar/blob/dev/src/Bar%20Bar/Baz.java#L0-L0"
             },
             {
-                new GitHubUrlFactory(),
+                factory(),
                 mockRemote("https://github.com/foo bar/baz"),
                 new File("需求0920-2017/0928.sql", "0928.sql"),
                 Branch.master(),
                 new LineSelection(15),
-                "https://github.com/foo%20bar/baz/blob/master/需求0920-2017/0928.sql#L15"
+                "https://github.com/foo%20bar/baz/blob/master/%E9%9C%80%E6%B1%820920-2017/0928.sql#L15-L15"
             },
         };
     }
