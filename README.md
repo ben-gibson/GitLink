@@ -7,7 +7,7 @@
 
 <div align="center">
     <a href="https://travis-ci.org/ben-gibson/GitLink">
-        <img src="https://img.shields.io/travis/ben-gibson/GitLink.svg?style=for-the-badge" />
+        <img src="https://img.shields.io/travis/ben-gibson/GitLink/master.svg?style=for-the-badge" />
     </a>
     <img src="https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg?label=plugin%20downloads&style=for-the-badge" />
     <a href="https://github.com/ben-gibson/GitLink/issues">
