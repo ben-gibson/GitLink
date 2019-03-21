@@ -76,6 +76,16 @@ After installing the plugin set your remote host and enabled extensions in the p
 Make sure you have registered your projects root under the version control preferences:
 
       Preferences → Version Control (see unregistered roots)
+      
+For custom hosts, you need to enter your git url in the "GitLink" setting:
+
+e.g.: custom gitlab server
+
+| | | |
+| ----- |:-------------:| -----:|
+| File at commit | https://[GITLAB.HOST]/[GITLAB.NAMESPACE]/[GITLAB.PROJECT]/commit/{commit}/{filePath}/{fileName}#L{line} | you need to repalce [GITLAB.HOST], [GITLAB.NAMESPACE] and [GITLAB.PROJECT] |
+| File on branch | https://[GITLAB.HOST]/[GITLAB.NAMESPACE]/[GITLAB.PROJECT]/blob/{branch}/{filePath}/{fileName}#L{line}   | you need to repalce [GITLAB.HOST], [GITLAB.NAMESPACE] and [GITLAB.PROJECT] |
+| Commit         | https://[GITLAB.HOST]/[GITLAB.NAMESPACE]/[GITLAB.PROJECT]/commit/{commit}                               | you need to repalce [GITLAB.HOST], [GITLAB.NAMESPACE] and [GITLAB.PROJECT] |
 
 To open the current file in the default browser:
 
