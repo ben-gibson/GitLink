@@ -112,3 +112,8 @@ All Notable changes to `GitLink` will be documented in this file
 
 - Fix multi-line selection in GitLab. #86
 
+## 3.1.2 - 2019-03-21
+
+- Fix issue resulting in an invalid URL for project/organisation names made up digits when the remote URL uses 
+the SSH protocol in the SCP syntax. #94
+

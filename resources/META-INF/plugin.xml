@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <version>3.1.1</version>
+    <version>3.1.2</version>
     <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
     <p>
@@ -31,7 +31,10 @@
     ]]></description>
     <change-notes><![CDATA[
     <ul>
-      <li>Fix multi-line selection in GitLab. <a href="https://github.com/ben-gibson/GitLink/issues/86">#86</a></li>
+      <li>
+        Fix issue resulting in an invalid URL for project/organisation names made up digits when the remote URL uses
+        the SSH protocol in the SCP syntax. <a href="https://github.com/ben-gibson/GitLink/issues/94">#94</a>
+      </li>
     </ul>
     ]]>
     </change-notes>
