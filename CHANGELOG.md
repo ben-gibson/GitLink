@@ -117,3 +117,8 @@ All Notable changes to `GitLink` will be documented in this file
 - Fix issue resulting in an invalid URL for project/organisation names made up digits when the remote URL uses 
 the SSH protocol in the SCP syntax. #94
 
+## 3.2.0 - 2019-06-17
+
+- Rebuilt the substitution system used for the Custom host type. This system is now also used under the hood for most
+  pre-defined host types. #92
+

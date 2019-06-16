@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <version>3.1.2</version>
+    <version>3.2.0</version>
     <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
     <p>
@@ -32,8 +32,8 @@
     <change-notes><![CDATA[
     <ul>
       <li>
-        Fix issue resulting in an invalid URL for project/organisation names made up digits when the remote URL uses
-        the SSH protocol in the SCP syntax. <a href="https://github.com/ben-gibson/GitLink/issues/94">#94</a>
+            Rebuilt the substitution system used for the Custom host type. This system is now also used under the hood for most
+            pre-defined host type. <a href="https://github.com/ben-gibson/GitLink/issues/92">#92</a>
       </li>
     </ul>
     ]]>
