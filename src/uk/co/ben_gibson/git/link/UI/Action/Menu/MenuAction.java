@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.git.link.UI.Action;
+package uk.co.ben_gibson.git.link.UI.Action.Menu;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -7,7 +7,8 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
-import uk.co.ben_gibson.git.link.Git.RemoteHost;
+import org.jetbrains.annotations.Nullable;
+import uk.co.ben_gibson.git.link.UI.Action.Action;
 import uk.co.ben_gibson.git.link.UI.LineSelection;
 
 import java.util.List;
@@ -15,8 +16,9 @@ import java.util.List;
 /**
  * An action triggered from the view or right click menu.
  */
-class MenuAction extends Action
+abstract class MenuAction extends Action
 {
+    protected abstract void perform(@NotNull Project project, @NotNull VirtualFile file, @Nullable LineSelection lineSelection);
 
     public void actionPerformed(Project project, AnActionEvent event)
     {
@@ -34,7 +36,7 @@ class MenuAction extends Action
             lineSelection = this.getLineSelection(editor);
         }
 
-        this.gitLink().openFile(project, file, null, lineSelection);
+        this.perform(project, file, lineSelection);
     }
 
 
@@ -64,11 +66,4 @@ class MenuAction extends Action
     {
         return (event.getData(CommonDataKeys.VIRTUAL_FILE) != null);
     }
-
-
-    protected String displayName(RemoteHost remoteHost)
-    {
-        return String.format("Open in %s", remoteHost.toString());
-    }
-
 }

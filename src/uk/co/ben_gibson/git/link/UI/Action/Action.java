@@ -13,6 +13,8 @@ import uk.co.ben_gibson.git.link.Preferences;
 
 public abstract class Action extends AnAction
 {
+    protected GitLink gitLink = ServiceManager.getService(GitLink.class);
+
     private Logger logger = Logger.getInstance(ServiceManager.getService(Plugin.class).displayName());
 
     protected abstract boolean shouldActionBeEnabled(AnActionEvent event);
@@ -61,11 +63,5 @@ public abstract class Action extends AnAction
         presentation.setIcon(remoteHost.icon());
 
         presentation.setEnabledAndVisible(this.shouldActionBeEnabled(event));
-    }
-
-
-    protected GitLink gitLink()
-    {
-        return ServiceManager.getService(GitLink.class);
     }
 }

@@ -1,12 +1,12 @@
 <idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
     <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
     <p>
-        Provides shortcuts to open a file or commit in GitHub, Bitbucket, GitLab, Gitea, Gogs or GitBlit using
-        the default browser.
+        Provides a shortcut to open a file or commit in GitHub, Bitbucket, GitLab, Gitea, Gogs or GitBlit using the
+        default browser. A Shortcut is also available to copy links to your clipboard.
     </p>
     </br>
     </br>
@@ -32,8 +32,7 @@
     <change-notes><![CDATA[
     <ul>
       <li>
-            Rebuilt the substitution system used for the Custom host type. This system is now also used under the hood for most
-            pre-defined host type. <a href="https://github.com/ben-gibson/GitLink/issues/92">#92</a>
+            Re-added support for copying links to the clipboard. <a href="https://github.com/ben-gibson/GitLink/issues/85">#85</a>
       </li>
     </ul>
     ]]>
@@ -56,19 +55,20 @@
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Modifier.UrlModifierProvider" />
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Plugin"/>
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Substitution.URLTemplateProcessor"/>
+        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Handler.BrowserHandler"/>
+        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Handler.ClipboardHandler"/>
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.Preferences"/>
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.GitLink" />
         <projectConfigurable instance="uk.co.ben_gibson.git.link.UI.Settings.ConfigurableSettings"/>
         <selectInTarget implementation="uk.co.ben_gibson.git.link.UI.Extensions.BrowserSelectInTarget"/>
-        <vcsAnnotationGutterActionProvider implementation="uk.co.ben_gibson.git.link.UI.Extensions.CommitAnnotationGutterActionProvider" />
-        <vcsAnnotationGutterActionProvider implementation="uk.co.ben_gibson.git.link.UI.Extensions.FileAnnotationGutterActionProvider" />
+        <vcsAnnotationGutterActionProvider implementation="uk.co.ben_gibson.git.link.UI.Extensions.AnnotationGutterActionProvider" />
     </extensions>
 
     <actions>
 
         <action
-            id="uk.co.ben_gibson.git.link.UI.Action.MenuAction"
-            class="uk.co.ben_gibson.git.link.UI.Action.MenuAction"
+            id="uk.co.ben_gibson.git.link.UI.Action.Menu.MenuAction.Browser"
+            class="uk.co.ben_gibson.git.link.UI.Action.Menu.BrowserMenuAction"
             text="Open in git host"
             description="Opens the file in the git host using the default browser"
         >
@@ -80,8 +80,36 @@
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
         </action>
 
-        <action id="uk.co.ben_gibson.git.link.UI.Action.Menu.VcsLogAction" class="uk.co.ben_gibson.git.link.UI.Action.VcsLogAction" text="Open in git host"
-                description="Opens the commit in the git host using the default browser">
+        <action
+            id="uk.co.ben_gibson.git.link.UI.Action.Menu.MenuAction.Clipboard"
+            class="uk.co.ben_gibson.git.link.UI.Action.Menu.ClipboardMenuAction"
+            text="Copy link to git host"
+            description="Copies a link to the clipboard pointing to the file in the git host"
+        >
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl C"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
+        </action>
+
+        <action
+            id="uk.co.ben_gibson.git.link.UI.Action.VcsLog.BrowserVcsAction"
+            class="uk.co.ben_gibson.git.link.UI.Action.VcsLog.BrowserVcsAction"
+            text="Open in git host"
+            description="Opens the commit in the git host using the default browser"
+        >
+            <add-to-group group-id="Git.LogContextMenu" />
+            <add-to-group group-id="Vcs.Log.ContextMenu" />
+        </action>
+
+        <action
+            id="uk.co.ben_gibson.git.link.UI.Action.VcsLog.ClipboardVcsAction"
+            class="uk.co.ben_gibson.git.link.UI.Action.VcsLog.ClipboardVcsAction"
+            text="Copy link to git host"
+            description="Copies a link to the clipboard pointing to the commit in the git host"
+        >
             <add-to-group group-id="Git.LogContextMenu" />
             <add-to-group group-id="Vcs.Log.ContextMenu" />
         </action>

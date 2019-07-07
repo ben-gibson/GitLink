@@ -1,6 +1,5 @@
 package uk.co.ben_gibson.git.link;
 
-import com.intellij.ide.browsers.BrowserLauncher;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -17,10 +16,11 @@ import uk.co.ben_gibson.git.link.Git.RepositoryFactory;
 import uk.co.ben_gibson.git.link.UI.ExceptionRenderer;
 import uk.co.ben_gibson.git.link.UI.LineSelection;
 import uk.co.ben_gibson.git.link.Url.Factory.*;
+import uk.co.ben_gibson.git.link.Url.Handler.BrowserHandler;
+import uk.co.ben_gibson.git.link.Url.Handler.ClipboardHandler;
+import uk.co.ben_gibson.git.link.Url.Handler.UrlHandler;
 import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifier;
 import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifierProvider;
-
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Objects;
 
@@ -30,21 +30,61 @@ public class GitLink
     private RepositoryFactory   repositoryFactory;
     private ExceptionRenderer   exceptionRenderer;
     private UrlModifierProvider urlModifierProvider;
+    private final BrowserHandler browserHandler;
+    private final ClipboardHandler clipboardHandler;
 
 
     GitLink(
         RepositoryFactory repositoryFactory,
         ExceptionRenderer exceptionRenderer,
-        UrlModifierProvider urlModifierProvider
+        UrlModifierProvider urlModifierProvider,
+        BrowserHandler browserHandler,
+        ClipboardHandler clipboardHandler
     )
     {
         this.repositoryFactory = repositoryFactory;
         this.exceptionRenderer = exceptionRenderer;
         this.urlModifierProvider = urlModifierProvider;
+        this.browserHandler = browserHandler;
+        this.clipboardHandler = clipboardHandler;
     }
 
 
     public void openFile(
+        @NotNull Project project,
+        @NotNull VirtualFile file,
+        @Nullable Commit commit,
+        @Nullable LineSelection lineSelection
+    )
+    {
+        this.handleFile(this.browserHandler, project, file, commit, lineSelection);
+    }
+
+
+    public void copyFile(
+        @NotNull Project project,
+        @NotNull VirtualFile file,
+        @Nullable Commit commit,
+        @Nullable LineSelection lineSelection
+    ) {
+        this.handleFile(this.clipboardHandler, project, file, commit, lineSelection);
+    }
+
+
+    public void openCommit(@NotNull Project project, @NotNull Commit commit, @NotNull VirtualFile file)
+    {
+        this.handleCommit(this.browserHandler, project, commit, file);
+    }
+
+
+    public void copyCommit(@NotNull Project project, @NotNull Commit commit, @NotNull VirtualFile file)
+    {
+        this.handleCommit(this.clipboardHandler, project, commit, file);
+    }
+
+
+    private void handleFile(
+        @NotNull UrlHandler urlHandler,
         @NotNull Project project,
         @NotNull VirtualFile file,
         @Nullable Commit commit,
@@ -83,7 +123,7 @@ public class GitLink
                             );
                         }
 
-                        GitLink.this.openUrlInBrowser(preferences, url);
+                        GitLink.this.handleUrl(urlHandler, preferences, url);
 
                     } catch (GitLinkException e) {
                         GitLink.this.exceptionRenderer.render(e);
@@ -99,7 +139,7 @@ public class GitLink
     }
 
 
-    public void openCommit(@NotNull Project project, @NotNull Commit commit, @NotNull VirtualFile file)
+    private void handleCommit(@NotNull UrlHandler urlHandler, @NotNull Project project, @NotNull Commit commit, @NotNull VirtualFile file)
     {
         try {
             Preferences preferences   = Preferences.getInstance(project);
@@ -116,7 +156,7 @@ public class GitLink
 
                         URL url = urlFactory.createUrlToCommit(repository.remote(), commit);
 
-                        GitLink.this.openUrlInBrowser(preferences, url);
+                        GitLink.this.handleUrl(urlHandler, preferences, url);
 
                     } catch (GitLinkException e) {
                         GitLink.this.exceptionRenderer.render(e);
@@ -132,7 +172,7 @@ public class GitLink
     }
 
 
-    private void openUrlInBrowser(@NotNull Preferences preferences, @NotNull URL url) throws GitLinkException
+    private void handleUrl(@NotNull UrlHandler urlHandler, @NotNull Preferences preferences, @NotNull URL url) throws GitLinkException
     {
         GitLink.this.logger.info(String.format("Generated URL '%s'", url.toString()));
 
@@ -147,10 +187,8 @@ public class GitLink
             }
         }
 
-        try {
-            BrowserLauncher.getInstance().open(url.toURI().toASCIIString());
-        } catch (URISyntaxException e) {
-            throw new GitLinkException(e.getMessage());
-        }
+        GitLink.this.logger.info(String.format("Handling URL with handler '%s'", urlHandler.getClass().getSimpleName()));
+
+        urlHandler.handle(url);
     }
 }

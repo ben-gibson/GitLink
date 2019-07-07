@@ -122,3 +122,7 @@ the SSH protocol in the SCP syntax. #94
 - Rebuilt the substitution system used for the Custom host type. This system is now also used under the hood for most
   pre-defined host types. #92
 
+## 3.3.0 - 2019-07-07
+
+- Re-added support for copying links to the clipboard. #85
+
