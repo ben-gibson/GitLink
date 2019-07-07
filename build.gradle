@@ -1,5 +1,5 @@
 plugins {
-    id "org.jetbrains.intellij" version "0.4.2"
+    id "org.jetbrains.intellij" version "0.4.9"
 }
 
 apply plugin: 'idea'
@@ -42,4 +42,4 @@ intellij {
 }
 
 group 'org.jetbrains'
-version '3.2.0'
+version '3.3.0'
