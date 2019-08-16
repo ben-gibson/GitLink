@@ -126,3 +126,7 @@ the SSH protocol in the SCP syntax. #94
 
 - Re-added support for copying links to the clipboard. #85
 
+## 3.3.1 - 2019-09-16
+
+- Add preference to disable check for a commit's existence on the remote. #61
+
