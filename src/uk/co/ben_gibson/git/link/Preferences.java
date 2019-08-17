@@ -20,14 +20,15 @@ import java.util.List;
 
 public class Preferences implements PersistentStateComponent<Preferences>
 {
-    public boolean      enabled                       = true;
-    public String       remoteHostId                  = RemoteHost.GIT_HUB.name();
-    public List<String> enabledModifiers              = new ArrayList<>();
-    public String       defaultBranchName             = "master";
-    public String       remoteName                    = "origin";
-    public String       customFileUrlAtCommitTemplate = "";
-    public String       customFileUrlOnBranchTemplate = "";
-    public String       customCommitUrlTemplate       = "";
+    public boolean      enabled                         = true;
+    public String       remoteHostId                    = RemoteHost.GIT_HUB.name();
+    public List<String> enabledModifiers                = new ArrayList<>();
+    public String       defaultBranchName               = "master";
+    public String       remoteName                      = "origin";
+    public String       customFileUrlAtCommitTemplate   = "";
+    public String       customFileUrlOnBranchTemplate   = "";
+    public String       customCommitUrlTemplate         = "";
+    public boolean      shouldCheckCommitExistsOnRemote = true;
 
 
     public boolean isEnabled()
@@ -47,6 +48,11 @@ public class Preferences implements PersistentStateComponent<Preferences>
     public Branch getDefaultBranch()
     {
         return new Branch(this.defaultBranchName);
+    }
+
+    public boolean shouldCheckCommitExistsOnRemote()
+    {
+        return shouldCheckCommitExistsOnRemote;
     }
 
 

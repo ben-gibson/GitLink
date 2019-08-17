@@ -6,6 +6,7 @@ import com.intellij.ui.components.JBCheckBox;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.intellij.util.ui.JBUI;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import uk.co.ben_gibson.git.link.Plugin;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class Settings
 {
     private JPanel rootPanel;
-    private JComboBox hostSelect;
+    private JComboBox<RemoteHost> hostSelect;
     private JTextField defaultBranchTextField;
     private JTextField                     customFileUrlOnBranchTemplateTextField;
     private JTextField                     customCommitUrlTemplateTextField;
@@ -38,6 +39,7 @@ public class Settings
     private JTextField                     remoteNameTextField;
     private JCheckBox                      enabledCheckBox;
     private HyperlinkLabel                 customTemplateHelpLabel;
+    private JCheckBox                      checkCommitExistsOnRemote;
     private Preferences                    preferences;
     private Map<UrlModifier, JBCheckBox>   urlModifierCheckBoxes = new HashMap<>();
 
@@ -46,7 +48,8 @@ public class Settings
         this.preferences = preferences;
 
         $$$setupUI$$$();
-        this.enabledCheckBox.setSelected(this.preferences.enabled);
+        this.enabledCheckBox.setSelected(this.preferences.isEnabled());
+        this.checkCommitExistsOnRemote.setSelected(this.preferences.shouldCheckCommitExistsOnRemote());
         this.hostSelect.setModel(new EnumComboBoxModel<>(RemoteHost.class));
         this.defaultBranchTextField.setText(this.preferences.defaultBranchName);
         this.remoteNameTextField.setText(this.preferences.remoteName);
@@ -60,7 +63,7 @@ public class Settings
 
         this.hostSelect.addActionListener(e -> {
             RemoteHost host = (((RemoteHost) hostSelect.getSelectedItem()));
-            Boolean isCustomHost = (host != null && host.isCustom());
+            boolean isCustomHost = (host != null && host.isCustom());
 
             // TODO: Move the label to the custom URL panel so we only need to toggle one component.
             Settings.this.customURLPanel.setVisible(isCustomHost);
@@ -85,12 +88,12 @@ public class Settings
 
     }
 
-    public JPanel getRootPanel()
+    JPanel getRootPanel()
     {
         return rootPanel;
     }
 
-    public boolean isModified()
+    boolean isModified()
     {
         for (Map.Entry<UrlModifier, JBCheckBox> entry : this.urlModifierCheckBoxes.entrySet()) {
             if (entry.getValue().isSelected() != this.preferences.isModifierEnabled(entry.getKey())) {
@@ -100,6 +103,7 @@ public class Settings
 
         return
             this.preferences.isEnabled() != this.enabledCheckBox.isSelected() ||
+            this.preferences.shouldCheckCommitExistsOnRemote() != this.checkCommitExistsOnRemote.isSelected() ||
             !this.preferences.getRemoteHost().equals(this.hostSelect.getSelectedItem()) ||
             !this.preferences.remoteName.equals(this.remoteNameTextField.getText()) ||
             !this.preferences.defaultBranchName.equals(this.defaultBranchTextField.getText()) ||
@@ -108,11 +112,16 @@ public class Settings
             !this.preferences.customCommitUrlTemplate.equals(this.customCommitUrlTemplateTextField.getText());
     }
 
-    public void apply() throws ConfigurationException
+    void apply() throws ConfigurationException
     {
-        this.preferences.enabled = this.enabledCheckBox.isSelected();
+        this.preferences.enabled                         = this.enabledCheckBox.isSelected();
+        this.preferences.shouldCheckCommitExistsOnRemote = this.checkCommitExistsOnRemote.isSelected();
 
         RemoteHost remoteHost = (RemoteHost) this.hostSelect.getSelectedItem();
+
+        if (remoteHost == null) {
+            throw new ConfigurationException("A remote host must be selected");
+        }
 
         if (remoteHost.equals(RemoteHost.CUSTOM)) {
 
@@ -162,9 +171,10 @@ public class Settings
         }
     }
 
-    public void reset()
+    void reset()
     {
         this.enabledCheckBox.setSelected(this.preferences.isEnabled());
+        this.checkCommitExistsOnRemote.setSelected(this.preferences.shouldCheckCommitExistsOnRemote());
         this.remoteNameTextField.setText(this.preferences.remoteName);
         this.defaultBranchTextField.setText(this.preferences.defaultBranchName);
         this.hostSelect.setSelectedItem(this.preferences.getRemoteHost());
@@ -205,7 +215,7 @@ public class Settings
     private void createUIComponents()
     {
         this.urlModifierCheckBoxPanel = new JPanel();
-        this.urlModifierCheckBoxPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        this.urlModifierCheckBoxPanel.setLayout(new GridLayoutManager(2, 2, JBUI.emptyInsets(), -1, -1));
     }
 
     /**

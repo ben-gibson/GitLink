@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/ben-gibson/GitLink">
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <version>3.3.0</version>
+    <version>3.3.1</version>
     <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
     <description><![CDATA[
     <p>
@@ -32,7 +32,7 @@
     <change-notes><![CDATA[
     <ul>
       <li>
-            Re-added support for copying links to the clipboard. <a href="https://github.com/ben-gibson/GitLink/issues/85">#85</a>
+            Add preference to disable check for a commit's existence on the remote. <a href="https://github.com/ben-gibson/GitLink/issues/61">#61</a>
       </li>
     </ul>
     ]]>
