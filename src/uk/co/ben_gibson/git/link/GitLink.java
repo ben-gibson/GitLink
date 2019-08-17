@@ -22,7 +22,6 @@ import uk.co.ben_gibson.git.link.Url.Handler.UrlHandler;
 import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifier;
 import uk.co.ben_gibson.git.link.Url.Modifier.UrlModifierProvider;
 import java.net.URL;
-import java.util.Objects;
 
 public class GitLink
 {
@@ -104,14 +103,21 @@ public class GitLink
                     try {
 
                         URL url;
+                        Commit selectedCommit = commit;
 
-                        // If we have explicitly been given a commit or the current commit exists on the remote
-                        // repository then open the file at that commit otherwise use the branch.
-                        if (commit != null || repository.isCurrentCommitOnRemote()) {
+                        // If we have not been give a commit to open explicitly then use the current commit. We fallback
+                        // to using the branch if the commit does not exist on the remote repository (unless we have
+                        // been asked not to check the remote see https://github.com/ben-gibson/GitLink/issues/97
+                        // for details).
+                        if ((selectedCommit == null) && (!preferences.shouldCheckCommitExistsOnRemote() || repository.isCurrentCommitOnRemote())) {
+                            selectedCommit = repository.currentCommit();
+                        }
+
+                        if (selectedCommit != null) {
                             url = urlFactory.createUrlToFileAtCommit(
                                 repository.remote(),
                                 repository.repositoryFileFromVirtualFile(file),
-                                Objects.requireNonNull((commit != null) ? commit : repository.currentCommit()),
+                                selectedCommit,
                                 lineSelection
                             );
                         } else {
