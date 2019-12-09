@@ -1,5 +1,14 @@
 plugins {
-    id "org.jetbrains.intellij" version "0.4.10"
+    id 'org.jetbrains.intellij' version '0.4.15'
+}
+
+group 'uk.co.ben-gibson'
+version '3.3.2'
+
+ext {
+    if (!project.hasProperty("intellijPublishToken")) {
+        ext.intellijPublishToken = "foo"
+    }
 }
 
 apply plugin: 'idea'
@@ -17,29 +26,38 @@ dependencies {
     testCompile group: 'com.tngtech.java', name: 'junit-dataprovider', version: '1.10.0'
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src/'
-        }
-        resources {
-            srcDir 'resources'
-        }
-    }
-
-    test {
-        java {
-            srcDir 'tests/unit'
-        }
-    }
-}
-
 intellij {
+    version '2019.3'
     plugins 'git4idea'
     pluginName 'GitLink'
     updateSinceUntilBuild false
     sameSinceUntilBuild false
 }
 
-group 'org.jetbrains'
-version '3.3.1'
+patchPluginXml {
+    sinceBuild "IU-162.94"
+    untilBuild null
+    version project.version
+    pluginDescription """
+Provides a shortcut to open a file or commit in GitHub, Bitbucket, GitLab, Gitea, Gogs or GitBlit using the default 
+browser. A Shortcut is also available to copy links to your clipboard. <br>
+<br>
+After installing select your remote host in Settings &rarr; Other Settings &rarr; GitLink.
+Make sure you have registered your project's root under the version control settings.
+Preferences → Version Control (see unregistered roots) <br>
+<br>
+To open a file in the default browser select View &rarr; Open in (your selected host). Shortcuts are also available on
+the annotation gutter and VCS log window.
+    """
+    changeNotes """
+<p>3.3.2</p>
+<ul>
+    <li>Fixed error when opening IDE. <a href="https://github.com/ben-gibson/GitLink/issues/107">#107</a></li>
+</ul>
+    """
+
+}
+
+publishPlugin {
+    token intellijPublishToken
+}
