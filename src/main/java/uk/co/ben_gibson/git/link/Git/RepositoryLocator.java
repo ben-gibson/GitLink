@@ -2,6 +2,7 @@ package uk.co.ben_gibson.git.link.Git;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vcs.LocalFilePath;
 import com.intellij.openapi.vfs.VirtualFile;
 import git4idea.GitUtil;
 import git4idea.repo.GitRepository;
@@ -23,7 +24,8 @@ public class RepositoryLocator
 
     @NotNull
     public Repository locate(@NotNull final VirtualFile file) throws RepositoryNotFoundException {
-        GitRepository repository = GitUtil.getRepositoryManager(project).getRepositoryForFile(file);
+        LocalFilePath path = new LocalFilePath(file.getPath(), file.isDirectory());
+        GitRepository repository = GitUtil.getRepositoryManager(project).getRepositoryForFileQuick(path);
 
         if (repository == null) {
             throw new RepositoryNotFoundException();
