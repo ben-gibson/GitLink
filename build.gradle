@@ -1,9 +1,9 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.15'
+    id 'org.jetbrains.intellij' version '0.4.16'
 }
 
 group 'uk.co.ben-gibson'
-version '3.3.2'
+version '3.3.3'
 
 ext {
     if (!project.hasProperty("intellijPublishToken")) {
@@ -35,7 +35,7 @@ intellij {
 }
 
 patchPluginXml {
-    sinceBuild "IU-162.94"
+    sinceBuild "193"
     untilBuild null
     version project.version
     pluginDescription """
@@ -50,9 +50,9 @@ To open a file in the default browser select View &rarr; Open in (your selected 
 the annotation gutter and VCS log window.
     """
     changeNotes """
-<p>3.3.2</p>
+<p>3.3.3</p>
 <ul>
-    <li>Fixed error when opening IDE. <a href="https://github.com/ben-gibson/GitLink/issues/107">#107</a></li>
+    <li>Fixed repository update error. <a href="https://github.com/ben-gibson/GitLink/issues/114">#114</a></li>
 </ul>
     """
 
