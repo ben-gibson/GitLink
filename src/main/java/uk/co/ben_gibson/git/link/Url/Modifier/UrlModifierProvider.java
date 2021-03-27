@@ -5,7 +5,7 @@ import java.util.List;
 
 public class UrlModifierProvider
 {
-    private List<UrlModifier> modifiers;
+    private final List<UrlModifier> modifiers;
 
     public UrlModifierProvider()
     {

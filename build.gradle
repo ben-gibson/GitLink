@@ -1,9 +1,9 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.16'
+    id 'org.jetbrains.intellij' version '0.7.2'
 }
 
 group 'uk.co.ben-gibson'
-version '3.3.3'
+version '3.3.4'
 
 ext {
     if (!project.hasProperty("intellijPublishToken")) {
@@ -14,6 +14,9 @@ ext {
 apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     jcenter()
@@ -27,17 +30,16 @@ dependencies {
 }
 
 intellij {
-    version '2019.3'
+    version ideaVersion
     plugins 'git4idea'
     pluginName 'GitLink'
-    updateSinceUntilBuild false
-    sameSinceUntilBuild false
+    updateSinceUntilBuild = true
 }
 
 patchPluginXml {
-    sinceBuild "193"
-    untilBuild null
-    version project.version
+    sinceBuild pluginSinceBuild
+    untilBuild pluginUntilBuild
+    version version
     pluginDescription """
 Provides a shortcut to open a file or commit in GitHub, Bitbucket, GitLab, Gitea, Gogs or GitBlit using the default 
 browser. A Shortcut is also available to copy links to your clipboard. <br>
@@ -50,9 +52,9 @@ To open a file in the default browser select View &rarr; Open in (your selected 
 the annotation gutter and VCS log window.
     """
     changeNotes """
-<p>3.3.3</p>
+<p>3.3.4</p>
 <ul>
-    <li>Fixed repository update error. <a href="https://github.com/ben-gibson/GitLink/issues/114">#114</a></li>
+    <li>Fixed errors in latest 2021 EAP</li>
 </ul>
     """
 

@@ -14,13 +14,11 @@ public class ConfigurableSettings implements Configurable
 {
     private final Project project;
     private uk.co.ben_gibson.git.link.UI.Settings.Settings ui;
-    private final UrlModifierProvider urlModifierProvider;
 
 
-    public ConfigurableSettings(Project project, UrlModifierProvider urlModifierProvider)
+    public ConfigurableSettings(Project project)
     {
-        this.urlModifierProvider = urlModifierProvider;
-        this.project             = project;
+        this.project = project;
     }
 
 
@@ -28,7 +26,7 @@ public class ConfigurableSettings implements Configurable
     {
         ui = new uk.co.ben_gibson.git.link.UI.Settings.Settings(
             Preferences.getInstance(project),
-            urlModifierProvider.modifiers(),
+            ServiceManager.getService(UrlModifierProvider.class).modifiers(),
             ServiceManager.getService(Plugin.class)
         );
 
