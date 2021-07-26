@@ -22,6 +22,7 @@ public class UrlFactoryLocator
         this.preferences = Preferences.getInstance(project);
 
         this.factories.add(ServiceManager.getService(GitLabUrlFactory.class));
+        this.factories.add(ServiceManager.getService(AzureUrlFactory.class));
         this.factories.add(ServiceManager.getService(GitHubUrlFactory.class));
         this.factories.add(ServiceManager.getService(GogsUrlFactory.class));
         this.factories.add(ServiceManager.getService(BitbucketServerUrlFactory.class));

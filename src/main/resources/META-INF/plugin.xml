@@ -21,6 +21,7 @@
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.GitBlitUrlFactory"/>
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.GitHubUrlFactory"/>
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.GitLabUrlFactory"/>
+        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.AzureUrlFactory"/>
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.GogsUrlFactory"/>
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.UrlFactoryLocator"/>
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.CustomUrlFactory"/>

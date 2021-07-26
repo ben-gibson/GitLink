@@ -60,7 +60,7 @@ Update the permissions:
 
 Execute an IntelliJ IDEA instance with the plugin you're developing installed:
 
-    $ ./gradlew runIdea
+    $ ./gradlew runIde
 
 Run the tests:
 

@@ -11,6 +11,7 @@ public enum RemoteHost
     BITBUCKET_SERVER("Bitbucket Server", "/Icons/Bitbucket/Bitbucket.png"),
     BITBUCKET_CLOUD("Bitbucket Cloud", "/Icons/Bitbucket/Bitbucket.png"),
     GITLAB("GitLab", "/Icons/GitLab/GitLab.png"),
+    AZURE("Azure", "/Icons/Azure/Azure.png"),
     GITBLIT("GitBlit", ""),
     GITEA("Gitea", "/Icons/Gitea/Gitea.png"),
     GOGS("Gogs", "/Icons/Gogs/Gogs.png"),
@@ -49,6 +50,11 @@ public enum RemoteHost
     public boolean isGitLab()
     {
         return (this == GITLAB);
+    }
+
+    public boolean isAzure()
+    {
+        return (this == AZURE);
     }
 
     public boolean isBitbucketCloud()
