@@ -1,19 +1,15 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.7.2'
+    id 'org.jetbrains.intellij' version '1.1.4'
 }
 
 group 'uk.co.ben-gibson'
-version '3.3.4'
+version '3.3.5'
 
 ext {
     if (!project.hasProperty("intellijPublishToken")) {
         ext.intellijPublishToken = "foo"
     }
 }
-
-apply plugin: 'idea'
-apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'java'
 
 sourceCompatibility = 11
 targetCompatibility = 11
@@ -30,17 +26,14 @@ dependencies {
 }
 
 intellij {
-    version ideaVersion
-    plugins 'git4idea'
-    pluginName 'GitLink'
+    version = '2021.2'
+    plugins = ['git4idea']
+    pluginName = 'GitLink'
     updateSinceUntilBuild = true
 }
 
 patchPluginXml {
-    sinceBuild pluginSinceBuild
-    untilBuild pluginUntilBuild
-    version version
-    pluginDescription """
+    pluginDescription = """
 Provides a shortcut to open a file or commit in GitHub, Bitbucket, GitLab, Gitea, Gogs or GitBlit using the default 
 browser. A Shortcut is also available to copy links to your clipboard. <br>
 <br>
@@ -51,15 +44,15 @@ Preferences → Version Control (see unregistered roots) <br>
 To open a file in the default browser select View &rarr; Open in (your selected host). Shortcuts are also available on
 the annotation gutter and VCS log window.
     """
-    changeNotes """
-<p>3.3.4</p>
+    changeNotes = """
+<p>3.3.5</p>
 <ul>
-    <li>Fixed errors in latest 2021 EAP</li>
+    <li>Fixed errors in latest 2021.2</li>
 </ul>
     """
 
 }
 
 publishPlugin {
-    token intellijPublishToken
+    token = intellijPublishToken
 }
