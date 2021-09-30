@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.git.link.Url.Factory;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import uk.co.ben_gibson.git.link.Preferences;
 import uk.co.ben_gibson.git.link.Url.Factory.Exception.UrlFactoryException;
@@ -14,19 +14,19 @@ public class UrlFactoryLocator
     private Preferences preferences;
 
     public static UrlFactoryLocator getInstance(Project project) {
-        return ServiceManager.getService(project, UrlFactoryLocator.class);
+        return project.getService(UrlFactoryLocator.class);
     }
 
     public UrlFactoryLocator(Project project) {
 
         this.preferences = Preferences.getInstance(project);
 
-        this.factories.add(ServiceManager.getService(GitLabUrlFactory.class));
-        this.factories.add(ServiceManager.getService(GitHubUrlFactory.class));
-        this.factories.add(ServiceManager.getService(GogsUrlFactory.class));
-        this.factories.add(ServiceManager.getService(BitbucketServerUrlFactory.class));
-        this.factories.add(ServiceManager.getService(BitbucketCloudUrlFactory.class));
-        this.factories.add(ServiceManager.getService(project, CustomUrlFactory.class));
+        this.factories.add(ApplicationManager.getApplication().getService(GitLabUrlFactory.class));
+        this.factories.add(ApplicationManager.getApplication().getService(GitHubUrlFactory.class));
+        this.factories.add(ApplicationManager.getApplication().getService(GogsUrlFactory.class));
+        this.factories.add(ApplicationManager.getApplication().getService(BitbucketServerUrlFactory.class));
+        this.factories.add(ApplicationManager.getApplication().getService(BitbucketCloudUrlFactory.class));
+        this.factories.add(project.getService(CustomUrlFactory.class));
     }
 
     public UrlFactory locate() throws UrlFactoryException {

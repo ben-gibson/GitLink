@@ -1,7 +1,7 @@
 package uk.co.ben_gibson.git.link.Url.Handler;
 
 import com.intellij.ide.browsers.BrowserLauncher;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.serviceContainer.NonInjectable;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ public class BrowserHandler implements UrlHandler
     }
 
     public static BrowserHandler getInstance() {
-        return ServiceManager.getService(BrowserHandler.class);
+        return ApplicationManager.getApplication().getService(BrowserHandler.class);
     }
 
     @Override

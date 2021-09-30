@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.git.link.Url.Substitution;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.co.ben_gibson.git.link.Git.Branch;
@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class URLTemplateProcessor
 {
     public static URLTemplateProcessor getInstance() {
-        return ServiceManager.getService(URLTemplateProcessor.class);
+        return ApplicationManager.getApplication().getService(URLTemplateProcessor.class);
     }
 
     public URL process(

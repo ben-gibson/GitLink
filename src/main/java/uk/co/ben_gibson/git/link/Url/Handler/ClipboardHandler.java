@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.git.link.Url.Handler;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.serviceContainer.NonInjectable;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public class ClipboardHandler implements UrlHandler
     }
 
     public static ClipboardHandler getInstance() {
-        return ServiceManager.getService(ClipboardHandler.class);
+        return ApplicationManager.getApplication().getService(ClipboardHandler.class);
     }
 
     @Override

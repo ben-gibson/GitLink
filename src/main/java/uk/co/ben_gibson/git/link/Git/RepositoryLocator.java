@@ -1,6 +1,5 @@
 package uk.co.ben_gibson.git.link.Git;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.LocalFilePath;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -19,7 +18,7 @@ public class RepositoryLocator
     }
 
     public static RepositoryLocator getInstance(Project project) {
-        return ServiceManager.getService(project, RepositoryLocator.class);
+        return project.getService(RepositoryLocator.class);
     }
 
     @NotNull

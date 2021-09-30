@@ -3,7 +3,7 @@ package uk.co.ben_gibson.git.link.UI.Action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ import uk.co.ben_gibson.git.link.Preferences;
 
 public abstract class Action extends AnAction
 {
-    private final Logger logger = Logger.getInstance(ServiceManager.getService(Plugin.class).displayName());
+    private final Logger logger = Logger.getInstance(ApplicationManager.getApplication().getService(Plugin.class).displayName());
 
     protected abstract boolean shouldActionBeEnabled(@NotNull final AnActionEvent event);
 
