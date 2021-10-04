@@ -85,8 +85,8 @@ val AZURE = TemplatedHost(
     "Azure",
     Icons.AZURE,
     UrlTemplates(
-        "{remote:url}?version=GB{branch}&path=/{file:path}{file:name}{line-block:start}&line={line:start}&lineEnd={line:end}{line-block:end}&lineStartColumn=1&lineEndColumn=1",
-        "{remote:url}?version=GC{commit}&path=/{file:path}{file:name}{line-block:start}&line={line:start}&lineEnd={line:end}{line-block:end}&lineStartColumn=1&lineEndColumn=1",
+        "{remote:url}?version=GB{branch}&path=/{file:path}/{file:name}{line-block:start}&line={line:start}&lineEnd={line:end}{line-block:end}&lineStartColumn=1&lineEndColumn=1",
+        "{remote:url}?version=GC{commit}&path=/{file:path}/{file:name}{line-block:start}&line={line:start}&lineEnd={line:end}{line-block:end}&lineStartColumn=1&lineEndColumn=1",
         "{remote:url}/commit/{commit}"
     ),
     URL("https://dev.azure.com")
