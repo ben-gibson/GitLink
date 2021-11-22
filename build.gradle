@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'uk.co.ben-gibson'
-version '3.3.5'
+version '3.3.6'
 
 ext {
     if (!project.hasProperty("intellijPublishToken")) {
@@ -45,9 +45,10 @@ To open a file in the default browser select View &rarr; Open in (your selected 
 the annotation gutter and VCS log window.
     """
     changeNotes = """
-<p>3.3.5</p>
+<p>3.3.6</p>
 <ul>
-    <li>Fixed errors in latest 2021.2</li>
+    <li>Fixed errors in latest 2021.3</li>
+    <li>Fixed deprecation errors</li>
 </ul>
     """
 
