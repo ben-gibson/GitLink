@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.git.link;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
@@ -23,7 +23,7 @@ import java.net.URL;
 
 public class GitLink
 {
-    private Logger logger = Logger.getInstance(ServiceManager.getService(Plugin.class).displayName());
+    private Logger logger = Logger.getInstance(ApplicationManager.getApplication().getService(Plugin.class).displayName());
     private final RepositoryLocator repositoryLocator;
     private final ExceptionRenderer exceptionRenderer;
     private final UrlModifierProvider urlModifierProvider;
@@ -36,7 +36,7 @@ public class GitLink
     GitLink(Project project) {
         this.repositoryLocator = RepositoryLocator.getInstance(project);
         this.exceptionRenderer = ExceptionRenderer.getInstance();
-        this.urlModifierProvider = ServiceManager.getService(UrlModifierProvider.class);
+        this.urlModifierProvider = ApplicationManager.getApplication().getService(UrlModifierProvider.class);
         this.browserHandler = BrowserHandler.getInstance();
         this.clipboardHandler = ClipboardHandler.getInstance();
         this.urlFactoryLocator = UrlFactoryLocator.getInstance(project);
@@ -45,7 +45,7 @@ public class GitLink
     }
 
     public static GitLink getInstance(Project project) {
-        return ServiceManager.getService(project, GitLink.class);
+        return project.getService(GitLink.class);
     }
 
     public void openFile(@NotNull final VirtualFile file, final Commit commit, final LineSelection lineSelection) {

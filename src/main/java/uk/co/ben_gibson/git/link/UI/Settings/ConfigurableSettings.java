@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.git.link.UI.Settings;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -26,8 +26,8 @@ public class ConfigurableSettings implements Configurable
     {
         ui = new uk.co.ben_gibson.git.link.UI.Settings.Settings(
             Preferences.getInstance(project),
-            ServiceManager.getService(UrlModifierProvider.class).modifiers(),
-            ServiceManager.getService(Plugin.class)
+            ApplicationManager.getApplication().getService(UrlModifierProvider.class).modifiers(),
+            ApplicationManager.getApplication().getService(Plugin.class)
         );
 
         return ui.getRootPanel();
@@ -43,13 +43,13 @@ public class ConfigurableSettings implements Configurable
 
     public String getHelpTopic()
     {
-        return ServiceManager.getService(Plugin.class).displayName();
+        return ApplicationManager.getApplication().getService(Plugin.class).displayName();
     }
 
 
     public String getDisplayName()
     {
-        return ServiceManager.getService(Plugin.class).displayName();
+        return ApplicationManager.getApplication().getService(Plugin.class).displayName();
     }
 
 

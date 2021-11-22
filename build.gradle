@@ -29,7 +29,7 @@ intellij {
     version = '2021.2'
     plugins = ['git4idea']
     pluginName = 'GitLink'
-    updateSinceUntilBuild = true
+    updateSinceUntilBuild = false
 }
 
 patchPluginXml {

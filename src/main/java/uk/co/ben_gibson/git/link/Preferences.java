@@ -1,6 +1,5 @@
 package uk.co.ben_gibson.git.link;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import uk.co.ben_gibson.git.link.Git.Branch;
@@ -82,7 +81,7 @@ public class Preferences implements PersistentStateComponent<Preferences>
 
     public static Preferences getInstance(Project project)
     {
-        return ServiceManager.getService(project, Preferences.class);
+        return project.getService(Preferences.class);
     }
 
 
