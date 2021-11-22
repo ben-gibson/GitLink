@@ -8,6 +8,8 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
 
+    <idea-version since-build="212.4746" />
+
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.Git.RepositoryLocator" />
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.UI.ExceptionRenderer" />
