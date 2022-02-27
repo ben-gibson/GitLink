@@ -1,18 +1,42 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>org.jetbrains.plugins.template</id>
-    <name>Template</name>
-    <vendor>JetBrains</vendor>
+    <id>uk.co.ben-gibson.remote.repository.mapper</id>
+    <name>GitLink</name>
+    <vendor url="https://github.com/ben-gibson">Ben Gibson</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.services.MyApplicationService"/>
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.services.MyProjectService"/>
+        <projectService serviceImplementation="uk.co.ben_gibson.git.link.SettingsState"/>
+        <notificationGroup id="GitLink Notification Group" displayType="BALLOON" key="notification.group.name"/>
+        <postStartupActivity implementation="uk.co.ben_gibson.git.link.StartupActivity"/>
+        <projectConfigurable
+            parentId="tools"
+            instance="uk.co.ben_gibson.git.link.ui.settings.SettingsConfigurable"
+            id="uk.co.ben_gibson.git.ProjectSettingsConfigurable"
+            displayName="Git Link Settings"
+        />
     </extensions>
 
     <applicationListeners>
-        <listener class="uk.co.ben_gibson.git.link.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+        <listener
+            class="uk.co.ben_gibson.git.link.listeners.MyProjectManagerListener"
+            topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+
+    <!-- UI -->
+    <resource-bundle>messages.ActionsBundle</resource-bundle>
+
+    <actions>
+        <action
+            id="uk.co.ben_gibson.git.link.ui.OpenInBrowserAction"
+            class="uk.co.ben_gibson.git.link.ui.OpenInBrowserAction"
+        >
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
+        </action>
+    </actions>
 </idea-plugin>
