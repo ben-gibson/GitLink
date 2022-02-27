@@ -1,106 +1,41 @@
-<h1 align="center">GitLink</h1>
+# GitLink
 
-<p align="center">
-    <strong>A Jetbrains plugin that provides shortcuts to open a file or commit in GitHub, Bitbucket, GitLab, Gitea,
-    Gogs or GitBlit using the default browser.</strong>
-</p>
+![Build](https://github.com/ben-gibson/GitLink/workflows/Build/badge.svg)
+[![Version](https://img.shields.io/jetbrains/plugin/v/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 
-<div align="center">
-    <a href="https://travis-ci.org/ben-gibson/GitLink">
-        <img src="https://img.shields.io/travis/ben-gibson/GitLink/master.svg?style=for-the-badge" />
-    </a>
-    <img src="https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg?label=plugin%20downloads&style=for-the-badge" />
-    <a href="https://github.com/ben-gibson/GitLink/issues">
-        <img src="https://img.shields.io/github/issues/ben-gibson/GitLink.svg?style=for-the-badge" />
-    </a>
-    <a href="https://github.com/ben-gibson/GitLink/stargazers">
-        <img src="https://img.shields.io/github/stars/ben-gibson/GitLink.svg?style=for-the-badge" />
-    </a>
-    <img src="https://img.shields.io/github/tag/ben-gibson/GitLink.svg?style=for-the-badge" />
-    <img src="https://img.shields.io/jetbrains/plugin/v/8183-gitlink.svg?style=for-the-badge" />
-</div>
-<div align="center">
-  <img src="gitlink-demo.gif" alt="demo">
-</div>
+## Template ToDo list
+- [x] Create a new [IntelliJ Platform Plugin Template][template] project.
+- [ ] Get familiar with the [template documentation][template].
+- [ ] Verify the [pluginGroup](/gradle.properties), [plugin ID](/src/main/resources/META-INF/plugin.xml) and [sources package](/src/main/kotlin).
+- [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html).
+- [ ] [Publish a plugin manually](https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate) for the first time.
+- [ ] Set the Plugin ID in the above README badges.
+- [ ] Set the [Deployment Token](https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html).
+- [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
 
-Installation
--------------------------------------------------------------------------------
+<!-- Plugin description -->
+This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
 
-This plugin is published on the
-[JetBrains Plugin Repository](https://plugins.jetbrains.com/plugin/8183):
+This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
 
-    Preferences → Plugins → Browse Repositories → Search for "GitLink"
+To keep everything working, do not remove `<!-- ... -->` sections.
+<!-- Plugin description end -->
 
-### From Source
+## Installation
 
-Clone this repository:
+- Using IDE built-in plugin system:
 
-    $ git clone https://github.com/ben-gibson/GitLink
-    $ cd GitLink
+  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "GitLink"</kbd> >
+  <kbd>Install Plugin</kbd>
 
-Update the permissions:
+- Manually:
 
-     $ chmod +x ./gradlew
-
-Build the plugin zip file:
-
-    $ ./gradlew buildPlugin
-
-Install the plugin from `./build/distributions/GitLink-*.zip`:
-
-    Preferences → Plugins → Install plugin from disk
+  Download the [latest release](https://github.com/%REPOSITORY%/releases/latest) and install it manually using
+  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 
-Development
--------------------------------------------------------------------------------
+---
+Plugin based on the [IntelliJ Platform Plugin Template][template].
 
-Update the permissions:
-
-     $ chmod +x ./gradlew
-
-Execute an IntelliJ IDEA instance with the plugin you're developing installed:
-
-    $ ./gradlew runIdea
-
-Run the tests:
-
-    $ ./gradlew test
-
-Usage
--------------------------------------------------------------------------------
-
-After installing the plugin set your remote host and enabled extensions in the preferences:
-
-      Preferences → Other Settings → GitLink
-      
-Make sure you have registered your projects root under the version control preferences:
-
-      Preferences → Version Control (see unregistered roots)
-
-To open the current file in the default browser:
-
-      View → Open in (your selected host) or
-      Select in... → Browser (GitLink)
-
-Shortcuts are also available on the annotation gutter and VCS log window.
-
-When viewing a file, the URL generated references the current commit unless that commit does not exist on the remote
-repository in which case it references the current branch instead. If the current branch also does not exist on the
-remote repository the default branch defined in the plugin configuration is used instead.
-
-Change log
--------------------------------------------------------------------------------
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
-
-Contributing
--------------------------------------------------------------------------------
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-### Credits
-
-License
--------------------------------------------------------------------------------
-
-Please see [LICENSE](LICENSE) for details.
+[template]: https://github.com/JetBrains/intellij-platform-plugin-template
