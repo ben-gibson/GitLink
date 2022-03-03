@@ -1,10 +1,10 @@
 package uk.co.ben_gibson.git.link.services
 
-import uk.co.ben_gibson.git.link.MyBundle
+import uk.co.ben_gibson.git.link.GitLinkBundle
 
 class MyApplicationService {
 
     init {
-        println(MyBundle.message("applicationService"))
+        println(GitLinkBundle.message("applicationService"))
     }
 }

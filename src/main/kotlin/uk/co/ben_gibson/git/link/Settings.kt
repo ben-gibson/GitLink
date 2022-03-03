@@ -5,6 +5,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.XmlSerializerUtil
+import uk.co.ben_gibson.git.link.git.RemoteHost
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -12,20 +13,24 @@ import com.intellij.util.xmlb.XmlSerializerUtil
  * these persistent application settings are stored.
  */
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
-class SettingsState : PersistentStateComponent<SettingsState?> {
-    var userId = "John Q. Public"
-    var ideaStatus = false
-    override fun getState(): SettingsState {
+class Settings : PersistentStateComponent<Settings?> {
+    var remoteHost = RemoteHost.GITLAB
+    var defaultBranch = "master"
+    var remote = "origin"
+    var checkCommitOnRemote = true
+    var forceHttps = true
+
+    override fun getState(): Settings {
         return this
     }
 
-    override fun loadState(state: SettingsState) {
+    override fun loadState(state: Settings) {
         XmlSerializerUtil.copyBean(state, this)
     }
 
     companion object {
-        fun getInstance(project: Project): SettingsState {
-            return project.getService(SettingsState::class.java)
+        fun getInstance(project: Project): Settings {
+            return project.getService(Settings::class.java)
         }
     }
 }

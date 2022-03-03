@@ -3,7 +3,7 @@ package uk.co.ben_gibson.git.link.git
 import com.intellij.icons.AllIcons
 import javax.swing.Icon
 
-enum class RemoteHost(val displayName: String, private val icon: Icon) {
+enum class RemoteHost(val displayName: String, val icon: Icon) {
     GIT_HUB("GitHub", AllIcons.Vcs.Vendors.Github),
     BITBUCKET_SERVER("Bitbucket Server", AllIcons.Vcs.Vendors.Github),
     BITBUCKET_CLOUD("Bitbucket Cloud", AllIcons.Vcs.Vendors.Github),
@@ -12,8 +12,4 @@ enum class RemoteHost(val displayName: String, private val icon: Icon) {
     GITEA("Gitea", AllIcons.Vcs.Vendors.Github),
     GOGS("Gogs", AllIcons.Vcs.Vendors.Github),
     CUSTOM("Custom", AllIcons.Vcs.Vendors.Github);
-
-    fun icon(): Icon {
-        return AllIcons.Vcs.Vendors.Github
-    }
 }
