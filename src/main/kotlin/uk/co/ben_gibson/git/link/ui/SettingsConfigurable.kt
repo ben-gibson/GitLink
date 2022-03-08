@@ -40,7 +40,7 @@ class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Te
             }
         }
         row() {
-            browserLink("Report a bug", "https://www.jetbrains.com")
+            browserLink("Report a bug", "https://github.com/ben-gibson/GitLink/issues")
         }
     }
 }
