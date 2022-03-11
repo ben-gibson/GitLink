@@ -1,8 +1,5 @@
 package uk.co.ben_gibson.git.link.git
 
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.guessProjectDir
-import com.intellij.openapi.vcs.VcsException
 import com.intellij.openapi.vfs.VirtualFile
 import git4idea.GitLocalBranch
 import git4idea.GitUtil
@@ -23,6 +20,8 @@ fun GitRepository.isBranchOnRemote(remote: GitRemote, branch: GitLocalBranch) : 
         "--heads"
     )
 
+    repositoryFiles
+
     return (result.success() && result.output.size == 1) || branch.findTrackedBranch(this) != null
 }
 
@@ -40,12 +39,10 @@ fun GitRepository.isCommitOnRemote(remote: GitRemote, commit: Commit): Boolean {
     return result.output.find{ it.trim().startsWith(remote.name) } != null
 }
 
-fun GitRepository.findRemote(name: String) : GitRemote? {
-    return GitUtil.findRemoteByName(this, name)
-}
+fun GitRepository.findRemote(name: String) = GitUtil.findRemoteByName(this, name)
 
-fun GitRepository.headCommit() : Commit? {
-    val revision = currentRevision ?: return null
+fun GitRepository.headCommit() = currentRevision?.let { Commit(it) }
 
-    return Commit(revision)
-}
+fun GitRepository.guessRemoteHost(remoteName: String) = findRemote(remoteName)?.let { RemoteHost.findHostByRemote(it) }
+
+fun GitRepository.getRelativeFilePath(file: VirtualFile) = file.path.substring(root.path.length)

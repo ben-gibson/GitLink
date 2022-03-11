@@ -7,11 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import git4idea.GitUtil
 import git4idea.repo.GitRepository
 
-fun findRepositoryForProject(project: Project) : GitRepository? {
-    val projectDirectory = project.guessProjectDir() ?: return null
-
-    return findRepositoryForFile(project, projectDirectory)
-}
+fun findRepositoryForProject(project: Project) = project.guessProjectDir()?.let { findRepositoryForFile(project, it) }
 
 fun findRepositoryForFile(project: Project, file: VirtualFile) : GitRepository? {
     return try {

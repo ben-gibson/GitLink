@@ -2,75 +2,44 @@ package uk.co.ben_gibson.git.link.ui.notification
 
 import uk.co.ben_gibson.git.link.git.RemoteHost
 
-data class Notification(val title : String, val message : String) {
+data class Notification(val title: String, val message: String) {
 
     companion object {
         private const val DEFAULT_TITLE = "GitLink"
 
-        fun welcomeGuide() : Notification {
-            return Notification(
-                DEFAULT_TITLE,
-                """
-                    Thanks for installing GitLink. To get started, head over to the settings and configure your remote
-                    host.
-                """
-                    .trimIndent()
-            )
-        }
+        fun repositoryNotFound() = Notification(DEFAULT_TITLE, "Could not find repository for selected file")
+        fun remoteNotFound() = Notification(DEFAULT_TITLE, "Could not find remote")
 
-        fun repositoryNotFound() : Notification {
-            return Notification(
-                DEFAULT_TITLE,
-                """
-                    Could not find repository for selected file
-                """
-                    .trimIndent()
-            )
-        }
+        fun welcomeGuide() = Notification(
+            DEFAULT_TITLE,
+            """
+                Thanks for installing GitLink. To get started, head over to the settings and configure your remote
+                host.
+            """.trimIndent()
+        )
 
-        fun remoteNotFound() : Notification {
-            return Notification(
-                DEFAULT_TITLE,
-                """
-                    Could not find remote
-                """
-                    .trimIndent()
-            )
-        }
+        fun performanceTips() = Notification(
+            DEFAULT_TITLE,
+            """
+                GitLink taking too long? Try adjusting the settings to avoid calls to the remote repository
+                to check the current commit status. 
+            """.trimIndent()
+        )
 
-        fun performanceTips() : Notification {
-            return Notification(
-                DEFAULT_TITLE,
-                """
-                    GitLink taking too long? Try adjusting the settings to avoid calls to the remote repository
-                    to check the current commit status. 
-                """
-                    .trimIndent()
-            )
-        }
+        fun couldNotAutoDetectRemoteHost(remoteHost: RemoteHost) = Notification(
+            DEFAULT_TITLE,
+            """
+                Could not detect your remote host automatically, '%s' has been set as the default remote host.
+                You change this at any time from the plugin settings.
+            """.trimIndent().format(remoteHost.displayName)
+        )
 
-        fun couldNotAutoDetectRemoteHost(remoteHost: RemoteHost) : Notification {
-            return Notification(
-                DEFAULT_TITLE,
-                """
-                    Could not detect your remote host automatically, '%s' has been set as the default remote host.
-                    You change this at any time from the plugin settings.
-                """
-                    .trimIndent()
-                    .format(remoteHost.displayName)
-            )
-        }
-
-        fun remoteHostAutoDetected(remoteHost: RemoteHost) : Notification {
-            return Notification(
-                DEFAULT_TITLE,
-                """
-                    '%s' has been detected as your remote host and automatically set it in the settings. You change this at any
-                    time from the plugin settings.
-                """
-                    .trimIndent()
-                    .format(remoteHost.displayName)
-            )
-        }
+        fun remoteHostAutoDetected(remoteHost: RemoteHost) = Notification(
+            DEFAULT_TITLE,
+            """
+                '%s' has been detected as your remote host and automatically set it in the settings. You change this at any
+                time from the plugin settings.
+            """.trimIndent().format(remoteHost.displayName)
+        )
     }
 }

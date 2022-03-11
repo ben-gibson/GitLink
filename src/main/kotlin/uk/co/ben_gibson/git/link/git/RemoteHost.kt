@@ -17,10 +17,9 @@ enum class RemoteHost(val displayName: String, val icon: Icon, val defaultUrl: U
     CUSTOM("Custom", AllIcons.Vcs.Vendors.Github, URL("https://github.com"));
 
     companion object {
-        fun findHostByRemote(remote: GitRemote) : RemoteHost? {
-            val remoteUrl = remote.httpUrl() ?: return null
-
-            return values().first { remoteUrl.toString().startsWith(it.defaultUrl.toString()) }
-        }
+        fun findHostByRemote(remote: GitRemote) = remote
+            .httpUrl()
+            ?.host
+            ?.let { host -> values().first { it.defaultUrl.host == host } }
     }
 }

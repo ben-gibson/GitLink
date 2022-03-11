@@ -1,23 +1,28 @@
 package uk.co.ben_gibson.git.link.url
 
-import com.intellij.openapi.vfs.VirtualFile
 import uk.co.ben_gibson.git.link.git.Commit
+import uk.co.ben_gibson.git.link.git.File
+import uk.co.ben_gibson.git.link.ui.LineSelection
 import java.net.URL
 
-data class UrlOptions(
-    val baseUrl: URL,
-    val branch: String,
-    val file: VirtualFile? = null,
-    val commit: Commit? = null,
-    val lineSelection: LineSelection? = null
-) {
-    val baseUrlHost: URL
-        get() {
-            return URL(baseUrl.protocol, baseUrl.host, baseUrl.port, "")
-        }
+sealed class UrlOptions(val baseUrl: URL)
 
-    val hasFileAndCommit: Boolean
-        get() {
-            return file != null && commit != null
-        }
-}
+class UrlOptionsCommit(
+    baseUrl: URL,
+    val commit: Commit,
+    val lineSelection: LineSelection? = null
+) : UrlOptions(baseUrl)
+
+class UrlOptionsFileAtCommit(
+    baseUrl: URL,
+    val file: File,
+    val commit: Commit,
+    val lineSelection: LineSelection? = null
+) : UrlOptions(baseUrl)
+
+class UrlOptionsFileAtBranch(
+    baseUrl: URL,
+    val file: File,
+    val branch: String,
+    val lineSelection: LineSelection? = null
+) : UrlOptions(baseUrl)

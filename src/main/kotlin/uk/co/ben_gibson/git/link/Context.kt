@@ -1,21 +1,27 @@
-package uk.co.ben_gibson.git.link.url
+package uk.co.ben_gibson.git.link
 
 import com.intellij.openapi.vfs.VirtualFile
 import uk.co.ben_gibson.git.link.git.Commit
+import uk.co.ben_gibson.git.link.ui.LineSelection
 
-enum class Type {
-    COMMIT,
-    FILE
-}
+sealed class Context(val file: VirtualFile)
 
-data class Context(
-    val type: Type,
-    val file: VirtualFile,
-    val commit: Commit? = null,
+class ContextCommit(
+    file: VirtualFile,
+    val commit: Commit,
     val lineSelection: LineSelection? = null
-)
+) : Context(file)
 
-data class LineSelection(
-    val start: Int,
-    val end: Int
-)
+class ContextFileAtCommit(
+    file: VirtualFile,
+    val commit: Commit,
+    val lineSelection: LineSelection? = null
+) : Context(file)
+
+class ContextFileAtBranch(
+    file: VirtualFile,
+    val branch: String,
+    val lineSelection: LineSelection? = null
+) : Context(file)
+
+class ContextCurrentFile(file: VirtualFile, val lineSelection: LineSelection? = null) : Context(file)

@@ -1,35 +1,74 @@
 package uk.co.ben_gibson.git.link.url.factory
 
-import uk.co.ben_gibson.git.link.url.UrlOptions
+import uk.co.ben_gibson.git.link.git.Commit
+import uk.co.ben_gibson.git.link.git.File
+import uk.co.ben_gibson.git.link.ui.LineSelection
+import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.template.UrlTemplateConfiguration
 import java.net.URL
 
-abstract class TemplatedUrlFactory : UrlFactory {
+abstract class TemplatedUrlFactory(private val templateConfiguration: UrlTemplateConfiguration) : UrlFactory {
     override fun createUrl(options: UrlOptions): URL {
-        val templateConfiguration = getUrlTemplateConfiguration()
-
-        when {
-            options.hasFileAndCommit -> templateConfiguration.fileAtCommit,
-            options.hasFileWithoutCommit -> templateConfiguration.fileAtBranch,
-            
+        var processTemplate = when(options) {
+            is UrlOptionsFileAtCommit -> processCommitTemplate(options)
+            is UrlOptionsFileAtBranch -> processCommitTemplate(options)
+            is UrlOptionsCommit -> processCommitTemplate(options)
         }
 
-        var template = templateConfiguration.fileAtCommit
+        processTemplate = processBaseUrl(processTemplate, options.baseUrl)
 
-        template = template
-            .replace("{remote:url:host}", options.baseUrlHost.toString())
-            .replace("{remote:url}", options.baseUrl.toString())
-            .replace("{remote:url:path}", options.baseUrl.path)
-            .replace("{file:name}", options.file.name)
-            .replace("{file:path}", options.file.path)
-            .replace("{branch}", options.branch.toString())
-            .replace("{commit}", options.commit?.toString() ?: "")
-            .replace("{commit:short}", options.commit?.shortHash ?: "")
-            .replace("{line:start}", options.lineSelection?.start?.toString() ?: "")
-            .replace("{line:end}", options.lineSelection?.end?.toString() ?: "")
-
-        return URL(template)
+        return URL(processTemplate)
     }
 
-    abstract fun getUrlTemplateConfiguration() : UrlTemplateConfiguration
+    private fun processCommitTemplate(options: UrlOptionsFileAtBranch) : String  {
+        var template = templateConfiguration.fileAtBranch
+
+        template = processFile(template, options.file)
+        template = processBranch(template, options.branch)
+
+        options.lineSelection?.let { template = processLineSelection(template, it) }
+
+        return template
+    }
+
+    private fun processCommitTemplate(options: UrlOptionsFileAtCommit) : String {
+        var template = templateConfiguration.fileAtCommit
+
+        template = processFile(template, options.file)
+        template = processCommit(template, options.commit)
+
+        options.lineSelection?.let { template = processLineSelection(template, it) }
+
+        return template
+    }
+
+    private fun processCommitTemplate(options: UrlOptionsCommit) : String {
+        var template = templateConfiguration.commit
+
+        template = processCommit(template, options.commit)
+
+        options.lineSelection?.let { template = processLineSelection(template, it) }
+
+        return template
+    }
+
+    private fun processBaseUrl(template: String, baseUrl: URL) = template
+        .replace("{remote:url:host}", baseUrl.hostUrl.toString())
+        .replace("{remote:url}", baseUrl.toString())
+        .replace("{remote:url:path}", baseUrl.path)
+
+    private fun processBranch(template: String, branch: String) = template
+        .replace("{branch}", branch)
+
+    private fun processFile(template: String, file: File) = template
+        .replace("{file:name}", file.name)
+        .replace("{file:path}", file.path)
+
+    private fun processCommit(template: String, commit: Commit) = template
+        .replace("{commit}", commit.toString())
+        .replace("{commit:short}", commit.shortHash)
+
+    private fun processLineSelection(template: String, lineSelection: LineSelection) = template
+        .replace("{line:start}", lineSelection.start.toString())
+        .replace("{line:end}", lineSelection.end.toString())
 }

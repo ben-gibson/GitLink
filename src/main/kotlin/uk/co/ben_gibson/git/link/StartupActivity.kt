@@ -4,6 +4,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
 import uk.co.ben_gibson.git.link.git.findRepositoryForProject
+import uk.co.ben_gibson.git.link.git.guessRemoteHost
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
 
@@ -20,15 +21,15 @@ class StartupActivity : StartupActivity.DumbAware {
 
         val repository = findRepositoryForProject(project) ?: return
 
-        val guessedRemoteHost = repository.guessRemoteHost(settings.remote)
+        val host = repository.guessRemoteHost(settings.remote)
 
-        if (guessedRemoteHost == null) {
+        if (host == null) {
             sendNotification(project, Notification.couldNotAutoDetectRemoteHost(settings.remoteHost))
             return
         }
 
-        sendNotification(project, Notification.remoteHostAutoDetected(guessedRemoteHost))
+        sendNotification(project, Notification.remoteHostAutoDetected(host))
 
-        settings.remoteHost = guessedRemoteHost
+        settings.remoteHost = host
     }
 }

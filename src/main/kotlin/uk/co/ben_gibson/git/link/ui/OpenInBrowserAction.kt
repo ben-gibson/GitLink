@@ -6,21 +6,18 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileEditor.FileEditorManager
-import com.intellij.openapi.project.Project
-import uk.co.ben_gibson.git.link.GitLinkBundle
-import uk.co.ben_gibson.git.link.Settings
-import uk.co.ben_gibson.git.link.openInBrowser
-import uk.co.ben_gibson.git.link.url.Context
-import uk.co.ben_gibson.git.link.url.LineSelection
+import uk.co.ben_gibson.git.link.*
 
 class OpenInBrowserAction : AnAction() {
 
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.project ?: return
         val file = event.getData(CommonDataKeys.VIRTUAL_FILE) ?: return
-        val lineSelection = getLineSelection(project)
 
-        openInBrowser(project, Context(file, lineSelection))
+        val editor: Editor? = FileEditorManager.getInstance(project).selectedTextEditor
+        val lineSelection = editor?.lineSelection
+
+        openInBrowser(project, ContextCurrentFile(file, lineSelection))
         //ShowSettingsUtilImpl.showSettingsDialog(event.project, "GitLink.Settings", null)
     }
 
@@ -38,16 +35,5 @@ class OpenInBrowserAction : AnAction() {
             event.presentation.icon = remoteHost.icon
             event.presentation.text = GitLinkBundle.message("actions.menu.browser", remoteHost.displayName)
         }
-    }
-
-    private fun getLineSelection(project: Project): LineSelection? {
-        val editor: Editor? = FileEditorManager.getInstance(project).selectedTextEditor
-
-        val primaryCaret = editor?.caretModel?.primaryCaret ?: return null
-
-        val start = primaryCaret.selectionStart
-        val end = primaryCaret.selectionEnd
-
-        return LineSelection(start, end)
     }
 }

@@ -3,7 +3,6 @@ package uk.co.ben_gibson.git.link
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
-import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.XmlSerializerUtil
 import uk.co.ben_gibson.git.link.git.RemoteHost
 
@@ -20,17 +19,9 @@ class Settings : PersistentStateComponent<Settings?> {
     var checkCommitOnRemote = true
     var forceHttps = true
 
-    override fun getState(): Settings {
-        return this
-    }
+    override fun getState() = this
 
     override fun loadState(state: Settings) {
         XmlSerializerUtil.copyBean(state, this)
-    }
-
-    companion object {
-        fun getInstance(project: Project): Settings {
-            return project.getService(Settings::class.java)
-        }
     }
 }

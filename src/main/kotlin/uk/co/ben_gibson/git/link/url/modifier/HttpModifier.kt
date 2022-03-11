@@ -5,7 +5,5 @@ import java.net.URL
 
 @Service
 class HttpModifier : UrlModifier {
-    override fun modify(url: URL): URL {
-        return url
-    }
+    override fun modify(url: URL) = url
 }
