@@ -23,19 +23,23 @@ fun openInBrowser(project: Project, context: Context) {
 }
 
 fun copyToClipBoard(project: Project, context: Context) {
-    processGitLink(
-        project,
-        context
-    ) { Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(it.toString()), null) }
+    processGitLink(project, context) {
+        Toolkit.getDefaultToolkit().systemClipboard.setContents(
+            StringSelection(it.toString()),
+            null
+        )
+    }
 }
 
 private fun processGitLink(project: Project, context: Context, handle: (URL) -> Unit) {
     runBackgroundableTask("Foo", project, false) {
-        val (_, totalTime) = timeOperation { process(project, context, handle) }
+        val time = timeOperation { process(project, context, handle) }
 
-        if (totalTime > 1) {
-            sendNotification(project, Notification.performanceTips())
+        if (time < 1000) {
+            return@runBackgroundableTask
         }
+
+        sendNotification(project, Notification.performanceTips())
     }
 }
 
@@ -43,48 +47,24 @@ private fun process(project: Project, context: Context, handle: (URL) -> Unit) {
     val settings = project.service<Settings>()
 
     val repository = locateRepository(project, context.file) ?: return
-    val urlFactory = project.service<UrlFactoryLocator>().locateFactory(settings.remoteHost)
+    val urlFactory = project.service<UrlFactoryLocator>().locate(settings.host)
 
     val remote = findRemote(project, repository, settings) ?: return
     val remoteBaseUrl = remote.httpUrl() ?: return
     val repositoryFile = File.create(context.file.name, repository.getRelativeFilePath(context.file))
 
     val urlOptions = when(context) {
-        is ContextFileAtCommit -> UrlOptionsFileAtCommit(
-            baseUrl = remoteBaseUrl,
-            file = repositoryFile,
-            commit = context.commit,
-            lineSelection = context.lineSelection
-        )
-        is ContextFileAtBranch -> UrlOptionsFileAtBranch(
-            baseUrl = remoteBaseUrl,
-            file = repositoryFile,
-            branch = context.branch,
-            lineSelection = context.lineSelection
-        )
-        is ContextCommit -> UrlOptionsCommit(
-            baseUrl = remoteBaseUrl,
-            commit = context.commit,
-            lineSelection = context.lineSelection
-        )
+        is ContextFileAtCommit -> UrlOptionsFileAtCommit(remoteBaseUrl, repositoryFile, context.commit, context.lineSelection)
+        is ContextFileAtBranch -> UrlOptionsFileAtBranch(remoteBaseUrl, repositoryFile, context.branch, context.lineSelection)
+        is ContextCommit -> UrlOptionsCommit(remoteBaseUrl, context.commit, context.lineSelection)
         is ContextCurrentFile -> {
-            val commit = attemptToResolveCurrentCommit(repository, remote, settings)
+            val commit = repository.currentCommit()
 
-            if (commit != null) {
-                UrlOptionsFileAtCommit(
-                    baseUrl = remoteBaseUrl,
-                    file = repositoryFile,
-                    commit = commit,
-                    lineSelection = context.lineSelection
-                )
+            if (commit != null && settings.checkCommitOnRemote && repository.isCommitOnRemote(remote, commit)) {
+                UrlOptionsFileAtCommit(remoteBaseUrl, repositoryFile, commit, context.lineSelection)
             }
 
-            UrlOptionsFileAtBranch(
-                baseUrl = remoteBaseUrl,
-                file = repositoryFile,
-                branch = repository.currentBranch?.name ?: settings.defaultBranch,
-                lineSelection = context.lineSelection
-            )
+            UrlOptionsFileAtBranch(remoteBaseUrl, repositoryFile, repository.currentBranch(settings.defaultBranch), context.lineSelection)
         }
     }
 
@@ -105,12 +85,4 @@ private fun findRemote(project: Project, repository: GitRepository, settings: Se
     remote ?: sendNotification(project, Notification.remoteNotFound())
 
     return remote
-}
-
-private fun attemptToResolveCurrentCommit(repository: GitRepository, remote: GitRemote, settings: Settings): Commit? {
-    if(settings.checkCommitOnRemote) {
-        return null
-    }
-
-    return repository.headCommit()?.takeIf { repository.isCommitOnRemote(remote, it) }
 }

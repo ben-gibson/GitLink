@@ -41,8 +41,10 @@ fun GitRepository.isCommitOnRemote(remote: GitRemote, commit: Commit): Boolean {
 
 fun GitRepository.findRemote(name: String) = GitUtil.findRemoteByName(this, name)
 
-fun GitRepository.headCommit() = currentRevision?.let { Commit(it) }
+fun GitRepository.currentCommit() = currentRevision?.let { Commit(it) }
 
-fun GitRepository.guessRemoteHost(remoteName: String) = findRemote(remoteName)?.let { RemoteHost.findHostByRemote(it) }
+fun GitRepository.guessRemoteHost(remoteName: String) = findRemote(remoteName)?.let { Host.forRemote(it) }
 
 fun GitRepository.getRelativeFilePath(file: VirtualFile) = file.path.substring(root.path.length)
+
+fun GitRepository.currentBranch(default: String) = currentBranch?.name ?: default

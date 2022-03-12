@@ -1,13 +1,11 @@
 package uk.co.ben_gibson.git.link
 
-inline fun <T> timeOperation(operation: () -> T) : Pair<T, Long> {
+inline fun timeOperation(operation: () -> Unit) : Long {
     val startTime = System.nanoTime()
 
-    val result = operation()
+    operation()
 
     val endTime = System.nanoTime()
 
-    val totalTimeSeconds = endTime - startTime
-
-    return Pair(result, totalTimeSeconds)
+    return endTime - startTime
 }

@@ -32,11 +32,26 @@
 
     <actions>
         <action
-            id="uk.co.ben_gibson.git.link.ui.OpenInBrowserAction"
-            class="uk.co.ben_gibson.git.link.ui.OpenInBrowserAction"
+            id="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserMenuAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserMenuAction"
         >
             <add-to-group group-id="ViewMenu" anchor="last"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl O"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
+        </action>
+        <action
+            id="uk.co.ben_gibson.git.link.ui.actions.menu.CopyMenuAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.menu.CopyMenuAction"
+        >
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl O"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
         </action>
     </actions>
 </idea-plugin>

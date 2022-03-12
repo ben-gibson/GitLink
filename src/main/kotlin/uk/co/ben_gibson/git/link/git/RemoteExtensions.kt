@@ -31,4 +31,4 @@ fun GitRemote.httpUrl() : URL? {
     return URL(url)
 }
 
-fun GitRemote.guessHost() = RemoteHost.findHostByRemote(this)
+fun GitRemote.guessHost() = Host.forRemote(this)

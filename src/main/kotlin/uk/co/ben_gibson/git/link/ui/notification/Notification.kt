@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.git.link.ui.notification
 
-import uk.co.ben_gibson.git.link.git.RemoteHost
+import uk.co.ben_gibson.git.link.git.Host
 
 data class Notification(val title: String, val message: String) {
 
@@ -26,7 +26,7 @@ data class Notification(val title: String, val message: String) {
             """.trimIndent()
         )
 
-        fun couldNotAutoDetectRemoteHost(remoteHost: RemoteHost) = Notification(
+        fun couldNotAutoDetectRemoteHost(remoteHost: Host) = Notification(
             DEFAULT_TITLE,
             """
                 Could not detect your remote host automatically, '%s' has been set as the default remote host.
@@ -34,7 +34,7 @@ data class Notification(val title: String, val message: String) {
             """.trimIndent().format(remoteHost.displayName)
         )
 
-        fun remoteHostAutoDetected(remoteHost: RemoteHost) = Notification(
+        fun remoteHostAutoDetected(remoteHost: Host) = Notification(
             DEFAULT_TITLE,
             """
                 '%s' has been detected as your remote host and automatically set it in the settings. You change this at any

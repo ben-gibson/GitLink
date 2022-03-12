@@ -24,12 +24,12 @@ class StartupActivity : StartupActivity.DumbAware {
         val host = repository.guessRemoteHost(settings.remote)
 
         if (host == null) {
-            sendNotification(project, Notification.couldNotAutoDetectRemoteHost(settings.remoteHost))
+            sendNotification(project, Notification.couldNotAutoDetectRemoteHost(settings.host))
             return
         }
 
         sendNotification(project, Notification.remoteHostAutoDetected(host))
 
-        settings.remoteHost = host
+        settings.host = host
     }
 }

@@ -3,21 +3,20 @@ package uk.co.ben_gibson.git.link.url.factory
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import uk.co.ben_gibson.git.link.git.RemoteHost
+import uk.co.ben_gibson.git.link.git.Host
 
 @Service
 class UrlFactoryLocator(private val project: Project) {
-    fun locateFactory(remoteHost: RemoteHost) : UrlFactory {
+    fun locate(remoteHost: Host) : UrlFactory {
         return when(remoteHost) {
-            RemoteHost.GIT_HUB -> service<GitHubUrlFactory>()
-            RemoteHost.GITLAB -> service<GitHubUrlFactory>()
-            RemoteHost.BITBUCKET_SERVER -> service<GitHubUrlFactory>()
-            RemoteHost.BITBUCKET_CLOUD -> service<GitHubUrlFactory>()
-            RemoteHost.GITBLIT -> service<GitHubUrlFactory>()
-            RemoteHost.GITEA -> service<GitHubUrlFactory>()
-            RemoteHost.GOGS -> service<GitHubUrlFactory>()
-            RemoteHost.AZURE -> service<GitHubUrlFactory>()
-            RemoteHost.CUSTOM -> project.service<CustomUrlFactory>()
+            Host.GIT_HUB -> service<GitHub>()
+            Host.GITLAB -> service<GitLab>()
+            Host.BITBUCKET_SERVER -> service<BitbucketServer>()
+            Host.BITBUCKET_CLOUD -> service<BitbucketCloud>()
+            Host.GITEA -> service<Gogs>()
+            Host.GOGS -> service<Gogs>()
+            Host.AZURE -> service<Azure>()
+            Host.CUSTOM -> project.service<CustomUrlFactory>()
         }
     }
 }

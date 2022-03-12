@@ -7,18 +7,31 @@ import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.layout.panel
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.Settings
-import uk.co.ben_gibson.git.link.git.RemoteHost
+import uk.co.ben_gibson.git.link.git.Host
 import javax.swing.DefaultComboBoxModel
+import javax.swing.JList
 
 class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Test") {
     private val settings = project.service<Settings>()
 
     override fun createPanel() = panel {
-        row(message("settings.remote-host.label")) {
+        row(message("settings.host.label")) {
             comboBox(
-                DefaultComboBoxModel(RemoteHost.values()),
-                renderer = SimpleListCellRenderer.create("") { it?.displayName ?: "" },
-                prop = settings::remoteHost
+                DefaultComboBoxModel(Host.values()),
+                renderer = object : SimpleListCellRenderer<Host>() {
+                    override fun customize(
+                        list: JList<out Host>,
+                        value: Host?,
+                        index: Int,
+                        selected: Boolean,
+                        hasFocus: Boolean
+                    ) {
+                        text = value?.displayName ?: ""
+                        icon = value?.icon
+                    }
+
+                },
+                prop = settings::host
             )
         }
         row(message("settings.default-branch.label")) {
@@ -28,6 +41,9 @@ class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Te
             textField(settings::remote)
         }
         titledRow("Advanced") {
+            row(message("settings.force-https.label")) {
+                checkBox(message("settings.force-https.label"), settings::forceHttps)
+            }
             row(message("settings.check-commit-on-remote.label")) {
                 checkBox(
                     message("settings.check-commit-on-remote.label"),
