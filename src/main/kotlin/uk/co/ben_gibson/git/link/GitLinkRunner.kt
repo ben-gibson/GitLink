@@ -45,9 +45,11 @@ private fun processGitLink(project: Project, context: Context, handle: (URL) -> 
 
 private fun process(project: Project, context: Context, handle: (URL) -> Unit) {
     val settings = project.service<Settings>()
+    val hosts = project.service<HostsProvider>().provide()
+    val host = hosts.getById(settings.host)
 
     val repository = locateRepository(project, context.file) ?: return
-    val urlFactory = project.service<UrlFactoryLocator>().locate(settings.host)
+    val urlFactory = project.service<UrlFactoryLocator>().locate(host)
 
     val remote = findRemote(project, repository, settings) ?: return
     val remoteBaseUrl = remote.httpUrl() ?: return
@@ -58,13 +60,18 @@ private fun process(project: Project, context: Context, handle: (URL) -> Unit) {
         is ContextFileAtBranch -> UrlOptionsFileAtBranch(remoteBaseUrl, repositoryFile, context.branch, context.lineSelection)
         is ContextCommit -> UrlOptionsCommit(remoteBaseUrl, context.commit, context.lineSelection)
         is ContextCurrentFile -> {
-            val commit = repository.currentCommit()
+            val commit = resolveCommit(repository, remote, settings)
 
-            if (commit != null && settings.checkCommitOnRemote && repository.isCommitOnRemote(remote, commit)) {
+            if (commit != null) {
                 UrlOptionsFileAtCommit(remoteBaseUrl, repositoryFile, commit, context.lineSelection)
             }
 
-            UrlOptionsFileAtBranch(remoteBaseUrl, repositoryFile, repository.currentBranch(settings.defaultBranch), context.lineSelection)
+            UrlOptionsFileAtBranch(
+                remoteBaseUrl,
+                repositoryFile,
+                resolveBranch(repository, remote, settings),
+                context.lineSelection
+            )
         }
     }
 
@@ -85,4 +92,20 @@ private fun findRemote(project: Project, repository: GitRepository, settings: Se
     remote ?: sendNotification(project, Notification.remoteNotFound())
 
     return remote
+}
+
+private fun resolveBranch(repository: GitRepository, remote: GitRemote, settings: Settings): String {
+    val branch = repository.currentBranch
+
+    if (branch != null && remote.contains(repository, branch)) {
+        return branch.name
+    }
+
+    return settings.fallbackBranch
+}
+
+private fun resolveCommit(repository: GitRepository, remote: GitRemote, settings: Settings): Commit? {
+    val commit = repository.currentCommit() ?: return null
+
+    return if (settings.checkCommitOnRemote && remote.contains(repository, commit)) commit else null
 }

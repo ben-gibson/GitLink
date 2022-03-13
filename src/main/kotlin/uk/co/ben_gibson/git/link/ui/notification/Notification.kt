@@ -26,7 +26,7 @@ data class Notification(val title: String, val message: String) {
             """.trimIndent()
         )
 
-        fun couldNotAutoDetectRemoteHost(remoteHost: Host) = Notification(
+        fun couldNotDetectGitHost(remoteHost: Host) = Notification(
             DEFAULT_TITLE,
             """
                 Could not detect your remote host automatically, '%s' has been set as the default remote host.

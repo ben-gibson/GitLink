@@ -1,25 +1,29 @@
 package uk.co.ben_gibson.git.link.git
 
-import com.intellij.icons.AllIcons
-import git4idea.repo.GitRemote
-import uk.co.ben_gibson.git.link.ui.Icons
+import uk.co.ben_gibson.git.link.url.template.UrlTemplate
 import java.net.URL
 import javax.swing.Icon
 
-enum class Host(val displayName: String, val icon: Icon, val defaultUrl: URL? = null) {
-    GIT_HUB("GitHub", AllIcons.Vcs.Vendors.Github, URL("https://github.com")),
-    GITLAB("GitLab", Icons.GITLAB, URL("https://gitlab.com")),
-    BITBUCKET_SERVER("Bitbucket Server", Icons.BITBUCKET),
-    BITBUCKET_CLOUD("Bitbucket Cloud", Icons.BITBUCKET, URL("https://bitbucket.org")),
-    GITEA("Gitea", AllIcons.Vcs.Vendors.Github, URL("https://gitea.io")),
-    GOGS("Gogs", AllIcons.Vcs.Vendors.Github, URL("https://gogs.io")),
-    AZURE("Azure", AllIcons.Vcs.Vendors.Github, URL("https://azure.microsoft.com")),
-    CUSTOM("Custom", AllIcons.Vcs.Vendors.Github);
+val HOST_ID_GITHUB = HostId("github")
+val HOST_ID_GITLAB = HostId("gitlab")
+val HOST_ID_BITBUCKET_CLOUD = HostId("bitbucket-cloud")
+val HOST_ID_BITBUCKET_SERVER = HostId("bitbucket-server")
+val HOST_ID_GOGS = HostId("gogs")
+val HOST_ID_GITEA = HostId("gitea")
+val HOST_ID_AZURE = HostId("azure")
 
-    companion object {
-        fun forRemote(remote: GitRemote) = remote
-            .httpUrl()
-            ?.host
-            ?.let { host -> values().first { it.defaultUrl?.host == host } }
+sealed class Host(val id: HostId, val displayName: String, val icon: Icon, val baseUrl: URL? = null)
+
+class TemplatedHost(
+    id: HostId,
+    displayName: String,
+    icon: Icon,
+    val urlTemplate: UrlTemplate,
+    baseUrl: URL? = null
+) : Host(id, displayName, icon, baseUrl)
+
+data class HostId(private val id: String) {
+    override fun toString(): String {
+        return id
     }
 }

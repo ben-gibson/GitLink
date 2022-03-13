@@ -4,12 +4,12 @@ import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.*
-import uk.co.ben_gibson.git.link.url.template.UrlTemplateConfiguration
+import uk.co.ben_gibson.git.link.url.template.UrlTemplate
 import java.net.URL
 
-abstract class TemplatedUrlFactory(private val templateConfiguration: UrlTemplateConfiguration) : UrlFactory {
+class TemplatedUrlFactory(private val templateConfiguration: UrlTemplate) : UrlFactory {
     override fun createUrl(options: UrlOptions): URL {
-        var processTemplate = when(options) {
+        var processTemplate = when (options) {
             is UrlOptionsFileAtCommit -> processCommitTemplate(options)
             is UrlOptionsFileAtBranch -> processCommitTemplate(options)
             is UrlOptionsCommit -> processCommitTemplate(options)
@@ -20,7 +20,7 @@ abstract class TemplatedUrlFactory(private val templateConfiguration: UrlTemplat
         return URL(processTemplate)
     }
 
-    private fun processCommitTemplate(options: UrlOptionsFileAtBranch) : String  {
+    private fun processCommitTemplate(options: UrlOptionsFileAtBranch): String {
         var template = templateConfiguration.fileAtBranch
 
         template = processFile(template, options.file)
@@ -31,7 +31,7 @@ abstract class TemplatedUrlFactory(private val templateConfiguration: UrlTemplat
         return template
     }
 
-    private fun processCommitTemplate(options: UrlOptionsFileAtCommit) : String {
+    private fun processCommitTemplate(options: UrlOptionsFileAtCommit): String {
         var template = templateConfiguration.fileAtCommit
 
         template = processFile(template, options.file)
@@ -42,7 +42,7 @@ abstract class TemplatedUrlFactory(private val templateConfiguration: UrlTemplat
         return template
     }
 
-    private fun processCommitTemplate(options: UrlOptionsCommit) : String {
+    private fun processCommitTemplate(options: UrlOptionsCommit): String {
         var template = templateConfiguration.commit
 
         template = processCommit(template, options.commit)

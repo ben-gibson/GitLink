@@ -8,14 +8,12 @@
     <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.services.MyApplicationService"/>
-        <projectService serviceImplementation="uk.co.ben_gibson.git.link.services.MyProjectService"/>
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.Settings"/>
         <notificationGroup id="GitLink Notification Group" displayType="BALLOON" key="notification.group.name"/>
         <postStartupActivity implementation="uk.co.ben_gibson.git.link.StartupActivity"/>
         <projectConfigurable
             parentId="tools"
-            instance="uk.co.ben_gibson.git.link.ui.SettingsConfigurable"
+            instance="uk.co.ben_gibson.git.link.ui.settings.SettingsConfigurable"
             id="GitLink.Settings"
             displayName="Git Link Settings"
         />

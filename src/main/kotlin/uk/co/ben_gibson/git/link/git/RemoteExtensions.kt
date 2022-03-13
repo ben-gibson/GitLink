@@ -1,6 +1,12 @@
 package uk.co.ben_gibson.git.link.git
 
+import git4idea.GitLocalBranch
+import git4idea.commands.Git
+import git4idea.commands.GitCommand
+import git4idea.commands.GitCommandResult
+import git4idea.commands.GitLineHandler
 import git4idea.repo.GitRemote
+import git4idea.repo.GitRepository
 import java.net.URL
 
 fun GitRemote.httpUrl() : URL? {
@@ -31,4 +37,33 @@ fun GitRemote.httpUrl() : URL? {
     return URL(url)
 }
 
-fun GitRemote.guessHost() = Host.forRemote(this)
+fun GitRemote.contains(repository: GitRepository, branch: GitLocalBranch): Boolean {
+    val result = Git.getInstance().lsRemote(
+        repository.project,
+        repository.root,
+        this,
+        this.firstUrl,
+        branch.fullName,
+        "--heads"
+    )
+
+    if (result.success()) {
+        return result.output.size == 1
+    }
+
+    return branch.findTrackedBranch(repository) != null
+}
+
+fun GitRemote.contains(repository: GitRepository, commit: Commit): Boolean {
+    val command = GitLineHandler(repository.project, repository.root, GitCommand.BRANCH)
+
+    command.addParameters("-r", "--contains", commit.toString())
+
+    val result: GitCommandResult = Git.getInstance().runCommand(command)
+
+    if (!result.success()) {
+        return false
+    }
+
+    return result.output.find{ it.trim().startsWith(name) } != null
+}

@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.*
+import uk.co.ben_gibson.git.link.git.HostsProvider
 import uk.co.ben_gibson.git.link.ui.lineSelection
 
 abstract class MenuAction(private val key: String) : AnAction() {
@@ -33,11 +34,12 @@ abstract class MenuAction(private val key: String) : AnAction() {
         val project = event.project ?: return
 
         val settings = project.service<Settings>()
-        val remoteHost = settings.host
+        val hosts = project.service<HostsProvider>().provide()
+        val host = hosts.getById(settings.host)
 
         settings.let {
-            event.presentation.icon = remoteHost.icon
-            event.presentation.text = GitLinkBundle.message("actions.$key.title", remoteHost.displayName)
+            event.presentation.icon = host.icon
+            event.presentation.text = GitLinkBundle.message("actions.$key.title", host.displayName)
         }
     }
 }
