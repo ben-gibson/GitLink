@@ -5,6 +5,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 import uk.co.ben_gibson.git.link.git.HOST_ID_GITHUB
+import com.intellij.util.xmlb.annotations.Tag;
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -18,7 +19,7 @@ class Settings : PersistentStateComponent<Settings?> {
     var remote = "origin"
     var checkCommitOnRemote = true
     var forceHttps = true
-    var customHosts: List<CustomHostSettings> = listOf()
+    var customHosts: MutableList<CustomHostSettings> = mutableListOf()
 
     override fun getState() = this
 
@@ -26,6 +27,7 @@ class Settings : PersistentStateComponent<Settings?> {
         XmlSerializerUtil.copyBean(state, this)
     }
 
+    @Tag("custom_hosts")
     data class CustomHostSettings(
         val id: String,
         val displayName: String,
