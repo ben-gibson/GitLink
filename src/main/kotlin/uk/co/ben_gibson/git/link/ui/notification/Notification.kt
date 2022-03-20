@@ -37,8 +37,7 @@ data class Notification(val title: String, val message: String) {
         fun remoteHostAutoDetected(remoteHost: Host) = Notification(
             DEFAULT_TITLE,
             """
-                '%s' has been detected as your remote host and automatically set it in the settings. You change this at any
-                time from the plugin settings.
+                GitLink has automatically set your remote host to '%s. You can configure this anytime from the <settings.
             """.trimIndent().format(remoteHost.displayName)
         )
     }

@@ -9,18 +9,15 @@ import uk.co.ben_gibson.git.link.*
 import uk.co.ben_gibson.git.link.ui.actions.Action
 import uk.co.ben_gibson.git.link.ui.lineSelection
 
-abstract class MenuAction(key: String) : Action(key) {
-
-    abstract fun handleAction(project: Project, context: ContextCurrentFile)
-
-    override fun actionPerformed(event: AnActionEvent) {
-        val project = event.project ?: return
-        val file = event.getData(CommonDataKeys.VIRTUAL_FILE) ?: return
+abstract class MenuAction(type: Type) : Action(type) {
+    override fun buildContext(project: Project, event: AnActionEvent): Context? {
+        val file = event.getData(CommonDataKeys.VIRTUAL_FILE) ?: return null
 
         val editor: Editor? = FileEditorManager.getInstance(project).selectedTextEditor
         val lineSelection = editor?.lineSelection
 
-        handleAction(project, ContextCurrentFile(file, lineSelection))
         //ShowSettingsUtilImpl.showSettingsDialog(event.project, "GitLink.Settings", null)
+
+        return ContextCurrentFile(file, lineSelection)
     }
 }

@@ -1,20 +1,20 @@
 package uk.co.ben_gibson.git.link.ui.actions.vcslog
 
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.project.Project
 import com.intellij.vcs.log.VcsLogDataKeys
+import uk.co.ben_gibson.git.link.Context
 import uk.co.ben_gibson.git.link.ContextCommit
 import uk.co.ben_gibson.git.link.git.Commit
-import uk.co.ben_gibson.git.link.openInBrowser
 import uk.co.ben_gibson.git.link.ui.actions.Action
 
-class BrowserAction: Action(key="browser") {
-    override fun actionPerformed(event: AnActionEvent) {
-        val project = event.project ?: return
-        val vcsLog = event.getData(VcsLogDataKeys.VCS_LOG) ?: return
+class BrowserAction: Action(Type.BROWSER) {
+    override fun buildContext(project: Project, event: AnActionEvent) : Context? {
+        val vcsLog = event.getData(VcsLogDataKeys.VCS_LOG) ?: return null
 
         val vcsCommit = vcsLog.selectedDetails[0]
 
-        openInBrowser(project, ContextCommit(vcsCommit.root, Commit(vcsCommit.id.toShortString())))
+        return ContextCommit(vcsCommit.root, Commit(vcsCommit.id.toShortString()))
     }
 
     override fun shouldBeEnabled(event: AnActionEvent): Boolean {
