@@ -7,11 +7,7 @@ import java.net.URL
 
 sealed class UrlOptions(val baseUrl: URL)
 
-class UrlOptionsCommit(
-    baseUrl: URL,
-    val commit: Commit,
-    val lineSelection: LineSelection? = null
-) : UrlOptions(baseUrl)
+class UrlOptionsCommit(baseUrl: URL, val commit: Commit) : UrlOptions(baseUrl)
 
 class UrlOptionsFileAtCommit(
     baseUrl: URL,

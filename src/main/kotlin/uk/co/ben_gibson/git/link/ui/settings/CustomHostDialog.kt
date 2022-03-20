@@ -6,50 +6,43 @@ import com.intellij.ui.components.JBTextField
 import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.ui.layout.panel
 import uk.co.ben_gibson.git.link.Settings
+import java.net.MalformedURLException
+import java.net.URL
 
-class CustomHostDialog : DialogWrapper(true) {
-    var name: String = ""
-    var baseUrl: String = ""
-    var fileAtBranchTemplate: String = ""
-    var fileAtCommitTemplate: String = ""
-    var commitTemplate: String = ""
-
+class CustomHostDialog(val customHost: Settings.CustomHostSettings) : DialogWrapper(false) {
     init {
         title = "Test DialogWrapper"
         setOKButtonText("Add")
+        setSize(600, 300)
         init()
     }
 
     override fun createCenterPanel() = panel {
         row("Name") {
-            textField(::name).focused().withValidationOnInput(::validateName)
+            textField(customHost::displayName).focused().withValidationOnApply(::validateName)
         }
         row("Base URL") {
-            textField(::baseUrl).withValidationOnInput(::validateBaseUrl)
+            textField(customHost::baseUrl).withValidationOnApply(::validateBaseUrl)
         }
         row("File at branch template") {
-            textField(::fileAtBranchTemplate).withValidationOnInput(::validateTemplate)
+            textField(customHost::fileAtBranchTemplate).withValidationOnApply(::validateTemplate)
         }
         row("File at commit template") {
-            textField(::fileAtCommitTemplate).withValidationOnInput(::validateTemplate)
+            textField(customHost::fileAtCommitTemplate).withValidationOnApply(::validateTemplate)
         }
         row("commit template") {
-            textField(::commitTemplate).withValidationOnInput(::validateTemplate)
+            textField(customHost::commitTemplate).withValidationOnApply(::validateTemplate)
         }
     }
-
-    fun getCustomHostSettings() = Settings.CustomHostSettings(
-        name.lowercase().trim().replace("\\s", "-"),
-        name.trim(),
-        baseUrl,
-        listOf()
-    );
 
     private fun validateName(builder: ValidationInfoBuilder, textField: JBTextField): ValidationInfo? {
         return builder.run {
             val fieldText = textField.text
             when {
-                fieldText.isEmpty() -> error("Foo bar")
+                fieldText.isEmpty() -> error("Name required")
+                !fieldText.matches("\\w+".toRegex()) -> error("Name can only contain alphanumeric characters")
+                fieldText.length < 3 -> error("Name must be at least 3 characters")
+                fieldText.length > 15 -> error("Name cannot be more than 15 characters")
                 else -> null
             }
         }
@@ -59,8 +52,16 @@ class CustomHostDialog : DialogWrapper(true) {
         return builder.run {
             val fieldText = textField.text
             when {
-                fieldText.isEmpty() -> error("Foo bar")
-                else -> null
+                fieldText.isEmpty() -> error("Base URL Required")
+                else -> {
+                    try {
+                        URL(fieldText)
+                    } catch (e: MalformedURLException) {
+                        return error("Invalid URL")
+                    }
+
+                    return null
+                }
             }
         }
     }
@@ -69,7 +70,7 @@ class CustomHostDialog : DialogWrapper(true) {
         return builder.run {
             val fieldText = textField.text
             when {
-                fieldText.isEmpty() -> error("Foo bar")
+                fieldText.isEmpty() -> error("Template required")
                 else -> null
             }
         }

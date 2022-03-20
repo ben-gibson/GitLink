@@ -1,30 +1,21 @@
 package uk.co.ben_gibson.git.link.ui.settings
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.project.Project
-import com.intellij.ui.AnActionButton
 import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.ToolbarDecorator
-import com.intellij.ui.components.fields.ExtendableTextComponent
 import com.intellij.ui.layout.CCFlags
-import com.intellij.ui.layout.GrowPolicy
 import com.intellij.ui.layout.panel
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ColumnInfo
-import com.intellij.util.ui.ElementProducer
-import com.intellij.util.ui.JBDimension
 import com.intellij.util.ui.ListTableModel
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.Settings
 import uk.co.ben_gibson.git.link.Settings.CustomHostSettings
 import uk.co.ben_gibson.git.link.git.Host
 import uk.co.ben_gibson.git.link.git.HostsProvider
-import java.awt.BorderLayout
-import java.awt.Dimension
 import javax.swing.DefaultComboBoxModel
-import javax.swing.JComponent
 import javax.swing.JList
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
@@ -32,6 +23,7 @@ import javax.swing.ListSelectionModel.SINGLE_SELECTION
 class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Test") {
     private val settings = project.service<Settings>()
     private val hosts = project.service<HostsProvider>().provide()
+    private var customHosts = settings.customHosts.toMutableList()
 
     private val customHostsTable = TableView(createCustomHostModel()).apply {
         setShowColumns(true)
@@ -50,7 +42,7 @@ class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Te
             comboBox(
                 DefaultComboBoxModel(hosts.toArray()),
                 { hosts.getById(settings.host) },
-                { settings.host = it?.id.toString() },
+                { settings.host = it!!.id.toString() },
                 object : SimpleListCellRenderer<Host>() {
                     override fun customize(
                         list: JList<out Host>,
@@ -97,7 +89,7 @@ class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Te
             createCustomHostColumn("Host Name") { customHost -> customHost?.displayName },
             createCustomHostColumn("Base URL") { customHost -> customHost?.baseUrl },
         ),
-        settings.customHosts
+        customHosts
     )
 
     private fun createCustomHostColumn(name: String, formatter: (CustomHostSettings?) -> String?) : ColumnInfo<CustomHostSettings, String> {
@@ -109,21 +101,46 @@ class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Te
     }
 
     private fun addCustomHost() {
-        val dialog = CustomHostDialog()
+        val dialog = CustomHostDialog(CustomHostSettings())
 
         if (dialog.showAndGet()) {
-            settings.customHosts.add(dialog.getCustomHostSettings())
+            customHosts.add(dialog.customHost)
+            customHostsTable.tableViewModel.fireTableDataChanged()
         }
     }
 
     private fun removeCustomHost() {
         val row = customHostsTable.selectedObject ?: return
 
-        settings.customHosts.remove(row)
+        customHosts.remove(row)
         customHostsTable.tableViewModel.fireTableDataChanged()
     }
 
     private fun editCustomHost() {
+        val row = customHostsTable.selectedObject ?: return
 
+        val dialog = CustomHostDialog(row.copy())
+
+        if (dialog.showAndGet()) {
+            customHosts[customHostsTable.selectedRow] = dialog.customHost
+            customHostsTable.tableViewModel.fireTableDataChanged()
+        }
+    }
+
+    override fun reset() {
+        super.reset()
+
+        customHosts.clear()
+        customHosts.addAll(settings.customHosts)
+    }
+
+    override fun isModified() : Boolean {
+        return super.isModified() || customHosts != settings.customHosts
+    }
+
+    override fun apply() {
+        super.apply()
+
+        settings.customHosts = customHosts
     }
 }

@@ -6,6 +6,7 @@ import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 import uk.co.ben_gibson.git.link.git.HOST_ID_GITHUB
 import com.intellij.util.xmlb.annotations.Tag;
+import java.util.UUID
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -29,9 +30,11 @@ class Settings : PersistentStateComponent<Settings?> {
 
     @Tag("custom_hosts")
     data class CustomHostSettings(
-        val id: String,
-        val displayName: String,
-        val baseUrl: String?,
-        val template: List<String>
+        var id: String = UUID.randomUUID().toString(),
+        var displayName: String = "",
+        var baseUrl: String = "",
+        var fileAtBranchTemplate: String = "",
+        var fileAtCommitTemplate: String = "",
+        var commitTemplate: String = ""
     )
 }

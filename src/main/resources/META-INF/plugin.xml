@@ -11,6 +11,9 @@
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.Settings"/>
         <notificationGroup id="GitLink Notification Group" displayType="BALLOON" key="notification.group.name"/>
         <postStartupActivity implementation="uk.co.ben_gibson.git.link.StartupActivity"/>
+        <vcsAnnotationGutterActionProvider
+            implementation="uk.co.ben_gibson.git.link.ui.extensions.AnnotationGutterActionProvider"/>
+        <selectInTarget implementation="uk.co.ben_gibson.git.link.ui.extensions.SelectInTarget"/>
         <projectConfigurable
             parentId="tools"
             instance="uk.co.ben_gibson.git.link.ui.settings.SettingsConfigurable"
@@ -30,8 +33,8 @@
 
     <actions>
         <action
-            id="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserMenuAction"
-            class="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserMenuAction"
+            id="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction"
         >
             <add-to-group group-id="ViewMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu"/>
@@ -41,8 +44,8 @@
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
         </action>
         <action
-            id="uk.co.ben_gibson.git.link.ui.actions.menu.CopyMenuAction"
-            class="uk.co.ben_gibson.git.link.ui.actions.menu.CopyMenuAction"
+            id="uk.co.ben_gibson.git.link.ui.actions.menu.CopyAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.menu.CopyAction"
         >
             <add-to-group group-id="ViewMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu"/>
@@ -50,6 +53,20 @@
             <add-to-group group-id="EditorTabPopupMenu"/>
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl O"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
+        </action>
+        <action
+            id="uk.co.ben_gibson.git.link.ui.actions.vcslog.BrowserAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.vcslog.BrowserAction"
+        >
+            <add-to-group group-id="Git.LogContextMenu"/>
+            <add-to-group group-id="Vcs.Log.ContextMenu"/>
+        </action>
+        <action
+            id="uk.co.ben_gibson.git.link.ui.actions.vcslog.ClipboardAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.vcslog.ClipboardAction"
+        >
+            <add-to-group group-id="Git.LogContextMenu"/>
+            <add-to-group group-id="Vcs.Log.ContextMenu"/>
         </action>
     </actions>
 </idea-plugin>

@@ -8,6 +8,7 @@ import uk.co.ben_gibson.git.link.Settings
 import uk.co.ben_gibson.git.link.ui.Icons
 import uk.co.ben_gibson.git.link.url.template.UrlTemplate
 import java.net.URL
+import java.util.*
 
 @Service
 class HostsProvider(private val project: Project) {
@@ -19,8 +20,8 @@ class HostsProvider(private val project: Project) {
                 "GitHub",
                 AllIcons.Vcs.Vendors.Github,
                 UrlTemplate(
-                    "{remote:url}/blob/{branch}/{file:path}/{file:name}#L{line:start}-L{line:end}",
-                    "{remote:url}/blob/{commit}/{file:path}/{file:name}#L{line:start}-L{line:end}",
+                    "{remote:url}/{object}/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
+                    "{remote:url}/{object}/{commit}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
                     "{remote:url}/commit/{commit}"
                 ),
                 URL("https://github.com")
@@ -30,7 +31,7 @@ class HostsProvider(private val project: Project) {
                 "GitLab",
                 Icons.GITLAB,
                 UrlTemplate(
-                    "{remote:url}/blob/{branch}/{file:path}/{file:name}#L{line:start}-{line:end}",
+                    "{remote:url}/blob/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-{line:end}{line-block:end}",
                     "{remote:url}/blob/{commit}/{file:path}/{file:name}#L{line:start}-{line:end}",
                     "{remote:url}/commit/{commit}"
                 ),
@@ -96,7 +97,15 @@ class HostsProvider(private val project: Project) {
     fun provide(): Hosts {
         val settings = project.service<Settings>()
 
-        val customHosts = listOf<Host>()
+        val customHosts: List<TemplatedHost> = settings.customHosts.map {
+            TemplatedHost(
+                UUID.fromString(it.id),
+                it.displayName,
+                Icons.GIT,
+                UrlTemplate(it.fileAtBranchTemplate, it.fileAtCommitTemplate, it.commitTemplate),
+                URL(it.baseUrl)
+            )
+        }
 
         return Hosts(EXISTING.plus(customHosts))
     }

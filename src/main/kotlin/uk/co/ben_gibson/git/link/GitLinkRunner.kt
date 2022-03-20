@@ -53,25 +53,25 @@ private fun process(project: Project, context: Context, handle: (URL) -> Unit) {
 
     val remote = findRemote(project, repository, settings) ?: return
     val remoteBaseUrl = remote.httpUrl() ?: return
-    val repositoryFile = File.create(context.file.name, repository.getRelativeFilePath(context.file))
+    val repositoryFile = File.create(context.file, repository)
 
     val urlOptions = when(context) {
         is ContextFileAtCommit -> UrlOptionsFileAtCommit(remoteBaseUrl, repositoryFile, context.commit, context.lineSelection)
         is ContextFileAtBranch -> UrlOptionsFileAtBranch(remoteBaseUrl, repositoryFile, context.branch, context.lineSelection)
-        is ContextCommit -> UrlOptionsCommit(remoteBaseUrl, context.commit, context.lineSelection)
+        is ContextCommit -> UrlOptionsCommit(remoteBaseUrl, context.commit)
         is ContextCurrentFile -> {
             val commit = resolveCommit(repository, remote, settings)
 
             if (commit != null) {
                 UrlOptionsFileAtCommit(remoteBaseUrl, repositoryFile, commit, context.lineSelection)
+            } else {
+                UrlOptionsFileAtBranch(
+                    remoteBaseUrl,
+                    repositoryFile,
+                    resolveBranch(repository, remote, settings),
+                    context.lineSelection
+                )
             }
-
-            UrlOptionsFileAtBranch(
-                remoteBaseUrl,
-                repositoryFile,
-                resolveBranch(repository, remote, settings),
-                context.lineSelection
-            )
         }
     }
 
