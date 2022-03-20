@@ -2,7 +2,7 @@ package uk.co.ben_gibson.git.link.ui.notification
 
 import uk.co.ben_gibson.git.link.git.Host
 
-data class Notification(val title: String, val message: String) {
+data class Notification(val title: String? = null, val message: String) {
 
     companion object {
         private const val DEFAULT_TITLE = "GitLink"
@@ -19,26 +19,21 @@ data class Notification(val title: String, val message: String) {
         )
 
         fun performanceTips() = Notification(
-            DEFAULT_TITLE,
-            """
-                GitLink taking too long? Try adjusting the settings to avoid calls to the remote repository
-                to check the current commit status. 
+            message = """
+                GitLink taking too long? Would you like to disable checking for the commit on the remote? Disable
             """.trimIndent()
         )
 
         fun couldNotDetectGitHost(remoteHost: Host) = Notification(
-            DEFAULT_TITLE,
-            """
-                Could not detect your remote host automatically, '%s' has been set as the default remote host.
-                You change this at any time from the plugin settings.
-            """.trimIndent().format(remoteHost.displayName)
+            message = "GitLink could not detect your remote host and has defaulted to '%s'. You change this at any time from the settings."
+                .trimIndent()
+                .format(remoteHost.displayName)
         )
 
         fun remoteHostAutoDetected(remoteHost: Host) = Notification(
-            DEFAULT_TITLE,
-            """
-                GitLink has automatically set your remote host to '%s. You can configure this anytime from the <settings.
-            """.trimIndent().format(remoteHost.displayName)
+            message =  "GitLink has detected your remote host as '%s. You can change this anytime from the settings."
+                .trimIndent()
+                .format(remoteHost.displayName)
         )
     }
 }
