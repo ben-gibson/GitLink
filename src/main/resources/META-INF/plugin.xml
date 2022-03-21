@@ -8,7 +8,8 @@
     <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceImplementation="uk.co.ben_gibson.git.link.Settings"/>
+        <projectService serviceImplementation="uk.co.ben_gibson.git.link.settings.ProjectSettings"/>
+        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.settings.ApplicationSettings"/>
         <notificationGroup id="GitLink Notification Group" displayType="BALLOON" key="notification.group.name"/>
         <postStartupActivity implementation="uk.co.ben_gibson.git.link.StartupActivity"/>
         <vcsAnnotationGutterActionProvider
@@ -16,9 +17,15 @@
         <selectInTarget implementation="uk.co.ben_gibson.git.link.ui.extensions.SelectInTarget"/>
         <projectConfigurable
             parentId="tools"
-            instance="uk.co.ben_gibson.git.link.ui.settings.SettingsConfigurable"
-            id="GitLink.Settings"
-            displayName="Git Link Settings"
+            instance="uk.co.ben_gibson.git.link.ui.settings.ProjectSettingsConfigurable"
+            id="GitLink.ProjectSettings"
+            displayName="GitLink"
+        />
+        <applicationConfigurable
+            parentId="GitLink.ProjectSettings"
+            instance="uk.co.ben_gibson.git.link.ui.settings.ApplicationSettingsConfigurable"
+            id="GitLink.ApplicationSettings"
+            displayName="Custom Hosts"
         />
     </extensions>
 

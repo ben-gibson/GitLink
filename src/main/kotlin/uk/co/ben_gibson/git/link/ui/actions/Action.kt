@@ -6,6 +6,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.*
 import uk.co.ben_gibson.git.link.git.HostsProvider
+import uk.co.ben_gibson.git.link.settings.ProjectSettings
 
 abstract class Action(private val type: Type): AnAction() {
 
@@ -36,7 +37,7 @@ abstract class Action(private val type: Type): AnAction() {
 
         val project = event.project ?: return
 
-        val settings = project.service<Settings>()
+        val settings = project.service<ProjectSettings>()
         val hosts = project.service<HostsProvider>().provide()
         val host = hosts.getById(settings.host)
 

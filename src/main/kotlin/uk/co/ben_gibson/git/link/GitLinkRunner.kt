@@ -8,6 +8,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
 import uk.co.ben_gibson.git.link.git.*
+import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
 import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
@@ -44,7 +45,7 @@ private fun processGitLink(project: Project, context: Context, handle: (URL) -> 
 }
 
 private fun process(project: Project, context: Context, handle: (URL) -> Unit) {
-    val settings = project.service<Settings>()
+    val settings = project.service<ProjectSettings>()
     val hosts = project.service<HostsProvider>().provide()
     val host = hosts.getById(settings.host)
 
@@ -86,7 +87,7 @@ private fun locateRepository(project: Project, file: VirtualFile): GitRepository
     return repository
 }
 
-private fun findRemote(project: Project, repository: GitRepository, settings: Settings): GitRemote? {
+private fun findRemote(project: Project, repository: GitRepository, settings: ProjectSettings): GitRemote? {
     val remote = repository.findRemote(settings.remote)
 
     remote ?: sendNotification(project, Notification.remoteNotFound())
@@ -94,7 +95,7 @@ private fun findRemote(project: Project, repository: GitRepository, settings: Se
     return remote
 }
 
-private fun resolveBranch(repository: GitRepository, remote: GitRemote, settings: Settings): String {
+private fun resolveBranch(repository: GitRepository, remote: GitRemote, settings: ProjectSettings): String {
     val branch = repository.currentBranch
 
     if (branch != null && remote.contains(repository, branch)) {
@@ -104,7 +105,7 @@ private fun resolveBranch(repository: GitRepository, remote: GitRemote, settings
     return settings.fallbackBranch
 }
 
-private fun resolveCommit(repository: GitRepository, remote: GitRemote, settings: Settings): Commit? {
+private fun resolveCommit(repository: GitRepository, remote: GitRemote, settings: ProjectSettings): Commit? {
     val commit = repository.currentCommit() ?: return null
 
     return if (settings.checkCommitOnRemote && remote.contains(repository, commit)) commit else null

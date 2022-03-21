@@ -3,16 +3,14 @@ package uk.co.ben_gibson.git.link.git
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
-import uk.co.ben_gibson.git.link.Settings
+import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.Icons
 import uk.co.ben_gibson.git.link.url.template.UrlTemplate
 import java.net.URL
 import java.util.*
 
 @Service
-class HostsProvider(private val project: Project) {
-
+class HostsProvider {
     companion object {
         val EXISTING = setOf(
             TemplatedHost(
@@ -95,7 +93,7 @@ class HostsProvider(private val project: Project) {
     }
 
     fun provide(): Hosts {
-        val settings = project.service<Settings>()
+        val settings = service<ApplicationSettings>()
 
         val customHosts: List<TemplatedHost> = settings.customHosts.map {
             TemplatedHost(

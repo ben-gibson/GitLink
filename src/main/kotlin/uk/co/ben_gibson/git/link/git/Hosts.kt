@@ -11,5 +11,6 @@ class Hosts(private val hosts: Set<Host>) {
         ?.host
         ?.let { host -> hosts.firstOrNull { it.baseUrl?.host == host } }
 
+    fun toSet() = hosts.toHashSet()
     fun toArray() = hosts.toTypedArray()
 }

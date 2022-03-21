@@ -1,10 +1,9 @@
-package uk.co.ben_gibson.git.link
+package uk.co.ben_gibson.git.link.settings
 
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
-import uk.co.ben_gibson.git.link.git.HOST_ID_GITHUB
 import com.intellij.util.xmlb.annotations.Tag;
 import java.util.UUID
 
@@ -14,17 +13,18 @@ import java.util.UUID
  * these persistent application settings are stored.
  */
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
-class Settings : PersistentStateComponent<Settings?> {
-    var host = HOST_ID_GITHUB.toString()
-    var fallbackBranch = "master"
-    var remote = "origin"
-    var checkCommitOnRemote = true
-    var forceHttps = true
+class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
+    private var listeners: MutableList<ChangeListener> = mutableListOf()
+
     var customHosts: MutableList<CustomHostSettings> = mutableListOf()
+        set(value) {
+            field = value
+            notifyListeners()
+        }
 
     override fun getState() = this
 
-    override fun loadState(state: Settings) {
+    override fun loadState(state: ApplicationSettings) {
         XmlSerializerUtil.copyBean(state, this)
     }
 
@@ -37,4 +37,16 @@ class Settings : PersistentStateComponent<Settings?> {
         var fileAtCommitTemplate: String = "",
         var commitTemplate: String = ""
     )
+
+    fun registerListener(listener: ChangeListener) {
+        listeners.add(listener)
+    }
+
+    private fun notifyListeners() {
+        listeners.forEach(ChangeListener::onChange)
+    }
+
+    interface ChangeListener {
+        fun onChange()
+    }
 }

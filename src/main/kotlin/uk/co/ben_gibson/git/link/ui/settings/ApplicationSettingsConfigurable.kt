@@ -2,27 +2,18 @@ package uk.co.ben_gibson.git.link.ui.settings
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
-import com.intellij.openapi.project.Project
-import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ListTableModel
-import uk.co.ben_gibson.git.link.GitLinkBundle.message
-import uk.co.ben_gibson.git.link.Settings
-import uk.co.ben_gibson.git.link.Settings.CustomHostSettings
-import uk.co.ben_gibson.git.link.git.Host
-import uk.co.ben_gibson.git.link.git.HostsProvider
-import javax.swing.DefaultComboBoxModel
-import javax.swing.JList
+import uk.co.ben_gibson.git.link.settings.ApplicationSettings
+import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomHostSettings
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 
-
-class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Test") {
-    private val settings = project.service<Settings>()
-    private val hosts = project.service<HostsProvider>().provide()
+class ApplicationSettingsConfigurable : BoundConfigurable("Foo Bar", "Test") {
+    private var settings = service<ApplicationSettings>()
     private var customHosts = settings.customHosts.toMutableList()
 
     private val customHostsTable = TableView(createCustomHostModel()).apply {
@@ -38,44 +29,6 @@ class SettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Te
         .createPanel()
 
     override fun createPanel() = panel {
-        row(message("settings.host.label")) {
-            comboBox(
-                DefaultComboBoxModel(hosts.toArray()),
-                { hosts.getById(settings.host) },
-                { settings.host = it!!.id.toString() },
-                object : SimpleListCellRenderer<Host>() {
-                    override fun customize(
-                        list: JList<out Host>,
-                        value: Host?,
-                        index: Int,
-                        selected: Boolean,
-                        hasFocus: Boolean
-                    ) {
-                        text = value?.displayName ?: ""
-                        icon = value?.icon
-                    }
-
-                }
-            )
-        }
-        row(message("settings.fallback-branch.label")) {
-            textField(settings::fallbackBranch)
-        }
-        row(message("settings.remote.label")) {
-            textField(settings::remote)
-        }
-        titledRow("Advanced") {
-            row(message("settings.force-https.label")) {
-                checkBox(message("settings.force-https.label"), settings::forceHttps)
-            }
-            row(message("settings.check-commit-on-remote.label")) {
-                checkBox(
-                    message("settings.check-commit-on-remote.label"),
-                    settings::checkCommitOnRemote,
-                    comment = "foo bar baz"
-                )
-            }
-        }
         row {
             component(customHostTableContainer).constraints(CCFlags.grow)
         }

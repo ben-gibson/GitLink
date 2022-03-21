@@ -13,7 +13,7 @@ fun sendNotification(project : Project, notification : Notification) {
         .getNotificationGroup("GitLink Notification Group")
 
     val intellijNotification = notificationManager.createNotification(
-        notification.title,
+        notification.title ?: "",
         notification.message,
         NotificationType.INFORMATION
     ).addAction(

@@ -5,11 +5,11 @@ import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.layout.ValidationInfoBuilder
 import com.intellij.ui.layout.panel
-import uk.co.ben_gibson.git.link.Settings
+import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomHostSettings
 import java.net.MalformedURLException
 import java.net.URL
 
-class CustomHostDialog(val customHost: Settings.CustomHostSettings) : DialogWrapper(false) {
+class CustomHostDialog(val customHost: CustomHostSettings) : DialogWrapper(false) {
     init {
         title = "Test DialogWrapper"
         setOKButtonText("Add")
@@ -37,10 +37,10 @@ class CustomHostDialog(val customHost: Settings.CustomHostSettings) : DialogWrap
 
     private fun validateName(builder: ValidationInfoBuilder, textField: JBTextField): ValidationInfo? {
         return builder.run {
-            val fieldText = textField.text
+            val fieldText = textField.text.trim()
             when {
                 fieldText.isEmpty() -> error("Name required")
-                !fieldText.matches("\\w+".toRegex()) -> error("Name can only contain alphanumeric characters")
+                !fieldText.matches("[\\w\\s]+".toRegex()) -> error("Name can only contain alphanumeric characters")
                 fieldText.length < 3 -> error("Name must be at least 3 characters")
                 fieldText.length > 15 -> error("Name cannot be more than 15 characters")
                 else -> null

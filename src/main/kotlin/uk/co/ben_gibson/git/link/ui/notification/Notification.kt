@@ -19,9 +19,8 @@ data class Notification(val title: String? = null, val message: String) {
         )
 
         fun performanceTips() = Notification(
-            message = """
-                GitLink taking too long? Would you like to disable checking for the commit on the remote? Disable
-            """.trimIndent()
+            message = "GitLink taking too long? Would you like to disable checking for the commit on the remote? Disable"
+                .trimIndent()
         )
 
         fun couldNotDetectGitHost(remoteHost: Host) = Notification(
