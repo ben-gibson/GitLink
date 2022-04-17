@@ -4,6 +4,16 @@
 
 ## [Unreleased]
 
+## 4.0.0
+
+- Completely re-written in Kotlin
+- Improve settings UI
+- Improve notifications
+- Support the creation of multiple custom hosts
+- Store custom hosts across projects
+- Auto-detect host when opening a new project
+- Many more fixes and improvements.
+
 ## 3.3.1
 
 - Add preference to disable check for a commit's existence on the remote. #97
