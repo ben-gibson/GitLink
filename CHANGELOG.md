@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+- Fixed settings button opening the wrong menu.
+
 ## 4.0.0
 
 - Completely re-written in Kotlin
