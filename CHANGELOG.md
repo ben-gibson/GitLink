@@ -5,6 +5,7 @@
 ## [Unreleased]
 
 - Fixed settings button opening the wrong menu.
+- Add shortcuts to editor gutter. #166
 
 ## 4.0.0
 

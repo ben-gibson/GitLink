@@ -8,7 +8,7 @@ import uk.co.ben_gibson.git.link.ContextCommit
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.ui.actions.Action
 
-class ClipboardAction: Action(Type.CLIPBOARD) {
+class CopyAction: Action(Type.COPY) {
     override fun buildContext(project: Project, event: AnActionEvent): Context? {
         val vcsLog = event.getData(VcsLogDataKeys.VCS_LOG) ?: return null
         val vcsCommit = vcsLog.selectedDetails[0]

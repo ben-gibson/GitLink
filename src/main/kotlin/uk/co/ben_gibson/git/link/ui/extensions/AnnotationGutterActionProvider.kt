@@ -8,9 +8,9 @@ import com.intellij.openapi.vcs.annotate.FileAnnotation
 import com.intellij.openapi.vcs.annotate.UpToDateLineNumberListener
 import git4idea.annotate.GitFileAnnotation
 import uk.co.ben_gibson.git.link.ui.actions.annotation.CommitBrowserAction
-import uk.co.ben_gibson.git.link.ui.actions.annotation.CommitClipboardAction
+import uk.co.ben_gibson.git.link.ui.actions.annotation.CommitCopyAction
 import uk.co.ben_gibson.git.link.ui.actions.annotation.FileBrowserAction
-import uk.co.ben_gibson.git.link.ui.actions.annotation.FileClipboardAction
+import uk.co.ben_gibson.git.link.ui.actions.annotation.FileCopyAction
 import com.intellij.openapi.vcs.annotate.AnnotationGutterActionProvider as IntellijAnnotationGutterActionProvider
 
 class AnnotationGutterActionProvider : IntellijAnnotationGutterActionProvider {
@@ -23,13 +23,13 @@ class AnnotationGutterActionProvider : IntellijAnnotationGutterActionProvider {
             is GitFileAnnotation -> arrayOf(
                 DefaultActionGroup(
                     "File",
-                    listOf(FileBrowserAction(annotation), FileClipboardAction(annotation))
+                    listOf(FileBrowserAction(annotation), FileCopyAction(annotation))
                 ).apply {
                     isPopup = true
                 },
                 DefaultActionGroup(
                     "Commit",
-                    listOf(CommitBrowserAction(annotation), CommitClipboardAction(annotation))
+                    listOf(CommitBrowserAction(annotation), CommitCopyAction(annotation))
                 ).apply {
                     isPopup = true
                 }

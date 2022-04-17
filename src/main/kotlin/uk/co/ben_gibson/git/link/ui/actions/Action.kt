@@ -11,7 +11,7 @@ abstract class Action(private val type: Type): AnAction() {
 
     enum class Type(val key: String) {
         BROWSER("browser"),
-        CLIPBOARD("clipboard")
+        COPY("copy")
     }
 
     abstract fun buildContext(project: Project, event: AnActionEvent) : Context?
@@ -23,7 +23,7 @@ abstract class Action(private val type: Type): AnAction() {
 
         when(type) {
             Type.BROWSER -> openInBrowser(project, context)
-            Type.CLIPBOARD -> copyToClipBoard(project, context)
+            Type.COPY -> copyToClipBoard(project, context)
         }
     }
 
