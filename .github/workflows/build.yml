@@ -67,7 +67,7 @@ jobs:
           echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
 
-          ./gradlew listProductsReleases # prepare list of IDEs for Plugin Verifier
+          # ./gradlew listproductsreleases # prepare list of ides for plugin verifier
 
       # Run tests
       - name: Run Tests
