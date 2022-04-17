@@ -2,6 +2,8 @@
 
 # GitLink Changelog
 
+## [Unreleased]
+
 ## 1.5.4
 
 - Fixed issue with branch encoding for `GitHub` and `GitLab` hosts.
