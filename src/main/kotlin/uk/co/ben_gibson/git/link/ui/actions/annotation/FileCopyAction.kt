@@ -9,8 +9,8 @@ import uk.co.ben_gibson.git.link.ContextFileAtCommit
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.ui.actions.Action
 
-class FileClipboardAction(private val annotation: GitFileAnnotation):
-    Action(Type.CLIPBOARD),
+class FileCopyAction(private val annotation: GitFileAnnotation):
+    Action(Type.COPY),
     UpToDateLineNumberListener
 {
     private var lineNumber = -1
