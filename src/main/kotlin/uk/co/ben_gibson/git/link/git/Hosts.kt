@@ -4,8 +4,9 @@ import git4idea.repo.GitRemote
 import java.util.UUID
 
 class Hosts(private val hosts: Set<Host>) {
+
     fun getById(id: String) = getById(UUID.fromString(id))
-    fun getById(id: UUID) = hosts.first { it.id == id }
+    fun getById(id: UUID) = hosts.firstOrNull() { it.id == id }
 
     fun forRemote(remote: GitRemote) = remote.httpUrl()
         ?.host

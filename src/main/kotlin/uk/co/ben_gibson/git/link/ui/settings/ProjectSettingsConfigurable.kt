@@ -13,26 +13,26 @@ import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JList
 
-class ProjectSettingsConfigurable(project : Project) : BoundConfigurable("Foo Bar", "Test"), ApplicationSettings.ChangeListener {
+class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message("settings.general.group.title")), ApplicationSettings.ChangeListener {
     private val settings = project.service<ProjectSettings>()
     private val hostsComboBoxModel: DefaultComboBoxModel<Host>
-    private val initialHost: Host
+    private val initialHost: Host?
 
     init {
         val hosts = service<HostsProvider>().provide()
 
-        initialHost = hosts.getById(settings.host)
+        initialHost = settings.host?.let { hosts.getById(it) }
         hostsComboBoxModel = DefaultComboBoxModel(hosts.toArray())
 
         service<ApplicationSettings>().registerListener(this)
     }
 
     override fun createPanel() = panel {
-        row(message("settings.host.label")) {
+        row(message("settings.general.field.host.label")) {
             comboBox(
                 hostsComboBoxModel,
                 { initialHost },
-                { settings.host = it!!.id.toString() },
+                { settings.host = it?.id?.toString() },
                 object : SimpleListCellRenderer<Host>() {
                     override fun customize(
                         list: JList<out Host>,
@@ -48,36 +48,42 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable("Foo Ba
                 }
             )
         }
-        row(message("settings.fallback-branch.label")) {
+        row(message("settings.general.field.fallback-branch.label")) {
             textField(settings::fallbackBranch)
         }
-        row(message("settings.remote.label")) {
+        row(message("settings.general.field.remote.label")) {
             textField(settings::remote)
         }
-        titledRow("Advanced") {
-            row(message("settings.force-https.label")) {
-                checkBox(message("settings.force-https.label"), settings::forceHttps)
+        titledRow(message("settings.general.section.advanced.label")) {
+            row(message("settings.general.field.force-https.label")) {
+                checkBox(message("settings.general.field.force-https.label"), settings::forceHttps)
             }
-            row(message("settings.check-commit-on-remote.label")) {
+            row(message("settings.general.field.check-commit-on-remote.label")) {
                 checkBox(
-                    message("settings.check-commit-on-remote.label"),
+                    message("settings.general.field.check-commit-on-remote.label"),
                     settings::checkCommitOnRemote,
-                    comment = "foo bar baz"
+                    comment = message("settings.general.field.check-commit-on-remote.help")
                 )
             }
         }
         row {
-            browserLink("Report a bug", "https://github.com/ben-gibson/GitLink/issues")
+            browserLink(message("actions.report-bug.title"), "https://github.com/ben-gibson/GitLink/issues")
         }
     }
 
     override fun onChange() {
         val current = hostsComboBoxModel.selectedItem
+        val updatedHosts = service<HostsProvider>().provide().toSet();
 
         hostsComboBoxModel.apply {
             removeAllElements()
-            addAll(service<HostsProvider>().PROVIDE().toSet())
-            selectedItem = current
+            addAll(service<HostsProvider>().provide().toSet())
+
+            if (updatedHosts.contains(current)) {
+                selectedItem = current
+            } else {
+                selectedItem = null
+            }
         }
     }
 }

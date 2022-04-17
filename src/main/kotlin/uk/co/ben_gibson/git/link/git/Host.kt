@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.git.link.git
 
-import uk.co.ben_gibson.git.link.url.template.UrlTemplate
+import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import java.net.URL
 import java.util.UUID
 import javax.swing.Icon
@@ -16,9 +16,9 @@ val HOST_ID_AZURE: UUID = UUID.fromString("83008277-73fa-4faa-b9b2-0a60fecb030e"
 sealed class Host(val id: UUID, val displayName: String, val icon: Icon, val baseUrl: URL? = null)
 
 class TemplatedHost(
-    id: UUID,
-    displayName: String,
-    icon: Icon,
-    val urlTemplate: UrlTemplate,
-    baseUrl: URL? = null
+        id: UUID,
+        displayName: String,
+        icon: Icon,
+        val urlTemplate: UrlTemplates,
+        baseUrl: URL? = null
 ) : Host(id, displayName, icon, baseUrl)

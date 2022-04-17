@@ -6,15 +6,15 @@ import git4idea.repo.GitRepository
 /**
  * Represents a repository file, where the path is relative to the repository it lives in.
  */
-data class File constructor(private val file: VirtualFile, private val root: VirtualFile) {
-    val isDirectory = file.isDirectory
-    val name = file.name
-    val path = file.path.substring(root.path.length).replace(name, "").trimEnd('/')
-    val isRoot = file.path == root.path
-
+data class File(val name: String, val isDirectory: Boolean, val path: String, val isRoot: Boolean) {
     companion object {
-        fun create(file: VirtualFile, repository: GitRepository): File {
-            return File(file, repository.root)
+        fun forRepository(file: VirtualFile, repository: GitRepository): File {
+            return File(
+                file.name,
+                file.isDirectory,
+                file.path.substring(repository.root.path.length).replace(file.name, "").trimEnd('/'),
+                file.path == repository.root.path
+            )
         }
     }
 }

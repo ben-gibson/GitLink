@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
+import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
@@ -15,6 +16,7 @@ import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
 import uk.co.ben_gibson.git.link.url.factory.UrlFactoryLocator
+import uk.co.ben_gibson.git.link.url.toHttps
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.net.URL
@@ -33,28 +35,37 @@ fun copyToClipBoard(project: Project, context: Context) {
 }
 
 private fun processGitLink(project: Project, context: Context, handle: (URL) -> Unit) {
-    runBackgroundableTask("Foo", project, false) {
+    runBackgroundableTask(message("name"), project, false) {
         val time = timeOperation { process(project, context, handle) }
 
-        if (time < 1000) {
+        if (time > 1000 || !project.service<ProjectSettings>().checkCommitOnRemote) {
             return@runBackgroundableTask
         }
 
-        sendNotification(project, Notification.performanceTips())
+        sendNotification(project, Notification.performanceTips(project))
     }
 }
 
 private fun process(project: Project, context: Context, handle: (URL) -> Unit) {
     val settings = project.service<ProjectSettings>()
-    val hosts = project.service<HostsProvider>().provide()
-    val host = hosts.getById(settings.host)
+
+    val host = project.service<HostLocator>().locate()
+
+    if (host == null) {
+        sendNotification(project, Notification.hostNotSet(project))
+        return
+    }
 
     val repository = locateRepository(project, context.file) ?: return
     val urlFactory = project.service<UrlFactoryLocator>().locate(host)
 
     val remote = findRemote(project, repository, settings) ?: return
-    val remoteBaseUrl = remote.httpUrl() ?: return
-    val repositoryFile = File.create(context.file, repository)
+    var remoteBaseUrl = remote.httpUrl() ?: return
+    val repositoryFile = File.forRepository(context.file, repository)
+
+    if (settings.forceHttps) {
+        remoteBaseUrl = remoteBaseUrl.toHttps()
+    }
 
     val urlOptions = when(context) {
         is ContextFileAtCommit -> UrlOptionsFileAtCommit(remoteBaseUrl, repositoryFile, context.commit, context.lineSelection)

@@ -4,23 +4,39 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 
-## Template ToDo list
-- [x] Create a new [IntelliJ Platform Plugin Template][template] project.
-- [ ] Get familiar with the [template documentation][template].
-- [ ] Verify the [pluginGroup](/gradle.properties), [plugin ID](/src/main/resources/META-INF/plugin.xml) and [sources package](/src/main/kotlin).
-- [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html).
-- [ ] [Publish a plugin manually](https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate) for the first time.
-- [ ] Set the Plugin ID in the above README badges.
-- [ ] Set the [Deployment Token](https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html).
-- [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
-
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
+A Jetbrains plugin providing shortcuts to open or copy resources such as a file or commit in `GitHub`, `Bitbucket`, 
+`GitLab`, `Gitea`, `Gogs` or `GitBlit`. Custom hosts can also be configured using the URL template
+syntax.
 
-To keep everything working, do not remove `<!-- ... -->` sections.
 <!-- Plugin description end -->
+
+## Usage
+
+Install the plugin and configure your remote host if it hasn't been auto detected already:
+
+      Preferences → Tools → GitLink
+
+Make sure you have registered your projects root under the version control preferences:
+
+      Preferences → Version Control (see unregistered roots)
+
+To open the current file in the default browser:
+
+      View → Open in (your selected host) or
+      Select in... → Browser (GitLink)
+
+Additional shortcuts are als available from the annotation gutter, VCS log window and select in window.
+
+A URL can be generated to one of the following resources. 
+
+* Fle at commit
+* File at branch
+* Commit
+
+By default, when generating a URL for a file, the latest commit will be included as part of the URL to provide a 
+fixed snapshot of the file. If the latest commit is unknown or not on the remote, the branch will be used instead. 
 
 ## Installation
 
@@ -31,11 +47,18 @@ To keep everything working, do not remove `<!-- ... -->` sections.
 
 - Manually:
 
-  Download the [latest release](https://github.com/%REPOSITORY%/releases/latest) and install it manually using
+  Download the [latest release](https://github.com/ben-gibson/GitLink/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
+  
+## Change log
 
----
-Plugin based on the [IntelliJ Platform Plugin Template][template].
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## License
+
+Please see [LICENSE](LICENSE) for details.

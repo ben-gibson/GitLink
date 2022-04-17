@@ -5,8 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.*
-import uk.co.ben_gibson.git.link.git.HostsProvider
-import uk.co.ben_gibson.git.link.settings.ProjectSettings
+import uk.co.ben_gibson.git.link.git.HostLocator
 
 abstract class Action(private val type: Type): AnAction() {
 
@@ -33,17 +32,17 @@ abstract class Action(private val type: Type): AnAction() {
     override fun update(event: AnActionEvent) {
         super.update(event)
 
-        event.presentation.isEnabled = event.project != null && shouldBeEnabled(event)
+        event.presentation.isEnabled = event.project != null
 
         val project = event.project ?: return
 
-        val settings = project.service<ProjectSettings>()
-        val hosts = project.service<HostsProvider>().provide()
-        val host = hosts.getById(settings.host)
+        val host = project.service<HostLocator>().locate()
 
-        settings.let {
-            event.presentation.icon = host.icon
-            event.presentation.text = GitLinkBundle.message("actions.${type.key}.title", host.displayName)
+        event.presentation.isEnabled = host != null && shouldBeEnabled(event)
+
+        host?.let {
+            event.presentation.icon = it.icon
+            event.presentation.text = GitLinkBundle.message("actions.${type.key}.title", it.displayName)
         }
     }
 }

@@ -11,15 +11,16 @@ import com.intellij.util.ui.ListTableModel
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomHostSettings
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
+import uk.co.ben_gibson.git.link.GitLinkBundle.message
 
-class ApplicationSettingsConfigurable : BoundConfigurable("Foo Bar", "Test") {
+class ApplicationSettingsConfigurable : BoundConfigurable(message("settings.custom-host.group.title")) {
     private var settings = service<ApplicationSettings>()
     private var customHosts = settings.customHosts.toMutableList()
 
     private val customHostsTable = TableView(createCustomHostModel()).apply {
         setShowColumns(true)
         setSelectionMode(SINGLE_SELECTION)
-        emptyText.text = "No custom hosts"
+        emptyText.text = message("settings.custom-host.table.empty")
     }
 
     private val customHostTableContainer = ToolbarDecorator.createDecorator(customHostsTable)
@@ -33,14 +34,14 @@ class ApplicationSettingsConfigurable : BoundConfigurable("Foo Bar", "Test") {
             component(customHostTableContainer).constraints(CCFlags.grow)
         }
         row {
-            browserLink("Report a bug", "https://github.com/ben-gibson/GitLink/issues")
+            browserLink(message("actions.report-bug.title"), "https://github.com/ben-gibson/GitLink/issues")
         }
     }
 
     private fun createCustomHostModel(): ListTableModel<CustomHostSettings> = ListTableModel(
         arrayOf(
-            createCustomHostColumn("Host Name") { customHost -> customHost?.displayName },
-            createCustomHostColumn("Base URL") { customHost -> customHost?.baseUrl },
+            createCustomHostColumn(message("settings.custom-host.table.column.name")) { customHost -> customHost?.displayName },
+            createCustomHostColumn(message("settings.custom-host.table.column.base-url")) { customHost -> customHost?.baseUrl },
         ),
         customHosts
     )

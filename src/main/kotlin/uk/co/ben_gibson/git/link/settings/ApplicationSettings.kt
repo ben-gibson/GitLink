@@ -22,6 +22,8 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
             notifyListeners()
         }
 
+    var lastVersion: String? = null
+
     override fun getState() = this
 
     override fun loadState(state: ApplicationSettings) {

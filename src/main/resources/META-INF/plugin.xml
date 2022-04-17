@@ -6,6 +6,10 @@
 
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
+    <description>
+        A Jetbrains plugin open or copy git URLs to a remote host. Supports `GitHub`, `Bitbucket`, `GitLab`, `Gitea`, `Gogs`
+        and `GitBlit` out of the box, while additional hosts can be configured using custom URL templates.
+    </description>
 
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="uk.co.ben_gibson.git.link.settings.ProjectSettings"/>
@@ -29,12 +33,6 @@
         />
     </extensions>
 
-    <applicationListeners>
-        <listener
-            class="uk.co.ben_gibson.git.link.listeners.MyProjectManagerListener"
-            topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
-
     <!-- UI -->
     <resource-bundle>messages.ActionsBundle</resource-bundle>
 
@@ -43,7 +41,7 @@
             id="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction"
             class="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction"
         >
-            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <add-to-group group-id="Git.MainMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu"/>
             <add-to-group group-id="ProjectViewPopupMenu"/>
             <add-to-group group-id="EditorTabPopupMenu"/>
@@ -54,12 +52,12 @@
             id="uk.co.ben_gibson.git.link.ui.actions.menu.CopyAction"
             class="uk.co.ben_gibson.git.link.ui.actions.menu.CopyAction"
         >
-            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <add-to-group group-id="Git.MainMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu"/>
             <add-to-group group-id="ProjectViewPopupMenu"/>
             <add-to-group group-id="EditorTabPopupMenu"/>
-            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl O"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl C"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
         </action>
         <action
             id="uk.co.ben_gibson.git.link.ui.actions.vcslog.BrowserAction"

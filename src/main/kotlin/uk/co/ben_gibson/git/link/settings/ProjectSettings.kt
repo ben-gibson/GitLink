@@ -4,7 +4,6 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
-import uk.co.ben_gibson.git.link.git.HOST_ID_GITHUB
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -13,7 +12,7 @@ import uk.co.ben_gibson.git.link.git.HOST_ID_GITHUB
  */
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
 class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
-    var host = HOST_ID_GITHUB.toString()
+    var host: String? = null
     var fallbackBranch = "master"
     var remote = "origin"
     var checkCommitOnRemote = true

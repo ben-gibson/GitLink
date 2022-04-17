@@ -23,6 +23,14 @@ version = properties("pluginVersion")
 repositories {
     mavenCentral()
 }
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
@@ -47,6 +55,8 @@ qodana {
     saveReport.set(true)
     showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
 }
+
+
 
 tasks {
     // Set the JVM compatibility versions
