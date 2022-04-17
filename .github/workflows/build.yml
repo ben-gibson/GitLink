@@ -81,6 +81,10 @@ jobs:
           name: tests-result
           path: ${{ github.workspace }}/build/reports/tests
 
+      # Run tests
+      - name: Build Plugin
+        run: ./gradlew buildPlugin
+
       # Cache Plugin Verifier IDEs
 #      - name: Setup Plugin Verifier IDEs Cache
 #        uses: actions/cache@v2.1.7
