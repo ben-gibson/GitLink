@@ -24,7 +24,7 @@ object GitLinkBundle : DynamicBundle(BUNDLE) {
         getLazyMessage(key, *params)
 
     fun openPluginSettings(project: Project) {
-        ShowSettingsUtil.getInstance().showSettingsDialog(project, "GitLink.Settings")
+        ShowSettingsUtil.getInstance().showSettingsDialog(project, "GitLink.ProjectSettings")
     }
 
     fun plugin() = PluginManagerCore.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper"))

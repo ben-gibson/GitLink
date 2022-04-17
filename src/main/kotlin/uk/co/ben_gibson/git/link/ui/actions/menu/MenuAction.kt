@@ -16,8 +16,6 @@ abstract class MenuAction(type: Type) : Action(type) {
         val editor: Editor? = FileEditorManager.getInstance(project).selectedTextEditor
         val lineSelection = editor?.lineSelection
 
-        //ShowSettingsUtilImpl.showSettingsDialog(event.project, "GitLink.Settings", null)
-
         return ContextCurrentFile(file, lineSelection)
     }
 }
