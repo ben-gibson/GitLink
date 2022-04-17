@@ -1,46 +1,47 @@
-<idea-plugin url="https://github.com/ben-gibson/GitLink">
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
-    <vendor url="https://github.com/ben-gibson/GitLink">Ben Gibson</vendor>
-
-    <depends>com.intellij.modules.vcs</depends>
-    <depends>com.intellij.modules.lang</depends>
+    <vendor url="https://github.com/ben-gibson">Ben Gibson</vendor>
+    <idea-version since-build="213" />
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
-
-    <idea-version since-build="212.4746" />
+    <description>
+        A Jetbrains plugin open or copy git URLs to a remote host. Supports `GitHub`, `Bitbucket`, `GitLab`, `Gitea`, `Gogs`
+        and `GitBlit` out of the box, while additional hosts can be configured using custom URL templates.
+    </description>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceImplementation="uk.co.ben_gibson.git.link.Git.RepositoryLocator" />
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.UI.ExceptionRenderer" />
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Modifier.UrlModifierProvider" />
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Plugin"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Substitution.URLTemplateProcessor"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Handler.BrowserHandler"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Handler.ClipboardHandler"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.BitbucketCloudUrlFactory"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.BitbucketServerUrlFactory"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.GitBlitUrlFactory"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.GitHubUrlFactory"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.GitLabUrlFactory"/>
-        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.GogsUrlFactory"/>
-        <projectService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.UrlFactoryLocator"/>
-        <projectService serviceImplementation="uk.co.ben_gibson.git.link.Url.Factory.CustomUrlFactory"/>
-        <projectService serviceImplementation="uk.co.ben_gibson.git.link.Preferences"/>
-        <projectService serviceImplementation="uk.co.ben_gibson.git.link.GitLink" />
-        <projectConfigurable instance="uk.co.ben_gibson.git.link.UI.Settings.ConfigurableSettings"/>
-        <selectInTarget implementation="uk.co.ben_gibson.git.link.UI.Extensions.BrowserSelectInTarget"/>
-        <vcsAnnotationGutterActionProvider implementation="uk.co.ben_gibson.git.link.UI.Extensions.AnnotationGutterActionProvider" />
+        <projectService serviceImplementation="uk.co.ben_gibson.git.link.settings.ProjectSettings"/>
+        <applicationService serviceImplementation="uk.co.ben_gibson.git.link.settings.ApplicationSettings"/>
+        <notificationGroup id="GitLink Notification Group" displayType="BALLOON" key="notification.group.name"/>
+        <postStartupActivity implementation="uk.co.ben_gibson.git.link.StartupActivity"/>
+        <vcsAnnotationGutterActionProvider
+            implementation="uk.co.ben_gibson.git.link.ui.extensions.AnnotationGutterActionProvider"/>
+        <selectInTarget implementation="uk.co.ben_gibson.git.link.ui.extensions.SelectInTarget"/>
+        <projectConfigurable
+            parentId="tools"
+            instance="uk.co.ben_gibson.git.link.ui.settings.ProjectSettingsConfigurable"
+            id="GitLink.ProjectSettings"
+            displayName="GitLink"
+        />
+        <applicationConfigurable
+            parentId="GitLink.ProjectSettings"
+            instance="uk.co.ben_gibson.git.link.ui.settings.ApplicationSettingsConfigurable"
+            id="GitLink.ApplicationSettings"
+            displayName="Custom Hosts"
+        />
     </extensions>
+
+    <!-- UI -->
+    <resource-bundle>messages.ActionsBundle</resource-bundle>
 
     <actions>
         <action
-            id="uk.co.ben_gibson.git.link.UI.Action.Menu.MenuAction.Browser"
-            class="uk.co.ben_gibson.git.link.UI.Action.Menu.BrowserMenuAction"
-            text="Open in Git Host"
-            description="Opens the file in the git host using the default browser"
+            id="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.menu.BrowserAction"
         >
-            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <add-to-group group-id="Git.MainMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu"/>
             <add-to-group group-id="ProjectViewPopupMenu"/>
             <add-to-group group-id="EditorTabPopupMenu"/>
@@ -48,12 +49,10 @@
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl O"/>
         </action>
         <action
-            id="uk.co.ben_gibson.git.link.UI.Action.Menu.MenuAction.Clipboard"
-            class="uk.co.ben_gibson.git.link.UI.Action.Menu.ClipboardMenuAction"
-            text="Copy Link to Git Host"
-            description="Copies a link to the clipboard pointing to the file in the git host"
+            id="uk.co.ben_gibson.git.link.ui.actions.menu.CopyAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.menu.CopyAction"
         >
-            <add-to-group group-id="ViewMenu" anchor="last"/>
+            <add-to-group group-id="Git.MainMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu"/>
             <add-to-group group-id="ProjectViewPopupMenu"/>
             <add-to-group group-id="EditorTabPopupMenu"/>
@@ -61,22 +60,18 @@
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
         </action>
         <action
-            id="uk.co.ben_gibson.git.link.UI.Action.VcsLog.BrowserVcsAction"
-            class="uk.co.ben_gibson.git.link.UI.Action.VcsLog.BrowserVcsAction"
-            text="Open in Git Host"
-            description="Opens the commit in the git host using the default browser"
+            id="uk.co.ben_gibson.git.link.ui.actions.vcslog.BrowserAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.vcslog.BrowserAction"
         >
-            <add-to-group group-id="Git.LogContextMenu" />
-            <add-to-group group-id="Vcs.Log.ContextMenu" />
+            <add-to-group group-id="Git.LogContextMenu"/>
+            <add-to-group group-id="Vcs.Log.ContextMenu"/>
         </action>
         <action
-            id="uk.co.ben_gibson.git.link.UI.Action.VcsLog.ClipboardVcsAction"
-            class="uk.co.ben_gibson.git.link.UI.Action.VcsLog.ClipboardVcsAction"
-            text="Copy Link to Git Host"
-            description="Copies a link to the clipboard pointing to the commit in the git host"
+            id="uk.co.ben_gibson.git.link.ui.actions.vcslog.ClipboardAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.vcslog.ClipboardAction"
         >
-            <add-to-group group-id="Git.LogContextMenu" />
-            <add-to-group group-id="Vcs.Log.ContextMenu" />
+            <add-to-group group-id="Git.LogContextMenu"/>
+            <add-to-group group-id="Vcs.Log.ContextMenu"/>
         </action>
     </actions>
 </idea-plugin>
