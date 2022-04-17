@@ -38,7 +38,7 @@ private fun processGitLink(project: Project, context: Context, handle: (URL) -> 
     runBackgroundableTask(message("name"), project, false) {
         val time = timeOperation { process(project, context, handle) }
 
-        if (time > 1000 || !project.service<ProjectSettings>().checkCommitOnRemote) {
+        if (time < 1000 || !project.service<ProjectSettings>().checkCommitOnRemote) {
             return@runBackgroundableTask
         }
 
