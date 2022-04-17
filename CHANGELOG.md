@@ -4,60 +4,69 @@
 
 ## [Unreleased]
 
-## 1.5.4
+## 3.3.1
 
-- Fixed issue with branch encoding for `GitHub` and `GitLab` hosts.
-- Fixed issue with origins using `git` protocol.
+- Add preference to disable check for a commit's existence on the remote. #97
 
-## 1.5.5
+## 3.3.0
 
-- Run plugin process on a background thread to prevent UI freezes.
+- Re-added support for copying links to the clipboard. #85
 
-## 1.5.6
+## 3.2.0
 
-- Ability to open a specific commit from the VCS log tool window.
+- Rebuilt the substitution system used for the Custom host type. This system is now also used under the hood for most
+  pre-defined host types. #92
 
-## 1.5.7
+## 3.1.2
 
--  Fixed: Select target action now uses the correct line number when used from the editor. (#24 PR by markiewb)
+- Fix issue resulting in an invalid URL for project/organisation names made up digits when the remote URL uses
+  the SSH protocol in the SCP syntax. #94
 
-## 1.6.0
+## 3.1.1
 
-- Support GitBlit #26
+- Fix multi-line selection in GitLab. #86
 
-## 1.6.1
+## 3.1.0
 
-- Support more shortcuts.
-- Added host icons.
-- Minor refactors.
+- Support for multiline selection. #77
+- Renamed the host Stash to Bitbucket Server
 
-## 1.6.2
+## 3.0.0
 
-- Added analytics
+- Added ability to disable the plugin per project. #79
+- Added support for hosts Giea and Gogs. #80
+- Removed copy link action.
+- Code base cleanup.
 
-## 1.6.3
+## 2.4.0
 
-- Improved analytics
+- Add open commit action to annotation gutter. #70
+- Respect line number when using from the annotation gutter. #68
+- Removed copy link action from annotation gutter.
 
-## 1.6.4
+## 2.3.1
 
-- Tweaked analytics
+- Fixed bug which caused an incorrect URL to be created from the VCS log.
+- Added GitBlit support to open a file at a specific commit. #65
 
-## 1.6.5
+## 2.3.0
 
-- Removed analytics.
+- Generate link to file at commit instead of branch where possible. #61
+- Added actions to annotation gutter. #57
+- Allow remote name to be configured from the preferences. #60
+- Minor bug fixes and improvements.
 
-## 1.6.6
+## 2.2.0
 
-- Fixed incompatibility issue with save actions plugin. Note that you have to configure the plugin again!
+- Added support for GitBlit. #41
 
-## 2.0.0
+## 2.1.2
 
-- Rebuilt the entire plugin! Note that you have to configure the plugin again!
+- Fixed issue preventing port numbers with more than 4 digits being removed #52.
 
-## 2.0.1
+## 2.1.1
 
-- Fixed encoding issue when URL contains non-ASCII characters. #40
+- Fixed force HTTPS option.
 
 ## 2.1.0
 
@@ -67,74 +76,57 @@
 - Make default branch customisable #45
 - Add custom URL factory #44
 
-## 2.1.1
+## 2.0.1
 
-- Fixed force HTTPS option.
+- Fixed encoding issue when URL contains non-ASCII characters. #40
 
-## 2.1.2
+## 2.0.0
 
-- Fixed issue preventing port numbers with more than 4 digits being removed #52.
+- Rebuilt the entire plugin! Note that you have to configure the plugin again!
 
-## 2.2.0
+## 1.6.6
 
-- Added support for GitBlit. #41
+- Fixed incompatibility issue with save actions plugin. Note that you have to configure the plugin again!
 
-## 2.3.0
+## 1.6.5
 
-- Generate link to file at commit instead of branch where possible. #61
-- Added actions to annotation gutter. #57
-- Allow remote name to be configured from the preferences. #60
-- Minor bug fixes and improvements.
+- Removed analytics.
 
-## 2.3.1
+## 1.6.4
 
-- Fixed bug which caused an incorrect URL to be created from the VCS log.
-- Added GitBlit support to open a file at a specific commit. #65
+- Tweaked analytics
 
-## 2.4.0
+## 1.6.3
 
-- Add open commit action to annotation gutter. #70
-- Respect line number when using from the annotation gutter. #68
-- Removed copy link action from annotation gutter.
+- Improved analytics
 
-## 3.0.0
+## 1.6.2
 
-- Added ability to disable the plugin per project. #79
-- Added support for hosts Giea and Gogs. #80
-- Removed copy link action.
-- Code base cleanup.
+- Added analytics
 
-## 3.1.0
+## 1.6.1
 
-- Support for multiline selection. #77
-- Renamed the host Stash to Bitbucket Server
+- Support more shortcuts.
+- Added host icons.
+- Minor refactors.
 
-## 3.1.1
+## 1.6.0
 
-- Fix multi-line selection in GitLab. #86
+- Support GitBlit #26
 
-## 3.1.2
+## 1.5.7
 
-- Fix issue resulting in an invalid URL for project/organisation names made up digits when the remote URL uses
-  the SSH protocol in the SCP syntax. #94
+-  Fixed: Select target action now uses the correct line number when used from the editor. (#24 PR by markiewb)
 
-## 3.2.0
+## 1.5.6
 
-- Rebuilt the substitution system used for the Custom host type. This system is now also used under the hood for most
-  pre-defined host types. #92
+- Ability to open a specific commit from the VCS log tool window.
 
-## 3.3.0
+## 1.5.5
 
-- Re-added support for copying links to the clipboard. #85
+- Run plugin process on a background thread to prevent UI freezes.
 
-## 3.3.1
+## 1.5.4
 
-- Add preference to disable check for a commit's existence on the remote. #97
-
-## 4.0.0
-
-- Complete re-write
-- Notification improvements
-- Add logo
-- Support multiple custom hosts and store them at the application level for reuse between projects
-- Fix issue preventing URL generating of the root project
+- Fixed issue with branch encoding for `GitHub` and `GitLab` hosts.
+- Fixed issue with origins using `git` protocol.

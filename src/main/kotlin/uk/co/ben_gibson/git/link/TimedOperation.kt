@@ -1,11 +1,11 @@
 package uk.co.ben_gibson.git.link
 
 inline fun timeOperation(operation: () -> Unit) : Long {
-    val startTime = System.nanoTime()
+    val startTime = System.currentTimeMillis()
 
     operation()
 
-    val endTime = System.nanoTime()
+    val endTime = System.currentTimeMillis()
 
-    return endTime - startTime
+    return (endTime - startTime)
 }
