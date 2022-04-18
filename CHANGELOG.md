@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 
+## [4.0.2]
 - Add images to README
 - Add Open Collective link to README
 - Fix issue where the '#' character in a file name is not correctly encoded.
