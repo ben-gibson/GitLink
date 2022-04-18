@@ -5,10 +5,8 @@ import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
-import java.net.URI
 import java.net.URL
 import java.util.regex.Pattern
-
 
 class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
     private val remotePathPattern = Pattern.compile("\\{remote:url:path:(\\d)}")
@@ -22,20 +20,9 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
 
         processTemplate = processBaseUrl(processTemplate, options.baseUrl)
         processTemplate = removeUnmatchedSubstitutions(processTemplate)
+        processTemplate = processTemplate.replace("(?<!:)/{2,}".toRegex(), "/")
 
-        val url = URL(processTemplate)
-
-        val uri = URI(
-            url.protocol,
-            null,
-            url.host,
-            url.port,
-            url.path.replace("/{2,}".toRegex(), "/").trimEnd('/'),
-            url.query,
-            url.ref
-        );
-
-        return URL(uri.toASCIIString())
+        return URL(processTemplate).trimPath()
     }
 
     private fun removeUnmatchedSubstitutions(template: String) = template.replace("\\{.+?}".toRegex(), "")
@@ -87,12 +74,12 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
     }
 
     private fun processBranch(template: String, branch: String) = template
-        .replace("{branch}", branch)
+        .replace("{branch}", encode(branch))
 
     private fun processFile(template: String, file: File) = template
         .replace("{object}", if (file.isDirectory) "tree" else "blob")
-        .replace("{file:name}", if (file.isRoot) "" else file.name)
-        .replace("{file:path}", file.path)
+        .replace("{file:name}", if (file.isRoot) "" else encode(file.name))
+        .replace("{file:path}", file.path.split("/").map { encode(it) }.joinToString("/"))
 
     private fun processCommit(template: String, commit: Commit) = template
         .replace("{commit}", commit.toString())
