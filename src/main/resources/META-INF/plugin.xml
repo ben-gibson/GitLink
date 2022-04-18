@@ -7,8 +7,8 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
     <description>
-        A Jetbrains plugin open or copy git URLs to a remote host. Supports `GitHub`, `Bitbucket`, `GitLab`, `Gitea`, `Gogs`
-        and `GitBlit` out of the box, while additional hosts can be configured using custom URL templates.
+        A Jetbrains plugin open or copy git URLs to a remote host. Supports `GitHub`, `Bitbucket`, `GitLab`, `Gitea`, `Gogs`,
+        and `Azure` out of the box, while additional hosts can be configured using custom URL templates.
     </description>
 
     <extensions defaultExtensionNs="com.intellij">
