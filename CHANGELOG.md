@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+- Add images to README
+- Add Open Collective link to README
+
 ## [4.0.1]
 - Fixed settings button opening the wrong menu.
 - Add shortcuts to editor gutter. #166
