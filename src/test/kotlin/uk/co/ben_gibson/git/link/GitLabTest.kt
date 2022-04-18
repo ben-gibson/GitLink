@@ -41,6 +41,15 @@ class GitLabTest {
                 "https://gitlab.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#L10-20"
             ),
             Arguments.of(
+                UrlOptionsFileAtBranch(
+                    REMOTE_BASE_URL,
+                    File("Code.cs", false, "Assets/#/Sources", false),
+                    BRANCH,
+                    LINE_SELECTION
+                ),
+                "https://gitlab.com/my/repo/blob/master/Assets/%23/Sources/Code.cs#L10-20"
+            ),
+            Arguments.of(
                 UrlOptionsFileAtCommit(
                     REMOTE_BASE_URL,
                     File("resources", true, "src/foo", false),

@@ -16,3 +16,21 @@ fun URL.toHttps(): URL {
 
     return URL("https", host, port, normalised)
 }
+
+fun URL.trimPath(): URL {
+    if (!path.endsWith("/")) {
+        return this;
+    }
+
+    var normalisedFile = path.trimEnd('/')
+
+    query?.let {
+        normalisedFile = normalisedFile.plus("?${query}")
+    }
+
+    ref?.let {
+        normalisedFile = normalisedFile.plus("#${ref}")
+    }
+
+    return URL(protocol, host, port, normalisedFile)
+}
