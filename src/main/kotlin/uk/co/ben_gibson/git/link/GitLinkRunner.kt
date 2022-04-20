@@ -31,7 +31,7 @@ fun copyToClipBoard(project: Project, context: Context) {
             StringSelection(it.toString()),
             null
         )
-        sendNotification(Notification.linkCopied(), project)
+        sendNotification(Notification.linkCopied(it), project)
     }
 }
 

@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.git.link.ui.notification
 
+import com.intellij.ide.browsers.BrowserLauncher
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.GitLinkBundle
@@ -8,6 +9,7 @@ import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.git.Host
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
+import java.net.URL
 
 data class Notification(
     val title: String? = null,
@@ -62,7 +64,12 @@ data class Notification(
             actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
         )
 
-        fun linkCopied() = Notification(DEFAULT_TITLE, message("notifications.copied-to-clipboard"), type = Type.TRANSIENT)
+        fun linkCopied(link: URL) = Notification(
+            DEFAULT_TITLE,
+            message("notifications.copied-to-clipboard"),
+            setOf(NotificationAction.openUrl(link)),
+            Type.TRANSIENT,
+        )
     }
 
     fun isTransient() = type == Type.TRANSIENT
@@ -75,9 +82,13 @@ data class NotificationAction(val title: String, val run: () -> Unit) {
             openPluginSettings(project)
         }
 
-        fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.take-me-there")) {
+        fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) {
             GitLinkBundle.openRepository()
             onComplete()
+        }
+
+        fun openUrl(url: URL, title: String = message("actions.take-me-there")) = NotificationAction(title) {
+            BrowserLauncher.instance.open(url.toString());
         }
 
         fun disableCheckCommitOnRemote(project: Project) = NotificationAction(message("actions.disable")) {
