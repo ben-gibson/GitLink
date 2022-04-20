@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 
+## [4.0.3]
 - Add support for Ukraine in README
 - Add notification on successful copy action
 - Improve notification messages
