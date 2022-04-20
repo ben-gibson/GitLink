@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+- Add support for Ukraine in README
+- Add notification on successful copy action
+- Improve notification messages
+- Make some notifications sticky
+- Add request for support notification
+
 ## [4.0.2]
 - Add images to README
 - Add Open Collective link to README

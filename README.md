@@ -6,6 +6,7 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Backers](https://opencollective.com/gitlink/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/gitlink)
 [![Sponsors](https://opencollective.com/gitlink/tiers/sponsor/badge.svg?label=sponsor&color=brightgreen)](https://opencollective.com/gitlink)
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 
 <!-- Plugin description -->
 
@@ -28,7 +29,7 @@ syntax.
 
 ## Usage
 
-Install the plugin and configure your remote host if it hasn't been auto detected already:
+Install the plugin and configure your remote host if it hasn't been auto-detected already:
 
       Preferences → Tools → GitLink
 
@@ -69,7 +70,7 @@ fixed snapshot of the file. If the latest commit is unknown or not on the remote
 * Star the repository
 * [Rate the plugin](https://plugins.jetbrains.com/plugin/8183-gitlink)
 * [Share the plugin](https://plugins.jetbrains.com/plugin/8183-gitlink)
-* [Become a backer or sponsor](https://opencollective.com/gitlink)
+* [Become a Backer or Sponsor](https://opencollective.com/gitlink)
 
   
 ## Change log
