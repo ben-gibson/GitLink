@@ -1,13 +1,27 @@
 package uk.co.ben_gibson.git.link.ui.notification
 
+import com.intellij.ide.browsers.BrowserLauncher
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import uk.co.ben_gibson.git.link.GitLinkBundle
 import uk.co.ben_gibson.git.link.GitLinkBundle.openPluginSettings
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.git.Host
+import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
+import java.net.URL
 
-data class Notification(val title: String? = null, val message: String, val actions: Set<NotificationAction> = setOf()) {
+data class Notification(
+    val title: String? = null,
+    val message: String,
+    val actions: Set<NotificationAction> = setOf(),
+    val type: Type = Type.PERSISTENT
+) {
+
+    enum class Type {
+        PERSISTENT,
+        TRANSIENT
+    }
 
     companion object {
         private val DEFAULT_TITLE = message("name")
@@ -24,6 +38,17 @@ data class Notification(val title: String? = null, val message: String, val acti
 
         fun welcome(version: String) = Notification(message = message("notifications.welcome", version))
 
+        fun review() = Notification(
+            message = """
+                Finding GitLink useful? Show your support 💖, drop a review and ⭐ the repo 🙏.
+            """.trimIndent(),
+            actions = setOf(
+                NotificationAction.openRepository() {
+                    service<ApplicationSettings>().requestSupport = false;
+                }
+            )
+        )
+
         fun performanceTips(project: Project) = Notification(
             message = message("notifications.performance"),
             actions = setOf(NotificationAction.disableCheckCommitOnRemote(project))
@@ -31,20 +56,39 @@ data class Notification(val title: String? = null, val message: String, val acti
 
         fun couldNotDetectGitHost(project: Project) = Notification(
             message = message("notifications.could-not-detect-host"),
-            actions = setOf(NotificationAction.settings(project))
+            actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
         )
 
         fun remoteHostAutoDetected(remoteHost: Host, project: Project) = Notification(
             message =  message("notifications.host-detected", remoteHost.displayName),
-            actions = setOf(NotificationAction.settings(project))
+            actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
+        )
+
+        fun linkCopied(link: URL) = Notification(
+            DEFAULT_TITLE,
+            message("notifications.copied-to-clipboard"),
+            setOf(NotificationAction.openUrl(link)),
+            Type.TRANSIENT,
         )
     }
+
+    fun isTransient() = type == Type.TRANSIENT
+    fun isPersistent() = !isTransient();
 }
 
 data class NotificationAction(val title: String, val run: () -> Unit) {
     companion object {
-        fun settings(project: Project) = NotificationAction(message("title.settings")) {
+        fun settings(project: Project, title: String = message("title.settings")) = NotificationAction(title) {
             openPluginSettings(project)
+        }
+
+        fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) {
+            GitLinkBundle.openRepository()
+            onComplete()
+        }
+
+        fun openUrl(url: URL, title: String = message("actions.take-me-there")) = NotificationAction(title) {
+            BrowserLauncher.instance.open(url.toString());
         }
 
         fun disableCheckCommitOnRemote(project: Project) = NotificationAction(message("actions.disable")) {

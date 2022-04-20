@@ -24,6 +24,10 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
 
     var lastVersion: String? = null
 
+    var hits = 0
+
+    var requestSupport = true;
+
     override fun getState() = this
 
     override fun loadState(state: ApplicationSettings) {

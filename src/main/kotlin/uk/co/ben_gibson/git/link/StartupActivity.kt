@@ -18,7 +18,7 @@ class StartupActivity : StartupActivity.DumbAware {
 
         if (version != settings.lastVersion) {
             settings.lastVersion = version
-            sendNotification(project, Notification.welcome(version ?: "Unknown"))
+            sendNotification(Notification.welcome(version ?: "Unknown"), project)
         }
 
         runInitialSetup(project)
@@ -38,11 +38,11 @@ class StartupActivity : StartupActivity.DumbAware {
         val host = repository.findRemote(settings.remote)?.let { hosts.forRemote(it) }
 
         if (host == null) {
-            sendNotification(project, Notification.couldNotDetectGitHost(project))
+            sendNotification(Notification.couldNotDetectGitHost(project), project)
             return
         }
 
-        sendNotification(project, Notification.remoteHostAutoDetected(host, project))
+        sendNotification(Notification.remoteHostAutoDetected(host, project), project)
 
         settings.host = host.id.toString()
     }

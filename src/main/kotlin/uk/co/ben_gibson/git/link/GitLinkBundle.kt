@@ -1,6 +1,7 @@
 package uk.co.ben_gibson.git.link
 
 import com.intellij.DynamicBundle
+import com.intellij.ide.browsers.BrowserLauncher
 import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.options.ShowSettingsUtil
@@ -25,6 +26,10 @@ object GitLinkBundle : DynamicBundle(BUNDLE) {
 
     fun openPluginSettings(project: Project) {
         ShowSettingsUtil.getInstance().showSettingsDialog(project, message("settings.general.group.title"))
+    }
+
+    fun openRepository() {
+        BrowserLauncher.instance.open("https://github.com/ben-gibson/GitLink");
     }
 
     fun plugin() = PluginManagerCore.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper"))

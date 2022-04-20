@@ -31,6 +31,7 @@ fun copyToClipBoard(project: Project, context: Context) {
             StringSelection(it.toString()),
             null
         )
+        sendNotification(Notification.linkCopied(it), project)
     }
 }
 
@@ -42,7 +43,7 @@ private fun processGitLink(project: Project, context: Context, handle: (URL) -> 
             return@runBackgroundableTask
         }
 
-        sendNotification(project, Notification.performanceTips(project))
+        sendNotification(Notification.performanceTips(project), project)
     }
 }
 
@@ -52,7 +53,7 @@ private fun process(project: Project, context: Context, handle: (URL) -> Unit) {
     val host = project.service<HostLocator>().locate()
 
     if (host == null) {
-        sendNotification(project, Notification.hostNotSet(project))
+        sendNotification(Notification.hostNotSet(project), project)
         return
     }
 
@@ -88,12 +89,14 @@ private fun process(project: Project, context: Context, handle: (URL) -> Unit) {
     }
 
     handle(urlFactory.createUrl(urlOptions))
+
+    handleHit();
 }
 
 private fun locateRepository(project: Project, file: VirtualFile): GitRepository? {
     val repository = findRepositoryForFile(project, file)
 
-    repository ?: sendNotification(project, Notification.repositoryNotFound())
+    repository ?: sendNotification(Notification.repositoryNotFound(), project)
 
     return repository
 }
@@ -101,7 +104,7 @@ private fun locateRepository(project: Project, file: VirtualFile): GitRepository
 private fun findRemote(project: Project, repository: GitRepository, settings: ProjectSettings): GitRemote? {
     val remote = repository.findRemote(settings.remote)
 
-    remote ?: sendNotification(project, Notification.remoteNotFound())
+    remote ?: sendNotification(Notification.remoteNotFound(), project)
 
     return remote
 }

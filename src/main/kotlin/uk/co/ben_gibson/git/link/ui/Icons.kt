@@ -9,4 +9,5 @@ object Icons {
     val AZURE = IconLoader.getIcon("/icons/azure.svg", javaClass)
     val GITEA = IconLoader.getIcon("/icons/gitea.svg", javaClass)
     val GIT = IconLoader.getIcon("/icons/git.svg", javaClass)
+    val GIT_LINK = IconLoader.getIcon("/icons/gitlink.svg", javaClass)
 }
