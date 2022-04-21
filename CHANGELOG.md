@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.0.5]
 - Fix line selection around collapsed code sections
 
 ## [4.0.4]
