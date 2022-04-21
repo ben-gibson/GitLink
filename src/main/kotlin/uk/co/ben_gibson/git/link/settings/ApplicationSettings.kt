@@ -48,6 +48,10 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
         listeners.add(listener)
     }
 
+    fun incrementHits() {
+        hits++
+    }
+
     private fun notifyListeners() {
         listeners.forEach(ChangeListener::onChange)
     }

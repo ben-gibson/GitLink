@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+- Add pipeline to handle URL logic
+- Fix typos
+
 ## [4.0.3]
 - Add support for Ukraine in README
 - Add notification on successful copy action
