@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Fix line selection around collapsed code sections
 
 ## [4.0.4]
 - Add pipeline to handle URL logic
