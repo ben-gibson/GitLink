@@ -10,9 +10,8 @@
 
 <!-- Plugin description -->
 
-A Jetbrains plugin providing shortcuts to open or copy resources such as a file or commit in `GitHub`, `Bitbucket`, 
-`GitLab`, `Gitea`, `Gogs` or `Azure`. Custom hosts can also be configured using the URL template
-syntax.
+A Jetbrains plugin providing shortcuts to open or copy a file, directory or commit in `GitHub`, `Bitbucket`, 
+`GitLab`, `Gitea`, `Gogs` or `Azure`. Custom hosts can also be configured using the URL template syntax.
 
 <!-- Plugin description end -->
 
@@ -42,16 +41,17 @@ To open the current file in the default browser:
       View → Open in (your selected host) or
       Select in... → Browser (GitLink)
 
-Additional shortcuts are als available from the annotation gutter, VCS log window and select in window.
+Additional shortcuts are available including from the editor gutter and Git log window.
 
-A URL can be generated to one of the following resources. 
+A URL can be generated in one of the following ways: 
 
-* Fle at commit
-* File at branch
+* Fle at a commit
+* File at a branch
 * Commit
 
-By default, when generating a URL for a file, the latest commit will be included as part of the URL to provide a 
-fixed snapshot of the file. If the latest commit is unknown or not on the remote, the branch will be used instead. 
+By default, when generating a URL to a file, the latest commit hash is used, creating a reference to a fixed version of 
+the file's content. If the latest commit has not been pushed to the remote, the current branch is used instead. 
+While this avoids generating a URL to a 404, it does mean the linked contents can change over time.
 
 ## Installation
 
