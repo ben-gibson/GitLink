@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 
+## [4.0.4]
 - Add pipeline to handle URL logic
 - Fix typos
 
