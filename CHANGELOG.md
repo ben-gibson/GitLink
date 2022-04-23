@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Add host Chromium
 
 ## [4.0.6]
 - Fix Azure DevOps url templates
