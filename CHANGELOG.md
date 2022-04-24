@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.0.6]
 - Fix Azure DevOps url templates
 
 ## [4.0.5]
