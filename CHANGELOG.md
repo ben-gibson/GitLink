@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Fix Azure DevOps url templates
 
 ## [4.0.5]
 - Fix line selection around collapsed code sections
