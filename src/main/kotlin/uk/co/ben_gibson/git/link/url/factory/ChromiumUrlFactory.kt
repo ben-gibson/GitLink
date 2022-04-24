@@ -83,6 +83,7 @@ class ChromiumUrlFactory: UrlFactory {
     }
 
     private fun createLineSelection(options: UrlOptionsFileAware) : String? {
-        return options.lineSelection?.let { ";l=${it.start}-${it.end}" }
+        val selection = options.lineSelection ?: return ""
+        return ";l=${selection.start}-${selection.end}"
     }
 }
