@@ -15,7 +15,8 @@ class Pipeline(private val project: Project) {
         project.service<TimerMiddleware>(),
         project.service<RecordHitMiddleware>(),
         project.service<ForceHttpsMiddleware>(),
-        project.service<RequestSupportMiddleware>(),
+        project.service<RatePluginMiddleware>(),
+        project.service<ResolveContextMiddleware>(),
     )
 
     fun accept(context: Context) : URL? {
@@ -25,14 +26,14 @@ class Pipeline(private val project: Project) {
 
         val queue = PriorityQueue<Middleware>(middlewares)
 
-        return next(queue, context)
+        return next(queue, Pass(project, context))
     }
 
-    private fun next(queue: PriorityQueue<Middleware>, context: Context) : URL? {
+    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : URL? {
         val middleware = queue.remove()
 
-        return middleware(project, context) {
-            return@middleware next(queue, context);
+        return middleware(pass) {
+            return@middleware next(queue, pass);
         }
     }
 }

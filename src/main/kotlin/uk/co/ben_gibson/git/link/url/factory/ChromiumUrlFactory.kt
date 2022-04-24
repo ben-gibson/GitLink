@@ -1,7 +1,6 @@
 package uk.co.ben_gibson.git.link.url.factory
 
 import com.intellij.openapi.components.Service
-import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.url.*
 import java.net.URL
 
@@ -12,12 +11,10 @@ private const val IDENTIFIER_CHROMIUMOS = "chromiumos"
 @Service
 class ChromiumUrlFactory: UrlFactory {
     override fun createUrl(options: UrlOptions): URL {
-        var path = if (options.baseUrl.path.contains(IDENTIFIER_CHROMIUMOS))
+        val path = if (options.baseUrl.path.contains(IDENTIFIER_CHROMIUMOS))
             createPathForChromiumos(options)
         else
             createPathForChromium(options)
-
-        path = path.plus(createLineSelectionSubPath(options) ?: "")
 
         return URL(options.baseUrl.protocol, HOST, path)
     }
@@ -31,8 +28,8 @@ class ChromiumUrlFactory: UrlFactory {
             .withPart("+")
 
         when (options) {
-            is UrlOptionsFileAtBranch -> pathBuilder.withSubPath(createChromiumFileSubPath(options.file, options.branch))
-            is UrlOptionsFileAtCommit -> pathBuilder.withSubPath(createChromiumFileSubPath(options.file, options.commit.toString()))
+            is UrlOptionsFileAtBranch -> pathBuilder.withSubPath(createChromiumFileSubPath(options))
+            is UrlOptionsFileAtCommit -> pathBuilder.withSubPath(createChromiumFileSubPath(options))
             is UrlOptionsCommit -> pathBuilder.withPart(options.commit.toString())
         }
 
@@ -43,8 +40,8 @@ class ChromiumUrlFactory: UrlFactory {
         val pathBuilder = PathBuilder()
 
         when (options) {
-            is UrlOptionsFileAtBranch -> pathBuilder.withSubPath(createChromiumosFileSubPath(options.baseUrl, options.file, options.branch))
-            is UrlOptionsFileAtCommit -> pathBuilder.withSubPath(createChromiumosFileSubPath(options.baseUrl, options.file, options.commit.toString()))
+            is UrlOptionsFileAtBranch -> pathBuilder.withSubPath(createChromiumosFileSubPath(options))
+            is UrlOptionsFileAtCommit -> pathBuilder.withSubPath(createChromiumosFileSubPath(options))
             is UrlOptionsCommit -> pathBuilder
                 .withSubPath("chromiumos/_/chromium/chromiumos")
                 .withParts(options.baseUrl.path.split('/').filter{ it.isNotBlank() }.drop(1))
@@ -55,23 +52,37 @@ class ChromiumUrlFactory: UrlFactory {
         return pathBuilder.build()
     }
 
-    private fun createChromiumFileSubPath(file: File, ref: String) = PathBuilder()
-        .withParts("${ref}:".plus(file.path).split("/"))
-        .withPart(if (file.isRoot) "" else file.name)
-        .build()
+    private fun createChromiumFileSubPath(options: UrlOptionsFileAware): String {
+        var path = PathBuilder()
+            .withParts("${options.ref}:".plus(options.file.path.trim('/')).split("/"))
+            .withPart(if (options.file.isRoot) "" else options.file.name)
+            .build()
 
-    private fun createChromiumosFileSubPath(baseUrl: URL, file: File, ref: String) = PathBuilder()
-        .withSubPath("chromiumos/chromiumos/codesearch")
-        .withPart("+")
-        .withPart(ref.plus(":src"))
-        .withParts(baseUrl.path.split('/').filter{ it.isNotBlank() }.drop(1))
-        .withParts(file.path.split("/").filter { it.isNotBlank() })
-        .withPart(if (file.isRoot) "" else file.name)
-        .build()
+        if (options.file.isDirectory) {
+            return path
+        }
 
-    private fun createLineSelectionSubPath(options: UrlOptions) : String? {
-        if (options !is LineSelectionAware) return null
+        return path.plus(createLineSelection(options))
+    }
 
+    private fun createChromiumosFileSubPath(options: UrlOptionsFileAware): String {
+        val path = PathBuilder()
+            .withSubPath("chromiumos/chromiumos/codesearch")
+            .withPart("+")
+            .withPart(options.ref.plus(":src"))
+            .withParts(options.baseUrl.path.split('/').filter{ it.isNotBlank() }.drop(1))
+            .withParts(options.file.path.split("/").filter { it.isNotBlank() })
+            .withPart(if (options.file.isRoot) "" else options.file.name)
+            .build()
+
+        if (options.file.isDirectory) {
+            return path
+        }
+
+        return path.plus(createLineSelection(options))
+    }
+
+    private fun createLineSelection(options: UrlOptionsFileAware) : String? {
         return options.lineSelection?.let { ";l=${it.start}-${it.end}" }
     }
 }

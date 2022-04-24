@@ -7,7 +7,7 @@ import java.net.URL
 interface Middleware : Comparable<Middleware> {
     val priority: Int
 
-    operator fun invoke(project: Project, context: Context, next: () -> URL?) : URL?
+    operator fun invoke(pass: Pass, next: () -> URL?) : URL?
 
     override fun compareTo(other: Middleware): Int {
         return priority - other.priority

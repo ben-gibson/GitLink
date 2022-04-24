@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 - Add host Chromium
+- Add resolve context middleware
 
 ## [4.0.6]
 - Fix Azure DevOps url templates
