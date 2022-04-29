@@ -3,8 +3,9 @@
 # GitLink Changelog
 
 ## [Unreleased]
-- Add host Chromium
+- Add experimental host Chromium
 - Add resolve context middleware
+- Dismiss notifications when action pressed
 
 ## [4.0.6]
 - Fix Azure DevOps url templates
