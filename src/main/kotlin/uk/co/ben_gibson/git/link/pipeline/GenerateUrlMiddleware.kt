@@ -1,16 +1,14 @@
 package uk.co.ben_gibson.git.link.pipeline
 
+import com.intellij.dvcs.repo.Repository
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
 import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
 import uk.co.ben_gibson.git.link.*
 import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
-import uk.co.ben_gibson.git.link.ui.notification.Notification
-import uk.co.ben_gibson.git.link.ui.notification.sendNotification
+import uk.co.ben_gibson.git.link.url.UrlOptions
 import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
@@ -20,37 +18,39 @@ import java.net.URL
 // Must be the last middleware in the pipeline!
 @Service
 class GenerateUrlMiddleware : Middleware {
-    override val priority = 5
+    override val priority = 50
 
-    override fun invoke(project: Project, context: Context, next: () -> URL?) : URL? {
-        val settings = project.service<ProjectSettings>()
+    override fun invoke(pass: Pass, next: () -> URL?) : URL? {
+        // We can't reach this point unless the host, repository, and remote have been resolved
+        val baseUrl = pass.remoteOrThrow().httpUrl() ?: return null
 
-        val host = project.service<HostLocator>().locate()
+        val host = pass.hostOrThrow()
 
-        if (host == null) {
-            sendNotification(Notification.hostNotSet(project), project)
-            return null
-        }
+        val urlOptions = createUrlOptions(pass, baseUrl)
 
-        val repository = locateRepository(project, context.file) ?: return null
-        val urlFactory = project.service<UrlFactoryLocator>().locate(host)
+        return service<UrlFactoryLocator>().locate(host).createUrl(urlOptions)
+    }
 
-        val remote = findRemote(project, repository, settings) ?: return null
-        val remoteBaseUrl = remote.httpUrl() ?: return null
+    private fun createUrlOptions(pass: Pass, baseUrl: URL): UrlOptions {
+        val remote = pass.remoteOrThrow()
+        val repository = pass.repositoryOrThrow()
+        val context = pass.context
+        val settings = pass.project.service<ProjectSettings>()
+
         val repositoryFile = File.forRepository(context.file, repository)
 
-        val urlOptions = when(context) {
-            is ContextFileAtCommit -> UrlOptionsFileAtCommit(remoteBaseUrl, repositoryFile, context.commit, context.lineSelection)
-            is ContextFileAtBranch -> UrlOptionsFileAtBranch(remoteBaseUrl, repositoryFile, context.branch, context.lineSelection)
-            is ContextCommit -> UrlOptionsCommit(remoteBaseUrl, context.commit)
+        return when (context) {
+            is ContextFileAtCommit -> UrlOptionsFileAtCommit(baseUrl, repositoryFile, context.commit, context.lineSelection)
+            is ContextFileAtBranch -> UrlOptionsFileAtBranch(baseUrl, repositoryFile, context.branch, context.lineSelection)
+            is ContextCommit -> UrlOptionsCommit(baseUrl, context.commit)
             is ContextCurrentFile -> {
                 val commit = resolveCommit(repository, remote, settings)
 
                 if (commit != null) {
-                    UrlOptionsFileAtCommit(remoteBaseUrl, repositoryFile, commit, context.lineSelection)
+                    UrlOptionsFileAtCommit(baseUrl, repositoryFile, commit, context.lineSelection)
                 } else {
                     UrlOptionsFileAtBranch(
-                        remoteBaseUrl,
+                        baseUrl,
                         repositoryFile,
                         resolveBranch(repository, remote, settings),
                         context.lineSelection
@@ -58,24 +58,6 @@ class GenerateUrlMiddleware : Middleware {
                 }
             }
         }
-
-        return urlFactory.createUrl(urlOptions)
-    }
-
-    private fun locateRepository(project: Project, file: VirtualFile): GitRepository? {
-        val repository = findRepositoryForFile(project, file)
-
-        repository ?: sendNotification(Notification.repositoryNotFound(), project)
-
-        return repository
-    }
-
-    private fun findRemote(project: Project, repository: GitRepository, settings: ProjectSettings): GitRemote? {
-        val remote = repository.findRemote(settings.remote)
-
-        remote ?: sendNotification(Notification.remoteNotFound(), project)
-
-        return remote
     }
 
     private fun resolveBranch(repository: GitRepository, remote: GitRemote, settings: ProjectSettings): String {

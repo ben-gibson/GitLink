@@ -3,6 +3,7 @@ package uk.co.ben_gibson.git.link.git
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.Icons
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
@@ -11,7 +12,7 @@ import java.util.*
 
 val GIT_HUB = TemplatedHost(
     HOST_ID_GITHUB,
-    "GitHub",
+    message("hosts.github.name"),
     AllIcons.Vcs.Vendors.Github,
     UrlTemplates(
         "{remote:url}/{object}/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
@@ -23,7 +24,7 @@ val GIT_HUB = TemplatedHost(
 
 val GIT_LAB = TemplatedHost(
     HOST_ID_GITLAB,
-    "GitLab",
+    message("hosts.gitlab.name"),
     Icons.GITLAB,
     UrlTemplates(
         "{remote:url}/{object}/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-{line:end}{line-block:end}",
@@ -35,7 +36,7 @@ val GIT_LAB = TemplatedHost(
 
 val BITBUCKET_CLOUD = TemplatedHost(
     HOST_ID_BITBUCKET_CLOUD,
-    "Bitbucket Cloud",
+    message("hosts.bitbucket.cloud.name"),
     Icons.BITBUCKET,
     UrlTemplates(
         "{remote:url}/src/HEAD/{file:path}/{file:name}?at={branch}{line-block:start}#lines-{line:start}:{line:end}{line-block:end}",
@@ -47,7 +48,7 @@ val BITBUCKET_CLOUD = TemplatedHost(
 
 val BITBUCKET_SERVER = TemplatedHost(
     HOST_ID_BITBUCKET_SERVER,
-    "Bitbucket Server",
+    message("hosts.bitbucket.server.name"),
     Icons.BITBUCKET,
     UrlTemplates(
         "{remote:url:host}/projects/{remote:url:path:0}/repos/{remote:url:path:1}/browse/{file:path}/{file:name}?at=refs/heads/{branch}{line-block:start}#{line:start}-{line:end}{line-block:end}",
@@ -58,7 +59,7 @@ val BITBUCKET_SERVER = TemplatedHost(
 
 val GITEA = TemplatedHost(
     HOST_ID_GITEA,
-    "Gitea",
+    message("hosts.gitea.name"),
     Icons.GITEA,
     UrlTemplates(
         "{remote:url}/src/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
@@ -70,7 +71,7 @@ val GITEA = TemplatedHost(
 
 val GOGS = TemplatedHost(
     HOST_ID_GOGS,
-    "Gogs",
+    message("hosts.gogs.name"),
     Icons.GOGS,
     UrlTemplates(
         "{remote:url}/src/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
@@ -82,7 +83,7 @@ val GOGS = TemplatedHost(
 
 val AZURE = TemplatedHost(
     HOST_ID_AZURE,
-    "Azure",
+    message("hosts.azure.name"),
     Icons.AZURE,
     UrlTemplates(
         "{remote:url}?version=GB{branch}&path=/{file:path}/{file:name}{line-block:start}&line={line:start}&lineEnd={line:end}{line-block:end}&lineStartColumn=1&lineEndColumn=1",
@@ -92,6 +93,8 @@ val AZURE = TemplatedHost(
     URL("https://dev.azure.com")
 );
 
+val CHROMIUM = ChromiumHost()
+
 val ALL = setOf(
     GIT_HUB,
     GIT_LAB,
@@ -99,7 +102,8 @@ val ALL = setOf(
     BITBUCKET_SERVER,
     GITEA,
     GOGS,
-    AZURE
+    AZURE,
+    CHROMIUM
 )
 
 @Service

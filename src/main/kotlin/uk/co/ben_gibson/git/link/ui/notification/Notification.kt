@@ -45,6 +45,9 @@ data class Notification(
             actions = setOf(
                 NotificationAction.openRepository() {
                     service<ApplicationSettings>().requestSupport = false;
+                },
+                NotificationAction.doNotAskAgain() {
+                    service<ApplicationSettings>().requestSupport = false;
                 }
             )
         )
@@ -76,22 +79,31 @@ data class Notification(
     fun isPersistent() = !isTransient();
 }
 
-data class NotificationAction(val title: String, val run: () -> Unit) {
+data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) -> Unit) {
     companion object {
-        fun settings(project: Project, title: String = message("title.settings")) = NotificationAction(title) {
+        fun settings(project: Project, title: String = message("title.settings")) = NotificationAction(title) { dismiss ->
+            dismiss()
             openPluginSettings(project)
         }
 
-        fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) {
+        fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
             GitLinkBundle.openRepository()
+            dismiss()
             onComplete()
         }
 
-        fun openUrl(url: URL, title: String = message("actions.take-me-there")) = NotificationAction(title) {
+        fun doNotAskAgain(onComplete: () -> Unit) = NotificationAction(message("actions.do-not-ask-again")) { dismiss ->
+            dismiss()
+            onComplete()
+        }
+
+        fun openUrl(url: URL, title: String = message("actions.take-me-there")) = NotificationAction(title) { dismiss ->
+            dismiss()
             BrowserLauncher.instance.open(url.toString());
         }
 
-        fun disableCheckCommitOnRemote(project: Project) = NotificationAction(message("actions.disable")) {
+        fun disableCheckCommitOnRemote(project: Project) = NotificationAction(message("actions.disable")) { dismiss ->
+            dismiss()
             project.service<ProjectSettings>().checkCommitOnRemote = false;
         }
     }

@@ -9,16 +9,27 @@ sealed class UrlOptions(val baseUrl: URL)
 
 class UrlOptionsCommit(baseUrl: URL, val commit: Commit) : UrlOptions(baseUrl)
 
+interface UrlOptionsFileAware {
+    val baseUrl: URL
+    val file: File
+    val ref: String
+    val lineSelection: LineSelection?
+}
+
 class UrlOptionsFileAtCommit(
     baseUrl: URL,
-    val file: File,
+    override val file: File,
     val commit: Commit,
-    val lineSelection: LineSelection? = null
-) : UrlOptions(baseUrl)
+    override val lineSelection: LineSelection? = null
+) : UrlOptions(baseUrl), UrlOptionsFileAware {
+    override val ref: String get() = commit.toString()
+}
 
 class UrlOptionsFileAtBranch(
     baseUrl: URL,
-    val file: File,
+    override val file: File,
     val branch: String,
-    val lineSelection: LineSelection? = null
-) : UrlOptions(baseUrl)
+    override val lineSelection: LineSelection? = null
+) : UrlOptions(baseUrl), UrlOptionsFileAware {
+    override val ref: String get() = branch
+}

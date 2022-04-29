@@ -4,7 +4,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
 import uk.co.ben_gibson.git.link.git.HostsProvider
-import uk.co.ben_gibson.git.link.git.findRemote
+import uk.co.ben_gibson.git.link.git.locateRemote
 import uk.co.ben_gibson.git.link.git.findRepositoryForProject
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
@@ -35,7 +35,7 @@ class StartupActivity : StartupActivity.DumbAware {
 
         val repository = findRepositoryForProject(project) ?: return
 
-        val host = repository.findRemote(settings.remote)?.let { hosts.forRemote(it) }
+        val host = repository.locateRemote(settings.remote)?.let { hosts.forRemote(it) }
 
         if (host == null) {
             sendNotification(Notification.couldNotDetectGitHost(project), project)

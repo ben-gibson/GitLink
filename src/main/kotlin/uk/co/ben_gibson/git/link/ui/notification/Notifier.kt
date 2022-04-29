@@ -28,7 +28,11 @@ fun sendNotification(notification : Notification, project : Project? = null) {
     intellijNotification.icon = GIT_LINK
 
     notification.actions.forEach { action ->
-        intellijNotification.addAction(DumbAwareAction.create(action.title) { action.run() })
+        intellijNotification.addAction(DumbAwareAction.create(action.title) {
+            action.run() {
+                intellijNotification.expire()
+            }
+        })
     }
 
     intellijNotification.notify(project)

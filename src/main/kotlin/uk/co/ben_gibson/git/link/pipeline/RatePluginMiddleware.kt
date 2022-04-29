@@ -2,18 +2,16 @@ package uk.co.ben_gibson.git.link.pipeline
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
 import java.net.URL
-import uk.co.ben_gibson.git.link.Context
 
 @Service
-class RequestSupportMiddleware : Middleware {
-    override val priority = 1
+class RatePluginMiddleware : Middleware {
+    override val priority = 10
 
-    override fun invoke(project: Project, context: Context, next: () -> URL?) : URL? {
+    override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val url = next()
 
         val settings = service<ApplicationSettings>()

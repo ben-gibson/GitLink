@@ -10,4 +10,5 @@ object Icons {
     val GITEA = IconLoader.getIcon("/icons/gitea.svg", javaClass)
     val GIT = IconLoader.getIcon("/icons/git.svg", javaClass)
     val GIT_LINK = IconLoader.getIcon("/icons/gitlink.svg", javaClass)
+    val CHROMIUM = IconLoader.getIcon("/icons/chromium.svg", javaClass)
 }
