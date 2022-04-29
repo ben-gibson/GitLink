@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.0.7]
 - Add experimental host Chromium
 - Add resolve context middleware
 - Dismiss notifications when action pressed
