@@ -52,9 +52,26 @@ data class Notification(
             )
         )
 
+        fun hostPoll() = Notification(
+            message = """
+                Help improve GitLink by telling us which host you use 🗳️.
+            """.trimIndent(),
+            actions = setOf(
+                NotificationAction.openHostPoll() {
+                    service<ApplicationSettings>().showHostPoll = false;
+                },
+                NotificationAction.doNotAskAgain() {
+                    service<ApplicationSettings>().showHostPoll = false;
+                }
+            )
+        )
+
         fun performanceTips(project: Project) = Notification(
             message = message("notifications.performance"),
-            actions = setOf(NotificationAction.disableCheckCommitOnRemote(project))
+            actions = setOf(
+                NotificationAction.disableCheckCommitOnRemote(project),
+                NotificationAction.doNotAskAgain { project.service<ProjectSettings>().showPerformanceTip = false },
+            )
         )
 
         fun couldNotDetectGitHost(project: Project) = Notification(
@@ -88,6 +105,11 @@ data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) 
 
         fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
             GitLinkBundle.openRepository()
+            dismiss()
+            onComplete()
+        }
+        fun openHostPoll(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
+            GitLinkBundle.openHostPoll()
             dismiss()
             onComplete()
         }

@@ -41,7 +41,6 @@ class GenerateUrlMiddleware : Middleware {
 
         return when (context) {
             is ContextFileAtCommit -> UrlOptionsFileAtCommit(baseUrl, repositoryFile, context.commit, context.lineSelection)
-            is ContextFileAtBranch -> UrlOptionsFileAtBranch(baseUrl, repositoryFile, context.branch, context.lineSelection)
             is ContextCommit -> UrlOptionsCommit(baseUrl, context.commit)
             is ContextCurrentFile -> {
                 val commit = resolveCommit(repository, remote, settings)

@@ -32,5 +32,9 @@ object GitLinkBundle : DynamicBundle(BUNDLE) {
         BrowserLauncher.instance.open("https://github.com/ben-gibson/GitLink");
     }
 
+    fun openHostPoll() {
+        BrowserLauncher.instance.open("https://github.com/ben-gibson/GitLink/discussions/172");
+    }
+
     fun plugin() = PluginManagerCore.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper"))
 }
