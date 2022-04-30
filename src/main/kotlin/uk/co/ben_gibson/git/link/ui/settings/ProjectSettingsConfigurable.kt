@@ -50,7 +50,7 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
         }
         row(message("settings.general.field.fallback-branch.label")) {
             textField(settings::fallbackBranch)
-                .comment("When opening a file, if the current branch does not exist on the remote, this will be used instead")
+                .comment(message("settings.general.field.fallback-branch.help"))
         }
         row(message("settings.general.field.remote.label")) {
             textField(settings::remote)
