@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.0.8]
 - Add host poll notification
 - Add 'Do not show again' button to performance tip notification
 
