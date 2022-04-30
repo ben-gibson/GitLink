@@ -58,10 +58,10 @@ data class Notification(
             """.trimIndent(),
             actions = setOf(
                 NotificationAction.openHostPoll() {
-                    //service<ApplicationSettings>().showHostPoll = false;
+                    service<ApplicationSettings>().showHostPoll = false;
                 },
                 NotificationAction.doNotAskAgain() {
-                    //service<ApplicationSettings>().showHostPoll = false;
+                    service<ApplicationSettings>().showHostPoll = false;
                 }
             )
         )
