@@ -17,6 +17,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     var remote = "origin"
     var checkCommitOnRemote = true
     var forceHttps = true
+    var showPerformanceTip = true
 
     override fun getState() = this
 

@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Add host poll notification
+- Add 'Do not show again' button to performance tip notification
 
 ## [4.0.7]
 - Add experimental host Chromium

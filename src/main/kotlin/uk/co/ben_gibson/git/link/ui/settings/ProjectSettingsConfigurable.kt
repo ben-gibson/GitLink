@@ -50,6 +50,7 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
         }
         row(message("settings.general.field.fallback-branch.label")) {
             textField(settings::fallbackBranch)
+                .comment("When opening a file, if the current branch does not exist on the remote, this will be used instead")
         }
         row(message("settings.general.field.remote.label")) {
             textField(settings::remote)
@@ -57,7 +58,13 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
         titledRow(message("settings.general.section.advanced.label")) {
             row(message("settings.general.field.force-https.label")) {
                 checkBox(message("settings.general.field.force-https.label"), settings::forceHttps)
-            }
+            }.largeGapAfter()
+//            row("Generate URLs to current file using") {
+//                buttonGroup(settings::generateUrlTo) {
+//                    radioButton("Commit", ContextType.COMMIT)
+//                    radioButton("Branch", ContextType.BRANCH)
+//                }
+//            }.largeGapAfter()
             row(message("settings.general.field.check-commit-on-remote.label")) {
                 checkBox(
                     message("settings.general.field.check-commit-on-remote.label"),

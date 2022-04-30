@@ -16,6 +16,7 @@ class Pipeline(private val project: Project) {
         project.service<RecordHitMiddleware>(),
         project.service<ForceHttpsMiddleware>(),
         project.service<RatePluginMiddleware>(),
+        project.service<HostPollMiddleware>(),
         project.service<ResolveContextMiddleware>(),
     )
 
