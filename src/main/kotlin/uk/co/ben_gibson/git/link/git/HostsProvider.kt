@@ -14,11 +14,7 @@ val GIT_HUB = TemplatedHost(
     HOST_ID_GITHUB,
     message("hosts.github.name"),
     AllIcons.Vcs.Vendors.Github,
-    UrlTemplates(
-        "{remote:url}/{object}/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
-        "{remote:url}/{object}/{commit}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
-        "{remote:url}/commit/{commit}"
-    ),
+    UrlTemplates.gitHub(),
     URL("https://github.com")
 );
 
@@ -93,6 +89,14 @@ val AZURE = TemplatedHost(
     URL("https://dev.azure.com")
 );
 
+val GITEE = TemplatedHost(
+    HOST_ID_GITEE,
+    message("hosts.gitee.name"),
+    Icons.GITEE,
+    UrlTemplates.gitHub(),
+    URL("https://gitee.com")
+);
+
 val CHROMIUM = ChromiumHost()
 
 val ALL = setOf(
@@ -100,6 +104,7 @@ val ALL = setOf(
     GIT_LAB,
     BITBUCKET_CLOUD,
     BITBUCKET_SERVER,
+    GITEE,
     GITEA,
     GOGS,
     AZURE,

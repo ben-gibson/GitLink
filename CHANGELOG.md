@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Add Gitee host
 
 ## [4.0.8]
 - Add host poll notification
