@@ -11,7 +11,7 @@
 <!-- Plugin description -->
 
 A Jetbrains plugin providing shortcuts to open or copy a file, directory or commit in `GitHub`, `Bitbucket`, 
-`GitLab`, `Gitea`, `Gogs` or `Azure`. Custom hosts can also be configured using the URL template syntax.
+`GitLab`, `Gitee` `Gitea`, `Gogs` or `Azure`. Custom hosts can also be configured using the URL template syntax.
 
 <!-- Plugin description end -->
 
