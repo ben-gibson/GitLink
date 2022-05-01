@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.0.9]
 - Add Gitee host
 
 ## [4.0.8]
