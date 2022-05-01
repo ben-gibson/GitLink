@@ -4,17 +4,15 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import uk.co.ben_gibson.git.link.git.File
+import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.UrlOptions
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
-import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import java.net.URL
 import java.util.stream.Stream
-import uk.co.ben_gibson.git.link.git.Commit
-import uk.co.ben_gibson.git.link.git.GOGS
 import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
+import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactoryProvider
 
 class GogsTest {
 
@@ -69,7 +67,8 @@ class GogsTest {
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
     fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
-        val url = TemplatedUrlFactory(GOGS.urlTemplate).createUrl(options)
+        val factory = TemplatedUrlFactoryProvider().forHost(Gogs())
+        val url = factory.createUrl(options)
 
         assertEquals(expectedUrl, url.toString())
     }

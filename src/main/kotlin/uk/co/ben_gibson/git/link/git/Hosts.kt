@@ -10,7 +10,7 @@ class Hosts(private val hosts: Set<Host>) {
 
     fun forRemote(remote: GitRemote) = remote.httpUrl()
         ?.host
-        ?.let { host -> hosts.firstOrNull { it.baseUrl?.host == host } }
+        ?.let { remoteHost -> hosts.firstOrNull { host -> host.baseUrls.map { it.host }.contains(remoteHost) } }
 
     fun toSet() = hosts.toHashSet()
     fun toArray() = hosts.toTypedArray()

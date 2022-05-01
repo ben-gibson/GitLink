@@ -5,6 +5,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.Tag;
+import java.net.URL
 import java.util.UUID
 
 /**
@@ -15,6 +16,7 @@ import java.util.UUID
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
 class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
     private var listeners: MutableList<ChangeListener> = mutableListOf()
+    private var hostBaseUrls: Map<String, List<URL>> = mutableMapOf()
 
     var customHosts: MutableList<CustomHostSettings> = mutableListOf()
         set(value) {

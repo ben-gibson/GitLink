@@ -8,13 +8,13 @@ import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.UrlOptions
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
-import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import java.net.URL
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
-import uk.co.ben_gibson.git.link.git.GIT_LAB
+import uk.co.ben_gibson.git.link.git.GitLab
 import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
+import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactoryProvider
 
 class GitLabTest {
 
@@ -79,7 +79,9 @@ class GitLabTest {
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
     fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
-        val url = TemplatedUrlFactory(GIT_LAB.urlTemplate).createUrl(options)
+        val factory = TemplatedUrlFactoryProvider().forHost(GitLab())
+
+        val url = factory.createUrl(options)
 
         assertEquals(expectedUrl, url.toString())
     }

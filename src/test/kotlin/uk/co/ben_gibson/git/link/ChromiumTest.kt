@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import uk.co.ben_gibson.git.link.git.Chromium
 import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.UrlOptions
@@ -14,6 +15,7 @@ import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
 import uk.co.ben_gibson.git.link.url.factory.ChromiumUrlFactory
+import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactoryProvider
 
 class ChromiumTest {
 
@@ -85,7 +87,8 @@ class ChromiumTest {
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
     fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
-        val url = ChromiumUrlFactory().createUrl(options)
+        val factory = ChromiumUrlFactory()
+        val url = factory.createUrl(options)
 
         assertEquals(expectedUrl, url.toString())
     }
