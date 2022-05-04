@@ -12,7 +12,7 @@ class RecordHitMiddleware : Middleware {
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val url = next() ?: return null
 
-        service<ApplicationSettings>().incrementHits();
+        service<ApplicationSettings>().recordHit();
 
         return url;
     }

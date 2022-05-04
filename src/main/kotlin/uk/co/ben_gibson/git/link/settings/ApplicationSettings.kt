@@ -16,13 +16,14 @@ import java.util.UUID
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
 class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
     private var listeners: MutableList<ChangeListener> = mutableListOf()
-    private var hostBaseUrls: Map<String, List<URL>> = mutableMapOf()
 
     var customHosts: MutableList<CustomHostSettings> = mutableListOf()
         set(value) {
             field = value
             notifyListeners()
         }
+
+    var hostBaseUrls: Map<String, List<URL>> = mapOf()
 
     var lastVersion: String? = null
     var hits = 0
@@ -49,7 +50,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
         listeners.add(listener)
     }
 
-    fun incrementHits() {
+    fun recordHit() {
         hits++
     }
 

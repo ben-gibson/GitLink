@@ -7,7 +7,7 @@ import uk.co.ben_gibson.git.link.ui.Icons
 import java.net.URL
 import java.util.*
 
-private val EXISTING_HOSTS = setOf(
+private val HOSTS = setOf(
     GitHub(),
     GitLab(),
     BitbucketCloud(),
@@ -33,6 +33,6 @@ class HostsProvider {
             )
         }
 
-        return Hosts(EXISTING_HOSTS.plus(customHosts))
+        return Hosts(HOSTS.plus(customHosts))
     }
 }

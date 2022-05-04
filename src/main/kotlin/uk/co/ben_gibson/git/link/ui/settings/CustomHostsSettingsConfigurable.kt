@@ -13,7 +13,7 @@ import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomHostSettings
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 
-class HostsSettingsConfigurable : BoundConfigurable(message("settings.host.group.title")) {
+class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.host.group.title")) {
     private var settings = service<ApplicationSettings>()
     private var customHosts = settings.customHosts.toMutableList()
 
@@ -30,7 +30,7 @@ class HostsSettingsConfigurable : BoundConfigurable(message("settings.host.group
         .createPanel()
 
     override fun createPanel() = panel {
-        titledRow("Custom Hosts") {
+        row {
             component(customHostTableContainer).constraints(CCFlags.grow)
         }
         row {

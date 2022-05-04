@@ -29,8 +29,8 @@
         />
         <applicationConfigurable
             parentId="GitLink.ProjectSettings"
-            instance="uk.co.ben_gibson.git.link.ui.settings.HostsSettingsConfigurable"
-            id="GitLink.ApplicationSettings"
+            instance="uk.co.ben_gibson.git.link.ui.settings.CustomHostsSettingsConfigurable"
+            id="GitLink.CustomHostSettings"
             displayName="Custom Hosts"
         />
     </extensions>
