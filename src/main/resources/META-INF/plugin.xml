@@ -25,13 +25,16 @@
             parentId="tools"
             instance="uk.co.ben_gibson.git.link.ui.settings.ProjectSettingsConfigurable"
             id="GitLink.ProjectSettings"
-            displayName="GitLink"
         />
         <applicationConfigurable
             parentId="GitLink.ProjectSettings"
             instance="uk.co.ben_gibson.git.link.ui.settings.CustomHostsSettingsConfigurable"
             id="GitLink.CustomHostSettings"
-            displayName="Custom Hosts"
+        />
+        <applicationConfigurable
+            parentId="GitLink.ProjectSettings"
+            instance="uk.co.ben_gibson.git.link.ui.settings.AutoDetectSettings"
+            id="GitLink.AutoDetectSettings"
         />
     </extensions>
 
