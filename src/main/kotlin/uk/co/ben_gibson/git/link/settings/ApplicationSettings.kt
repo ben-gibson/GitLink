@@ -23,7 +23,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
             notifyListeners()
         }
 
-    var hostBaseUrls: Map<String, List<URL>> = mapOf()
+    var customBaseUrls: MutableMap<String, MutableList<URL>> = mutableMapOf()
 
     var lastVersion: String? = null
     var hits = 0
