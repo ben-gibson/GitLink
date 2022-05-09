@@ -13,5 +13,6 @@ class Hosts(private val hosts: Set<Host>) {
         ?.let { remoteHost -> hosts.firstOrNull { host -> host.baseUrls.map { it.host }.contains(remoteHost) } }
 
     fun toSet() = hosts.toHashSet()
+    fun toList() = hosts.toList()
     fun toArray() = hosts.toTypedArray()
 }
