@@ -13,15 +13,17 @@ import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomHostSettings
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
+import uk.co.ben_gibson.git.link.extensions.replaceAt
 import uk.co.ben_gibson.git.link.ui.components.SubstitutionReferenceTable
 import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.*
 
 class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.custom-host.group.title")) {
     private var settings = service<ApplicationSettings>()
-    private var customHosts = settings.customHosts.toMutableList()
+    private var customHosts = settings.customHosts
+    private val customHostTableModel = createCustomHostModel()
 
-    private val customHostsTable = TableView(createCustomHostModel()).apply {
+    private val customHostsTable = TableView(customHostTableModel).apply {
         setShowColumns(true)
         setSelectionMode(SINGLE_SELECTION)
         emptyText.text = message("settings.custom-host.table.empty")
@@ -62,16 +64,16 @@ class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.cust
         val dialog = CustomHostDialog(CustomHostSettings())
 
         if (dialog.showAndGet()) {
-            customHosts.add(dialog.customHost)
-            customHostsTable.tableViewModel.fireTableDataChanged()
+            customHosts = customHosts.plus(dialog.customHost)
+            refreshCustomHostTableModel()
         }
     }
 
     private fun removeCustomHost() {
         val row = customHostsTable.selectedObject ?: return
 
-        customHosts.remove(row)
-        customHostsTable.tableViewModel.fireTableDataChanged()
+        customHosts = customHosts.minus(row)
+        refreshCustomHostTableModel()
     }
 
     private fun editCustomHost() {
@@ -80,16 +82,20 @@ class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.cust
         val dialog = CustomHostDialog(row.copy())
 
         if (dialog.showAndGet()) {
-            customHosts[customHostsTable.selectedRow] = dialog.customHost
-            customHostsTable.tableViewModel.fireTableDataChanged()
+            customHosts = customHosts.replaceAt(customHostsTable.selectedRow, dialog.customHost)
+            refreshCustomHostTableModel()
         }
+    }
+
+    private fun refreshCustomHostTableModel() {
+        customHostTableModel.items = customHosts
     }
 
     override fun reset() {
         super.reset()
 
-        customHosts.clear()
-        customHosts.addAll(settings.customHosts)
+        customHosts = settings.customHosts
+        refreshCustomHostTableModel()
     }
 
     override fun isModified() : Boolean {

@@ -39,6 +39,14 @@ fun ValidationInfoBuilder.alphaNumeric(value: String): ValidationInfo? {
     return if (!value.matches("[\\w\\s]+".toRegex())) error(message("validation.alpha-numeric")) else null
 }
 
+fun ValidationInfoBuilder.exists(value: String, existing: Collection<String>): ValidationInfo? {
+    if (value.isEmpty()) {
+        return null
+    }
+
+    return if (existing.contains(value)) return error(message("validation.exists")) else null
+}
+
 fun ValidationInfoBuilder.length(value: String, min: Int, max: Int): ValidationInfo? {
     if (value.isEmpty()) {
         return null;
