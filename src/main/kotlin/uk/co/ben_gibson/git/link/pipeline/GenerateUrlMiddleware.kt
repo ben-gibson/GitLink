@@ -1,6 +1,5 @@
 package uk.co.ben_gibson.git.link.pipeline
 
-import com.intellij.dvcs.repo.Repository
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import git4idea.repo.GitRemote
@@ -13,16 +12,16 @@ import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
 import uk.co.ben_gibson.git.link.url.factory.UrlFactoryLocator
-import java.net.URL
+import java.net.URI
 
 // Must be the last middleware in the pipeline!
 @Service
 class GenerateUrlMiddleware : Middleware {
     override val priority = 50
 
-    override fun invoke(pass: Pass, next: () -> URL?) : URL? {
+    override fun invoke(pass: Pass, next: () -> URI?) : URI? {
         // We can't reach this point unless the host, repository, and remote have been resolved
-        val baseUrl = pass.remoteOrThrow().httpUrl() ?: return null
+        val baseUrl = pass.remoteOrThrow().httpUrl ?: return null
 
         val host = pass.hostOrThrow()
 
@@ -31,7 +30,7 @@ class GenerateUrlMiddleware : Middleware {
         return service<UrlFactoryLocator>().locate(host).createUrl(urlOptions)
     }
 
-    private fun createUrlOptions(pass: Pass, baseUrl: URL): UrlOptions {
+    private fun createUrlOptions(pass: Pass, baseUrl: URI): UrlOptions {
         val remote = pass.remoteOrThrow()
         val repository = pass.repositoryOrThrow()
         val context = pass.context

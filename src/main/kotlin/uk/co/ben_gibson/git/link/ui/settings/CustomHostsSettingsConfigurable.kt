@@ -47,7 +47,7 @@ class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.cust
     private fun createCustomHostModel(): ListTableModel<CustomHostSettings> = ListTableModel(
         arrayOf(
             createCustomHostColumn(message("settings.custom-host.table.column.name")) { customHost -> customHost?.displayName },
-            createCustomHostColumn(message("settings.custom-host.table.column.base-url")) { customHost -> customHost?.baseUrl },
+            createCustomHostColumn(message("settings.custom-host.table.column.domain")) { customHost -> customHost?.baseUrl },
         ),
         customHosts
     )
@@ -126,10 +126,10 @@ private class CustomHostDialog(val customHost: CustomHostSettings) : DialogWrapp
                 .withValidationOnApply { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
                 .comment(message("settings.custom-host.add-dialog.field.name.comment"))
         }
-        row(message("settings.custom-host.add-dialog.field.base-url.label")) {
+        row(message("settings.custom-host.add-dialog.field.domain.label")) {
             textField(customHost::baseUrl)
-                .withValidationOnApply { notBlank(it.text) ?: url(it.text) }
-                .comment(message("settings.custom-host.add-dialog.field.base-url.comment"))
+                .withValidationOnApply { notBlank(it.text) ?: domain(it.text) }
+                .comment(message("settings.custom-host.add-dialog.field.domain.comment"))
         }
         row(message("settings.custom-host.add-dialog.field.file-at-branch-template.label")) {
             textField(customHost::fileAtBranchTemplate)

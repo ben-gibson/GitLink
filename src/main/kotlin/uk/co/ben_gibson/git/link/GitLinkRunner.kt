@@ -10,7 +10,7 @@ import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
-import java.net.URL
+import java.net.URI
 
 fun openInBrowser(project: Project, context: Context) {
     processGitLink(project, context) { BrowserUtil.browse(it) }
@@ -26,7 +26,7 @@ fun copyToClipBoard(project: Project, context: Context) {
     }
 }
 
-private fun processGitLink(project: Project, context: Context, handle: (URL) -> Unit) {
+private fun processGitLink(project: Project, context: Context, handle: (URI) -> Unit) {
     runBackgroundableTask(message("name"), project, false) {
         val pipeline = project.service<Pipeline>()
 

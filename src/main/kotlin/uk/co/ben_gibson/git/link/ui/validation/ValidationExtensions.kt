@@ -6,29 +6,27 @@ import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
-import uk.co.ben_gibson.git.link.url.UrlOptions
-import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
-import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
-import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
+import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import java.net.MalformedURLException
+import java.net.URI
+import java.net.URISyntaxException
 import java.net.URL
 
 fun ValidationInfoBuilder.notBlank(value: String): ValidationInfo? = if (value.isEmpty()) error(message("validation.required")) else null
 
-fun ValidationInfoBuilder.url(value: String): ValidationInfo? {
+fun ValidationInfoBuilder.domain(value: String): ValidationInfo? {
     if (value.isEmpty()) {
         return null
     }
 
-    try {
-        URL(value)
-    } catch (e: MalformedURLException) {
-        return error(message("validation.invalid-url"))
+    return try {
+        val domain = URI(value)
+        if (domain.host != value) error(message("validation.invalid-domain")) else null
+    } catch (e: URISyntaxException) {
+        error(message("validation.invalid-domain"))
     }
-
-    return null
 }
 
 fun ValidationInfoBuilder.alphaNumeric(value: String): ValidationInfo? {
@@ -65,7 +63,7 @@ fun ValidationInfoBuilder.fileAtCommitTemplate(value: String): ValidationInfo? {
     }
 
     val options = UrlOptionsFileAtCommit(
-        URL("https://example.com"),
+        URI("https://example.com"),
         File("foo.kt", false, "src/main", false),
         Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"),
         LineSelection(10, 20)
@@ -80,7 +78,7 @@ fun ValidationInfoBuilder.fileAtBranchTemplate(value: String): ValidationInfo? {
     }
 
     val options = UrlOptionsFileAtBranch(
-        URL("https://example.com"),
+        URI("https://example.com"),
         File("foo.kt", false, "src/main", false),
         "master",
         LineSelection(10, 20)
@@ -95,7 +93,7 @@ fun ValidationInfoBuilder.commitTemplate(value: String): ValidationInfo? {
     }
 
     val options = UrlOptionsCommit(
-        URL("https://example.com"),
+        URI("https://example.com"),
         Commit("734232a3c18f0625843bd161c3f5da272b9d53c1")
     )
 

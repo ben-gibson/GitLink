@@ -5,7 +5,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.Tag;
-import java.net.URL
+import java.net.URI
 import java.util.UUID
 
 /**
@@ -23,7 +23,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
             notifyListeners()
         }
 
-    var customBaseUrls: Map<String, Set<URL>> = mapOf()
+    var customHostDomains: Map<String, Set<URI>> = mapOf()
 
     var lastVersion: String? = null
     var hits = 0
@@ -45,6 +45,11 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
         var fileAtCommitTemplate: String = "",
         var commitTemplate: String = ""
     )
+
+    fun findHostIdByCustomDomain(domain: URI) = customHostDomains
+        .entries
+        .firstOrNull { entry -> entry.value.contains(domain) }
+        ?.key
 
     fun registerListener(listener: ChangeListener) {
         listeners = listeners.plus(listener)

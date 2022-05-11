@@ -8,13 +8,13 @@ import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
-import java.net.URL
+import java.net.URI
 
 @Service
 class ResolveContextMiddleware : Middleware {
     override val priority = 5
 
-    override fun invoke(pass: Pass, next: () -> URL?): URL? {
+    override fun invoke(pass: Pass, next: () -> URI?): URI? {
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null
         val host = localeHost(pass) ?: return null

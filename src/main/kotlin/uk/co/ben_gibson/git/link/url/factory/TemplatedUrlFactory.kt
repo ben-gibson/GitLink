@@ -5,13 +5,14 @@ import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
+import java.net.URI
 import java.net.URL
 import java.util.regex.Pattern
 
 class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
     private val remotePathPattern = Pattern.compile("\\{remote:url:path:(\\d)}")
 
-    override fun createUrl(options: UrlOptions): URL {
+    override fun createUrl(options: UrlOptions): URI {
         var processTemplate = when (options) {
             is UrlOptionsFileAtCommit -> processTemplate(options)
             is UrlOptionsFileAtBranch -> processTemplate(options)
@@ -22,7 +23,7 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
         processTemplate = removeUnmatchedSubstitutions(processTemplate)
         processTemplate = processTemplate.replace("(?<!:)/{2,}".toRegex(), "/")
 
-        return URL(processTemplate).trimPath()
+        return URI(processTemplate).withTrimmedPath()
     }
 
     private fun removeUnmatchedSubstitutions(template: String) = template.replace("\\{.+?}".toRegex(), "")
@@ -55,9 +56,9 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
         return template
     }
 
-    private fun processBaseUrl(template: String, baseUrl: URL) : String {
+    private fun processBaseUrl(template: String, baseUrl: URI) : String {
         var processed = template
-            .replace("{remote:url:host}", baseUrl.hostUrl.toString())
+            .replace("{remote:url:host}", baseUrl.host)
             .replace("{remote:url}", baseUrl.toString())
             .replace("{remote:url:path}", baseUrl.path)
 

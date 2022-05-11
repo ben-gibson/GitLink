@@ -4,7 +4,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.Context
-import java.net.URL
+import java.net.URI
 import java.util.*
 import kotlin.collections.Set
 
@@ -20,7 +20,7 @@ class Pipeline(private val project: Project) {
         project.service<ResolveContextMiddleware>(),
     )
 
-    fun accept(context: Context) : URL? {
+    fun accept(context: Context) : URI? {
         if (middlewares.isEmpty()) {
             throw IllegalStateException("No middleware registered")
         }
@@ -30,7 +30,7 @@ class Pipeline(private val project: Project) {
         return next(queue, Pass(project, context))
     }
 
-    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : URL? {
+    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : URI? {
         val middleware = queue.remove()
 
         return middleware(pass) {

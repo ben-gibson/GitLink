@@ -2,6 +2,7 @@ package uk.co.ben_gibson.git.link.url.factory
 
 import com.intellij.openapi.components.Service
 import uk.co.ben_gibson.git.link.url.*
+import java.net.URI
 import java.net.URL
 
 private const val HOST = "source.chromium.org"
@@ -10,13 +11,13 @@ private const val IDENTIFIER_CHROMIUMOS = "chromiumos"
 
 @Service
 class ChromiumUrlFactory: UrlFactory {
-    override fun createUrl(options: UrlOptions): URL {
+    override fun createUrl(options: UrlOptions): URI {
         val path = if (options.baseUrl.path.contains(IDENTIFIER_CHROMIUMOS))
             createPathForChromiumos(options)
         else
             createPathForChromium(options)
 
-        return URL(options.baseUrl.protocol, HOST, path)
+        return URL(options.baseUrl.toURL().protocol, HOST, path).toURI()
     }
 
     private fun createPathForChromium(options: UrlOptions) : String {

@@ -4,7 +4,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.Icons
-import java.net.URL
+import java.net.URI
 import java.util.*
 
 private val HOSTS = setOf(
@@ -29,7 +29,7 @@ class HostsProvider {
                 UUID.fromString(it.id),
                 it.displayName,
                 Icons.GIT,
-                setOf(URL(it.baseUrl))
+                setOf(URI(it.baseUrl))
             )
         }
 
