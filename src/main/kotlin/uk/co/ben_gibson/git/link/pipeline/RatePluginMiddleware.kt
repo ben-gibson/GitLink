@@ -5,13 +5,13 @@ import com.intellij.openapi.components.service
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
-import java.net.URL
+import java.net.URI
 
 @Service
 class RatePluginMiddleware : Middleware {
     override val priority = 10
 
-    override fun invoke(pass: Pass, next: () -> URL?) : URL? {
+    override fun invoke(pass: Pass, next: () -> URI?) : URI? {
         val url = next()
 
         val settings = service<ApplicationSettings>()

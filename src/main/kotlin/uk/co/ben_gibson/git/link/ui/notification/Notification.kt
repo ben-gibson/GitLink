@@ -9,7 +9,7 @@ import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.git.Host
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
-import java.net.URL
+import java.net.URI
 
 data class Notification(
     val title: String? = null,
@@ -84,7 +84,7 @@ data class Notification(
             actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
         )
 
-        fun linkCopied(link: URL) = Notification(
+        fun linkCopied(link: URI) = Notification(
             DEFAULT_TITLE,
             message("notifications.copied-to-clipboard"),
             setOf(NotificationAction.openUrl(link)),
@@ -119,7 +119,7 @@ data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) 
             onComplete()
         }
 
-        fun openUrl(url: URL, title: String = message("actions.take-me-there")) = NotificationAction(title) { dismiss ->
+        fun openUrl(url: URI, title: String = message("actions.take-me-there")) = NotificationAction(title) { dismiss ->
             dismiss()
             BrowserLauncher.instance.open(url.toString());
         }

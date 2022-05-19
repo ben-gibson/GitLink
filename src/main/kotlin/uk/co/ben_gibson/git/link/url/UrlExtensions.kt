@@ -1,36 +1,42 @@
 package uk.co.ben_gibson.git.link.url
 
+import java.net.URI
 import java.net.URL
 
-val URL.hostUrl:URL get() { return URL(protocol, host, port, "") }
-fun URL.toHttps(): URL {
-    if (protocol == "https") {
+val URI.domain: URI get() { return URI(host) }
+
+fun URI.toHttps(): URI {
+    val url = toURL()
+
+    if (url.protocol == "https") {
         return this
     }
 
-    var normalised = file
+    var normalised = url.file
 
-    ref?.let {
-        normalised = normalised.plus("#".plus(ref))
+    url.ref?.let {
+        normalised = normalised.plus("#".plus(it))
     }
 
-    return URL("https", host, port, normalised)
+    return URL("https", host, port, normalised).toURI()
 }
 
-fun URL.trimPath(): URL {
-    if (!path.endsWith("/")) {
+fun URI.withTrimmedPath(): URI {
+    val url = toURL()
+
+    if (!url.path.endsWith("/")) {
         return this;
     }
 
-    var normalisedFile = path.trimEnd('/')
+    var normalisedFile = url.path.trimEnd('/')
 
-    query?.let {
-        normalisedFile = normalisedFile.plus("?${query}")
+    url.query?.let {
+        normalisedFile = normalisedFile.plus("?${it}")
     }
 
-    ref?.let {
-        normalisedFile = normalisedFile.plus("#${ref}")
+    url.ref?.let {
+        normalisedFile = normalisedFile.plus("#${it}")
     }
 
-    return URL(protocol, host, port, normalisedFile)
+    return URL(url.protocol, host, port, normalisedFile).toURI()
 }

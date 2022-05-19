@@ -3,9 +3,7 @@ package uk.co.ben_gibson.git.link
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
-import uk.co.ben_gibson.git.link.git.HostsProvider
-import uk.co.ben_gibson.git.link.git.locateRemote
-import uk.co.ben_gibson.git.link.git.findRepositoryForProject
+import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
@@ -25,17 +23,21 @@ class StartupActivity : StartupActivity.DumbAware {
     }
 
     private fun runInitialSetup(project: Project) {
-        val settings = project.service<ProjectSettings>()
+        val projectSettings = project.service<ProjectSettings>()
+        val applicationSettings = service<ApplicationSettings>()
 
-        if (settings.host != null) {
+        if (projectSettings.host != null) {
             return
         }
 
         val hosts = project.service<HostsProvider>().provide()
 
         val repository = findRepositoryForProject(project) ?: return
+        val remote = repository.locateRemote(projectSettings.remote) ?: return
 
-        val host = repository.locateRemote(settings.remote)?.let { hosts.forRemote(it) }
+        val host = remote.domain?.let {
+            hosts.getByHostDomain(it) ?: applicationSettings.findHostIdByCustomDomain(it)?.let { id -> hosts.getById(id) }
+        }
 
         if (host == null) {
             sendNotification(Notification.couldNotDetectGitHost(project), project)
@@ -44,6 +46,6 @@ class StartupActivity : StartupActivity.DumbAware {
 
         sendNotification(Notification.remoteHostAutoDetected(host, project), project)
 
-        settings.host = host.id.toString()
+        projectSettings.host = host.id.toString()
     }
 }

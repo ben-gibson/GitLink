@@ -3,27 +3,24 @@ package uk.co.ben_gibson.git.link.ui.settings
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.project.Project
-import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.layout.panel
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
-import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.git.Host
+import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.git.HostsProvider
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
+import uk.co.ben_gibson.git.link.ui.components.HostCellRenderer
+import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
+import uk.co.ben_gibson.git.link.ui.validation.notBlank
 import javax.swing.DefaultComboBoxModel
-import javax.swing.JList
 
 class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message("settings.general.group.title")), ApplicationSettings.ChangeListener {
+    private val hosts = service<HostsProvider>().provide()
     private val settings = project.service<ProjectSettings>()
-    private val hostsComboBoxModel: DefaultComboBoxModel<Host>
-    private val initialHost: Host?
+    private val hostsComboBoxModel = DefaultComboBoxModel(hosts.toArray())
+    private val initialHost = settings.host?.let { hosts.getById(it) }
 
     init {
-        val hosts = service<HostsProvider>().provide()
-
-        initialHost = settings.host?.let { hosts.getById(it) }
-        hostsComboBoxModel = DefaultComboBoxModel(hosts.toArray())
-
         service<ApplicationSettings>().registerListener(this)
     }
 
@@ -33,27 +30,17 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
                 hostsComboBoxModel,
                 { initialHost },
                 { settings.host = it?.id?.toString() },
-                object : SimpleListCellRenderer<Host>() {
-                    override fun customize(
-                        list: JList<out Host>,
-                        value: Host?,
-                        index: Int,
-                        selected: Boolean,
-                        hasFocus: Boolean
-                    ) {
-                        text = value?.displayName ?: ""
-                        icon = value?.icon
-                    }
-
-                }
+                HostCellRenderer()
             )
         }
         row(message("settings.general.field.fallback-branch.label")) {
             textField(settings::fallbackBranch)
                 .comment(message("settings.general.field.fallback-branch.help"))
+                .withValidationOnApply { notBlank(it.text) }
         }
         row(message("settings.general.field.remote.label")) {
             textField(settings::remote)
+                .withValidationOnApply { notBlank(it.text) }
         }
         titledRow(message("settings.general.section.advanced.label")) {
             row(message("settings.general.field.force-https.label")) {
@@ -74,23 +61,16 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
             }
         }
         row {
-            browserLink(message("actions.report-bug.title"), "https://github.com/ben-gibson/GitLink/issues")
+            reportBugLink()
         }
     }
 
     override fun onChange() {
-        val current = hostsComboBoxModel.selectedItem
-        val updatedHosts = service<HostsProvider>().provide().toSet();
+        val current = hostsComboBoxModel.selectedItem as? Host
+        val updatedHosts = service<HostsProvider>().provide();
 
-        hostsComboBoxModel.apply {
-            removeAllElements()
-            addAll(service<HostsProvider>().provide().toSet())
-
-            if (updatedHosts.contains(current)) {
-                selectedItem = current
-            } else {
-                selectedItem = null
-            }
-        }
+        hostsComboBoxModel.removeAllElements();
+        hostsComboBoxModel.addAll(updatedHosts.toSet());
+        hostsComboBoxModel.selectedItem = current?.let { updatedHosts.getById(it.id) }
     }
 }

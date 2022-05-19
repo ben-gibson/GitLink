@@ -5,13 +5,13 @@ import com.intellij.openapi.components.service
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
-import java.net.URL
+import java.net.URI
 
 @Service
 class TimerMiddleware : Middleware {
     override val priority = 40
 
-    override fun invoke(pass: Pass, next: () -> URL?) : URL? {
+    override fun invoke(pass: Pass, next: () -> URI?) : URI? {
         val settings = pass.project.service<ProjectSettings>()
 
         if (!settings.checkCommitOnRemote || !settings.showPerformanceTip) {

@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Allow custom domain registration for supported hosts.
 
 ## [4.0.9]
 - Add Gitee host
