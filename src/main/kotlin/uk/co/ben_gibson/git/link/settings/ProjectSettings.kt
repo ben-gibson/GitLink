@@ -13,7 +13,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
 class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     var host: String? = null
-    var fallbackBranch = "master"
+    var fallbackBranch = "main"
     var remote = "origin"
     var checkCommitOnRemote = true
     var forceHttps = true
