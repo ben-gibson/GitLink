@@ -33,7 +33,7 @@
         />
         <applicationConfigurable
             parentId="GitLink.ProjectSettings"
-            instance="uk.co.ben_gibson.git.link.ui.settings.AutoDetectSettings"
+            instance="uk.co.ben_gibson.git.link.ui.settings.DomainRegistrySettings"
             id="GitLink.AutoDetectSettings"
         />
     </extensions>

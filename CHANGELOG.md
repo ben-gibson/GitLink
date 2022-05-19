@@ -3,6 +3,9 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Make 'main' the default fallback branch, replacing 'master'
+- Fix issue validation custom host URL templates
+- Don't allow duplicate domain registration
 
 ## [4.1.0]
 - Allow custom domain registration for supported hosts.

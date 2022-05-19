@@ -9,6 +9,7 @@ import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
+import java.lang.IllegalArgumentException
 import java.net.MalformedURLException
 import java.net.URI
 import java.net.URISyntaxException
@@ -112,7 +113,12 @@ private fun ValidationInfoBuilder.urlTemplate(
     return try {
         factory.createUrl(options)
         null
-    } catch (e: MalformedURLException) {
-        error(message("validation.invalid-url-template"))
+    } catch (e: Exception) {
+        when(e) {
+            is IllegalArgumentException,
+            is URISyntaxException,
+            is MalformedURLException -> error(message("validation.invalid-url-template"))
+            else -> throw e
+        }
     }
 }
