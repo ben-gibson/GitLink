@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.1.0]
 - Allow custom domain registration for supported hosts.
 
 ## [4.0.9]
