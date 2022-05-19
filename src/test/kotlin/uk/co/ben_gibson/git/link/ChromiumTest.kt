@@ -8,20 +8,19 @@ import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.UrlOptions
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
-import java.net.URL
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
 import uk.co.ben_gibson.git.link.url.factory.ChromiumUrlFactory
-import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactoryProvider
+import java.net.URI
 
 class ChromiumTest {
 
     companion object {
 
-        private val REMOTE_BASE_URL_CHROMIUMOS = URL("https://chromium.googlesource.com/chromiumos/platform/ec")
-        private val REMOTE_BASE_URL_CHROMIUM = URL("https://chromium.googlesource.com/chromium/tools/build")
+        private val REMOTE_BASE_URL_CHROMIUMOS = URI("https://chromium.googlesource.com/chromiumos/platform/ec")
+        private val REMOTE_BASE_URL_CHROMIUM = URI("https://chromium.googlesource.com/chromium/tools/build")
         private const val BRANCH = "master"
         private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
         private val FILE = File("foo.c", false, "board", false)

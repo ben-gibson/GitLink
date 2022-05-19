@@ -23,7 +23,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
             notifyListeners()
         }
 
-    var customHostDomains: Map<String, Set<URI>> = mapOf()
+    var customHostDomains: Map<String, Set<String>> = mapOf()
 
     var lastVersion: String? = null
     var hits = 0
@@ -48,7 +48,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
 
     fun findHostIdByCustomDomain(domain: URI) = customHostDomains
         .entries
-        .firstOrNull { entry -> entry.value.contains(domain) }
+        .firstOrNull { entry -> entry.value.contains(domain.toString()) }
         ?.key
 
     fun registerListener(listener: ChangeListener) {

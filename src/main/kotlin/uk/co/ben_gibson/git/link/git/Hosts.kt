@@ -10,7 +10,7 @@ class Hosts(private val hosts: Set<Host>) {
 
     fun getByHostDomain(domain: URI) = hosts.firstOrNull { host -> host.domains.contains(domain) }
 
-    fun toSet() = hosts.toHashSet()
+    fun toSet() = hosts.toSet()
     fun toList() = hosts.toList()
     fun toArray() = hosts.toTypedArray()
 }

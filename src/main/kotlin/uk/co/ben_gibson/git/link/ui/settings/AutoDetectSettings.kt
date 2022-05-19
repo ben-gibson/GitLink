@@ -20,7 +20,6 @@ import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.domain
 import uk.co.ben_gibson.git.link.ui.validation.exists
 import uk.co.ben_gibson.git.link.ui.validation.notBlank
-import uk.co.ben_gibson.git.link.url.domain
 import java.awt.event.ItemEvent
 import java.net.URI
 import javax.swing.ListSelectionModel
@@ -37,7 +36,7 @@ class AutoDetectSettings : BoundConfigurable(GitLinkBundle.message("settings.aut
     private val domainsTable = TableView(domainsTableModel).apply {
         setShowColumns(true)
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
-        emptyText.text = "No domains registered"
+        emptyText.text = message("settings.auto-detect.table.empty")
     }
 
     private val domainsTableContainer = ToolbarDecorator.createDecorator(domainsTable)
@@ -70,7 +69,7 @@ class AutoDetectSettings : BoundConfigurable(GitLinkBundle.message("settings.aut
         }
     }
 
-    private fun canModifyDomain() = hostsComboBoxModel.selected?.domains?.contains(domainsTable.selectedObject) != true
+    private fun canModifyDomain() = hostsComboBoxModel.selected?.domains?.map { it.toString() }?.contains(domainsTable.selectedObject) == false
 
     private fun addDomain() {
         val host = hostsComboBoxModel.selected ?: return
@@ -78,7 +77,7 @@ class AutoDetectSettings : BoundConfigurable(GitLinkBundle.message("settings.aut
 
         if (dialog.showAndGet()) {
             val existingUrls = customDomains.getOrDefault(host.id.toString(), setOf())
-            customDomains = customDomains.plus(Pair(host.id.toString(), existingUrls.plus(dialog.result)))
+            customDomains = customDomains.plus(Pair(host.id.toString(), existingUrls.plus(dialog.domain)))
             refreshDomainsTable(host)
         }
     }
@@ -96,27 +95,27 @@ class AutoDetectSettings : BoundConfigurable(GitLinkBundle.message("settings.aut
 
     private fun editDomain() {
         val host = hostsComboBoxModel.selected ?: return
-        val url = domainsTable.selectedObject ?: return
+        val domain = domainsTable.selectedObject ?: return
 
-        val dialog = RegisterDomainDialog(url, customDomains.getOrDefault(host.id.toString(), setOf()))
+        val dialog = RegisterDomainDialog(domain, customDomains.getOrDefault(host.id.toString(), setOf()))
 
         if (dialog.showAndGet()) {
             val existingUrls = customDomains.getOrDefault(host.id.toString(), setOf())
 
-            customDomains = customDomains.plus(Pair(host.id.toString(), existingUrls.minus(url).plus(dialog.result)))
+            customDomains = customDomains.plus(Pair(host.id.toString(), existingUrls.minus(domain).plus(dialog.domain)))
 
             refreshDomainsTable(host)
         }
     }
 
     private fun refreshDomainsTable(host: Host) {
-        domainsTableModel.items = host.domains.toList() + customDomains.getOrDefault(host.id.toString(), setOf())
+        domainsTableModel.items = host.domains.map { it.toString() }.toList() + customDomains.getOrDefault(host.id.toString(), setOf())
     }
 
-    private fun createDomainsTableModel(domains: List<URI> = listOf()): ListTableModel<URI> = ListTableModel(
+    private fun createDomainsTableModel(domains: List<String> = listOf()): ListTableModel<String> = ListTableModel(
         arrayOf(
-            object : ColumnInfo<URI, URI>("Domain") {
-                override fun valueOf(domain: URI): URI {
+            object : ColumnInfo<String, String>(message("settings.auto-detect.table.column.domain")) {
+                override fun valueOf(domain: String): String {
                     return domain
                 }
             }
@@ -145,23 +144,19 @@ class AutoDetectSettings : BoundConfigurable(GitLinkBundle.message("settings.aut
     }
 }
 
-class RegisterDomainDialog(private val domain: URI? = null, private val existing: Collection<URI>) : DialogWrapper(false) {
-    val result: URI get() = URI(textValue).domain
-
-    private var textValue = domain?.toString() ?: ""
-
+class RegisterDomainDialog(var domain: String = "", private val existing: Set<String>) : DialogWrapper(false) {
     init {
-        title = "Register Domain"
-        setOKButtonText(message("actions.register"))
+        title = message("settings.auto-detect.register-domain-dialog.title")
+        setOKButtonText(if (domain.isEmpty()) { message("actions.register") } else { message("actions.update") })
         setSize(600, 100)
         init()
     }
 
     override fun createCenterPanel() = panel {
-        row("Register Domain") {
-            textField(::textValue)
+        row(message("settings.auto-detect.register-domain-dialog.title")) {
+            textField(::domain)
                 .focused()
-                .withValidationOnApply { notBlank(it.text) ?: domain(it.text) ?: exists(it.text, existing.map { domain -> domain.toString() } ) }
+                .withValidationOnApply { notBlank(it.text) ?: domain(it.text) ?: exists(it.text, existing ) }
         }
     }
 }

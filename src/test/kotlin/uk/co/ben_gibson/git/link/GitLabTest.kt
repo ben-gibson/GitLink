@@ -8,19 +8,19 @@ import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.UrlOptions
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
-import java.net.URL
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
-import uk.co.ben_gibson.git.link.git.GitLab
 import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
-import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactoryProvider
+import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
+import uk.co.ben_gibson.git.link.url.template.UrlTemplates
+import java.net.URI
 
 class GitLabTest {
 
     companion object {
 
-        private val REMOTE_BASE_URL = URL("https://gitlab.com/my/repo/")
+        private val REMOTE_BASE_URL = URI("https://gitlab.com/my/repo/")
         private const val BRANCH = "master"
         private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
         private val FILE = File("Foo.java", false, "src", false)
@@ -79,7 +79,7 @@ class GitLabTest {
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
     fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
-        val factory = TemplatedUrlFactoryProvider().forHost(GitLab())
+        val factory = TemplatedUrlFactory(UrlTemplates.gitLab())
 
         val url = factory.createUrl(options)
 

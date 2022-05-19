@@ -12,7 +12,6 @@ import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import java.net.MalformedURLException
 import java.net.URI
 import java.net.URISyntaxException
-import java.net.URL
 
 fun ValidationInfoBuilder.notBlank(value: String): ValidationInfo? = if (value.isEmpty()) error(message("validation.required")) else null
 
@@ -21,8 +20,10 @@ fun ValidationInfoBuilder.domain(value: String): ValidationInfo? {
         return null
     }
 
+    val normalised = value.takeIf { it.startsWith("http") } ?: "https://".plus(value)
+
     return try {
-        val domain = URI(value)
+        val domain = URI(normalised)
         if (domain.host != value) error(message("validation.invalid-domain")) else null
     } catch (e: URISyntaxException) {
         error(message("validation.invalid-domain"))

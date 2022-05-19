@@ -61,10 +61,10 @@ class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.cust
     }
 
     private fun addCustomHost() {
-        val dialog = CustomHostDialog(CustomHostSettings())
+        val dialog = CustomHostDialog()
 
         if (dialog.showAndGet()) {
-            customHosts = customHosts.plus(dialog.customHost)
+            customHosts = customHosts.plus(dialog.host)
             refreshCustomHostTableModel()
         }
     }
@@ -82,7 +82,7 @@ class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.cust
         val dialog = CustomHostDialog(row.copy())
 
         if (dialog.showAndGet()) {
-            customHosts = customHosts.replaceAt(customHostsTable.selectedRow, dialog.customHost)
+            customHosts = customHosts.replaceAt(customHostsTable.selectedRow, dialog.host)
             refreshCustomHostTableModel()
         }
     }
@@ -109,40 +109,41 @@ class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.cust
     }
 }
 
-private class CustomHostDialog(val customHost: CustomHostSettings) : DialogWrapper(false) {
+private class CustomHostDialog(private val customHost: CustomHostSettings? = null) : DialogWrapper(false) {
+    val host = customHost ?: CustomHostSettings()
     private val substitutionReferenceTable = SubstitutionReferenceTable().apply { setShowColumns(true) }
 
     init {
         title = message("settings.custom-host.add-dialog.title")
-        setOKButtonText(message("actions.add"))
+        setOKButtonText(customHost?.let { message("actions.update") } ?: message("actions.add"))
         setSize(700, 700)
         init()
     }
 
     override fun createCenterPanel() = panel {
         row(message("settings.custom-host.add-dialog.field.name.label")) {
-            textField(customHost::displayName)
+            textField(host::displayName)
                 .focused()
                 .withValidationOnApply { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
                 .comment(message("settings.custom-host.add-dialog.field.name.comment"))
         }
         row(message("settings.custom-host.add-dialog.field.domain.label")) {
-            textField(customHost::baseUrl)
+            textField(host::baseUrl)
                 .withValidationOnApply { notBlank(it.text) ?: domain(it.text) }
                 .comment(message("settings.custom-host.add-dialog.field.domain.comment"))
         }
         row(message("settings.custom-host.add-dialog.field.file-at-branch-template.label")) {
-            textField(customHost::fileAtBranchTemplate)
+            textField(host::fileAtBranchTemplate)
                 .withValidationOnApply { notBlank(it.text) ?: fileAtBranchTemplate(it.text) }
                 .comment(message("settings.custom-host.add-dialog.field.file-at-branch-template.comment"))
         }
         row(message("settings.custom-host.add-dialog.field.file-at-commit-template.label")) {
-            textField(customHost::fileAtCommitTemplate)
+            textField(host::fileAtCommitTemplate)
                 .withValidationOnApply { notBlank(it.text) ?: fileAtCommitTemplate(it.text) }
                 .comment(message("settings.custom-host.add-dialog.field.file-at-commit-template.comment"))
         }
         row(message("settings.custom-host.add-dialog.field.commit-template.label")) {
-            textField(customHost::commitTemplate)
+            textField(host::commitTemplate)
                 .withValidationOnApply { notBlank(it.text) ?: commitTemplate(it.text) }
                 .comment(message("settings.custom-host.add-dialog.field.commit-template.comment"))
         }

@@ -5,6 +5,7 @@ import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.project.Project
 import com.intellij.ui.layout.panel
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
+import uk.co.ben_gibson.git.link.git.Host
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.git.HostsProvider
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
@@ -65,18 +66,11 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
     }
 
     override fun onChange() {
-        val current = hostsComboBoxModel.selectedItem
-        val updatedHosts = service<HostsProvider>().provide().toSet();
+        val current = hostsComboBoxModel.selectedItem as? Host
+        val updatedHosts = service<HostsProvider>().provide();
 
-        hostsComboBoxModel.apply {
-            removeAllElements()
-            addAll(service<HostsProvider>().provide().toSet())
-
-            selectedItem = if (updatedHosts.contains(current)) {
-                current
-            } else {
-                null
-            }
-        }
+        hostsComboBoxModel.removeAllElements();
+        hostsComboBoxModel.addAll(updatedHosts.toSet());
+        hostsComboBoxModel.selectedItem = current?.let { updatedHosts.getById(it.id) }
     }
 }

@@ -8,17 +8,18 @@ import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.UrlOptions
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
-import java.net.URL
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
-import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactoryProvider
+import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
+import uk.co.ben_gibson.git.link.url.template.UrlTemplates
+import java.net.URI
 
 class GogsTest {
 
     companion object {
 
-        private val REMOTE_BASE_URL = URL("https://try.gogs.io/foo/bar")
+        private val REMOTE_BASE_URL = URI("https://try.gogs.io/foo/bar")
         private const val BRANCH = "master"
         private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
         private val FILE = File("Foo.java", false, "src", false)
@@ -67,7 +68,7 @@ class GogsTest {
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
     fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
-        val factory = TemplatedUrlFactoryProvider().forHost(Gogs())
+        val factory = TemplatedUrlFactory(UrlTemplates.gogs())
         val url = factory.createUrl(options)
 
         assertEquals(expectedUrl, url.toString())

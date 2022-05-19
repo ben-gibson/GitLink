@@ -58,6 +58,7 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
 
     private fun processBaseUrl(template: String, baseUrl: URI) : String {
         var processed = template
+            .replace("{remote:url:protocol}", baseUrl.toURL().protocol)
             .replace("{remote:url:host}", baseUrl.host)
             .replace("{remote:url}", baseUrl.toString())
             .replace("{remote:url:path}", baseUrl.path)
