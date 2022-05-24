@@ -15,11 +15,16 @@ class VcsMappingChangedListener(val project: Project) : VcsRepositoryMappingList
 
     override fun mappingChanged() {
         val settings = project.service<ProjectSettings>()
-        val applicationSettings = service<ApplicationSettings>()
 
         if (settings.host != null) {
             return
         }
+
+        detectHost()
+    }
+
+    private fun detectHost() {
+        val settings = project.service<ProjectSettings>()
 
         val hosts = project.service<HostsProvider>().provide()
 
@@ -31,7 +36,7 @@ class VcsMappingChangedListener(val project: Project) : VcsRepositoryMappingList
         val remote = repository.locateRemote(settings.remote) ?: return
 
         val host = remote.domain?.let {
-            hosts.getByHostDomain(it) ?: applicationSettings.findHostIdByCustomDomain(it)
+            hosts.getByHostDomain(it) ?: service<ApplicationSettings>().findHostIdByCustomDomain(it)
                 ?.let { id -> hosts.getById(id) }
         }
 
