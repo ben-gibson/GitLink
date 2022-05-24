@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.1.5]
 - Revert host detection fix
 
 ## [4.1.4]
