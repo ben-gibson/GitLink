@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Internal refactor
 
 ## [4.1.2]
 - Fix host detection when opening a new project within the IDE.

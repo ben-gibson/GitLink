@@ -38,12 +38,6 @@
         />
     </extensions>
 
-    <projectListeners>
-        <listener class="uk.co.ben_gibson.git.link.listeners.VcsMappingChangedListener"
-                  topic="com.intellij.dvcs.repo.VcsRepositoryMappingListener"/>
-    </projectListeners>
-
-
     <!-- UI -->
     <resource-bundle>messages.ActionsBundle</resource-bundle>
 
