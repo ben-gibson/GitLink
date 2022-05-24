@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.1.6]
 - Trim forward slash character in file path substitution
 
 ## [4.1.5]
