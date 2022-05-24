@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.1.3]
 - Internal refactor
 
 ## [4.1.2]
