@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Fix host detection when opening a new project within the IDE.
 
 ## [4.1.1]
 - Make 'main' the default fallback branch, replacing 'master'

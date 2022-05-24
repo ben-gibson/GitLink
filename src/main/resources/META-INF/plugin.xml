@@ -17,7 +17,7 @@
         <notification.parentGroup id="git.link.notifications"/>
         <notificationGroup id="git.link.notification.general" displayType="BALLOON" key="notification.group.general.name" />
         <notificationGroup id="git.link.notification.important" displayType="STICKY_BALLOON" key="notification.group.important.name" />
-        <postStartupActivity implementation="uk.co.ben_gibson.git.link.StartupActivity"/>
+        <postStartupActivity implementation="uk.co.ben_gibson.git.link.listeners.ApplicationStartupListener"/>
         <vcsAnnotationGutterActionProvider
             implementation="uk.co.ben_gibson.git.link.ui.extensions.AnnotationGutterActionProvider"/>
         <selectInTarget implementation="uk.co.ben_gibson.git.link.ui.extensions.SelectInTarget"/>
@@ -37,6 +37,12 @@
             id="GitLink.AutoDetectSettings"
         />
     </extensions>
+
+    <projectListeners>
+        <listener class="uk.co.ben_gibson.git.link.listeners.VcsMappingChangedListener"
+                  topic="com.intellij.dvcs.repo.VcsRepositoryMappingListener"/>
+    </projectListeners>
+
 
     <!-- UI -->
     <resource-bundle>messages.ActionsBundle</resource-bundle>
