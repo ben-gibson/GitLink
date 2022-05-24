@@ -3,7 +3,9 @@
 # GitLink Changelog
 
 ## [Unreleased]
-- Strip user info component from the generated URL 
+
+## [4.1.4]
+- Strip user info component from the generated URL
 
 ## [4.1.3]
 - Internal refactor
