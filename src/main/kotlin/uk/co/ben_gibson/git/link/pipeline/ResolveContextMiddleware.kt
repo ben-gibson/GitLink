@@ -4,6 +4,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
+import git4idea.repo.GitRepositoryManager
 import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
@@ -37,7 +38,7 @@ class ResolveContextMiddleware : Middleware {
     }
 
     private fun locateRepository(pass: Pass): GitRepository? {
-        val repository = findRepositoryForFile(pass.project, pass.context.file)
+        val repository = GitRepositoryManager.getInstance(pass.project).getRepositoryForFile(pass.context.file)
 
         repository ?: sendNotification(Notification.repositoryNotFound(), pass.project)
 
