@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Revert host detection fix
 
 ## [4.1.4]
 - Strip user info component from the generated URL

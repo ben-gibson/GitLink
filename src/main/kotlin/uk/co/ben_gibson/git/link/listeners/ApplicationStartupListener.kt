@@ -40,7 +40,7 @@ class ApplicationStartupListener : StartupActivity.DumbAware {
         val projectDirectory = project.guessProjectDir() ?: return
 
         val repository = GitRepositoryManager.getInstance(project)
-            .getRepositoryForFileQuick(projectDirectory) ?: return
+            .getRepositoryForFile(projectDirectory) ?: return
 
         val remote = repository.locateRemote(projectSettings.remote) ?: return
 
