@@ -12,7 +12,7 @@ data class File(val name: String, val isDirectory: Boolean, val path: String, va
             return File(
                 file.name,
                 file.isDirectory,
-                file.path.substring(repository.root.path.length).replace(file.name, "").trimEnd('/'),
+                file.path.substring(repository.root.path.length).replace(file.name, "").trim('/'),
                 file.path == repository.root.path
             )
         }

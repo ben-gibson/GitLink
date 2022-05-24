@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Trim forward slash character in file path substitution
 
 ## [4.1.5]
 - Revert host detection fix
