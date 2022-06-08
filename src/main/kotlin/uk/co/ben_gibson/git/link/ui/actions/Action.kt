@@ -1,13 +1,13 @@
 package uk.co.ben_gibson.git.link.ui.actions
 
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
+import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.*
 import uk.co.ben_gibson.git.link.git.HostLocator
 
-abstract class Action(private val type: Type): AnAction() {
+abstract class Action(private val type: Type): DumbAwareAction() {
 
     enum class Type(val key: String) {
         BROWSER("browser"),
@@ -38,7 +38,7 @@ abstract class Action(private val type: Type): AnAction() {
 
         val host = project.service<HostLocator>().locate()
 
-        event.presentation.isEnabled = host != null && shouldBeEnabled(event)
+        event.presentation.isEnabled = shouldBeEnabled(event)
 
         host?.let {
             event.presentation.icon = it.icon

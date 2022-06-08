@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Do not disable actions during project indexing 
 
 ## [4.1.6]
 - Trim forward slash character in file path substitution
