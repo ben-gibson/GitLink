@@ -1,13 +1,13 @@
-package uk.co.ben_gibson.git.link.git
+package uk.co.ben_gibson.git.link.platform
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.Icons
 import java.net.URI
-import java.util.*
+import java.util.UUID
 
-private val HOSTS = setOf(
+private val EXISTING_PLATFORMS = setOf(
     GitHub(),
     GitLab(),
     BitbucketCloud(),
@@ -20,11 +20,16 @@ private val HOSTS = setOf(
 )
 
 @Service
-class HostsProvider {
-    fun provide(): Hosts {
+class PlatformRepository {
+    fun getById(id: String) = getById(UUID.fromString(id))
+    fun getById(id: UUID) = load().firstOrNull() { it.id == id }
+    fun getByDomain(domain: URI) = load().firstOrNull { it.domains.contains(domain) }
+    fun getAll() = load()
+
+    private fun load(): Set<Platform> {
         val settings = service<ApplicationSettings>()
 
-        val customHosts: List<Host> = settings.customHosts.map {
+        val customPlatforms: List<Platform> = settings.customHosts.map {
             Custom(
                 UUID.fromString(it.id),
                 it.displayName,
@@ -33,6 +38,6 @@ class HostsProvider {
             )
         }
 
-        return Hosts(HOSTS.plus(customHosts))
+        return EXISTING_PLATFORMS.plus(customPlatforms)
     }
 }

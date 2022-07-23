@@ -1,14 +1,15 @@
-package uk.co.ben_gibson.git.link.pipeline
+package uk.co.ben_gibson.git.link.pipeline.middleware
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import uk.co.ben_gibson.git.link.pipeline.Pass
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
 import java.net.URI
 
 @Service
-class HostPollMiddleware : Middleware {
+class SendPollNotification : Middleware {
     override val priority = 10
 
     override fun invoke(pass: Pass, next: () -> URI?) : URI? {
@@ -17,7 +18,7 @@ class HostPollMiddleware : Middleware {
         val settings = service<ApplicationSettings>()
 
         if (settings.showHostPoll && settings.hits % 10 == 0) {
-            sendNotification(Notification.hostPoll())
+            sendNotification(Notification.platformPoll())
         }
 
         return url;

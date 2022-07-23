@@ -46,7 +46,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
         var commitTemplate: String = ""
     )
 
-    fun findHostIdByCustomDomain(domain: URI) = customHostDomains
+    fun findPlatformIdByCustomDomain(domain: URI) = customHostDomains
         .entries
         .firstOrNull { entry -> entry.value.contains(domain.toString()) }
         ?.key

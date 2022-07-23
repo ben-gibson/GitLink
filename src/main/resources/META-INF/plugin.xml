@@ -17,7 +17,7 @@
         <notification.parentGroup id="git.link.notifications"/>
         <notificationGroup id="git.link.notification.general" displayType="BALLOON" key="notification.group.general.name" />
         <notificationGroup id="git.link.notification.important" displayType="STICKY_BALLOON" key="notification.group.important.name" />
-        <postStartupActivity implementation="uk.co.ben_gibson.git.link.listeners.ApplicationStartupListener"/>
+        <postStartupActivity implementation="uk.co.ben_gibson.git.link.listener.ApplicationStartupListener"/>
         <vcsAnnotationGutterActionProvider
             implementation="uk.co.ben_gibson.git.link.ui.extensions.AnnotationGutterActionProvider"/>
         <selectInTarget implementation="uk.co.ben_gibson.git.link.ui.extensions.SelectInTarget"/>

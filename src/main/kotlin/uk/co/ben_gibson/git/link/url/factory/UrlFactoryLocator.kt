@@ -2,14 +2,15 @@ package uk.co.ben_gibson.git.link.url.factory
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import uk.co.ben_gibson.git.link.git.*
+import uk.co.ben_gibson.git.link.platform.Chromium
+import uk.co.ben_gibson.git.link.platform.Platform
 
 @Service
 class UrlFactoryLocator {
-    fun locate(host: Host) : UrlFactory {
-        return when(host) {
+    fun locate(platform: Platform) : UrlFactory {
+        return when(platform) {
             is Chromium -> service<ChromiumUrlFactory>()
-            else -> service<TemplatedUrlFactoryProvider>().forHost(host)
+            else -> service<TemplatedUrlFactoryProvider>().forPlatform(platform)
         }
     }
 }

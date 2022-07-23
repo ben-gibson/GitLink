@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.GitLinkBundle
 import uk.co.ben_gibson.git.link.GitLinkBundle.openPluginSettings
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
-import uk.co.ben_gibson.git.link.git.Host
+import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import java.net.URI
@@ -17,7 +17,6 @@ data class Notification(
     val actions: Set<NotificationAction> = setOf(),
     val type: Type = Type.PERSISTENT
 ) {
-
     enum class Type {
         PERSISTENT,
         TRANSIENT
@@ -28,7 +27,7 @@ data class Notification(
 
         fun hostNotSet(project: Project) = Notification(
             DEFAULT_TITLE,
-            message("notifications.host-not-set"),
+            message("notifications.platform-not-set"),
             actions = setOf(NotificationAction.settings(project))
         )
 
@@ -38,9 +37,9 @@ data class Notification(
 
         fun welcome(version: String) = Notification(message = message("notifications.welcome", version))
 
-        fun review() = Notification(
+        fun star() = Notification(
             message = """
-                Finding GitLink useful? Show your support 💖, drop a review and ⭐ the repo 🙏.
+                Finding GitLink useful? Show your support 💖 and ⭐ the repository 🙏.
             """.trimIndent(),
             actions = setOf(
                 NotificationAction.openRepository() {
@@ -52,12 +51,12 @@ data class Notification(
             )
         )
 
-        fun hostPoll() = Notification(
+        fun platformPoll() = Notification(
             message = """
-                Help improve GitLink by telling us which host you use 🗳️.
+                Help improve GitLink by telling us which platform you use 🗳️.
             """.trimIndent(),
             actions = setOf(
-                NotificationAction.openHostPoll() {
+                NotificationAction.openPlatformPoll() {
                     service<ApplicationSettings>().showHostPoll = false;
                 },
                 NotificationAction.doNotAskAgain() {
@@ -74,14 +73,14 @@ data class Notification(
             )
         )
 
-        fun couldNotDetectGitHost(project: Project) = Notification(
-            message = message("notifications.could-not-detect-host"),
+        fun couldNotDetectPlatform(project: Project) = Notification(
+            message = message("notifications.could-not-detect-platform"),
             actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
         )
 
-        fun remoteHostAutoDetected(remoteHost: Host, project: Project) = Notification(
-            message =  message("notifications.host-detected", remoteHost.displayName),
-            actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
+        fun platformAutoDetected(remotePlatform: Platform, project: Project) = Notification(
+            message =  message("notifications.platform-detected.message", remotePlatform.name),
+            actions = setOf(NotificationAction.settings(project, message("notifications.platform-detected.action")))
         )
 
         fun linkCopied(link: URI) = Notification(
@@ -108,8 +107,8 @@ data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) 
             dismiss()
             onComplete()
         }
-        fun openHostPoll(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
-            GitLinkBundle.openHostPoll()
+        fun openPlatformPoll(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
+            GitLinkBundle.openPlatformPoll()
             dismiss()
             onComplete()
         }

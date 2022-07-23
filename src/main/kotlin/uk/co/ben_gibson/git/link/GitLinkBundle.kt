@@ -34,7 +34,7 @@ object GitLinkBundle : DynamicBundle(BUNDLE) {
         BrowserLauncher.instance.open("https://github.com/ben-gibson/GitLink");
     }
 
-    fun openHostPoll() {
+    fun openPlatformPoll() {
         BrowserLauncher.instance.open("https://github.com/ben-gibson/GitLink/discussions/172");
     }
 
