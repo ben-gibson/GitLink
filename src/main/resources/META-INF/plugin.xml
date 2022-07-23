@@ -28,7 +28,7 @@
         />
         <applicationConfigurable
             parentId="GitLink.ProjectSettings"
-            instance="uk.co.ben_gibson.git.link.ui.settings.CustomHostsSettingsConfigurable"
+            instance="uk.co.ben_gibson.git.link.ui.settings.CustomPlatformSettingsConfigurable"
             id="GitLink.CustomHostSettings"
         />
         <applicationConfigurable

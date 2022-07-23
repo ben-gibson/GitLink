@@ -14,7 +14,7 @@ import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.platform.PlatformRepository
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
-import uk.co.ben_gibson.git.link.ui.components.HostComboBoxModelProvider
+import uk.co.ben_gibson.git.link.ui.components.PlatformComboBoxModelProvider
 import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.domain
 import uk.co.ben_gibson.git.link.ui.validation.exists
@@ -27,7 +27,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
     private val platforms = service<PlatformRepository>()
     private var domainRegistry = settings.customHostDomains
 
-    private val hostsComboBoxModel = HostComboBoxModelProvider.provide()
+    private val platformsComboBoxModel = PlatformComboBoxModelProvider.provide()
 
     private val domainsTableModel = createDomainsTableModel()
 
@@ -48,7 +48,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
     override fun createPanel() = panel {
         row(message("settings.general.field.platform.label")) {
             comboBox(
-                hostsComboBoxModel,
+                platformsComboBoxModel,
                 { platforms.getAll().first() },
                 { },
                 PlatformCellRenderer()
@@ -67,32 +67,32 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         }
     }
 
-    private fun canModifyDomain() = hostsComboBoxModel.selected?.domains?.map { it.toString() }?.contains(domainsTable.selectedObject) == false
+    private fun canModifyDomain() = platformsComboBoxModel.selected?.domains?.map { it.toString() }?.contains(domainsTable.selectedObject) == false
 
     private fun addDomain() {
-        val host = hostsComboBoxModel.selected ?: return
+        val platform = platformsComboBoxModel.selected ?: return
         val dialog = RegisterDomainDialog(domainsRegistry = domainRegistry, platforms = platforms)
 
         if (dialog.showAndGet()) {
-            val hostDomains = domainRegistry.getOrDefault(host.id.toString(), setOf())
-            domainRegistry = domainRegistry.plus(Pair(host.id.toString(), hostDomains.plus(dialog.domain)))
-            refreshDomainsTable(host)
+            val domains = domainRegistry.getOrDefault(platform.id.toString(), setOf())
+            domainRegistry = domainRegistry.plus(Pair(platform.id.toString(), domains.plus(dialog.domain)))
+            refreshDomainsTable(platform)
         }
     }
 
     private fun removeDomain() {
-        val host = hostsComboBoxModel.selected ?: return
+        val platform = platformsComboBoxModel.selected ?: return
         val remove = domainsTable.selectedObject ?: return
 
-        val hostDomains = domainRegistry.getOrDefault(host.id.toString(), setOf())
+        val domains = domainRegistry.getOrDefault(platform.id.toString(), setOf())
 
-        domainRegistry = domainRegistry.plus(Pair(host.id.toString(), hostDomains.minus(remove)))
+        domainRegistry = domainRegistry.plus(Pair(platform.id.toString(), domains.minus(remove)))
 
-        refreshDomainsTable(host)
+        refreshDomainsTable(platform)
     }
 
     private fun editDomain() {
-        val platform = hostsComboBoxModel.selected ?: return
+        val platform = platformsComboBoxModel.selected ?: return
         val domain = domainsTable.selectedObject ?: return
 
         val dialog = RegisterDomainDialog(domain, domainRegistry, platforms)
@@ -126,9 +126,9 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
 
         domainRegistry = settings.customHostDomains
 
-        val host = hostsComboBoxModel.selected ?: return
+        val platform = platformsComboBoxModel.selected ?: return
 
-        refreshDomainsTable(host)
+        refreshDomainsTable(platform)
     }
 
     override fun isModified() : Boolean {

@@ -5,7 +5,7 @@ import com.intellij.ui.CollectionComboBoxModel
 import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.platform.PlatformRepository
 
-object HostComboBoxModelProvider {
+object PlatformComboBoxModelProvider {
     fun provide() : CollectionComboBoxModel<Platform> {
         return CollectionComboBoxModel(service<PlatformRepository>().getAll().toList())
     }

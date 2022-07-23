@@ -18,41 +18,41 @@ import uk.co.ben_gibson.git.link.ui.components.SubstitutionReferenceTable
 import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.*
 
-class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.custom-platform.group.title")) {
+class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.custom-platform.group.title")) {
     private var settings = service<ApplicationSettings>()
-    private var customHosts = settings.customHosts
-    private val customHostTableModel = createCustomHostModel()
+    private var customPlatforms = settings.customHosts
+    private val tableModel = createTableModel()
 
-    private val customHostsTable = TableView(customHostTableModel).apply {
+    private val table = TableView(tableModel).apply {
         setShowColumns(true)
         setSelectionMode(SINGLE_SELECTION)
         emptyText.text = message("settings.custom-platform.table.empty")
     }
 
-    private val customHostTableContainer = ToolbarDecorator.createDecorator(customHostsTable)
-        .setAddAction { addCustomHost() }
-        .setEditAction { editCustomHost() }
-        .setRemoveAction { removeCustomHost() }
+    private val tableContainer = ToolbarDecorator.createDecorator(table)
+        .setAddAction { addCustomPlatform() }
+        .setEditAction { editCustomPlatform() }
+        .setRemoveAction { removeCustomPlatform() }
         .createPanel()
 
     override fun createPanel() = panel {
         row {
-            component(customHostTableContainer).constraints(CCFlags.grow)
+            component(tableContainer).constraints(CCFlags.grow)
         }
         row {
             reportBugLink()
         }
     }
 
-    private fun createCustomHostModel(): ListTableModel<CustomHostSettings> = ListTableModel(
+    private fun createTableModel(): ListTableModel<CustomHostSettings> = ListTableModel(
         arrayOf(
-            createCustomHostColumn(message("settings.custom-platform.table.column.name")) { customHost -> customHost?.displayName },
-            createCustomHostColumn(message("settings.custom-platform.table.column.domain")) { customHost -> customHost?.baseUrl },
+            createColumn(message("settings.custom-platform.table.column.name")) { customPlatform -> customPlatform?.displayName },
+            createColumn(message("settings.custom-platform.table.column.domain")) { customPlatform -> customPlatform?.baseUrl },
         ),
-        customHosts
+        customPlatforms
     )
 
-    private fun createCustomHostColumn(name: String, formatter: (CustomHostSettings?) -> String?) : ColumnInfo<CustomHostSettings, String> {
+    private fun createColumn(name: String, formatter: (CustomHostSettings?) -> String?) : ColumnInfo<CustomHostSettings, String> {
         return object : ColumnInfo<CustomHostSettings, String>(name) {
             override fun valueOf(item: CustomHostSettings?): String? {
                 return formatter(item)
@@ -60,90 +60,90 @@ class CustomHostsSettingsConfigurable : BoundConfigurable(message("settings.cust
         }
     }
 
-    private fun addCustomHost() {
-        val dialog = CustomHostDialog()
+    private fun addCustomPlatform() {
+        val dialog = CustomPlatformDialog()
 
         if (dialog.showAndGet()) {
-            customHosts = customHosts.plus(dialog.host)
-            refreshCustomHostTableModel()
+            customPlatforms = customPlatforms.plus(dialog.platform)
+            refreshTableModel()
         }
     }
 
-    private fun removeCustomHost() {
-        val row = customHostsTable.selectedObject ?: return
+    private fun removeCustomPlatform() {
+        val row = table.selectedObject ?: return
 
-        customHosts = customHosts.minus(row)
-        refreshCustomHostTableModel()
+        customPlatforms = customPlatforms.minus(row)
+        refreshTableModel()
     }
 
-    private fun editCustomHost() {
-        val row = customHostsTable.selectedObject ?: return
+    private fun editCustomPlatform() {
+        val row = table.selectedObject ?: return
 
-        val dialog = CustomHostDialog(row.copy())
+        val dialog = CustomPlatformDialog(row.copy())
 
         if (dialog.showAndGet()) {
-            customHosts = customHosts.replaceAt(customHostsTable.selectedRow, dialog.host)
-            refreshCustomHostTableModel()
+            customPlatforms = customPlatforms.replaceAt(table.selectedRow, dialog.platform)
+            refreshTableModel()
         }
     }
 
-    private fun refreshCustomHostTableModel() {
-        customHostTableModel.items = customHosts
+    private fun refreshTableModel() {
+        tableModel.items = customPlatforms
     }
 
     override fun reset() {
         super.reset()
 
-        customHosts = settings.customHosts
-        refreshCustomHostTableModel()
+        customPlatforms = settings.customHosts
+        refreshTableModel()
     }
 
     override fun isModified() : Boolean {
-        return super.isModified() || customHosts != settings.customHosts
+        return super.isModified() || customPlatforms != settings.customHosts
     }
 
     override fun apply() {
         super.apply()
 
-        settings.customHosts = customHosts
+        settings.customHosts = customPlatforms
     }
 }
 
-private class CustomHostDialog(private val customHost: CustomHostSettings? = null) : DialogWrapper(false) {
-    val host = customHost ?: CustomHostSettings()
+private class CustomPlatformDialog(customPlatform: CustomHostSettings? = null) : DialogWrapper(false) {
+    val platform = customPlatform ?: CustomHostSettings()
     private val substitutionReferenceTable = SubstitutionReferenceTable().apply { setShowColumns(true) }
 
     init {
         title = message("settings.custom-platform.add-dialog.title")
-        setOKButtonText(customHost?.let { message("actions.update") } ?: message("actions.add"))
+        setOKButtonText(customPlatform?.let { message("actions.update") } ?: message("actions.add"))
         setSize(700, 700)
         init()
     }
 
     override fun createCenterPanel() = panel {
         row(message("settings.custom-platform.add-dialog.field.name.label")) {
-            textField(host::displayName)
+            textField(platform::displayName)
                 .focused()
                 .withValidationOnApply { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
                 .comment(message("settings.custom-platform.add-dialog.field.name.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.domain.label")) {
-            textField(host::baseUrl)
+            textField(platform::baseUrl)
                 .withValidationOnApply { notBlank(it.text) ?: domain(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.domain.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.file-at-branch-template.label")) {
-            textField(host::fileAtBranchTemplate)
+            textField(platform::fileAtBranchTemplate)
                 .withValidationOnApply { notBlank(it.text) ?: fileAtBranchTemplate(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.file-at-branch-template.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.file-at-commit-template.label")) {
-            textField(host::fileAtCommitTemplate)
+            textField(platform::fileAtCommitTemplate)
                 .withValidationOnApply { notBlank(it.text) ?: fileAtCommitTemplate(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.file-at-commit-template.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.commit-template.label")) {
-            textField(host::commitTemplate)
+            textField(platform::commitTemplate)
                 .withValidationOnApply { notBlank(it.text) ?: commitTemplate(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.commit-template.comment"))
         }

@@ -16,8 +16,8 @@ class SelectInTarget(private val project: Project) : IntellijSelectInTarget {
     }
 
     override fun toString(): String {
-        val host = project.service<PlatformLocator>().locate()
+        val platform = project.service<PlatformLocator>().locate()
 
-        return host?.name ?: "Gitlink"
+        return platform?.name ?: "Gitlink"
     }
 }
