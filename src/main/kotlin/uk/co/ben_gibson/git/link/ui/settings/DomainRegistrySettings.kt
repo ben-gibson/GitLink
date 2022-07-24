@@ -3,6 +3,7 @@ package uk.co.ben_gibson.git.link.ui.settings
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.layout.CCFlags
 import com.intellij.ui.layout.panel
@@ -14,7 +15,6 @@ import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.platform.PlatformRepository
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
-import uk.co.ben_gibson.git.link.ui.components.PlatformComboBoxModelProvider
 import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.domain
 import uk.co.ben_gibson.git.link.ui.validation.exists
@@ -22,12 +22,12 @@ import uk.co.ben_gibson.git.link.ui.validation.notBlank
 import java.awt.event.ItemEvent
 import javax.swing.ListSelectionModel
 
-class DomainRegistrySettings : BoundConfigurable(message("settings.domain-registry.group.title")) {
+class DomainRegistrySettings : BoundConfigurable(message("settings.domain-registry.group.title")), ApplicationSettings.ChangeListener {
     private val settings = service<ApplicationSettings>()
     private val platforms = service<PlatformRepository>()
     private var domainRegistry = settings.customHostDomains
 
-    private val platformsComboBoxModel = PlatformComboBoxModelProvider.provide()
+    private val platformComboBoxModel = CollectionComboBoxModel(platforms.getAll().toList())
 
     private val domainsTableModel = createDomainsTableModel()
 
@@ -45,10 +45,14 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         .setRemoveActionUpdater() { canModifyDomain() }
         .createPanel()
 
+    init {
+        service<ApplicationSettings>().registerListener(this)
+    }
+
     override fun createPanel() = panel {
         row(message("settings.general.field.platform.label")) {
             comboBox(
-                platformsComboBoxModel,
+                platformComboBoxModel,
                 { platforms.getAll().first() },
                 { },
                 PlatformCellRenderer()
@@ -67,10 +71,14 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         }
     }
 
-    private fun canModifyDomain() = platformsComboBoxModel.selected?.domains?.map { it.toString() }?.contains(domainsTable.selectedObject) == false
+    private fun canModifyDomain() : Boolean {
+        val platform = platformComboBoxModel.selectedItem as Platform? ?: return false
+
+        return platform.domains.map { it.toString() }.contains(domainsTable.selectedObject)
+    }
 
     private fun addDomain() {
-        val platform = platformsComboBoxModel.selected ?: return
+        val platform = platformComboBoxModel.selected ?: return
         val dialog = RegisterDomainDialog(domainsRegistry = domainRegistry, platforms = platforms)
 
         if (dialog.showAndGet()) {
@@ -81,7 +89,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
     }
 
     private fun removeDomain() {
-        val platform = platformsComboBoxModel.selected ?: return
+        val platform = platformComboBoxModel.selected ?: return
         val remove = domainsTable.selectedObject ?: return
 
         val domains = domainRegistry.getOrDefault(platform.id.toString(), setOf())
@@ -92,7 +100,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
     }
 
     private fun editDomain() {
-        val platform = platformsComboBoxModel.selected ?: return
+        val platform = platformComboBoxModel.selected ?: return
         val domain = domainsTable.selectedObject ?: return
 
         val dialog = RegisterDomainDialog(domain, domainRegistry, platforms)
@@ -126,7 +134,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
 
         domainRegistry = settings.customHostDomains
 
-        val platform = platformsComboBoxModel.selected ?: return
+        val platform = platformComboBoxModel.selected ?: return
 
         refreshDomainsTable(platform)
     }
@@ -139,6 +147,14 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         super.apply()
 
         settings.customHostDomains = domainRegistry
+    }
+
+    override fun onChange() {
+        val current = platformComboBoxModel.selectedItem as? Platform
+
+        platformComboBoxModel.removeAll()
+        platformComboBoxModel.add(platforms.getAll().toList())
+        platformComboBoxModel.selectedItem = current?.let { platforms.getById(it.id) }
     }
 }
 

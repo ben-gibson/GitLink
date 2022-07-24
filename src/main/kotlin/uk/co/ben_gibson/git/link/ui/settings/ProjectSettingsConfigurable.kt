@@ -3,6 +3,7 @@ package uk.co.ben_gibson.git.link.ui.settings
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.project.Project
+import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.layout.panel
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.platform.Platform
@@ -13,12 +14,11 @@ import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
 import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.notBlank
 import java.util.*
-import javax.swing.DefaultComboBoxModel
 
 class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message("settings.general.group.title")), ApplicationSettings.ChangeListener {
     private val platforms = service<PlatformRepository>()
     private val settings = project.service<ProjectSettings>()
-    private val platformComboBoxModel = DefaultComboBoxModel(Vector(platforms.getAll()))
+    private val platformComboBoxModel = CollectionComboBoxModel(platforms.getAll().toList())
     private val initialPlatform = settings.host?.let { platforms.getById(it) }
 
     init {
@@ -65,8 +65,8 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
     override fun onChange() {
         val current = platformComboBoxModel.selectedItem as? Platform
 
-        platformComboBoxModel.removeAllElements()
-        platformComboBoxModel.addAll(platforms.getAll())
+        platformComboBoxModel.removeAll()
+        platformComboBoxModel.add(platforms.getAll().toList())
         platformComboBoxModel.selectedItem = current?.let { platforms.getById(it.id) }
     }
 }

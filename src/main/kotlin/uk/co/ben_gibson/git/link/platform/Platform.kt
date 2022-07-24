@@ -7,7 +7,22 @@ import java.net.URI
 import java.util.UUID
 import javax.swing.Icon
 
-sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<URI> = setOf())
+sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<URI> = setOf()) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Platform
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
 
 class GitHub() : Platform(
     UUID.fromString("72037fcc-cb9c-4c22-960a-ffe73fd5e229"),
