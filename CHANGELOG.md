@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.1.8]
 - Rename 'Host' option to 'Platform'
 
 ## [4.1.7]
