@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Rename 'Host' option to 'Platform'
 
 ## [4.1.7]
 - Do not disable actions during project indexing

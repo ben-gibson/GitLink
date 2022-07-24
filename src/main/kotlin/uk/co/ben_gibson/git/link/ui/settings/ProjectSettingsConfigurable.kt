@@ -3,35 +3,37 @@ package uk.co.ben_gibson.git.link.ui.settings
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.project.Project
+import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.layout.panel
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
-import uk.co.ben_gibson.git.link.git.Host
+import uk.co.ben_gibson.git.link.platform.Platform
+import uk.co.ben_gibson.git.link.platform.PlatformRepository
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
-import uk.co.ben_gibson.git.link.git.HostsProvider
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
-import uk.co.ben_gibson.git.link.ui.components.HostCellRenderer
+import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
 import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.notBlank
-import javax.swing.DefaultComboBoxModel
+import java.util.*
 
 class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message("settings.general.group.title")), ApplicationSettings.ChangeListener {
-    private val hosts = service<HostsProvider>().provide()
+    private val platforms = service<PlatformRepository>()
     private val settings = project.service<ProjectSettings>()
-    private val hostsComboBoxModel = DefaultComboBoxModel(hosts.toArray())
-    private val initialHost = settings.host?.let { hosts.getById(it) }
+    private val platformComboBoxModel = CollectionComboBoxModel(platforms.getAll().toList())
+    private val initialPlatform = settings.host?.let { platforms.getById(it) }
 
     init {
         service<ApplicationSettings>().registerListener(this)
     }
 
     override fun createPanel() = panel {
-        row(message("settings.general.field.host.label")) {
+        row(message("settings.general.field.platform.label")) {
             comboBox(
-                hostsComboBoxModel,
-                { initialHost },
+                platformComboBoxModel,
+                { initialPlatform },
                 { settings.host = it?.id?.toString() },
-                HostCellRenderer()
+                PlatformCellRenderer()
             )
+                .comment(message("settings.general.field.platform.help"))
         }
         row(message("settings.general.field.fallback-branch.label")) {
             textField(settings::fallbackBranch)
@@ -46,12 +48,7 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
             row(message("settings.general.field.force-https.label")) {
                 checkBox(message("settings.general.field.force-https.label"), settings::forceHttps)
             }.largeGapAfter()
-//            row("Generate URLs to current file using") {
-//                buttonGroup(settings::generateUrlTo) {
-//                    radioButton("Commit", ContextType.COMMIT)
-//                    radioButton("Branch", ContextType.BRANCH)
-//                }
-//            }.largeGapAfter()
+
             row(message("settings.general.field.check-commit-on-remote.label")) {
                 checkBox(
                     message("settings.general.field.check-commit-on-remote.label"),
@@ -66,11 +63,10 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
     }
 
     override fun onChange() {
-        val current = hostsComboBoxModel.selectedItem as? Host
-        val updatedHosts = service<HostsProvider>().provide();
+        val current = platformComboBoxModel.selectedItem as? Platform
 
-        hostsComboBoxModel.removeAllElements();
-        hostsComboBoxModel.addAll(updatedHosts.toSet());
-        hostsComboBoxModel.selectedItem = current?.let { updatedHosts.getById(it.id) }
+        platformComboBoxModel.removeAll()
+        platformComboBoxModel.add(platforms.getAll().toList())
+        platformComboBoxModel.selectedItem = current?.let { platforms.getById(it.id) }
     }
 }

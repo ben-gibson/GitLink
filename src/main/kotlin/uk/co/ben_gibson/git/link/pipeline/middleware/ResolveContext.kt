@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.git.link.pipeline
+package uk.co.ben_gibson.git.link.pipeline.middleware
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -6,35 +6,38 @@ import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
 import git4idea.repo.GitRepositoryManager
 import uk.co.ben_gibson.git.link.git.*
+import uk.co.ben_gibson.git.link.pipeline.Pass
+import uk.co.ben_gibson.git.link.platform.Platform
+import uk.co.ben_gibson.git.link.platform.PlatformLocator
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
 import java.net.URI
 
 @Service
-class ResolveContextMiddleware : Middleware {
+class ResolveContext : Middleware {
     override val priority = 5
 
     override fun invoke(pass: Pass, next: () -> URI?): URI? {
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null
-        val host = localeHost(pass) ?: return null
+        val platform = localePlatform(pass) ?: return null
 
-        pass.host = host
+        pass.platform = platform
         pass.repository = repository
         pass.remote = remote
 
         return next()
     }
 
-    private fun localeHost(pass: Pass): Host? {
-        val host = pass.project.service<HostLocator>().locate()
+    private fun localePlatform(pass: Pass): Platform? {
+        val platform = pass.project.service<PlatformLocator>().locate()
 
-        if (host == null) {
+        if (platform == null) {
             sendNotification(Notification.hostNotSet(pass.project), pass.project)
         }
 
-        return host
+        return platform
     }
 
     private fun locateRepository(pass: Pass): GitRepository? {

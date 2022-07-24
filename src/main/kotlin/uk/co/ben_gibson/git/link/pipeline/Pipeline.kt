@@ -4,6 +4,8 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.Context
+import uk.co.ben_gibson.git.link.pipeline.middleware.*
+import uk.co.ben_gibson.git.link.pipeline.middleware.Timer
 import java.net.URI
 import java.util.*
 import kotlin.collections.Set
@@ -11,13 +13,13 @@ import kotlin.collections.Set
 @Service
 class Pipeline(private val project: Project) {
     private val middlewares: Set<Middleware> = setOf(
-        project.service<GenerateUrlMiddleware>(),
-        project.service<TimerMiddleware>(),
-        project.service<RecordHitMiddleware>(),
-        project.service<ForceHttpsMiddleware>(),
-        project.service<RatePluginMiddleware>(),
-        project.service<HostPollMiddleware>(),
-        project.service<ResolveContextMiddleware>(),
+        project.service<GenerateUrl>(),
+        project.service<Timer>(),
+        project.service<RecordHit>(),
+        project.service<ForceHttps>(),
+        project.service<SendSupportNotification>(),
+        project.service<SendPollNotification>(),
+        project.service<ResolveContext>(),
     )
 
     fun accept(context: Context) : URI? {
@@ -25,7 +27,7 @@ class Pipeline(private val project: Project) {
             throw IllegalStateException("No middleware registered")
         }
 
-        val queue = PriorityQueue<Middleware>(middlewares)
+        val queue = PriorityQueue(middlewares)
 
         return next(queue, Pass(project, context))
     }

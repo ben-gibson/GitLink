@@ -1,5 +1,6 @@
-package uk.co.ben_gibson.git.link.pipeline
+package uk.co.ben_gibson.git.link.pipeline.middleware
 
+import uk.co.ben_gibson.git.link.pipeline.Pass
 import java.net.URI
 
 interface Middleware : Comparable<Middleware> {
