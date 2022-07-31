@@ -3,21 +3,21 @@ package uk.co.ben_gibson.git.link.url
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 
-sealed class UrlOptions(val baseUrl: URI)
+sealed class UrlOptions(val baseUrl: URL)
 
-class UrlOptionsCommit(baseUrl: URI, val commit: Commit) : UrlOptions(baseUrl)
+class UrlOptionsCommit(baseUrl: URL, val commit: Commit) : UrlOptions(baseUrl)
 
 interface UrlOptionsFileAware {
-    val baseUrl: URI
+    val baseUrl: URL
     val file: File
     val ref: String
     val lineSelection: LineSelection?
 }
 
 class UrlOptionsFileAtCommit(
-    baseUrl: URI,
+    baseUrl: URL,
     override val file: File,
     val commit: Commit,
     override val lineSelection: LineSelection? = null
@@ -26,7 +26,7 @@ class UrlOptionsFileAtCommit(
 }
 
 class UrlOptionsFileAtBranch(
-    baseUrl: URI,
+    baseUrl: URL,
     override val file: File,
     val branch: String,
     override val lineSelection: LineSelection? = null

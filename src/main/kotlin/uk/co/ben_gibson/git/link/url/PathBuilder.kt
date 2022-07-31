@@ -1,6 +1,6 @@
 package uk.co.ben_gibson.git.link.url
 
-class PathBuilder() {
+class PathBuilder {
     private val parts:MutableList<String> = mutableListOf()
 
     fun withPart(parameter: String) : PathBuilder {

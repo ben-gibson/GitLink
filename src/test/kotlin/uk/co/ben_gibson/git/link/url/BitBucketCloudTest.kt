@@ -10,13 +10,13 @@ import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 
 class BitBucketCloudTest {
 
     companion object {
 
-        private val REMOTE_BASE_URL = URI("https://bitbucket.org/foo/bar")
+        private val REMOTE_BASE_URL = URL.fromString("https://bitbucket.org/foo/bar")
         private const val BRANCH = "master"
         private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
         private val FILE = File("Foo.java", false, "src", false)
@@ -26,11 +26,11 @@ class BitBucketCloudTest {
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH, LINE_SELECTION),
-                "https://bitbucket.org/foo/bar/src/HEAD/src/Foo.java?at=master#lines-10:20"
+                "https://bitbucket.org/foo/bar/src/master/src/Foo.java#lines-10:20"
             ),
             Arguments.of(
                 UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH),
-                "https://bitbucket.org/foo/bar/src/HEAD/src/Foo.java?at=master"
+                "https://bitbucket.org/foo/bar/src/master/src/Foo.java"
             ),
             Arguments.of(
                 UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT, LineSelection(10, 20)),

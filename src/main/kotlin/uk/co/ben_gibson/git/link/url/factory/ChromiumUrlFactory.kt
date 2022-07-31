@@ -2,22 +2,23 @@ package uk.co.ben_gibson.git.link.url.factory
 
 import com.intellij.openapi.components.Service
 import uk.co.ben_gibson.git.link.url.*
-import java.net.URI
-import java.net.URL
+import uk.co.ben_gibson.url.Host
+import uk.co.ben_gibson.url.Path
+import uk.co.ben_gibson.url.URL
 
-private const val HOST = "source.chromium.org"
+private val HOST = Host.create("source.chromium.org")
 
 private const val IDENTIFIER_CHROMIUMOS = "chromiumos"
 
 @Service
 class ChromiumUrlFactory: UrlFactory {
-    override fun createUrl(options: UrlOptions): URI {
-        val path = if (options.baseUrl.path.contains(IDENTIFIER_CHROMIUMOS))
+    override fun createUrl(options: UrlOptions): URL {
+        val path = if (options.baseUrl.path.toString().contains(IDENTIFIER_CHROMIUMOS))
             createPathForChromiumos(options)
         else
             createPathForChromium(options)
 
-        return URL(options.baseUrl.toURL().protocol, HOST, path).toURI()
+        return URL(scheme = options.baseUrl.scheme, host = HOST, path = Path.create(path))
     }
 
     private fun createPathForChromium(options: UrlOptions) : String {
@@ -25,7 +26,7 @@ class ChromiumUrlFactory: UrlFactory {
 
         pathBuilder
             .withPart("chromium")
-            .withSubPath(options.baseUrl.path)
+            .withSubPath(options.baseUrl.path.toString())
             .withPart("+")
 
         when (options) {
@@ -45,7 +46,7 @@ class ChromiumUrlFactory: UrlFactory {
             is UrlOptionsFileAtCommit -> pathBuilder.withSubPath(createChromiumosFileSubPath(options))
             is UrlOptionsCommit -> pathBuilder
                 .withSubPath("chromiumos/_/chromium/chromiumos")
-                .withParts(options.baseUrl.path.split('/').filter{ it.isNotBlank() }.drop(1))
+                .withParts(options.baseUrl.path.toString().split('/').filter{ it.isNotBlank() }.drop(1))
                 .withPart("+")
                 .withPart(options.commit.toString())
         }
@@ -71,7 +72,7 @@ class ChromiumUrlFactory: UrlFactory {
             .withSubPath("chromiumos/chromiumos/codesearch")
             .withPart("+")
             .withPart(options.ref.plus(":src"))
-            .withParts(options.baseUrl.path.split('/').filter{ it.isNotBlank() }.drop(1))
+            .withParts(options.baseUrl.path.toString().split('/').filter{ it.isNotBlank() }.drop(1))
             .withParts(options.file.path.split("/").filter { it.isNotBlank() })
             .withPart(if (options.file.isRoot) "" else options.file.name)
             .build()

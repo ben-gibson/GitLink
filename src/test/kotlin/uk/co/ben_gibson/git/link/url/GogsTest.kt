@@ -9,13 +9,13 @@ import uk.co.ben_gibson.git.link.ui.LineSelection
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 
 class GogsTest {
 
     companion object {
 
-        private val REMOTE_BASE_URL = URI("https://try.gogs.io/foo/bar")
+        private val REMOTE_BASE_URL = URL.fromString("https://try.gogs.io/foo/bar")
         private const val BRANCH = "master"
         private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
         private val FILE = File("Foo.java", false, "src", false)

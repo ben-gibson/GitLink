@@ -22,10 +22,20 @@ version = properties("pluginVersion")
 // Configure project's dependencies
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/ben-gibson/url")
+        credentials {
+            username = properties("githubUsername") as String? ?: System.getenv("USERNAME")
+            password = properties("githubToken") as String? ?: System.getenv("TOKEN")
+        }
+    }
 }
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    implementation("uk.co.ben_gibson:url:0.0.3")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
+
 }
 
 tasks.test {
@@ -56,8 +66,6 @@ qodana {
     saveReport.set(true)
     showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
 }
-
-
 
 tasks {
     // Set the JVM compatibility versions

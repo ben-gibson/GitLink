@@ -20,7 +20,7 @@ data class UrlTemplates(val fileAtBranch: String, val fileAtCommit : String, val
 
         fun bitbucketCloud(): UrlTemplates {
             return UrlTemplates(
-                "{remote:url}/src/HEAD/{file:path}/{file:name}?at={branch}{line-block:start}#lines-{line:start}:{line:end}{line-block:end}",
+                "{remote:url}/src/{branch}/{file:path}/{file:name}{line-block:start}#lines-{line:start}:{line:end}{line-block:end}",
                 "{remote:url}/src/{commit}/{file:path}/{file:name}{line-block:start}#lines-{line:start}:{line:end}{line-block:end}",
                 "{remote:url}/commits/{commit}"
             )

@@ -9,10 +9,9 @@ import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
+import uk.co.ben_gibson.url.Host
+import uk.co.ben_gibson.url.URL
 import java.lang.IllegalArgumentException
-import java.net.MalformedURLException
-import java.net.URI
-import java.net.URISyntaxException
 
 fun ValidationInfoBuilder.notBlank(value: String): ValidationInfo? = if (value.isEmpty()) error(message("validation.required")) else null
 
@@ -21,13 +20,11 @@ fun ValidationInfoBuilder.domain(value: String): ValidationInfo? {
         return null
     }
 
-    val normalised = value.takeIf { it.startsWith("http") } ?: "https://".plus(value)
-
     return try {
-        val domain = URI(normalised)
-        if (domain.host != value) error(message("validation.invalid-domain")) else null
-    } catch (e: URISyntaxException) {
-        error(message("validation.invalid-domain"))
+        Host.create(value)
+        null
+    } catch (e: IllegalArgumentException) {
+        error(message("validation.invalid-domain"));
     }
 }
 
@@ -65,7 +62,7 @@ fun ValidationInfoBuilder.fileAtCommitTemplate(value: String): ValidationInfo? {
     }
 
     val options = UrlOptionsFileAtCommit(
-        URI("https://example.com"),
+        URL.fromString("https://example.com"),
         File("foo.kt", false, "src/main", false),
         Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"),
         LineSelection(10, 20)
@@ -80,7 +77,7 @@ fun ValidationInfoBuilder.fileAtBranchTemplate(value: String): ValidationInfo? {
     }
 
     val options = UrlOptionsFileAtBranch(
-        URI("https://example.com"),
+        URL.fromString("https://example.com"),
         File("foo.kt", false, "src/main", false),
         "master",
         LineSelection(10, 20)
@@ -95,7 +92,7 @@ fun ValidationInfoBuilder.commitTemplate(value: String): ValidationInfo? {
     }
 
     val options = UrlOptionsCommit(
-        URI("https://example.com"),
+        URL.fromString("https://example.com"),
         Commit("734232a3c18f0625843bd161c3f5da272b9d53c1")
     )
 
@@ -115,9 +112,7 @@ private fun ValidationInfoBuilder.urlTemplate(
         null
     } catch (e: Exception) {
         when(e) {
-            is IllegalArgumentException,
-            is URISyntaxException,
-            is MalformedURLException -> error(message("validation.invalid-url-template"))
+            is IllegalArgumentException -> error(message("validation.invalid-url-template"))
             else -> throw e
         }
     }

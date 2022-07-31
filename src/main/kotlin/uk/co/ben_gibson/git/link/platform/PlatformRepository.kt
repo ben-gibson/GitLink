@@ -4,7 +4,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.Icons
-import java.net.URI
+import uk.co.ben_gibson.url.Host
 import java.util.UUID
 
 private val EXISTING_PLATFORMS = setOf(
@@ -23,7 +23,7 @@ private val EXISTING_PLATFORMS = setOf(
 class PlatformRepository {
     fun getById(id: String) = getById(UUID.fromString(id))
     fun getById(id: UUID) = load().firstOrNull() { it.id == id }
-    fun getByDomain(domain: URI) = load().firstOrNull { it.domains.contains(domain) }
+    fun getByDomain(domain: Host) = load().firstOrNull { it.domains.contains(domain) }
     fun getAll() = load()
 
     private fun load(): Set<Platform> {
@@ -34,7 +34,7 @@ class PlatformRepository {
                 UUID.fromString(it.id),
                 it.displayName,
                 Icons.GIT,
-                setOf(URI(it.baseUrl))
+                setOf(Host.create(it.baseUrl))
             )
         }
 

@@ -74,7 +74,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
     private fun canModifyDomain() : Boolean {
         val platform = platformComboBoxModel.selectedItem as Platform? ?: return false
 
-        return platform.domains.map { it.toString() }.contains(domainsTable.selectedObject)
+        return !platform.domains.map { it.toString() }.contains(domainsTable.selectedObject)
     }
 
     private fun addDomain() {

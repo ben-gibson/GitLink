@@ -10,13 +10,13 @@ import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 
 class GitLabTest {
 
     companion object {
 
-        private val REMOTE_BASE_URL = URI("https://gitlab.com/my/repo/")
+        private val REMOTE_BASE_URL = URL.fromString("https://gitlab.com/my/repo/")
         private const val BRANCH = "master"
         private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
         private val FILE = File("Foo.java", false, "src", false)

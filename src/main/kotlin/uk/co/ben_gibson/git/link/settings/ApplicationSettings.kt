@@ -5,7 +5,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
 import com.intellij.util.xmlb.annotations.Tag;
-import java.net.URI
+import uk.co.ben_gibson.url.Host
 import java.util.UUID
 
 /**
@@ -46,7 +46,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
         var commitTemplate: String = ""
     )
 
-    fun findPlatformIdByCustomDomain(domain: URI) = customHostDomains
+    fun findPlatformIdByCustomDomain(domain: Host) = customHostDomains
         .entries
         .firstOrNull { entry -> entry.value.contains(domain.toString()) }
         ?.key

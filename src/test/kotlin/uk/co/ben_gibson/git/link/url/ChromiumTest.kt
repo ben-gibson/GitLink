@@ -9,14 +9,14 @@ import uk.co.ben_gibson.git.link.ui.LineSelection
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.url.factory.ChromiumUrlFactory
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 
 class ChromiumTest {
 
     companion object {
 
-        private val REMOTE_BASE_URL_CHROMIUMOS = URI("https://chromium.googlesource.com/chromiumos/platform/ec")
-        private val REMOTE_BASE_URL_CHROMIUM = URI("https://chromium.googlesource.com/chromium/tools/build")
+        private val REMOTE_BASE_URL_CHROMIUMOS = URL.fromString("https://chromium.googlesource.com/chromiumos/platform/ec")
+        private val REMOTE_BASE_URL_CHROMIUM = URL.fromString("https://chromium.googlesource.com/chromium/tools/build")
         private const val BRANCH = "master"
         private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
         private val FILE = File("foo.c", false, "board", false)

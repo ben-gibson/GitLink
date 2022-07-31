@@ -12,13 +12,13 @@ import uk.co.ben_gibson.git.link.platform.PlatformLocator
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 
 @Service
 class ResolveContext : Middleware {
     override val priority = 5
 
-    override fun invoke(pass: Pass, next: () -> URI?): URI? {
+    override fun invoke(pass: Pass, next: () -> URL?): URL? {
         val repository = locateRepository(pass) ?: return null
         val remote = locateRemote(pass, repository) ?: return null
         val platform = localePlatform(pass) ?: return null
