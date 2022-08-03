@@ -73,7 +73,7 @@ jobs:
       - name: Run Tests
         run: ./gradlew test
         env:
-          GITHUB_USERNAME: "ben-gibson"
+          GITHUB_USERNAME: ben-gibson
           GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
 
       # Collect Tests Result of failed tests
