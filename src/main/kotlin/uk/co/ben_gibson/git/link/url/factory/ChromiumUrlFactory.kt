@@ -46,8 +46,7 @@ class ChromiumUrlFactory: UrlFactory {
     }
 
     private fun createChromiumFileSubPath(options: UrlOptionsFileAware): Path {
-        //var path = Path.fromSegments("${options.ref}:".plus(options.file.path.trim('/')).split("/"))
-        var path = Path("")
+        var path = Path.fromSegments("${options.ref}:".plus(options.file.path.trim('/')).split("/"))
 
         if (!options.file.isRoot) {
             path = path.withSegment(options.file.name)
@@ -59,7 +58,7 @@ class ChromiumUrlFactory: UrlFactory {
 
         val lineSelection = options.lineSelection ?: return path
 
-        return path.with(createLineSelection(lineSelection))
+        return Path(path.toString() + createLineSelection(lineSelection))
     }
 
     private fun createChromiumosFileSubPath(options: UrlOptionsFileAware): Path {
@@ -82,5 +81,5 @@ class ChromiumUrlFactory: UrlFactory {
         return Path(path.toString() + createLineSelection(lineSelection))
     }
 
-    private fun createLineSelection(selection: LineSelection) = Path(";l=${selection.start}-${selection.end}")
+    private fun createLineSelection(selection: LineSelection) = ";l=${selection.start}-${selection.end}"
 }

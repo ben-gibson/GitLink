@@ -31,9 +31,9 @@ repositories {
     }
 }
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    implementation("uk.co.ben_gibson:url:0.0.6")
+    implementation("uk.co.ben_gibson:url:0.0.7")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
 
 }
@@ -47,7 +47,7 @@ intellij {
     pluginName.set(properties("pluginName"))
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
-    //updateSinceUntilBuild.set(false)
+    updateSinceUntilBuild.set(false)
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
@@ -86,6 +86,7 @@ tasks {
     patchPluginXml {
         version.set(properties("pluginVersion"))
         sinceBuild.set(properties("pluginSinceBuild"))
+        //untilBuild.set(properties("pluginUntilBuild"))
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription.set(
