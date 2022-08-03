@@ -26,7 +26,7 @@ repositories {
         url = uri("https://maven.pkg.github.com/ben-gibson/url")
         credentials {
             username = properties("githubUsername") as String? ?: System.getenv("GITHUB_USERNAME")
-            password = properties("githubToken") as String? ?: System.getenv("PACKAGE_READ_TOKEN")
+            password = properties("githubToken") as String? ?: System.getenv("GITHUB_PACKAGE_READ_TOKEN")
         }
     }
 }
@@ -47,7 +47,7 @@ intellij {
     pluginName.set(properties("pluginName"))
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
-    updateSinceUntilBuild.set(false)
+    //updateSinceUntilBuild.set(false)
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
@@ -85,7 +85,7 @@ tasks {
 
     patchPluginXml {
         version.set(properties("pluginVersion"))
-        //sinceBuild.set(properties("pluginSinceBuild"))
+        sinceBuild.set(properties("pluginSinceBuild"))
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription.set(

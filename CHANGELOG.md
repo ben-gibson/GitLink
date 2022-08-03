@@ -3,8 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
-- Replace Java URL and URI with URL library.
-- Fix issue preventing registered custom domains being removed.
+- Switch URL library
+- Fix issue removing custom domains
 
 ## [4.1.8]
 - Rename 'Host' option to 'Platform'
