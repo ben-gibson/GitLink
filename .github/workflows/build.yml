@@ -69,6 +69,12 @@ jobs:
 
           # ./gradlew listproductsreleases # prepare list of ides for plugin verifier
 
+      - name: Echo env
+        run: echo $GITHUB_USERNAME
+        env:
+          GITHUB_USERNAME: ben-gibson
+          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
+
       # Run tests
       - name: Run Tests
         run: ./gradlew test
