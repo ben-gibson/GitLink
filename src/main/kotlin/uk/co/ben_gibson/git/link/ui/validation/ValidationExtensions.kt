@@ -21,7 +21,7 @@ fun ValidationInfoBuilder.domain(value: String): ValidationInfo? {
     }
 
     return try {
-        Host.create(value)
+        Host(value)
         null
     } catch (e: IllegalArgumentException) {
         error(message("validation.invalid-domain"));

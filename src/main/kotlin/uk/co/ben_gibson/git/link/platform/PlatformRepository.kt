@@ -34,7 +34,7 @@ class PlatformRepository {
                 UUID.fromString(it.id),
                 it.displayName,
                 Icons.GIT,
-                setOf(Host.create(it.baseUrl))
+                setOf(Host(it.baseUrl))
             )
         }
 

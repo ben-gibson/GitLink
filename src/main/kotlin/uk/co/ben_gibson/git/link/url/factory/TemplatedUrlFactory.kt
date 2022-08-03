@@ -7,8 +7,11 @@ import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
 import java.util.regex.Pattern
+import com.google.common.net.UrlEscapers
 
 class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
+    private val escape = UrlEscapers.urlPathSegmentEscaper().asFunction()
+
     private val remotePathPattern = Pattern.compile("\\{remote:url:path:(\\d)}")
 
     override fun createUrl(options: UrlOptions): URL {
@@ -75,12 +78,12 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
     }
 
     private fun processBranch(template: String, branch: String) = template
-        .replace("{branch}", encode(branch))
+        .replace("{branch}", escape.apply(branch))
 
     private fun processFile(template: String, file: File) = template
         .replace("{object}", if (file.isDirectory) "tree" else "blob")
-        .replace("{file:name}", if (file.isRoot) "" else encode(file.name))
-        .replace("{file:path}", file.path.split("/").map { encode(it) }.joinToString("/"))
+        .replace("{file:name}", if (file.isRoot) "" else escape.apply(file.name))
+        .replace("{file:path}", file.path.split("/").map { escape.apply(it) }.joinToString("/"))
 
     private fun processCommit(template: String, commit: Commit) = template
         .replace("{commit}", commit.toString())

@@ -25,15 +25,15 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/ben-gibson/url")
         credentials {
-            username = properties("githubUsername") as String? ?: System.getenv("USERNAME")
-            password = properties("githubToken") as String? ?: System.getenv("TOKEN")
+            username = properties("githubUsername") as String? ?: System.getenv("GITHUB_USERNAME")
+            password = properties("githubToken") as String? ?: System.getenv("PACKAGE_READ_TOKEN")
         }
     }
 }
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    implementation("uk.co.ben_gibson:url:0.0.3")
+    implementation("uk.co.ben_gibson:url:0.0.6")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
 
 }
