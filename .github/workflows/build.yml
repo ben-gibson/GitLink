@@ -80,7 +80,7 @@ jobs:
         run: ./gradlew test
         env:
           GITHUB_USERNAME: ben-gibson
-          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
+          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Collect Tests Result of failed tests
       - name: Collect Tests Result
@@ -90,12 +90,12 @@ jobs:
           name: tests-result
           path: ${{ github.workspace }}/build/reports/tests
 
-      # Run tests
+      # Build
       - name: Build Plugin
         run: ./gradlew buildPlugin
         env:
           GITHUB_USERNAME: "ben-gibson"
-          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
+          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Cache Plugin Verifier IDEs
       - name: Setup Plugin Verifier IDEs Cache
