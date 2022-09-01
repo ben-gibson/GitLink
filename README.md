@@ -45,7 +45,7 @@ Additional shortcuts are available including from the editor gutter and Git log 
 
 A URL can be generated in one of the following ways: 
 
-* Fle at a commit
+* File at a commit
 * File at a branch
 * Commit
 
