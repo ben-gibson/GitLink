@@ -34,8 +34,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     implementation("uk.co.ben_gibson:url:0.0.7")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-
 }
 
 tasks.test {
