@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.2.0]
 - Switch URL library
 - Fix issue removing custom domains
 
