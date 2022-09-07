@@ -25,8 +25,8 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/ben-gibson/url")
         credentials {
-            username = System.getenv("GITHUB_USERNAME")
-            password = System.getenv("GITHUB_PACKAGE_READ_TOKEN")
+            username = properties("githubUsername").ifEmpty { System.getenv("GITHUB_USERNAME") }
+            password = properties("githubToken").ifEmpty { System.getenv("GITHUB_PACKAGE_READ_TOKEN") }
         }
     }
 }
