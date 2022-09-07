@@ -7,13 +7,13 @@ import git4idea.commands.GitCommandResult
 import git4idea.commands.GitLineHandler
 import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
-import uk.co.ben_gibson.git.link.url.domain
+import uk.co.ben_gibson.url.Host
+import uk.co.ben_gibson.url.URL
 import java.net.URI
-import java.net.URL
 
-val GitRemote.domain : URI? get() = httpUrl?.domain
+val GitRemote.domain : Host? get() = httpUrl?.host
 
-val GitRemote.httpUrl : URI? get() {
+val GitRemote.httpUrl : URL? get() {
     var url = firstUrl ?: return null
 
     url = url
@@ -38,9 +38,7 @@ val GitRemote.httpUrl : URI? get() {
         url = "http://".plus(url)
     }
 
-    val normalisedUrl = URL(url)
-
-    return URI(normalisedUrl.protocol, normalisedUrl.host, normalisedUrl.path, normalisedUrl.query)
+    return URL.fromString(url)
 }
 
 fun GitRemote.contains(repository: GitRepository, branch: GitLocalBranch): Boolean {

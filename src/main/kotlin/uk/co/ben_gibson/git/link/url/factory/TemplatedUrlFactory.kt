@@ -5,14 +5,16 @@ import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
-import java.net.URI
-import java.net.URL
+import uk.co.ben_gibson.url.URL
 import java.util.regex.Pattern
+import com.google.common.net.UrlEscapers
 
 class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
+    private val escape = UrlEscapers.urlPathSegmentEscaper().asFunction()
+
     private val remotePathPattern = Pattern.compile("\\{remote:url:path:(\\d)}")
 
-    override fun createUrl(options: UrlOptions): URI {
+    override fun createUrl(options: UrlOptions): URL {
         var processTemplate = when (options) {
             is UrlOptionsFileAtCommit -> processTemplate(options)
             is UrlOptionsFileAtBranch -> processTemplate(options)
@@ -23,7 +25,7 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
         processTemplate = removeUnmatchedSubstitutions(processTemplate)
         processTemplate = processTemplate.replace("(?<!:)/{2,}".toRegex(), "/")
 
-        return URI(processTemplate).withTrimmedPath()
+        return URL.fromString(processTemplate)
     }
 
     private fun removeUnmatchedSubstitutions(template: String) = template.replace("\\{.+?}".toRegex(), "")
@@ -56,14 +58,14 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
         return template
     }
 
-    private fun processBaseUrl(template: String, baseUrl: URI) : String {
+    private fun processBaseUrl(template: String, baseUrl: URL) : String {
         var processed = template
-            .replace("{remote:url:protocol}", baseUrl.toURL().protocol)
-            .replace("{remote:url:host}", baseUrl.host)
+            .replace("{remote:url:protocol}", baseUrl.scheme.toString())
+            .replace("{remote:url:host}", baseUrl.host.toString())
             .replace("{remote:url}", baseUrl.toString())
-            .replace("{remote:url:path}", baseUrl.path)
+            .replace("{remote:url:path}", baseUrl.path.toString())
 
-        val pathParts = baseUrl.path.trimStart('/').split("/")
+        val pathParts = baseUrl.path.toString().split("/")
 
         val remotePathMatcher = remotePathPattern.matcher(template)
 
@@ -76,12 +78,12 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
     }
 
     private fun processBranch(template: String, branch: String) = template
-        .replace("{branch}", encode(branch))
+        .replace("{branch}", escape.apply(branch))
 
     private fun processFile(template: String, file: File) = template
         .replace("{object}", if (file.isDirectory) "tree" else "blob")
-        .replace("{file:name}", if (file.isRoot) "" else encode(file.name))
-        .replace("{file:path}", file.path.split("/").map { encode(it) }.joinToString("/"))
+        .replace("{file:name}", if (file.isRoot) "" else escape.apply(file.name))
+        .replace("{file:path}", file.path.split("/").map { escape.apply(it) }.joinToString("/"))
 
     private fun processCommit(template: String, commit: Commit) = template
         .replace("{commit}", commit.toString())

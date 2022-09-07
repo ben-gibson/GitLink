@@ -1,7 +1,7 @@
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-fun properties(key: String) = project.findProperty(key).toString()
+fun properties(key: String): String = (project.findProperty(key) ?: "") as String
 
 plugins {
     // Java support
@@ -22,10 +22,20 @@ version = properties("pluginVersion")
 // Configure project's dependencies
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/ben-gibson/url")
+        credentials {
+            username = properties("githubUsername").ifEmpty { System.getenv("GITHUB_USERNAME") }
+            password = properties("githubToken").ifEmpty { System.getenv("GITHUB_PACKAGE_READ_TOKEN") }
+        }
+    }
 }
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    implementation("uk.co.ben_gibson:url:0.0.7")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
+
 }
 
 tasks.test {
@@ -57,8 +67,6 @@ qodana {
     showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
 }
 
-
-
 tasks {
     // Set the JVM compatibility versions
     properties("javaVersion").let {
@@ -77,7 +85,8 @@ tasks {
 
     patchPluginXml {
         version.set(properties("pluginVersion"))
-        //sinceBuild.set(properties("pluginSinceBuild"))
+        sinceBuild.set(properties("pluginSinceBuild"))
+        //untilBuild.set(properties("pluginUntilBuild"))
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription.set(

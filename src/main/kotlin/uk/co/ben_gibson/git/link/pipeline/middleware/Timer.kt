@@ -6,13 +6,13 @@ import uk.co.ben_gibson.git.link.pipeline.Pass
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 
 @Service
 class Timer : Middleware {
     override val priority = 40
 
-    override fun invoke(pass: Pass, next: () -> URI?) : URI? {
+    override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val settings = pass.project.service<ProjectSettings>()
 
         if (!settings.checkCommitOnRemote || !settings.showPerformanceTip) {

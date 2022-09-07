@@ -72,6 +72,9 @@ jobs:
       # Run tests
       - name: Run Tests
         run: ./gradlew test
+        env:
+          GITHUB_USERNAME: "ben-gibson"
+          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
 
       # Collect Tests Result of failed tests
       - name: Collect Tests Result
@@ -81,29 +84,32 @@ jobs:
           name: tests-result
           path: ${{ github.workspace }}/build/reports/tests
 
-      # Run tests
+      # Build
       - name: Build Plugin
         run: ./gradlew buildPlugin
+        env:
+          GITHUB_USERNAME: "ben-gibson"
+          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
 
       # Cache Plugin Verifier IDEs
-#      - name: Setup Plugin Verifier IDEs Cache
-#        uses: actions/cache@v2.1.7
-#        with:
-#          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
-#          key: plugin-verifier-${{ hashFiles('build/listProductsReleases.txt') }}
-#
-#      # Run Verify Plugin task and IntelliJ Plugin Verifier tool
-#      - name: Run Plugin Verification tasks
-#        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
-#
-#      # Collect Plugin Verifier Result
-#      - name: Collect Plugin Verifier Result
-#        if: ${{ always() }}
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: pluginVerifier-result
-#          path: ${{ github.workspace }}/build/reports/pluginVerifier
-#
+      - name: Setup Plugin Verifier IDEs Cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
+          key: plugin-verifier-${{ hashFiles('build/listProductsReleases.txt') }}
+
+      # Run Verify Plugin task and IntelliJ Plugin Verifier tool
+      - name: Run Plugin Verification tasks
+        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
+
+      # Collect Plugin Verifier Result
+      - name: Collect Plugin Verifier Result
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: pluginVerifier-result
+          path: ${{ github.workspace }}/build/reports/pluginVerifier
+
 #      # Run Qodana inspections
 #      - name: Qodana - Code Inspection
 #        uses: JetBrains/qodana-action@v4.2.5

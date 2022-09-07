@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.Context
 import uk.co.ben_gibson.git.link.pipeline.middleware.*
 import uk.co.ben_gibson.git.link.pipeline.middleware.Timer
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 import java.util.*
 import kotlin.collections.Set
 
@@ -22,7 +22,7 @@ class Pipeline(private val project: Project) {
         project.service<ResolveContext>(),
     )
 
-    fun accept(context: Context) : URI? {
+    fun accept(context: Context) : URL? {
         if (middlewares.isEmpty()) {
             throw IllegalStateException("No middleware registered")
         }
@@ -32,7 +32,7 @@ class Pipeline(private val project: Project) {
         return next(queue, Pass(project, context))
     }
 
-    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : URI? {
+    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : URL? {
         val middleware = queue.remove()
 
         return middleware(pass) {

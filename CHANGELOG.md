@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Switch URL library
+- Fix issue removing custom domains
 
 ## [4.1.8]
 - Rename 'Host' option to 'Platform'

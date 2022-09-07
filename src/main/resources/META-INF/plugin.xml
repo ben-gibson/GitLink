@@ -3,7 +3,6 @@
     <id>uk.co.ben-gibson.remote.repository.mapper</id>
     <name>GitLink</name>
     <vendor url="https://github.com/ben-gibson">Ben Gibson</vendor>
-    <idea-version since-build="213" />
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
     <description>

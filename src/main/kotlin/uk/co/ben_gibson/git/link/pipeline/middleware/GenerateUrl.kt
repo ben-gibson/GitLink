@@ -13,14 +13,14 @@ import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
 import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
 import uk.co.ben_gibson.git.link.url.factory.UrlFactoryLocator
-import java.net.URI
+import uk.co.ben_gibson.url.URL
 
 // Must be the last middleware in the pipeline!
 @Service
 class GenerateUrl : Middleware {
     override val priority = 50
 
-    override fun invoke(pass: Pass, next: () -> URI?) : URI? {
+    override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         // We can't reach this point unless the platform, repository, and remote have been resolved
         val baseUrl = pass.remoteOrThrow().httpUrl ?: return null
 
@@ -31,7 +31,7 @@ class GenerateUrl : Middleware {
         return service<UrlFactoryLocator>().locate(platform).createUrl(urlOptions)
     }
 
-    private fun createUrlOptions(pass: Pass, baseUrl: URI): UrlOptions {
+    private fun createUrlOptions(pass: Pass, baseUrl: URL): UrlOptions {
         val remote = pass.remoteOrThrow()
         val repository = pass.repositoryOrThrow()
         val context = pass.context
