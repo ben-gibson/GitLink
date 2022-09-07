@@ -1,7 +1,7 @@
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-fun properties(key: String) = project.findProperty(key).toString()
+fun properties(key: String): String = (project.findProperty(key) ?: "") as String
 
 plugins {
     // Java support
