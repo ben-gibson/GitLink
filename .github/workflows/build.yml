@@ -72,15 +72,15 @@ jobs:
       - name: Echo env
         run: echo $GITHUB_USERNAME
         env:
-          GITHUB_USERNAME: ben-gibson
+          GITHUB_USERNAME: "ben-gibson"
           GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
 
       # Run tests
       - name: Run Tests
         run: ./gradlew test
         env:
-          GITHUB_USERNAME: ben-gibson
-          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: "ben-gibson"
+          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
 
       # Collect Tests Result of failed tests
       - name: Collect Tests Result
@@ -95,7 +95,7 @@ jobs:
         run: ./gradlew buildPlugin
         env:
           GITHUB_USERNAME: "ben-gibson"
-          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PACKAGE_READ_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN }}
 
       # Cache Plugin Verifier IDEs
       - name: Setup Plugin Verifier IDEs Cache
