@@ -16,6 +16,7 @@ val PLATFORM_MAP = mapOf(
     BitbucketServer::class.java to UrlTemplates.bitbucketServer(),
     BitbucketCloud::class.java to UrlTemplates.bitbucketCloud(),
     Azure::class.java to UrlTemplates.azure(),
+    Gerrit::class.java to UrlTemplates.gerrit(),
 )
 
 @Service
