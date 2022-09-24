@@ -26,12 +26,12 @@ class GenerateUrl : Middleware {
 
         val platform = pass.platformOrThrow()
 
-        val urlOptions = createUrlOptions(pass, baseUrl)
+        val urlOptions = createUrlOptions(pass, baseUrl, platform.pullRequestWorkflowSupported)
 
         return service<UrlFactoryLocator>().locate(platform).createUrl(urlOptions)
     }
 
-    private fun createUrlOptions(pass: Pass, baseUrl: URL): UrlOptions {
+    private fun createUrlOptions(pass: Pass, baseUrl: URL, pullRequestWorkflowSupported: Boolean): UrlOptions {
         val remote = pass.remoteOrThrow()
         val repository = pass.repositoryOrThrow()
         val context = pass.context
@@ -43,7 +43,7 @@ class GenerateUrl : Middleware {
             is ContextFileAtCommit -> UrlOptionsFileAtCommit(baseUrl, repositoryFile, context.commit, context.lineSelection)
             is ContextCommit -> UrlOptionsCommit(baseUrl, context.commit)
             is ContextCurrentFile -> {
-                val commit = resolveCommit(repository, remote, settings)
+                val commit = resolveCommit(repository, remote, settings, pullRequestWorkflowSupported)
 
                 if (commit != null) {
                     UrlOptionsFileAtCommit(baseUrl, repositoryFile, commit, context.lineSelection)
@@ -69,8 +69,12 @@ class GenerateUrl : Middleware {
         return settings.fallbackBranch
     }
 
-    private fun resolveCommit(repository: GitRepository, remote: GitRemote, settings: ProjectSettings): Commit? {
+    private fun resolveCommit(repository: GitRepository, remote: GitRemote, settings: ProjectSettings, pullRequestWorkflowSupported: Boolean): Commit? {
         val commit = repository.currentCommit() ?: return null
+
+        if (!pullRequestWorkflowSupported) {
+           return commit;
+        }
 
         return if (settings.checkCommitOnRemote && remote.contains(repository, commit)) commit else null
     }

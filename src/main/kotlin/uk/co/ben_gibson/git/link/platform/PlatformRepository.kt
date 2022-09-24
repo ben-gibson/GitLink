@@ -16,7 +16,8 @@ private val EXISTING_PLATFORMS = setOf(
     Gitea(),
     Gogs(),
     Azure(),
-    Chromium()
+    Chromium(),
+    Gerrit()
 )
 
 @Service

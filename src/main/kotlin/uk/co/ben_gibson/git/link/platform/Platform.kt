@@ -7,7 +7,7 @@ import java.util.UUID
 import javax.swing.Icon
 import uk.co.ben_gibson.url.Host;
 
-sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<Host> = setOf()) {
+sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<Host> = setOf(), val pullRequestWorkflowSupported: Boolean = true) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -84,6 +84,14 @@ class Chromium() : Platform(
     message("platform.chromium.name"),
     Icons.CHROMIUM,
     setOf(Host("googlesource.com"))
+)
+
+class Gerrit() : Platform(
+    UUID.fromString("a28d7024-f390-40d1-8554-db65a9120a38"),
+    message("platform.gerrit.name"),
+    Icons.GERRIT,
+    setOf(),
+    false
 )
 
 class Custom(id: UUID, name: String, icon: Icon, domains: Set<Host> = setOf()) : Platform(id, name, icon, domains)

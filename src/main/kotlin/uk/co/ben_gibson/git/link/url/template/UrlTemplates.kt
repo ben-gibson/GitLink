@@ -59,5 +59,13 @@ data class UrlTemplates(val fileAtBranch: String, val fileAtCommit : String, val
                 "{remote:url}/commit/{commit}"
             )
         }
+
+        fun gerrit(): UrlTemplates {
+            return UrlTemplates(
+                "{remote:url:protocol}://{remote:url:host}/plugins/gitiles/{remote:url:path}/+/refs/heads/{branch}/{file:path}/{file:name}{line-block:start}#{line:start}{line-block:end}",
+                "{remote:url:protocol}://{remote:url:host}/plugins/gitiles/{remote:url:path}/+/{commit}/{file:path}/{file:name}{line-block:start}#{line:start}{line-block:end}",
+                "{remote:url:protocol}://{remote:url:host}/plugins/gitiles/{remote:url:path}/+/{commit}"
+            )
+        }
     }
 }
