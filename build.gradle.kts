@@ -7,9 +7,9 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("org.jetbrains.kotlin.jvm") version "1.7.0"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.7.0"
+    id("org.jetbrains.intellij") version "1.9.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
     // Gradle Qodana Plugin
@@ -33,7 +33,7 @@ repositories {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    implementation("uk.co.ben_gibson:url:0.0.7")
+    implementation("uk.co.ben_gibson:url:0.0.8")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
 
 }
