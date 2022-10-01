@@ -35,15 +35,15 @@ class ApplicationStartupListener : StartupActivity.DumbAware {
             return
         }
 
-        val platform = project.service<PlatformDetector>().detect()
+        project.service<PlatformDetector>().detect { platform ->
+            if (platform == null) {
+                sendNotification(Notification.couldNotDetectPlatform(project), project)
+                return@detect
+            }
 
-        if (platform == null) {
-            sendNotification(Notification.couldNotDetectPlatform(project), project)
-            return
+            sendNotification(Notification.platformAutoDetected(platform, project), project)
+
+            projectSettings.host = platform.id.toString()
         }
-
-        sendNotification(Notification.platformAutoDetected(platform, project), project)
-
-        projectSettings.host = platform.id.toString()
     }
 }
