@@ -68,7 +68,7 @@ data class Notification(
         fun performanceTips(project: Project) = Notification(
             message = message("notifications.performance"),
             actions = setOf(
-                NotificationAction.disableCheckCommitOnRemote(project),
+                NotificationAction.disableRemoteCheck(project),
                 NotificationAction.doNotAskAgain { project.service<ProjectSettings>().showPerformanceTip = false },
             )
         )
@@ -123,9 +123,9 @@ data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) 
             BrowserLauncher.instance.open(url.toString());
         }
 
-        fun disableCheckCommitOnRemote(project: Project) = NotificationAction(message("actions.disable")) { dismiss ->
+        fun disableRemoteCheck(project: Project) = NotificationAction(message("actions.disable")) { dismiss ->
             dismiss()
-            project.service<ProjectSettings>().checkCommitOnRemote = false;
+            project.service<ProjectSettings>().shouldCheckRemote = false;
         }
     }
 }

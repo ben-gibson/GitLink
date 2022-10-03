@@ -15,7 +15,7 @@ class Timer : Middleware {
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val settings = pass.project.service<ProjectSettings>()
 
-        if (!settings.checkCommitOnRemote || !settings.showPerformanceTip) {
+        if (!settings.shouldCheckRemote || !settings.showPerformanceTip) {
             return next()
         }
 

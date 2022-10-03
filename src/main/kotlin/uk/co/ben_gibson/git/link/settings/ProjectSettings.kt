@@ -15,7 +15,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     var host: String? = null
     var fallbackBranch = "main"
     var remote = "origin"
-    var checkCommitOnRemote = true
+    var shouldCheckRemote = true
     var forceHttps = true
     var showPerformanceTip = true
 
