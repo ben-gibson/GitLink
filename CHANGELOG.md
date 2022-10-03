@@ -3,6 +3,10 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Fix platform auto-detection when cloning projects
+- Add auto-detection support for Bitbucket server and gerrit
+
+## [4.2.0]
 - Switch URL library
 - Fix issue removing custom domains
 - Add `Gerrit` support
