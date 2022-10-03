@@ -6,8 +6,9 @@ import uk.co.ben_gibson.git.link.ui.Icons
 import java.util.UUID
 import javax.swing.Icon
 import uk.co.ben_gibson.url.Host;
+import java.util.regex.Pattern
 
-sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<Host> = setOf(), val pullRequestWorkflowSupported: Boolean = true) {
+sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<Host> = setOf(), val domainPattern: Pattern? = null, val pullRequestWorkflowSupported: Boolean = true) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -48,7 +49,9 @@ class BitbucketCloud() : Platform(
 class BitbucketServer() : Platform(
     UUID.fromString("dba5941d-821c-49b3-83b0-75deb9462acb"),
     message("platform.bitbucket.server.name"),
-    Icons.BITBUCKET
+    Icons.BITBUCKET,
+    setOf(),
+    Pattern.compile(".*bitbucket.*", Pattern.CASE_INSENSITIVE)
 )
 
 class Gogs() : Platform(
@@ -91,6 +94,7 @@ class Gerrit() : Platform(
     message("platform.gerrit.name"),
     Icons.GERRIT,
     setOf(),
+    Pattern.compile(".*gerrit.*", Pattern.CASE_INSENSITIVE),
     false
 )
 
