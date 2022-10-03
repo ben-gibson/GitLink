@@ -60,23 +60,23 @@ class GenerateUrl : Middleware {
     }
 
     private fun resolveBranch(repository: GitRepository, remote: GitRemote, settings: ProjectSettings): String {
-        val branch = repository.currentBranch
+        val branch = repository.currentBranch ?: return settings.fallbackBranch
 
-        if (branch != null && remote.contains(repository, branch)) {
+        if (!settings.shouldCheckRemote) {
             return branch.name
         }
 
-        return settings.fallbackBranch
+        return if (remote.contains(repository, branch)) branch.name else settings.fallbackBranch
     }
 
     private fun resolveCommit(repository: GitRepository, remote: GitRemote, settings: ProjectSettings, pullRequestWorkflowSupported: Boolean): Commit? {
         val commit = repository.currentCommit() ?: return null
 
-        if (!pullRequestWorkflowSupported) {
+        if (!pullRequestWorkflowSupported || !settings.shouldCheckRemote) {
            return commit;
         }
 
-        return if (settings.checkCommitOnRemote && remote.contains(repository, commit)) commit else null
+        return if (remote.contains(repository, commit)) commit else null
     }
 }
 

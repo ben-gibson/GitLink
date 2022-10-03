@@ -13,7 +13,6 @@ import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
 import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.notBlank
-import java.util.*
 
 class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message("settings.general.group.title")), ApplicationSettings.ChangeListener {
     private val platforms = service<PlatformRepository>()
@@ -45,14 +44,14 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
                 .withValidationOnApply { notBlank(it.text) }
         }
         titledRow(message("settings.general.section.advanced.label")) {
-            row(message("settings.general.field.force-https.label")) {
+            row {
                 checkBox(message("settings.general.field.force-https.label"), settings::forceHttps)
             }.largeGapAfter()
 
-            row(message("settings.general.field.check-commit-on-remote.label")) {
+            row {
                 checkBox(
-                    message("settings.general.field.check-commit-on-remote.label"),
-                    settings::checkCommitOnRemote,
+                    message("settings.general.field.should-check-remote.label"),
+                    settings::shouldCheckRemote,
                     comment = message("settings.general.field.check-commit-on-remote.help")
                 )
             }

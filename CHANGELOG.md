@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Replace the `Check commit on remote` option with a more general `Check remote` option that disables all checks on the remote.
 
 ## [4.2.1]
 - Fix platform auto-detection when cloning projects
