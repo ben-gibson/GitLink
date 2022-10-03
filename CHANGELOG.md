@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.2.1]
 - Fix platform auto-detection when cloning projects
 - Add auto-detection support for Bitbucket server and gerrit
 
