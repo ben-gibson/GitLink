@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.2.2]
 - Replace the `Check commit on remote` option with a more general `Check remote` option that disables all checks on the remote.
 
 ## [4.2.1]
