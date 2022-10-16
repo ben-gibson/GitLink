@@ -28,6 +28,12 @@ val GitRemote.httpUrl : URL? get() {
         url = url.replace(":\\d{1,5}".toRegex(), ""); // remove the port
     }
 
+    // Hack for azure
+    if (url.startsWith("git@ssh.dev.azure.com")) {
+        url = url.replace("^git@ssh.".toRegex(), "git@")
+            .replace(":v\\d{1,5}".toRegex(), "") // remove v3 from git@ssh.dev.azure.com:v3/ben-gibson/test/test
+    }
+
     if (!url.startsWith("http")) {
         url = url
             .replace("git@", "")

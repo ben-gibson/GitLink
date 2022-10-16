@@ -15,7 +15,6 @@ val PLATFORM_MAP = mapOf(
     Gogs::class.java to UrlTemplates.gogs(),
     BitbucketServer::class.java to UrlTemplates.bitbucketServer(),
     BitbucketCloud::class.java to UrlTemplates.bitbucketCloud(),
-    Azure::class.java to UrlTemplates.azure(),
     Gerrit::class.java to UrlTemplates.gerrit(),
 )
 

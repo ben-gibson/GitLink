@@ -51,20 +51,6 @@ data class Notification(
             )
         )
 
-        fun platformPoll() = Notification(
-            message = """
-                Help improve GitLink by telling us which platform you use 🗳️.
-            """.trimIndent(),
-            actions = setOf(
-                NotificationAction.openPlatformPoll() {
-                    service<ApplicationSettings>().showHostPoll = false;
-                },
-                NotificationAction.doNotAskAgain() {
-                    service<ApplicationSettings>().showHostPoll = false;
-                }
-            )
-        )
-
         fun performanceTips(project: Project) = Notification(
             message = message("notifications.performance"),
             actions = setOf(
@@ -104,11 +90,6 @@ data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) 
 
         fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
             GitLinkBundle.openRepository()
-            dismiss()
-            onComplete()
-        }
-        fun openPlatformPoll(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
-            GitLinkBundle.openPlatformPoll()
             dismiss()
             onComplete()
         }

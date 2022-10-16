@@ -27,8 +27,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
 
     var lastVersion: String? = null
     var hits = 0
-    var requestSupport = true;
-    var showHostPoll = true;
+    var requestSupport = true
 
     override fun getState() = this
 

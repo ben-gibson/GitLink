@@ -41,6 +41,14 @@ class RemoteTest {
                 "ssh://git@custom.gitlab.url:10022/group/project.git",
                 "http://custom.gitlab.url/group/project"
             ),
+            Arguments.of(
+                "git@ssh.dev.azure.com:v3/ben-gibson/test/test",
+                "http://dev.azure.com/ben-gibson/test/test"
+            ),
+            Arguments.of(
+                "http://ben-gibson@dev.azure.com/ben-gibson/test/_git/test",
+                "http://dev.azure.com/ben-gibson/test/_git/test"
+            )
         )
     }
 

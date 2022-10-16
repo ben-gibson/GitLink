@@ -18,7 +18,6 @@ class Pipeline(private val project: Project) {
         project.service<RecordHit>(),
         project.service<ForceHttps>(),
         project.service<SendSupportNotification>(),
-        project.service<SendPollNotification>(),
         project.service<ResolveContext>(),
     )
 
