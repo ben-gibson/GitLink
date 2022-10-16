@@ -3,6 +3,9 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Fix Azure URL when using SSH protocol
+- Fix Azure URL line selection
+- Remove poll notification
 
 ## [4.2.2]
 - Replace the `Check commit on remote` option with a more general `Check remote` option that disables all checks on the remote.
