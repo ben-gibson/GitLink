@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.2.3]
 - Fix Azure URL when using SSH protocol
 - Fix Azure URL line selection
 - Remove poll notification
