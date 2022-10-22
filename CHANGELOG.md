@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.2.4]
 - Fix Azure URL when repo name has .git postfix
 
 ## [4.2.3]
