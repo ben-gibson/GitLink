@@ -48,7 +48,16 @@ class RemoteTest {
             Arguments.of(
                 "http://ben-gibson@dev.azure.com/ben-gibson/test/_git/test",
                 "http://dev.azure.com/ben-gibson/test/_git/test"
-            )
+            ),
+            // Azure does not strip .git like the others.
+            Arguments.of(
+                "git@ssh.dev.azure.com:v3/ben-gibson/test/test.git",
+                "http://dev.azure.com/ben-gibson/test/test.git"
+            ),
+            Arguments.of(
+                "http://ben-gibson@dev.azure.com/ben-gibson/test/_git/test.git",
+                "http://dev.azure.com/ben-gibson/test/_git/test.git"
+            ),
         )
     }
 

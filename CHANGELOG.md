@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Fix Azure URL when repo name has .git postfix
 
 ## [4.2.3]
 - Fix Azure URL when using SSH protocol
