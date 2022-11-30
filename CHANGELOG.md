@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Fix exceptions when using unqualified host
 
 ## [4.2.4]
 - Fix Azure URL when repo name has .git postfix
