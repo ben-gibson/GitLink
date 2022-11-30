@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+
+## [4.2.5]
 - Fix exceptions when using unqualified host
 
 ## [4.2.4]
