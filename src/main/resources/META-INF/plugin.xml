@@ -64,6 +64,15 @@
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl C"/>
         </action>
         <action
+            id="uk.co.ben_gibson.git.link.ui.actions.menu.MarkdownAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.menu.MarkdownAction"
+        >
+            <add-to-group group-id="Git.MainMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+        </action>
+        <action
             id="uk.co.ben_gibson.git.link.ui.actions.vcslog.BrowserAction"
             class="uk.co.ben_gibson.git.link.ui.actions.vcslog.BrowserAction"
         >
@@ -78,6 +87,13 @@
             <add-to-group group-id="Vcs.Log.ContextMenu"/>
         </action>
         <action
+            id="uk.co.ben_gibson.git.link.ui.actions.vcslog.MarkdownAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.vcslog.MarkdownAction"
+        >
+            <add-to-group group-id="Git.LogContextMenu"/>
+            <add-to-group group-id="Vcs.Log.ContextMenu"/>
+        </action>
+        <action
             id="uk.co.ben_gibson.git.link.ui.actions.gutter.BrowserAction"
             class="uk.co.ben_gibson.git.link.ui.actions.gutter.BrowserAction"
         >
@@ -87,6 +103,13 @@
         <action
             id="uk.co.ben_gibson.git.link.ui.actions.gutter.CopyAction"
             class="uk.co.ben_gibson.git.link.ui.actions.gutter.CopyAction"
+        >
+            <add-to-group group-id="EditorGutterPopupMenu"/>
+
+        </action>
+        <action
+            id="uk.co.ben_gibson.git.link.ui.actions.gutter.MarkdownAction"
+            class="uk.co.ben_gibson.git.link.ui.actions.gutter.MarkdownAction"
         >
             <add-to-group group-id="EditorGutterPopupMenu"/>
 

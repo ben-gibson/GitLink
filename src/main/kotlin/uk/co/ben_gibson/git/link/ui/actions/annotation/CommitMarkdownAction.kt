@@ -4,13 +4,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.actions.ShowAnnotateOperationsPopup
 import git4idea.annotate.GitFileAnnotation
-import uk.co.ben_gibson.git.link.ui.actions.Action
 import uk.co.ben_gibson.git.link.Context
 import uk.co.ben_gibson.git.link.ContextCommit
 import uk.co.ben_gibson.git.link.git.Commit
+import uk.co.ben_gibson.git.link.ui.actions.Action
 
-class CommitBrowserAction(private val annotation: GitFileAnnotation): Action(Type.BROWSER) {
-
+class CommitMarkdownAction(private val annotation: GitFileAnnotation): Action(Type.COPY_MARKDOWN) {
     override fun buildContext(project: Project, event: AnActionEvent): Context? {
         val lineNumber = ShowAnnotateOperationsPopup.getAnnotationLineNumber(event.dataContext)
 

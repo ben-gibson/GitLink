@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## [Unreleased]
+- Add basic copy Markdown action
+- Fix incorrect {remote:url:host} example
 
 ## [4.2.5]
 - Fix exceptions when using unqualified host

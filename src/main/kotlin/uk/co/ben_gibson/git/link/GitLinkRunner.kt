@@ -16,12 +16,25 @@ fun openInBrowser(project: Project, context: Context) {
     processGitLink(project, context) { BrowserUtil.browse(it.toString()) }
 }
 
-fun copyToClipBoard(project: Project, context: Context) {
+fun copyToClipBoard(project: Project, context: Context, asMarkdown: Boolean = false) {
     processGitLink(project, context) {
+        val url = if (asMarkdown) {
+            val label = when(context) {
+                is ContextCommit -> context.commit.shortHash
+                is ContextCurrentFile -> context.file.name
+                is ContextFileAtCommit -> context.file.name
+            }
+
+            "[${label}](${it})"
+        } else {
+            it.toString()
+        }
+
         Toolkit.getDefaultToolkit().systemClipboard.setContents(
-            StringSelection(it.toString()),
+            StringSelection(url),
             null
         )
+
         sendNotification(Notification.linkCopied(it), project)
     }
 }
