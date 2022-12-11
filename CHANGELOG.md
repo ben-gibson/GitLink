@@ -2,97 +2,99 @@
 
 # GitLink Changelog
 
-## [Unreleased]
+## Unreleased
+
+## 4.3.0 - 2022-12-11
 - Add basic copy Markdown action
 - Fix incorrect {remote:url:host} example
 
-## [4.2.5]
+## 4.2.5
 - Fix exceptions when using unqualified host
 
-## [4.2.4]
+## 4.2.4
 - Fix Azure URL when repo name has .git postfix
 
-## [4.2.3]
+## 4.2.3
 - Fix Azure URL when using SSH protocol
 - Fix Azure URL line selection
 - Remove poll notification
 
-## [4.2.2]
+## 4.2.2
 - Replace the `Check commit on remote` option with a more general `Check remote` option that disables all checks on the remote.
 
-## [4.2.1]
+## 4.2.1
 - Fix platform auto-detection when cloning projects
 - Add auto-detection support for Bitbucket server and gerrit
 
-## [4.2.0]
+## 4.2.0
 - Switch URL library
 - Fix issue removing custom domains
 - Add `Gerrit` support
 
-## [4.1.8]
+## 4.1.8
 - Rename 'Host' option to 'Platform'
 
-## [4.1.7]
+## 4.1.7
 - Do not disable actions during project indexing
 
-## [4.1.6]
+## 4.1.6
 - Trim forward slash character in file path substitution
 
-## [4.1.5]
+## 4.1.5
 - Revert host detection fix
 
-## [4.1.4]
+## 4.1.4
 - Strip user info component from the generated URL
 
-## [4.1.3]
+## 4.1.3
 - Internal refactor
 
-## [4.1.2]
+## 4.1.2
 - Fix host detection when opening a new project within the IDE.
 
-## [4.1.1]
+## 4.1.1
 - Make 'main' the default fallback branch, replacing 'master'
 - Fix issue validation custom host URL templates
 - Don't allow duplicate domain registration
 
-## [4.1.0]
+## 4.1.0
 - Allow custom domain registration for supported hosts.
 
-## [4.0.9]
+## 4.0.9
 - Add Gitee host
 
-## [4.0.8]
+## 4.0.8
 - Add host poll notification
 - Add 'Do not show again' button to performance tip notification
 
-## [4.0.7]
+## 4.0.7
 - Add experimental host Chromium
 - Add resolve context middleware
 - Dismiss notifications when action pressed
 
-## [4.0.6]
+## 4.0.6
 - Fix Azure DevOps url templates
 
-## [4.0.5]
+## 4.0.5
 - Fix line selection around collapsed code sections
 
-## [4.0.4]
+## 4.0.4
 - Add pipeline to handle URL logic
 - Fix typos
 
-## [4.0.3]
+## 4.0.3
 - Add support for Ukraine in README
 - Add notification on successful copy action
 - Improve notification messages
 - Make some notifications sticky
 - Add request for support notification
 
-## [4.0.2]
+## 4.0.2
 - Add images to README
 - Add Open Collective link to README
 - Fix issue where the '#' character in a file name is not correctly encoded.
 
-## [4.0.1]
+## 4.0.1
 - Fixed settings button opening the wrong menu.
 - Add shortcuts to editor gutter. #166
 
@@ -193,7 +195,7 @@
 - Support GitBlit #26
 
 ## 1.5.7
--  Fixed: Select target action now uses the correct line number when used from the editor. (#24 PR by markiewb)
+- Fixed: Select target action now uses the correct line number when used from the editor. (#24 PR by markiewb)
 
 ## 1.5.6
 - Ability to open a specific commit from the VCS log tool window.
