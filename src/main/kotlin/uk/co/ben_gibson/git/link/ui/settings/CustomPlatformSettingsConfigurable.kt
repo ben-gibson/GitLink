@@ -147,7 +147,7 @@ private class CustomPlatformDialog(customPlatform: CustomHostSettings? = null) :
                 .withValidationOnApply { notBlank(it.text) ?: commitTemplate(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.commit-template.comment"))
         }
-        row() {
+        row {
             scrollPane(substitutionReferenceTable)
         }
     }

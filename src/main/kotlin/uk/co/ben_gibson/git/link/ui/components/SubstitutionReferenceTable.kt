@@ -48,7 +48,7 @@ private val references = listOf(
     SubstitutionReference(
         "{remote:url:host}",
         "The remote url host.",
-        "https://example.com"
+        "example.com"
     ),
     SubstitutionReference(
         "{remote:url:path}",
