@@ -44,7 +44,7 @@ abstract class Action(private val type: Type): DumbAwareAction() {
 
         val host = project.service<PlatformLocator>().locate()
 
-        event.presentation.isEnabled = shouldBeEnabled(event)
+        event.presentation.isEnabledAndVisible = host != null && shouldBeEnabled(event)
 
         host?.let {
             event.presentation.icon = it.icon

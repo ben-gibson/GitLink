@@ -4,8 +4,7 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Rating](https://img.shields.io/jetbrains/plugin/r/stars/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
-[![Backers](https://opencollective.com/gitlink/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/gitlink)
-[![Sponsors](https://opencollective.com/gitlink/tiers/sponsor/badge.svg?label=sponsor&color=brightgreen)](https://opencollective.com/gitlink)
+[![Donations](https://opencollective.com/gitlink/tiers/badge.svg?label=sponsor&color=brightgreen)](https://opencollective.com/gitlink)
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 
 <!-- Plugin description -->

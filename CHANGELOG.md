@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## Unreleased
+- Fix menu text crash on 2022.3 when no host is detected 
 
 ## 4.3.0 - 2022-12-11
 - Add basic copy Markdown action
