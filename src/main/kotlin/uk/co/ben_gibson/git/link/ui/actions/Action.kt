@@ -44,12 +44,15 @@ abstract class Action(private val type: Type): DumbAwareAction() {
 
         val host = project.service<PlatformLocator>().locate()
 
-        event.presentation.isEnabledAndVisible = host != null && shouldBeEnabled(event)
-
-        host?.let {
-            event.presentation.icon = it.icon
-            event.presentation.text = GitLinkBundle.message("actions.${type.key}.title", it.name)
+        if (host == null) {
+            event.presentation.isEnabledAndVisible = false
+            return;
         }
+
+        event.presentation.isEnabled = shouldBeEnabled(event)
+
+        event.presentation.icon = host.icon
+        event.presentation.text = GitLinkBundle.message("actions.${type.key}.title", host.name)
     }
 
     override fun getActionUpdateThread(): ActionUpdateThread {
