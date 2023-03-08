@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## Unreleased
+- Update GitLab URL format (#284)
+- Add URL library JAR
 
 ## 4.3.1 - 2022-12-16
 - Fix menu text crash on 2022.3 when no host is detected

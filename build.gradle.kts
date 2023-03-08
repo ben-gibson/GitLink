@@ -9,7 +9,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.7.21"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.10.1"
+    id("org.jetbrains.intellij") version "1.13.1"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.0.0"
     // Gradle Qodana Plugin
@@ -22,18 +22,11 @@ version = properties("pluginVersion")
 // Configure project's dependencies
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/ben-gibson/url")
-        credentials {
-            username = properties("githubUsername").ifEmpty { System.getenv("GITHUB_USERNAME") }
-            password = properties("githubToken").ifEmpty { System.getenv("GITHUB_PACKAGE_READ_TOKEN") }
-        }
-    }
 }
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
-    implementation("uk.co.ben_gibson:url:0.0.10")
+    implementation(files("libs/url-0.0.10.jar"))
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
 
 }
