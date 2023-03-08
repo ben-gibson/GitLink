@@ -26,15 +26,15 @@ class GitLabTest {
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH, LINE_SELECTION),
-                "https://gitlab.com/my/repo/blob/master/src/Foo.java#L10-20"
+                "https://gitlab.com/my/repo/-/blob/master/src/Foo.java#L10-20"
             ),
             Arguments.of(
                 UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH),
-                "https://gitlab.com/my/repo/blob/master/src/Foo.java"
+                "https://gitlab.com/my/repo/-/blob/master/src/Foo.java"
             ),
             Arguments.of(
                 UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT, LineSelection(10, 20)),
-                "https://gitlab.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#L10-20"
+                "https://gitlab.com/my/repo/-/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#L10-20"
             ),
             Arguments.of(
                 UrlOptionsFileAtBranch(
@@ -43,7 +43,7 @@ class GitLabTest {
                     BRANCH,
                     LINE_SELECTION
                 ),
-                "https://gitlab.com/my/repo/blob/master/Assets/%23/Sources/Code.cs#L10-20"
+                "https://gitlab.com/my/repo/-/blob/master/Assets/%23/Sources/Code.cs#L10-20"
             ),
             Arguments.of(
                 UrlOptionsFileAtCommit(
@@ -51,7 +51,7 @@ class GitLabTest {
                     File("resources", true, "src/foo", false),
                     COMMIT
                 ),
-                "https://gitlab.com/my/repo/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources"
+                "https://gitlab.com/my/repo/-/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources"
             ),
             Arguments.of(
                 UrlOptionsFileAtCommit(
@@ -59,15 +59,15 @@ class GitLabTest {
                     File("my-project", true, "", true),
                     COMMIT
                 ),
-                "https://gitlab.com/my/repo/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                "https://gitlab.com/my/repo/-/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT),
-                "https://gitlab.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java"
+                "https://gitlab.com/my/repo/-/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java"
             ),
             Arguments.of(
                 UrlOptionsCommit(REMOTE_BASE_URL, COMMIT),
-                "https://gitlab.com/my/repo/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                "https://gitlab.com/my/repo/-/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
     }
