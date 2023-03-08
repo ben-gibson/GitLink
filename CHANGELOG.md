@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## Unreleased
+
+## 4.3.2 - 2023-03-08
 - Update GitLab URL format (#284)
 - Add URL library JAR
 
