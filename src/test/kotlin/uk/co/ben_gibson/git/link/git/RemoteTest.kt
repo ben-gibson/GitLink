@@ -42,6 +42,10 @@ class RemoteTest {
                 "http://custom.gitlab.url/group/project"
             ),
             Arguments.of(
+                "xy://custom.gitlab.url/group/project.git",
+                "http://custom.gitlab.url/group/project"
+            ),
+            Arguments.of(
                 "git@ssh.dev.azure.com:v3/ben-gibson/test/test",
                 "http://dev.azure.com/ben-gibson/test/test"
             ),
