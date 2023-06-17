@@ -40,8 +40,7 @@ val GitRemote.httpUrl : URL? get() {
     if (!url.startsWith("http")) {
         url = url
             .replace("git@", "")
-            .replace("ssh://", "")
-            .replace("git://", "")
+            .replace(Regex("^[^:]+://"), "")
             .replace(":", "/")
 
         url = "http://".plus(url)
