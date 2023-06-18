@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## Unreleased
+
+## 4.3.3 - 2023-06-18
 - Fix URL generation with custom protocols.
 
 ## 4.3.2 - 2023-03-08
