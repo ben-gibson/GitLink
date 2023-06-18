@@ -14,7 +14,7 @@ import java.net.URL
 private const val BUNDLE = "messages.MyBundle"
 
 object GitLinkBundle : DynamicBundle(BUNDLE) {
-    public val URL_BUG_REPORT = URL("https://github.com/ben-gibson/GitLink/issues")
+    val URL_BUG_REPORT = URL("https://github.com/ben-gibson/GitLink/issues")
 
     @Suppress("SpreadOperator")
     @JvmStatic
