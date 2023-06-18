@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## Unreleased
+- Fix URL generation with custom protocols.
 
 ## 4.3.2 - 2023-03-08
 - Update GitLab URL format (#284)

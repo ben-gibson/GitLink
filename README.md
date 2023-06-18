@@ -9,7 +9,7 @@
 
 <!-- Plugin description -->
 
-A Jetbrains [plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providing shortcuts to open or copy a file, directory or commit in `GitHub`, `Bitbucket`, 
+A [Jetbrains plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providing shortcuts to open or copy a file, directory or commit in `GitHub`, `Bitbucket`, 
 `GitLab`, `Gitee` `Gitea`, `Gogs`, `Azure` or `Gerrit`. Custom hosts can also be configured using the URL template syntax.
 
 <!-- Plugin description end -->
