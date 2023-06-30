@@ -13,7 +13,7 @@ class CopyAction: Action(Type.COPY) {
         val vcsLog = event.getData(VcsLogDataKeys.VCS_LOG) ?: return null
         val vcsCommit = vcsLog.selectedDetails[0]
 
-        return ContextCommit(vcsCommit.root, Commit(vcsCommit.id.toShortString()))
+        return ContextCommit(vcsCommit.root, Commit(vcsCommit.id.toString()))
     }
 
     override fun shouldBeEnabled(event: AnActionEvent): Boolean {

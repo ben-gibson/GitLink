@@ -14,7 +14,7 @@ class BrowserAction: Action(Type.BROWSER) {
 
         val vcsCommit = vcsLog.selectedDetails[0]
 
-        return ContextCommit(vcsCommit.root, Commit(vcsCommit.id.toShortString()))
+        return ContextCommit(vcsCommit.root, Commit(vcsCommit.id.asString()))
     }
 
     override fun shouldBeEnabled(event: AnActionEvent): Boolean {
