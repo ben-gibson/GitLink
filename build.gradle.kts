@@ -29,7 +29,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.5")
     implementation(files("libs/url-0.0.10.jar"))
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.test {
