@@ -5,17 +5,19 @@ import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.ToolbarDecorator
-import com.intellij.ui.layout.CCFlags
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.Align
+import com.intellij.ui.dsl.builder.bindItem
+import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ListTableModel
+import uk.co.ben_gibson.git.link.GitLinkBundle
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.platform.PlatformRepository
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
-import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.domain
 import uk.co.ben_gibson.git.link.ui.validation.exists
 import uk.co.ben_gibson.git.link.ui.validation.notBlank
@@ -53,10 +55,10 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         row(message("settings.general.field.platform.label")) {
             comboBox(
                 platformComboBoxModel,
-                { platforms.getAll().first() },
-                { },
                 PlatformCellRenderer()
-            ).component.addItemListener {
+            )
+                .bindItem({ platforms.getAll().first() }, { })
+                .component.addItemListener {
                 if (it.stateChange == ItemEvent.SELECTED) {
                     val selectedPlatform = it.itemSelectable.selectedObjects.first() as Platform
                     refreshDomainsTable(selectedPlatform)
@@ -64,10 +66,11 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
             }
         }
         row {
-            component(domainsTableContainer).constraints(CCFlags.grow)
+            cell(domainsTableContainer)
+                .align(Align.FILL)
         }
         row {
-            reportBugLink()
+            browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT.toString())
         }
     }
 
@@ -172,9 +175,10 @@ class RegisterDomainDialog(
 
     override fun createCenterPanel() = panel {
         row(message("settings.auto-detect.register-domain-dialog.title")) {
-            textField(::domain)
+            textField()
+                .bindText(::domain)
                 .focused()
-                .withValidationOnApply {
+                .validationOnApply {
                     notBlank(it.text) ?:
                     domain(it.text) ?:
                     exists(it.text, platforms.getAll().flatMap { platform -> platform.domains.map { domain -> domain.toString() } } ) ?:

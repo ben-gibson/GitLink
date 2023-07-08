@@ -9,7 +9,6 @@ import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
 import uk.co.ben_gibson.url.Host
 import uk.co.ben_gibson.url.URL
-import java.net.URI
 
 val GitRemote.domain : Host? get() = httpUrl?.host
 

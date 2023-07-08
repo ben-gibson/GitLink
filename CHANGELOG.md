@@ -3,6 +3,9 @@
 # GitLink Changelog
 
 ## Unreleased
+- Fix issue where short commit hash was used instead of the full commit hash
+- Fix project configurable display name error in 2023.2 EAP
+- Fix deprecation warnings
 
 ## 4.3.3 - 2023-06-18
 - Fix URL generation with custom protocols.
