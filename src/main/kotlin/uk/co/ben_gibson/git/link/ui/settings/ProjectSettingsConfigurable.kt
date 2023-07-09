@@ -4,14 +4,14 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.project.Project
 import com.intellij.ui.CollectionComboBoxModel
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.*
+import uk.co.ben_gibson.git.link.GitLinkBundle
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.platform.PlatformRepository
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
-import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.notBlank
 
 class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message("settings.general.group.title")), ApplicationSettings.ChangeListener {
@@ -26,38 +26,34 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
 
     override fun createPanel() = panel {
         row(message("settings.general.field.platform.label")) {
-            comboBox(
-                platformComboBoxModel,
-                { initialPlatform },
-                { settings.host = it?.id?.toString() },
-                PlatformCellRenderer()
-            )
+            comboBox(platformComboBoxModel, PlatformCellRenderer())
+                .bindItem({ initialPlatform }, { settings.host = it?.id?.toString() })
                 .comment(message("settings.general.field.platform.help"))
         }
         row(message("settings.general.field.fallback-branch.label")) {
-            textField(settings::fallbackBranch)
+            textField()
+                .bindText(settings::fallbackBranch)
                 .comment(message("settings.general.field.fallback-branch.help"))
-                .withValidationOnApply { notBlank(it.text) }
+                .validationOnApply { notBlank(it.text) }
         }
         row(message("settings.general.field.remote.label")) {
-            textField(settings::remote)
-                .withValidationOnApply { notBlank(it.text) }
+            textField()
+                .bindText(settings::remote)
+                .validationOnApply { notBlank(it.text) }
         }
-        titledRow(message("settings.general.section.advanced.label")) {
+        group(message("settings.general.section.advanced.label")) {
             row {
-                checkBox(message("settings.general.field.force-https.label"), settings::forceHttps)
-            }.largeGapAfter()
-
+                checkBox(message("settings.general.field.force-https.label"))
+                    .bindSelected(settings::forceHttps)
+            }
             row {
-                checkBox(
-                    message("settings.general.field.should-check-remote.label"),
-                    settings::shouldCheckRemote,
-                    comment = message("settings.general.field.check-commit-on-remote.help")
-                )
+                checkBox(message("settings.general.field.should-check-remote.label"))
+                    .comment(message("settings.general.field.check-commit-on-remote.help"))
+                    .bindSelected(settings::shouldCheckRemote)
             }
         }
         row {
-            reportBugLink()
+            browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT.toString())
         }
     }
 

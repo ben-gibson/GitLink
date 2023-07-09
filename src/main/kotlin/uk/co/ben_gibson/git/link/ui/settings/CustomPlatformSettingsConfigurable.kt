@@ -4,18 +4,19 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.ToolbarDecorator
-import com.intellij.ui.layout.CCFlags
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.Align
+import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ListTableModel
+import uk.co.ben_gibson.git.link.GitLinkBundle
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomHostSettings
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.extension.replaceAt
 import uk.co.ben_gibson.git.link.ui.components.SubstitutionReferenceTable
-import uk.co.ben_gibson.git.link.ui.layout.reportBugLink
 import uk.co.ben_gibson.git.link.ui.validation.*
 
 class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.custom-platform.group.title")) {
@@ -37,10 +38,11 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
 
     override fun createPanel() = panel {
         row {
-            component(tableContainer).constraints(CCFlags.grow)
+            cell(tableContainer)
+                .align(Align.FILL)
         }
         row {
-            reportBugLink()
+            browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT.toString())
         }
     }
 
@@ -122,33 +124,39 @@ private class CustomPlatformDialog(customPlatform: CustomHostSettings? = null) :
 
     override fun createCenterPanel() = panel {
         row(message("settings.custom-platform.add-dialog.field.name.label")) {
-            textField(platform::displayName)
+            textField()
+                .bindText(platform::displayName)
                 .focused()
-                .withValidationOnApply { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
+                .validationOnApply() { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
                 .comment(message("settings.custom-platform.add-dialog.field.name.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.domain.label")) {
-            textField(platform::baseUrl)
-                .withValidationOnApply { notBlank(it.text) ?: domain(it.text) }
+            textField()
+                .bindText(platform::baseUrl)
+                .validationOnApply { notBlank(it.text) ?: domain(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.domain.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.file-at-branch-template.label")) {
-            textField(platform::fileAtBranchTemplate)
-                .withValidationOnApply { notBlank(it.text) ?: fileAtBranchTemplate(it.text) }
+            textField()
+                .bindText(platform::fileAtBranchTemplate)
+                .validationOnApply { notBlank(it.text) ?: fileAtBranchTemplate(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.file-at-branch-template.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.file-at-commit-template.label")) {
-            textField(platform::fileAtCommitTemplate)
-                .withValidationOnApply { notBlank(it.text) ?: fileAtCommitTemplate(it.text) }
+            textField()
+                .bindText(platform::fileAtCommitTemplate)
+                .validationOnApply { notBlank(it.text) ?: fileAtCommitTemplate(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.file-at-commit-template.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.commit-template.label")) {
-            textField(platform::commitTemplate)
-                .withValidationOnApply { notBlank(it.text) ?: commitTemplate(it.text) }
+            textField()
+                .bindText(platform::commitTemplate)
+                .validationOnApply { notBlank(it.text) ?: commitTemplate(it.text) }
                 .comment(message("settings.custom-platform.add-dialog.field.commit-template.comment"))
         }
         row {
-            scrollPane(substitutionReferenceTable)
+            scrollCell(substitutionReferenceTable)
+                .align(Align.FILL)
         }
     }
 }
