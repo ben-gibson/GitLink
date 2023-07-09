@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## Unreleased
+
+## 4.3.4 - 2023-07-09
 - Fix issue where short commit hash was used instead of the full commit hash
 - Fix project configurable display name error in 2023.2 EAP
 - Fix deprecation warnings
