@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## Unreleased
+
+## 4.3.5 - 2023-07-16
 - Fix Azure commit URL
 
 ## 4.3.4 - 2023-07-09
