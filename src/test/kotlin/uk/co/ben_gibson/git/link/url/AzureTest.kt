@@ -56,11 +56,11 @@ class AzureTest {
             ),
             Arguments.of(
                 UrlOptionsCommit(REMOTE_BASE_URL_WITH_GIT, COMMIT),
-                "https://dev.azure.com/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 UrlOptionsCommit(REMOTE_BASE_URL_WITHOUT_GIT, COMMIT),
-                "https://dev.azure.com/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
     }

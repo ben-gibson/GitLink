@@ -17,7 +17,7 @@ class AzureUrlFactory: UrlFactory {
 
         // Azure expects this to be in the path between the project and repo name. It's already included when cloning the project using HTTPS, but not when cloning the project using SSH.
         if (!basePathParts.contains("_git")) {
-            basePathParts.add(2, "_git")
+            basePathParts.add(1, "_git")
         }
         
         val baseUrl = URL(scheme = Scheme.https(), host = host, path = Path(basePathParts.joinToString("/")))
@@ -65,8 +65,10 @@ class AzureUrlFactory: UrlFactory {
         return file.path.plus("/").plus(fileName)
     }
 
-    private fun createUrlToCommit(baseUrl: URL, options: UrlOptionsCommit) = baseUrl
-        .withPath(Path.fromSegments(listOf("commit", options.commit.toString())))
+    private fun createUrlToCommit(baseUrl: URL, options: UrlOptionsCommit): URL {
+        val path = requireNotNull(baseUrl.path) { "Unexpected error: repository path must be present in remote URL" }
+        return baseUrl.withPath(path.with(Path.fromSegments(listOf("commit", options.commit.toString()))))
+    }
 
     private fun addLineSelectionParameters(queryString: QueryString, lineSelection: LineSelection) : QueryString {
         return queryString
