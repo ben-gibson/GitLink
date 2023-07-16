@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## Unreleased
+- Fix Azure commit URL
 
 ## 4.3.4 - 2023-07-09
 - Fix issue where short commit hash was used instead of the full commit hash
