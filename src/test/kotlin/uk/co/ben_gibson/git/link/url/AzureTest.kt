@@ -16,6 +16,8 @@ class AzureTest {
 
         private val REMOTE_BASE_URL_WITH_GIT = URL.fromString("https://dev.azure.com/ben-gibson/_git/test")
         private val REMOTE_BASE_URL_WITHOUT_GIT = URL.fromString("https://dev.azure.com/ben-gibson/test")
+        private val REMOTE_BASE_URL_WITH_COMPANY_AND_GIT = URL.fromString("https://dev.azure.com/company/project/_git/test")
+        private val REMOTE_BASE_URL_WITH_COMPANY_WITHOUT_GIT = URL.fromString("https://dev.azure.com/company/project/test")
         private const val BRANCH = "master"
         private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
         private val FILE = File("Foo.java", false, "src", false)
@@ -61,6 +63,14 @@ class AzureTest {
             Arguments.of(
                 UrlOptionsCommit(REMOTE_BASE_URL_WITHOUT_GIT, COMMIT),
                 "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+            ),
+            Arguments.of(
+                UrlOptionsCommit(REMOTE_BASE_URL_WITH_COMPANY_AND_GIT, COMMIT),
+                "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+            ),
+            Arguments.of(
+                UrlOptionsCommit(REMOTE_BASE_URL_WITH_COMPANY_WITHOUT_GIT, COMMIT),
+                "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
     }

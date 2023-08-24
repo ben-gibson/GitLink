@@ -17,7 +17,9 @@ class AzureUrlFactory: UrlFactory {
 
         // Azure expects this to be in the path between the project and repo name. It's already included when cloning the project using HTTPS, but not when cloning the project using SSH.
         if (!basePathParts.contains("_git")) {
-            basePathParts.add(1, "_git")
+            // urls might have an option company component, if that's the case we need to insert _git in between company/project and repository parts
+            val indexToAddGit = if (basePathParts.size >= 3) 2 else 1
+            basePathParts.add(indexToAddGit, "_git")
         }
         
         val baseUrl = URL(scheme = Scheme.https(), host = host, path = Path(basePathParts.joinToString("/")))
