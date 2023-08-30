@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## Unreleased
+
+## 4.3.6 - 2023-08-30
 - Fix Azure URL generation for remotes contaning company name
 
 ## 4.3.5 - 2023-07-16
