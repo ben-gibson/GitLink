@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## Unreleased
+- Fix Azure URL generation for remotes contaning company name
 
 ## 4.3.5 - 2023-07-16
 - Fix Azure commit URL
