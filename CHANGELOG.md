@@ -3,6 +3,8 @@
 # GitLink Changelog
 
 ## Unreleased
+
+## 4.4.0 - 2023-12-02
 - Add sourcehut support
 
 ## 4.3.6 - 2023-08-30
