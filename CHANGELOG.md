@@ -3,6 +3,7 @@
 # GitLink Changelog
 
 ## Unreleased
+- Add sourcehut support
 
 ## 4.3.6 - 2023-08-30
 - Fix Azure URL generation for remotes contaning company name
