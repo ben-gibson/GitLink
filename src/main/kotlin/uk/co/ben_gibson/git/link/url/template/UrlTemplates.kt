@@ -50,6 +50,15 @@ data class UrlTemplates(val fileAtBranch: String, val fileAtCommit : String, val
             )
         }
 
+        fun srht(): UrlTemplates {
+            return UrlTemplates(
+                "{remote:url}/tree/{branch}/item/{file:path}/{file:name}{line-block:start}#L{line:start}{line-block:end}",
+                "{remote:url}/tree/{commit}/item/{file:path}/{file:name}{line-block:start}#L{line:start}{line-block:end}",
+                "{remote:url}/tree/{commit}"
+
+            )
+        }
+
         fun gitee() = gitHub()
 
         fun gerrit(): UrlTemplates {

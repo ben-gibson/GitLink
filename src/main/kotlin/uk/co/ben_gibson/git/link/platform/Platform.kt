@@ -61,6 +61,13 @@ class Gogs : Platform(
     setOf(Host("gogs.io"))
 )
 
+class Srht : Platform(
+    UUID.fromString("aa358239-5c11-4b53-8b97-723181c48f4f"),
+    message("platform.srht.name"),
+    Icons.SOURCEHUT,
+    setOf(Host("git.sr.ht"))
+)
+
 class Gitea : Platform(
     UUID.fromString("e0f86390-1091-4871-8aeb-f534fbc99cf0"),
     message("platform.gitea.name"),

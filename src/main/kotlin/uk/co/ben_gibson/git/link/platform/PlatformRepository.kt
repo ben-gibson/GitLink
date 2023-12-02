@@ -15,6 +15,7 @@ private val EXISTING_PLATFORMS = setOf(
     Gitee(),
     Gitea(),
     Gogs(),
+    Srht(),
     Azure(),
     Chromium(),
     Gerrit()
