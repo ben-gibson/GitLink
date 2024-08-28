@@ -1,16 +1,26 @@
 [versions]
 # libraries
-annotations = "24.0.1"
+junit = "4.13.2"
+junitJupiter = "5.8.2" # Version for junit-jupiter
+junitJupiterParams = "5.9.0" # Version for junit-jupiter-params
+mockk = "1.13.5" # Version for MockK
 
 # plugins
-kotlin = "1.9.0"
-changelog = "2.1.1"
-gradleIntelliJPlugin = "1.15.0"
+changelog = "2.2.1"
+intelliJPlatform = "2.0.1"
+kotlin = "1.9.25"
+kover = "0.8.3"
+qodana = "2024.1.9"
 
 [libraries]
-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+junitJupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+junitJupiterParams = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junitJupiterParams" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 [plugins]
 changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
-gradleIntelliJPlugin = { id = "org.jetbrains.intellij", version.ref = "gradleIntelliJPlugin" }
+intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+qodana = { id = "org.jetbrains.qodana", version.ref = "qodana" }
