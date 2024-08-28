@@ -160,3 +160,7 @@ intellijPlatformTesting {
         }
     }
 }
+
+tasks.test {
+    useJUnitPlatform()
+}
