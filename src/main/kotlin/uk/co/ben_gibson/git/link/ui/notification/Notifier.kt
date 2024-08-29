@@ -29,7 +29,7 @@ fun sendNotification(notification : Notification, project : Project? = null) {
 
     notification.actions.forEach { action ->
         intellijNotification.addAction(DumbAwareAction.create(action.title) {
-            action.run() {
+            action.run {
                 intellijNotification.expire()
             }
         })

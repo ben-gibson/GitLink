@@ -13,9 +13,9 @@ class RecordHit : Middleware {
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val url = next() ?: return null
 
-        service<ApplicationSettings>().recordHit();
+        service<ApplicationSettings>().recordHit()
 
-        return url;
+        return url
     }
 }
 

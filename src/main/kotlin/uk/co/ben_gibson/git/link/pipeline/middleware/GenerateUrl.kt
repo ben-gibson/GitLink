@@ -73,7 +73,7 @@ class GenerateUrl : Middleware {
         val commit = repository.currentCommit() ?: return null
 
         if (!pullRequestWorkflowSupported || !settings.shouldCheckRemote) {
-           return commit;
+           return commit
         }
 
         return if (remote.contains(repository, commit)) commit else null

@@ -44,7 +44,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         .setEditAction { editDomain() }
         .setRemoveAction { removeDomain() }
         .setEditActionUpdater { canModifyDomain() }
-        .setRemoveActionUpdater() { canModifyDomain() }
+        .setRemoveActionUpdater { canModifyDomain() }
         .createPanel()
 
     init {

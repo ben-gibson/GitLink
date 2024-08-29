@@ -19,7 +19,7 @@ class ForceHttps : Middleware {
             return url.toHttps()
         }
 
-        return url;
+        return url
     }
 }
 

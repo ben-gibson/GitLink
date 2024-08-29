@@ -24,7 +24,7 @@ private val EXISTING_PLATFORMS = setOf(
 @Service
 class PlatformRepository {
     fun getById(id: String) = getById(UUID.fromString(id))
-    fun getById(id: UUID) = load().firstOrNull() { it.id == id }
+    fun getById(id: UUID) = load().firstOrNull { it.id == id }
     fun getByDomain(domain: Host): Platform? {
         val platforms = load()
         return platforms.firstOrNull { it.domains.contains(domain) } ?: platforms.firstOrNull { it.domainPattern?.matcher(domain.toString())?.matches() == true }

@@ -42,11 +42,11 @@ data class Notification(
                 Finding GitLink useful? Show your support 💖 and ⭐ the repository 🙏.
             """.trimIndent(),
             actions = setOf(
-                NotificationAction.openRepository() {
-                    service<ApplicationSettings>().requestSupport = false;
+                NotificationAction.openRepository {
+                    service<ApplicationSettings>().requestSupport = false
                 },
-                NotificationAction.doNotAskAgain() {
-                    service<ApplicationSettings>().requestSupport = false;
+                NotificationAction.doNotAskAgain {
+                    service<ApplicationSettings>().requestSupport = false
                 }
             )
         )
@@ -76,9 +76,6 @@ data class Notification(
             Type.TRANSIENT,
         )
     }
-
-    fun isTransient() = type == Type.TRANSIENT
-    fun isPersistent() = !isTransient();
 }
 
 data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) -> Unit) {
@@ -101,12 +98,12 @@ data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) 
 
         fun openUrl(url: URL, title: String = message("actions.take-me-there")) = NotificationAction(title) { dismiss ->
             dismiss()
-            BrowserLauncher.instance.open(url.toString());
+            BrowserLauncher.instance.open(url.toString())
         }
 
         fun disableRemoteCheck(project: Project) = NotificationAction(message("actions.disable")) { dismiss ->
             dismiss()
-            project.service<ProjectSettings>().shouldCheckRemote = false;
+            project.service<ProjectSettings>().shouldCheckRemote = false
         }
     }
 }

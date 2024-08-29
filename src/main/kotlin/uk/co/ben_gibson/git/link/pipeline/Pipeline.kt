@@ -35,7 +35,7 @@ class Pipeline(private val project: Project) {
         val middleware = queue.remove()
 
         return middleware(pass) {
-            return@middleware next(queue, pass);
+            return@middleware next(queue, pass)
         }
     }
 }
