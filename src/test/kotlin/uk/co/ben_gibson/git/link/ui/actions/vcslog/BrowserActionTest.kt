@@ -3,10 +3,7 @@ package uk.co.ben_gibson.git.link.ui.actions.vcslog
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.vcs.log.Hash
-import com.intellij.vcs.log.VcsLog
-import com.intellij.vcs.log.VcsLogDataKeys
-import com.intellij.vcs.log.VcsUser
+import com.intellij.vcs.log.*
 import com.intellij.vcs.log.impl.HashImpl
 import com.intellij.vcs.log.impl.VcsFileStatusInfo
 import git4idea.GitCommit
@@ -53,11 +50,11 @@ class BrowserActionTest {
             mockk<GitCommitRequirements>()
         )
 
-        val vcsLog = mockk<VcsLog>()
-        every { vcsLog.selectedDetails } returns listOf(commit)
+        val vcsLog = mockk<VcsLogCommitSelection>()
+        every { vcsLog.cachedFullDetails } returns listOf(commit)
 
         val anActionEvent = mockk<AnActionEvent>()
-        every { anActionEvent.getData(VcsLogDataKeys.VCS_LOG) } returns vcsLog
+        every { anActionEvent.getData(VcsLogDataKeys.VCS_LOG_COMMIT_SELECTION) } returns vcsLog
 
         return anActionEvent
     }
