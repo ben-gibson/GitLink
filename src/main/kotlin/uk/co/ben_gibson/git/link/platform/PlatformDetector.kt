@@ -26,9 +26,7 @@ class PlatformDetector(val project: Project) {
         getRepositoryForFile(projectDirectory) { repository -> getPlatformForRepository(repository).let(consumer) }
     }
 
-    private fun getPlatformForRepository(repository: GitRepository?): Platform? {
-        repository ?: return null
-
+    private fun getPlatformForRepository(repository: GitRepository): Platform? {
         val settings = project.service<ProjectSettings>()
 
         val remote = repository.locateRemote(settings.remote) ?: return null
@@ -41,7 +39,7 @@ class PlatformDetector(val project: Project) {
         }
     }
 
-    private fun getRepositoryForFile(projectDirectory: VirtualFile, consumer: (GitRepository?) -> Unit) {
+    private fun getRepositoryForFile(projectDirectory: VirtualFile, consumer: (GitRepository) -> Unit) {
         val gitRepositoryManager = GitRepositoryManager.getInstance(project)
         val repository = gitRepositoryManager.getRepositoryForFile(projectDirectory)
         if (repository != null) {
@@ -55,7 +53,7 @@ class PlatformDetector(val project: Project) {
                 VcsRepositoryManager.VCS_REPOSITORY_MAPPING_UPDATED,
                 VcsRepositoryMappingListener {
                     busConnection.disconnect()
-                    gitRepositoryManager.getRepositoryForFile(projectDirectory).let(consumer)
+                    gitRepositoryManager.getRepositoryForFile(projectDirectory)?.let(consumer)
                 }
             )
     }
