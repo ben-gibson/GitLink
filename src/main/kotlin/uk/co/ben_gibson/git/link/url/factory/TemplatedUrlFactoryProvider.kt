@@ -20,7 +20,7 @@ val PLATFORM_MAP = mapOf(
 )
 
 @Service
-class TemplatedUrlFactoryProvider() {
+class TemplatedUrlFactoryProvider {
     fun forPlatform(platform: Platform): TemplatedUrlFactory {
         if (platform is Custom) {
             return customPlatform(platform)

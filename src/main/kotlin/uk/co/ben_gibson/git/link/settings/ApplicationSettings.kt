@@ -4,7 +4,7 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
-import com.intellij.util.xmlb.annotations.Tag;
+import com.intellij.util.xmlb.annotations.Tag
 import uk.co.ben_gibson.url.Host
 import java.util.UUID
 

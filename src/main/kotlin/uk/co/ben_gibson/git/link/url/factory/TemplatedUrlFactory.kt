@@ -74,7 +74,7 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
             processed = processed.replace("{remote:url:path:${position}}", pathParts.getOrElse(position) { "" })
         }
 
-        return processed;
+        return processed
     }
 
     private fun processBranch(template: String, branch: String) = template
@@ -83,7 +83,7 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
     private fun processFile(template: String, file: File) = template
         .replace("{object}", if (file.isDirectory) "tree" else "blob")
         .replace("{file:name}", if (file.isRoot) "" else escape.apply(file.name))
-        .replace("{file:path}", file.path.split("/").map { escape.apply(it) }.joinToString("/"))
+        .replace("{file:path}", file.path.split("/").joinToString("/") { escape.apply(it) })
 
     private fun processCommit(template: String, commit: Commit) = template
         .replace("{commit}", commit.toString())

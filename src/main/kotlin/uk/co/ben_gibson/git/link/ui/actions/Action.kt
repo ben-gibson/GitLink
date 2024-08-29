@@ -46,7 +46,7 @@ abstract class Action(private val type: Type): DumbAwareAction() {
 
         if (host == null) {
             event.presentation.isEnabledAndVisible = false
-            return;
+            return
         }
 
         event.presentation.isEnabled = shouldBeEnabled(event)

@@ -5,7 +5,7 @@ import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.ui.Icons
 import java.util.UUID
 import javax.swing.Icon
-import uk.co.ben_gibson.url.Host;
+import uk.co.ben_gibson.url.Host
 import java.util.regex.Pattern
 
 sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<Host> = setOf(), val domainPattern: Pattern? = null, val pullRequestWorkflowSupported: Boolean = true) {
@@ -15,9 +15,7 @@ sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domain
 
         other as Platform
 
-        if (id != other.id) return false
-
-        return true
+        return id == other.id
     }
 
     override fun hashCode(): Int {

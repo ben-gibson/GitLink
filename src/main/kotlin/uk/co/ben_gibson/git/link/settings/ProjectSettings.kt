@@ -15,7 +15,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
     var host: String? = null
     var fallbackBranch = "main"
     var remote = "origin"
-    var checkCommitOnRemote = true
+    private var checkCommitOnRemote = true
     var shouldCheckRemote
         get() = checkCommitOnRemote
         set(value) {

@@ -23,13 +23,13 @@ class Timer : Middleware {
 
         val url = next()
 
-        val total = System.currentTimeMillis() - startTime;
+        val total = System.currentTimeMillis() - startTime
 
         if (total > 1000) {
             sendNotification(Notification.performanceTips(pass.project), pass.project)
         }
 
-        return url;
+        return url
     }
 }
 

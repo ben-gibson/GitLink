@@ -127,7 +127,7 @@ private class CustomPlatformDialog(customPlatform: CustomHostSettings? = null) :
             textField()
                 .bindText(platform::displayName)
                 .focused()
-                .validationOnApply() { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
+                .validationOnApply { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
                 .comment(message("settings.custom-platform.add-dialog.field.name.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.domain.label")) {

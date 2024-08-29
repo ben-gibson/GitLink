@@ -27,7 +27,7 @@ val GitRemote.httpUrl : URL? get() {
     // will result in an invalid URL when the repository name is made up of digits.
     // See https://github.com/ben-gibson/GitLink/issues/94
     if (!url.startsWith("git@")) {
-        url = url.replace(":\\d{1,5}".toRegex(), ""); // remove the port
+        url = url.replace(":\\d{1,5}".toRegex(), "") // remove the port
     }
 
     // Hack for azure

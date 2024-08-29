@@ -21,7 +21,7 @@ class SendSupportNotification : Middleware {
             sendNotification(Notification.star())
         }
 
-        return url;
+        return url
     }
 }
 

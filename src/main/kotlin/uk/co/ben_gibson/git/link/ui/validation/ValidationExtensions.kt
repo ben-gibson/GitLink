@@ -24,7 +24,7 @@ fun ValidationInfoBuilder.domain(value: String): ValidationInfo? {
         Host(value)
         null
     } catch (e: IllegalArgumentException) {
-        error(message("validation.invalid-domain"));
+        error(message("validation.invalid-domain"))
     }
 }
 
@@ -46,7 +46,7 @@ fun ValidationInfoBuilder.exists(value: String, existing: Collection<String>): V
 
 fun ValidationInfoBuilder.length(value: String, min: Int, max: Int): ValidationInfo? {
     if (value.isEmpty()) {
-        return null;
+        return null
     }
 
     return when {
@@ -58,7 +58,7 @@ fun ValidationInfoBuilder.length(value: String, min: Int, max: Int): ValidationI
 
 fun ValidationInfoBuilder.fileAtCommitTemplate(value: String): ValidationInfo? {
     if (value.isEmpty()) {
-        return null;
+        return null
     }
 
     val options = UrlOptionsFileAtCommit(
@@ -73,7 +73,7 @@ fun ValidationInfoBuilder.fileAtCommitTemplate(value: String): ValidationInfo? {
 
 fun ValidationInfoBuilder.fileAtBranchTemplate(value: String): ValidationInfo? {
     if (value.isEmpty()) {
-        return null;
+        return null
     }
 
     val options = UrlOptionsFileAtBranch(
@@ -88,7 +88,7 @@ fun ValidationInfoBuilder.fileAtBranchTemplate(value: String): ValidationInfo? {
 
 fun ValidationInfoBuilder.commitTemplate(value: String): ValidationInfo? {
     if (value.isEmpty()) {
-        return null;
+        return null
     }
 
     val options = UrlOptionsCommit(
@@ -96,7 +96,7 @@ fun ValidationInfoBuilder.commitTemplate(value: String): ValidationInfo? {
         Commit("734232a3c18f0625843bd161c3f5da272b9d53c1")
     )
 
-    return urlTemplate(options, commit = value);
+    return urlTemplate(options, commit = value)
 }
 
 private fun ValidationInfoBuilder.urlTemplate(
@@ -105,7 +105,7 @@ private fun ValidationInfoBuilder.urlTemplate(
     fileAtCommit: String = "",
     commit: String = ""
 ) : ValidationInfo? {
-    val factory = TemplatedUrlFactory(UrlTemplates(fileAtBranch, fileAtCommit, commit));
+    val factory = TemplatedUrlFactory(UrlTemplates(fileAtBranch, fileAtCommit, commit))
 
     return try {
         factory.createUrl(options)
