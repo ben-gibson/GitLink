@@ -8,6 +8,7 @@ import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
+import uk.co.ben_gibson.git.link.url.factory.BitbucketCloudUrlFactory
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
@@ -25,39 +26,53 @@ class BitBucketCloudTest {
         @JvmStatic
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH, LINE_SELECTION),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://bitbucket.org/foo/bar/src/master/src/Foo.java#lines-10:20"
             ),
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH),
+                URL.fromString("https://dev.example.com/scm/foo/bar"),
+                UrlOptions.UrlOptionsFileAtBranch(
+                    FILE,
+                    BRANCH,
+                    LINE_SELECTION
+                ),
+                "https://dev.example.com/foo/bar/src/master/src/Foo.java#lines-10:20"
+            ),
+            Arguments.of(
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
                 "https://bitbucket.org/foo/bar/src/master/src/Foo.java"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT, LineSelection(10, 20)),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LineSelection(10, 20)),
                 "https://bitbucket.org/foo/bar/src/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#lines-10:20"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
                     COMMIT
                 ),
                 "https://bitbucket.org/foo/bar/src/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
                     COMMIT
                 ),
                 "https://bitbucket.org/foo/bar/src/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
                 "https://bitbucket.org/foo/bar/src/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://bitbucket.org/foo/bar/commits/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
@@ -65,9 +80,9 @@ class BitBucketCloudTest {
 
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
-        val factory = TemplatedUrlFactory(UrlTemplates.bitbucketCloud())
-        val url = factory.createUrl(options)
+    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
+        val factory = BitbucketCloudUrlFactory()
+        val url = factory.createUrl(baseUrl, options)
 
         assertEquals(expectedUrl, url.toString())
     }

@@ -10,8 +10,8 @@ import uk.co.ben_gibson.url.*
 class AzureUrlFactory: UrlFactory {
     private val host = Host("dev.azure.com")
 
-    override fun createUrl(options: UrlOptions): URL {
-        val basePathParts = options.baseUrl.path.toString()
+    override fun createUrl(baseUrl: URL, options: UrlOptions): URL {
+        val basePathParts = baseUrl.path.toString()
             .split("/")
             .toMutableList()
 
@@ -25,13 +25,13 @@ class AzureUrlFactory: UrlFactory {
         val baseUrl = URL(scheme = Scheme.https(), host = host, path = Path(basePathParts.joinToString("/")))
 
         return when (options) {
-            is UrlOptionsFileAtBranch -> createUrlToFileAtBranch(baseUrl, options)
-            is UrlOptionsFileAtCommit -> createUrlToFileAtCommit(baseUrl, options)
-            is UrlOptionsCommit -> createUrlToCommit(baseUrl, options)
+            is UrlOptions.UrlOptionsFileAtBranch -> createUrlToFileAtBranch(baseUrl, options)
+            is UrlOptions.UrlOptionsFileAtCommit -> createUrlToFileAtCommit(baseUrl, options)
+            is UrlOptions.UrlOptionsCommit -> createUrlToCommit(baseUrl, options)
         }
     }
 
-    private fun createUrlToFileAtCommit(baseUrl: URL, options: UrlOptionsFileAtCommit) : URL {
+    private fun createUrlToFileAtCommit(baseUrl: URL, options: UrlOptions.UrlOptionsFileAtCommit) : URL {
         var queryString = QueryString.fromMap(
             mapOf(
                 "version" to listOf("GC".plus(options.commit)),
@@ -46,7 +46,7 @@ class AzureUrlFactory: UrlFactory {
         return baseUrl.withQueryString(queryString)
     }
 
-    private fun createUrlToFileAtBranch(baseUrl: URL, options: UrlOptionsFileAtBranch) : URL {
+    private fun createUrlToFileAtBranch(baseUrl: URL, options: UrlOptions.UrlOptionsFileAtBranch) : URL {
         var queryString = QueryString.fromMap(
             mapOf(
                 "version" to listOf("GB".plus(options.branch)),
@@ -67,7 +67,7 @@ class AzureUrlFactory: UrlFactory {
         return file.path.plus("/").plus(fileName)
     }
 
-    private fun createUrlToCommit(baseUrl: URL, options: UrlOptionsCommit): URL {
+    private fun createUrlToCommit(baseUrl: URL, options: UrlOptions.UrlOptionsCommit): URL {
         val path = requireNotNull(baseUrl.path) { "Unexpected error: repository path must be present in remote URL" }
         return baseUrl.withPath(path.with(Path.fromSegments(listOf("commit", options.commit.toString()))))
     }

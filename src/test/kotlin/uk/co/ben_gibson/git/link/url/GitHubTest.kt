@@ -24,47 +24,52 @@ class GitHubTest {
         @JvmStatic
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH, LINE_SELECTION),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://github.com/my/repo/blob/master/src/Foo.java#L10-L20"
             ),
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH, LINE_SELECTION),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://github.com/my/repo/blob/master/src/Foo.java#L10-L20"
             ),
             Arguments.of(
-                UrlOptionsFileAtBranch(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(
                     File("my-image.png", false, "src/foo bar baz/images", false),
                     BRANCH
                 ),
                 "https://github.com/my/repo/blob/master/src/foo%20bar%20baz/images/my-image.png"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT, LineSelection(10, 20)),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LineSelection(10, 20)),
                 "https://github.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#L10-L20"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
                     COMMIT
                 ),
                 "https://github.com/my/repo/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
                     COMMIT
                 ),
                 "https://github.com/my/repo/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
                 "https://github.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://github.com/my/repo/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
@@ -72,10 +77,10 @@ class GitHubTest {
 
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
+    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
         val factory = TemplatedUrlFactory(UrlTemplates.gitHub())
 
-        val url = factory.createUrl(options)
+        val url = factory.createUrl(baseUrl, options)
 
         assertEquals(expectedUrl, url.toString())
     }

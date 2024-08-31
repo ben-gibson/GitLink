@@ -26,50 +26,58 @@ class AzureTest {
         @JvmStatic
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL_WITH_GIT, FILE, BRANCH, LINE_SELECTION),
+                REMOTE_BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://dev.azure.com/ben-gibson/_git/test?version=GBmaster&path=src%2FFoo.java&line=10&lineEnd=21&lineStartColumn=1&lineEndColumn=1"
             ),
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL_WITH_GIT, FILE, BRANCH),
+                REMOTE_BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
                 "https://dev.azure.com/ben-gibson/_git/test?version=GBmaster&path=src%2FFoo.java"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL_WITH_GIT, FILE, COMMIT, LINE_SELECTION),
+                REMOTE_BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LINE_SELECTION),
                 "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2FFoo.java&line=10&lineEnd=21&lineStartColumn=1&lineEndColumn=1"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL_WITH_GIT,
+                REMOTE_BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
                     COMMIT
                 ),
                 "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2Ffoo%2Fresources"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL_WITH_GIT,
+                REMOTE_BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
                     COMMIT
                 ),
                 "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=%2F"),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL_WITH_GIT, FILE, COMMIT),
+                REMOTE_BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
                 "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2FFoo.java"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL_WITH_GIT, COMMIT),
+                REMOTE_BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL_WITHOUT_GIT, COMMIT),
+                REMOTE_BASE_URL_WITHOUT_GIT,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL_WITH_COMPANY_AND_GIT, COMMIT),
+                REMOTE_BASE_URL_WITH_COMPANY_AND_GIT,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL_WITH_COMPANY_WITHOUT_GIT, COMMIT),
+                REMOTE_BASE_URL_WITH_COMPANY_WITHOUT_GIT,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
@@ -77,9 +85,9 @@ class AzureTest {
 
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
+    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
         val factory = AzureUrlFactory()
-        val url = factory.createUrl(options)
+        val url = factory.createUrl(baseUrl, options)
 
         assertEquals(expectedUrl, url.toString())
     }
