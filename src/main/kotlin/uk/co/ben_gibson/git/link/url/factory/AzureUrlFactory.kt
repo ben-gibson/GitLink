@@ -8,26 +8,13 @@ import uk.co.ben_gibson.url.*
 
 @Service
 class AzureUrlFactory: UrlFactory {
-    private val host = Host("dev.azure.com")
-
     override fun createUrl(baseUrl: URL, options: UrlOptions): URL {
-        val basePathParts = baseUrl.path.toString()
-            .split("/")
-            .toMutableList()
-
-        // Azure expects this to be in the path between the project and repo name. It's already included when cloning the project using HTTPS, but not when cloning the project using SSH.
-        if (!basePathParts.contains("_git")) {
-            // urls might have an option company component, if that's the case we need to insert _git in between company/project and repository parts
-            val indexToAddGit = if (basePathParts.size >= 3) 2 else 1
-            basePathParts.add(indexToAddGit, "_git")
-        }
-        
-        val baseUrl = URL(scheme = Scheme.https(), host = host, path = Path(basePathParts.joinToString("/")))
+        val normalisedBaseUrl = normaliseBaseUrl(baseUrl)
 
         return when (options) {
-            is UrlOptions.UrlOptionsFileAtBranch -> createUrlToFileAtBranch(baseUrl, options)
-            is UrlOptions.UrlOptionsFileAtCommit -> createUrlToFileAtCommit(baseUrl, options)
-            is UrlOptions.UrlOptionsCommit -> createUrlToCommit(baseUrl, options)
+            is UrlOptions.UrlOptionsFileAtBranch -> createUrlToFileAtBranch(normalisedBaseUrl, options)
+            is UrlOptions.UrlOptionsFileAtCommit -> createUrlToFileAtCommit(normalisedBaseUrl, options)
+            is UrlOptions.UrlOptionsCommit -> createUrlToCommit(normalisedBaseUrl, options)
         }
     }
 
@@ -80,5 +67,29 @@ class AzureUrlFactory: UrlFactory {
             // TODO: Pass column selection in.
             .withParameter("lineStartColumn", "1")
             .withParameter("lineEndColumn", "1")
+    }
+
+    private fun normaliseBaseUrl(baseUrl: URL): URL {
+        // Convert ssh.dev.azure.com:v3/ben-gibson/test/test to dev.azure.com:ben-gibson/test/_git/test.git
+        val basePathParts = baseUrl.path
+            .toString()
+            .removePrefix("v3/")
+            .plus(".git") // Azure expects .git after the repo name
+            .split("/")
+            .toMutableList()
+
+        // Azure expects this to be in the path between the project and repo name. It's already included when cloning the project using HTTPS, but not when cloning the project using SSH.
+        if (!basePathParts.contains("_git")) {
+            // urls might have an option company component, if that's the case we need to insert _git in between company/project and repository parts
+            val indexToAddGit = if (basePathParts.size >= 3) 2 else 1
+            basePathParts.add(indexToAddGit, "_git")
+        }
+
+        var normalisedBaseUrl = baseUrl.copy(path = Path(basePathParts.joinToString("/")))
+
+        if (baseUrl.host.toString().startsWith("ssh.")) {
+            normalisedBaseUrl = normalisedBaseUrl.copy(host = Host(baseUrl.host.toString().removePrefix("ssh.")))
+        }
+        return normalisedBaseUrl
     }
 }

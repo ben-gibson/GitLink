@@ -16,11 +16,7 @@ val GitRemote.httpUrl : URL? get() {
     var url = firstUrl ?: return null
 
     url = url.trim()
-
-    // Azure expects the .git postfix on the repo name unlike everything else
-    if (!url.contains("dev.azure")) {
-        url = url.removeSuffix(".git")
-    }
+        .removeSuffix(".git")
 
     // Do not try to remove the port if the URL uses the SSH protocol in the SCP syntax e.g.
     // 'git@github.com:foo.git' as it does not support port definitions. Attempting to remove the port
@@ -28,12 +24,6 @@ val GitRemote.httpUrl : URL? get() {
     // See https://github.com/ben-gibson/GitLink/issues/94
     if (!url.startsWith("git@")) {
         url = url.replace(":\\d{1,5}".toRegex(), "") // remove the port
-    }
-
-    // Hack for azure
-    if (url.startsWith("git@ssh.dev.azure.com")) {
-        url = url.replace("^git@ssh.".toRegex(), "git@")
-            .replace(":v\\d{1,5}".toRegex(), "") // remove v3 from git@ssh.dev.azure.com:v3/ben-gibson/test/test
     }
 
     if (!url.startsWith("http")) {
