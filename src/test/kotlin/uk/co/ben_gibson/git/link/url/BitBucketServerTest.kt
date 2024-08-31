@@ -24,39 +24,44 @@ class BitBucketServerTest {
         @JvmStatic
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH, LINE_SELECTION),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/master#10-20"
             ),
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/master"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT, LineSelection(10, 20)),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LineSelection(10, 20)),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c#10-20"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
                     COMMIT
                 ),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/foo/resources?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
                     COMMIT
                 ),
                 "https://stash.example.com/projects/foo/repos/bar/browse?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://stash.example.com/projects/foo/repos/bar/commits/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
@@ -64,9 +69,9 @@ class BitBucketServerTest {
 
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
+    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
         val factory = TemplatedUrlFactory(UrlTemplates.bitbucketServer())
-        val url = factory.createUrl(options)
+        val url = factory.createUrl(baseUrl, options)
 
         assertEquals(expectedUrl, url.toString())
     }

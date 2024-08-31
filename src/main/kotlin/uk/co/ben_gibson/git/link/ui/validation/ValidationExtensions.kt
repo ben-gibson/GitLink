@@ -61,8 +61,7 @@ fun ValidationInfoBuilder.fileAtCommitTemplate(value: String): ValidationInfo? {
         return null
     }
 
-    val options = UrlOptionsFileAtCommit(
-        URL.fromString("https://example.com"),
+    val options = UrlOptions.UrlOptionsFileAtCommit(
         File("foo.kt", false, "src/main", false),
         Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"),
         LineSelection(10, 20)
@@ -76,8 +75,7 @@ fun ValidationInfoBuilder.fileAtBranchTemplate(value: String): ValidationInfo? {
         return null
     }
 
-    val options = UrlOptionsFileAtBranch(
-        URL.fromString("https://example.com"),
+    val options = UrlOptions.UrlOptionsFileAtBranch(
         File("foo.kt", false, "src/main", false),
         "master",
         LineSelection(10, 20)
@@ -91,10 +89,7 @@ fun ValidationInfoBuilder.commitTemplate(value: String): ValidationInfo? {
         return null
     }
 
-    val options = UrlOptionsCommit(
-        URL.fromString("https://example.com"),
-        Commit("734232a3c18f0625843bd161c3f5da272b9d53c1")
-    )
+    val options = UrlOptions.UrlOptionsCommit(Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"))
 
     return urlTemplate(options, commit = value)
 }
@@ -108,7 +103,7 @@ private fun ValidationInfoBuilder.urlTemplate(
     val factory = TemplatedUrlFactory(UrlTemplates(fileAtBranch, fileAtCommit, commit))
 
     return try {
-        factory.createUrl(options)
+        factory.createUrl(URL.fromString("https://example.com"), options)
         null
     } catch (e: Exception) {
         when(e) {

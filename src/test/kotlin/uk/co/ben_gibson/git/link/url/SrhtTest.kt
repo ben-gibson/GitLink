@@ -24,23 +24,28 @@ class SourceHutTest {
         @JvmStatic
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH, LINE_SELECTION),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://git.sr.ht/~myuser/myproject/tree/main/item/src/main.rs#L1"
             ),
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
                 "https://git.sr.ht/~myuser/myproject/tree/main/item/src/main.rs"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT, LINE_SELECTION),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LINE_SELECTION),
                 "https://git.sr.ht/~myuser/myproject/tree/23471005d2d874bb7ab400d45a2360f988c0be33/item/src/main.rs#L1"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
                 "https://git.sr.ht/~myuser/myproject/tree/23471005d2d874bb7ab400d45a2360f988c0be33/item/src/main.rs"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://git.sr.ht/~myuser/myproject/tree/23471005d2d874bb7ab400d45a2360f988c0be33"
             )
         )
@@ -48,9 +53,9 @@ class SourceHutTest {
 
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
+    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
         val factory = TemplatedUrlFactory(UrlTemplates.srht())
-        val url = factory.createUrl(options)
+        val url = factory.createUrl(baseUrl, options)
 
         assertEquals(expectedUrl, url.toString())
     }

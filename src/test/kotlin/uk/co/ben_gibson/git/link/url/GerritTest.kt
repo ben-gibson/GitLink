@@ -24,39 +24,44 @@ class GerritTest {
         @JvmStatic
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH, LINE_SELECTION),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/refs/heads/master/src/Foo.java#10"
             ),
             Arguments.of(
-                UrlOptionsFileAtBranch(REMOTE_BASE_URL, FILE, BRANCH),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/refs/heads/master/src/Foo.java"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT, LineSelection(10, 20)),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LineSelection(10, 20)),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#10"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
                     COMMIT
                 ),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(
-                    REMOTE_BASE_URL,
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
                     COMMIT
                 ),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
-                UrlOptionsFileAtCommit(REMOTE_BASE_URL, FILE, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java"
             ),
             Arguments.of(
-                UrlOptionsCommit(REMOTE_BASE_URL, COMMIT),
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsCommit(COMMIT),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
@@ -64,9 +69,9 @@ class GerritTest {
 
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(options: UrlOptions, expectedUrl: String) {
+    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
         val factory = TemplatedUrlFactory(UrlTemplates.gerrit())
-        val url = factory.createUrl(options)
+        val url = factory.createUrl(baseUrl, options)
 
         assertEquals(expectedUrl, url.toString())
     }

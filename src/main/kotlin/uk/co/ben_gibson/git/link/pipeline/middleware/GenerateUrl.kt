@@ -9,9 +9,6 @@ import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.pipeline.Pass
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.url.UrlOptions
-import uk.co.ben_gibson.git.link.url.UrlOptionsCommit
-import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtBranch
-import uk.co.ben_gibson.git.link.url.UrlOptionsFileAtCommit
 import uk.co.ben_gibson.git.link.url.factory.UrlFactoryLocator
 import uk.co.ben_gibson.url.URL
 
@@ -26,12 +23,12 @@ class GenerateUrl : Middleware {
 
         val platform = pass.platformOrThrow()
 
-        val urlOptions = createUrlOptions(pass, baseUrl, platform.pullRequestWorkflowSupported)
+        val options = createUrlOptions(pass, platform.pullRequestWorkflowSupported)
 
-        return service<UrlFactoryLocator>().locate(platform).createUrl(urlOptions)
+        return service<UrlFactoryLocator>().locate(platform).createUrl(baseUrl, options)
     }
 
-    private fun createUrlOptions(pass: Pass, baseUrl: URL, pullRequestWorkflowSupported: Boolean): UrlOptions {
+    private fun createUrlOptions(pass: Pass, pullRequestWorkflowSupported: Boolean): UrlOptions {
         val remote = pass.remoteOrThrow()
         val repository = pass.repositoryOrThrow()
         val context = pass.context
@@ -40,16 +37,15 @@ class GenerateUrl : Middleware {
         val repositoryFile = File.forRepository(context.file, repository)
 
         return when (context) {
-            is ContextFileAtCommit -> UrlOptionsFileAtCommit(baseUrl, repositoryFile, context.commit, context.lineSelection)
-            is ContextCommit -> UrlOptionsCommit(baseUrl, context.commit)
+            is ContextFileAtCommit -> UrlOptions.UrlOptionsFileAtCommit(repositoryFile, context.commit, context.lineSelection)
+            is ContextCommit -> UrlOptions.UrlOptionsCommit(context.commit)
             is ContextCurrentFile -> {
                 val commit = resolveCommit(repository, remote, settings, pullRequestWorkflowSupported)
 
                 if (commit != null) {
-                    UrlOptionsFileAtCommit(baseUrl, repositoryFile, commit, context.lineSelection)
+                    UrlOptions.UrlOptionsFileAtCommit(repositoryFile, commit, context.lineSelection)
                 } else {
-                    UrlOptionsFileAtBranch(
-                        baseUrl,
+                    UrlOptions.UrlOptionsFileAtBranch(
                         repositoryFile,
                         resolveBranch(repository, remote, settings),
                         context.lineSelection

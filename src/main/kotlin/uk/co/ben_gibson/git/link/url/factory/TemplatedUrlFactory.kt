@@ -9,19 +9,19 @@ import uk.co.ben_gibson.url.URL
 import java.util.regex.Pattern
 import com.google.common.net.UrlEscapers
 
-class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
+open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
     private val escape = UrlEscapers.urlPathSegmentEscaper().asFunction()
 
     private val remotePathPattern = Pattern.compile("\\{remote:url:path:(\\d)}")
 
-    override fun createUrl(options: UrlOptions): URL {
+    override fun createUrl(baseUrl: URL, options: UrlOptions): URL {
         var processTemplate = when (options) {
-            is UrlOptionsFileAtCommit -> processTemplate(options)
-            is UrlOptionsFileAtBranch -> processTemplate(options)
-            is UrlOptionsCommit -> processTemplate(options)
+            is UrlOptions.UrlOptionsFileAtCommit -> processTemplate(options)
+            is UrlOptions.UrlOptionsFileAtBranch -> processTemplate(options)
+            is UrlOptions.UrlOptionsCommit -> processTemplate(options)
         }
 
-        processTemplate = processBaseUrl(processTemplate, options.baseUrl)
+        processTemplate = processBaseUrl(processTemplate, baseUrl)
         processTemplate = removeUnmatchedSubstitutions(processTemplate)
         processTemplate = processTemplate.replace("(?<!:)/{2,}".toRegex(), "/")
 
@@ -30,7 +30,7 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
 
     private fun removeUnmatchedSubstitutions(template: String) = template.replace("\\{.+?}".toRegex(), "")
 
-    private fun processTemplate(options: UrlOptionsFileAtBranch): String {
+    private fun processTemplate(options: UrlOptions.UrlOptionsFileAtBranch): String {
         var template = templates.fileAtBranch
 
         template = processFile(template, options.file)
@@ -40,7 +40,7 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
         return template
     }
 
-    private fun processTemplate(options: UrlOptionsFileAtCommit): String {
+    private fun processTemplate(options: UrlOptions.UrlOptionsFileAtCommit): String {
         var template = templates.fileAtCommit
 
         template = processFile(template, options.file)
@@ -50,7 +50,7 @@ class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
         return template
     }
 
-    private fun processTemplate(options: UrlOptionsCommit): String {
+    private fun processTemplate(options: UrlOptions.UrlOptionsCommit): String {
         var template = templates.commit
 
         template = processCommit(template, options.commit)
