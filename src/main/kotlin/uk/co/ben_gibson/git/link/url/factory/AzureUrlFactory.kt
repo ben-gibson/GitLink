@@ -1,6 +1,5 @@
 package uk.co.ben_gibson.git.link.url.factory
 
-import ai.grazie.utils.dropPrefix
 import com.intellij.openapi.components.Service
 import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
@@ -74,7 +73,7 @@ class AzureUrlFactory: UrlFactory {
         // Convert ssh.dev.azure.com:v3/ben-gibson/test/test to dev.azure.com:ben-gibson/test/_git/test.git
         val basePathParts = baseUrl.path
             .toString()
-            .dropPrefix("v3/")
+            .removePrefix("v3/")
             .plus(".git") // Azure expects .git after the repo name
             .split("/")
             .toMutableList()
@@ -89,7 +88,7 @@ class AzureUrlFactory: UrlFactory {
         var normalisedBaseUrl = baseUrl.copy(path = Path(basePathParts.joinToString("/")))
 
         if (baseUrl.host.toString().startsWith("ssh.")) {
-            normalisedBaseUrl = normalisedBaseUrl.copy(host = Host(baseUrl.host.toString().dropPrefix("ssh.")))
+            normalisedBaseUrl = normalisedBaseUrl.copy(host = Host(baseUrl.host.toString().removePrefix("ssh.")))
         }
         return normalisedBaseUrl
     }
