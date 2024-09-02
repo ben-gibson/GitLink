@@ -10,15 +10,15 @@ import uk.co.ben_gibson.url.URL
 import java.util.*
 import kotlin.collections.Set
 
-@Service
+@Service(Service.Level.PROJECT)
 class Pipeline(private val project: Project) {
     private val middlewares: Set<Middleware> = setOf(
-        project.service<GenerateUrl>(),
-        project.service<Timer>(),
-        project.service<RecordHit>(),
-        project.service<ForceHttps>(),
-        project.service<SendSupportNotification>(),
-        project.service<ResolveContext>(),
+        service<GenerateUrl>(),
+        service<Timer>(),
+        service<RecordHit>(),
+        service<ForceHttps>(),
+        service<SendSupportNotification>(),
+        service<ResolveContext>(),
     )
 
     fun accept(context: Context) : URL? {

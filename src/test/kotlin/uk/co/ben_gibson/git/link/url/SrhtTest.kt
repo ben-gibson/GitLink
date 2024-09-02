@@ -35,17 +35,17 @@ class SourceHutTest {
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LINE_SELECTION),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LINE_SELECTION),
                 "https://git.sr.ht/~myuser/myproject/tree/23471005d2d874bb7ab400d45a2360f988c0be33/item/src/main.rs#L1"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
                 "https://git.sr.ht/~myuser/myproject/tree/23471005d2d874bb7ab400d45a2360f988c0be33/item/src/main.rs"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://git.sr.ht/~myuser/myproject/tree/23471005d2d874bb7ab400d45a2360f988c0be33"
             )
         )

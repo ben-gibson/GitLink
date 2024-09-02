@@ -35,13 +35,14 @@ class BitBucketServerTest {
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LineSelection(10, 20)),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LineSelection(10, 20)),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c#10-20"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
+                    "main",
                     COMMIT
                 ),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/foo/resources?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c"
@@ -50,18 +51,19 @@ class BitBucketServerTest {
                 REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
+                    "main",
                     COMMIT
                 ),
                 "https://stash.example.com/projects/foo/repos/bar/browse?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://stash.example.com/projects/foo/repos/bar/commits/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )
