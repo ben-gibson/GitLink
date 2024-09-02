@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+- Fix warnings and deprecations
+- Support dynamic reloading
+
 ## 4.5.0 - 2024-09-02
 
 - Fix BitBucket cloud URL generation when the remote contains scm (#333)

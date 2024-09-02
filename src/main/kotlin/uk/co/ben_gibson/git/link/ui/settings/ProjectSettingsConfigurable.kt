@@ -53,7 +53,7 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
             }
         }
         row {
-            browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT.toString())
+            browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT)
         }
     }
 
