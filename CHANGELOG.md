@@ -4,11 +4,18 @@
 
 ## Unreleased
 
+- Fix BitBucket cloud URL generation when the remote contains scm (#333)
+- Remove dash character from GitLab URLs (#328)
+- Add actions to the Git History tool window (#336)
+- Support branch substitution in commit templates (#337)
+- Improve Azure support (#334)
+- Fix deprecations and warnings.
+
 ## 4.4.0 - 2023-12-02
 - Add sourcehut support
 
 ## 4.3.6 - 2023-08-30
-- Fix Azure URL generation for remotes contaning company name
+- Fix Azure URL generation for remotes containing company name
 
 ## 4.3.5 - 2023-07-16
 - Fix Azure commit URL
