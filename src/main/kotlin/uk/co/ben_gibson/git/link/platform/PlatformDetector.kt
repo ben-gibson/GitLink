@@ -14,7 +14,7 @@ import uk.co.ben_gibson.git.link.git.locateRemote
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 
-@Service
+@Service(Service.Level.PROJECT)
 class PlatformDetector(val project: Project) {
     fun detect(consumer: (Platform?) -> Unit) {
         val projectDirectory = project.guessProjectDir()
@@ -32,7 +32,7 @@ class PlatformDetector(val project: Project) {
         val remote = repository.locateRemote(settings.remote) ?: return null
 
         val applicationSettings = service<ApplicationSettings>()
-        val platforms = project.service<PlatformRepository>()
+        val platforms = service<PlatformRepository>()
 
         return remote.domain?.let {
             platforms.getByDomain(it) ?: applicationSettings.findPlatformIdByCustomDomain(it)?.let { id -> platforms.getById(id) }

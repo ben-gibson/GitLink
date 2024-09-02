@@ -5,7 +5,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 
-@Service
+@Service(Service.Level.PROJECT)
 class PlatformLocator(val project: Project) {
     fun locate() : Platform? {
         val settings = project.service<ProjectSettings>()
