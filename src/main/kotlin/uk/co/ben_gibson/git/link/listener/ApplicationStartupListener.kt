@@ -2,7 +2,7 @@ package uk.co.ben_gibson.git.link.listener
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.startup.ProjectActivity
 import uk.co.ben_gibson.git.link.GitLinkBundle
 import uk.co.ben_gibson.git.link.platform.PlatformDetector
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
@@ -10,8 +10,8 @@ import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.sendNotification
 
-class ApplicationStartupListener : StartupActivity.DumbAware {
-    override fun runActivity(project: Project) {
+class ApplicationStartupListener : ProjectActivity {
+    override suspend fun execute(project: Project) {
         showVersionNotification(project)
         detectPlatform(project)
     }
