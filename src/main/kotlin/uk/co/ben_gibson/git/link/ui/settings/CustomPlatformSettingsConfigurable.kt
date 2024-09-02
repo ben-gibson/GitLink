@@ -42,7 +42,7 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
                 .align(Align.FILL)
         }
         row {
-            browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT.toString())
+            browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT)
         }
     }
 

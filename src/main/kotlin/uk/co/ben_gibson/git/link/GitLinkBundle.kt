@@ -8,13 +8,12 @@ import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.PropertyKey
-import java.net.URL
 
 @NonNls
 private const val BUNDLE = "messages.MyBundle"
 
 object GitLinkBundle : DynamicBundle(BUNDLE) {
-    val URL_BUG_REPORT = URL("https://github.com/ben-gibson/GitLink/issues")
+    const val URL_BUG_REPORT = "https://github.com/ben-gibson/GitLink/issues"
 
     @Suppress("SpreadOperator")
     @JvmStatic
