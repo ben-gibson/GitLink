@@ -43,13 +43,14 @@ class GitHubTest {
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LineSelection(10, 20)),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LineSelection(10, 20)),
                 "https://github.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#L10-L20"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
+                    "main",
                     COMMIT
                 ),
                 "https://github.com/my/repo/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources"
@@ -58,18 +59,19 @@ class GitHubTest {
                 REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
+                    "main",
                     COMMIT
                 ),
                 "https://github.com/my/repo/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
                 "https://github.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://github.com/my/repo/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )

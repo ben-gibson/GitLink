@@ -51,38 +51,38 @@ class ChromiumTest {
             // Chromiumos file at commit
             Arguments.of(
                 REMOTE_BASE_URL_CHROMIUMOS,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LINE_SELECTION),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LINE_SELECTION),
                 "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:src/platform/ec/board/foo.c;l=10-20"
             ),
             Arguments.of(
                 REMOTE_BASE_URL_CHROMIUMOS,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
                 "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:src/platform/ec/board/foo.c"
             ),
 
             // Chromium file at commit
             Arguments.of(
                 REMOTE_BASE_URL_CHROMIUM,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LINE_SELECTION),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LINE_SELECTION),
                 "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:board/foo.c;l=10-20"
             ),
             Arguments.of(
                 REMOTE_BASE_URL_CHROMIUM,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
                 "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:board/foo.c"
             ),
 
             // Chromiumos commit
             Arguments.of(
                 REMOTE_BASE_URL_CHROMIUMOS,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://source.chromium.org/chromiumos/_/chromium/chromiumos/platform/ec/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
 
             // Chromium commit
             Arguments.of(
                 REMOTE_BASE_URL_CHROMIUM,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
         )

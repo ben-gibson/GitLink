@@ -9,8 +9,6 @@ import uk.co.ben_gibson.git.link.ui.LineSelection
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.url.factory.BitbucketCloudUrlFactory
-import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
-import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
 
 class BitBucketCloudTest {
@@ -46,13 +44,14 @@ class BitBucketCloudTest {
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LineSelection(10, 20)),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LineSelection(10, 20)),
                 "https://bitbucket.org/foo/bar/src/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#lines-10:20"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
+                    "main",
                     COMMIT
                 ),
                 "https://bitbucket.org/foo/bar/src/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources"
@@ -61,18 +60,19 @@ class BitBucketCloudTest {
                 REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
+                    "main",
                     COMMIT
                 ),
                 "https://bitbucket.org/foo/bar/src/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
                 "https://bitbucket.org/foo/bar/src/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://bitbucket.org/foo/bar/commits/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )

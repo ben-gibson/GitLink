@@ -37,13 +37,14 @@ class AzureTest {
             ),
             Arguments.of(
                 REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT, LINE_SELECTION),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LINE_SELECTION),
                 "https://dev.azure.com/ben-gibson/_git/test.git?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2FFoo.java&line=10&lineEnd=21&lineStartColumn=1&lineEndColumn=1"
             ),
             Arguments.of(
                 REMOTE_BASE_URL_WITH_GIT,
                 UrlOptions.UrlOptionsFileAtCommit(
                     File("resources", true, "src/foo", false),
+                    "main",
                     COMMIT
                 ),
                 "https://dev.azure.com/ben-gibson/_git/test.git?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2Ffoo%2Fresources"
@@ -52,37 +53,38 @@ class AzureTest {
                 REMOTE_BASE_URL_WITH_GIT,
                 UrlOptions.UrlOptionsFileAtCommit(
                     File("my-project", true, "", true),
+                    "main",
                     COMMIT
                 ),
                 "https://dev.azure.com/ben-gibson/_git/test.git?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=%2F"),
             Arguments.of(
                 REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, COMMIT),
+                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
                 "https://dev.azure.com/ben-gibson/_git/test.git?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2FFoo.java"
             ),
             Arguments.of(
                 REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://dev.azure.com/ben-gibson/_git/test.git/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 REMOTE_BASE_URL_WITHOUT_GIT,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://dev.azure.com/ben-gibson/_git/test.git/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 REMOTE_BASE_URL_WITH_COMPANY_AND_GIT,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://dev.azure.com/company/project/_git/test.git/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 REMOTE_BASE_URL_WITH_COMPANY_WITHOUT_GIT,
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://dev.azure.com/company/project/_git/test.git/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             ),
             Arguments.of(
                 URL.fromString("https://ssh.dev.azure.com/v3/ben-gibson/test/test"),
-                UrlOptions.UrlOptionsCommit(COMMIT),
+                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
                 "https://dev.azure.com/ben-gibson/test/_git/test.git/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
             )
         )

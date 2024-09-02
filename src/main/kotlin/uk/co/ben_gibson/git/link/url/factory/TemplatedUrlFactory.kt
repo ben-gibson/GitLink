@@ -45,6 +45,7 @@ open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory
 
         template = processFile(template, options.file)
         template = processCommit(template, options.commit)
+        template = processBranch(template, options.currentBranch)
         template = processLineSelection(template, options.lineSelection, options.file)
 
         return template
@@ -54,6 +55,7 @@ open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory
         var template = templates.commit
 
         template = processCommit(template, options.commit)
+        template = processBranch(template, options.currentBranch)
 
         return template
     }

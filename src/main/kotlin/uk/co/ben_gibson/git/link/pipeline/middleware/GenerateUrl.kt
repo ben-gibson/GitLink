@@ -37,13 +37,26 @@ class GenerateUrl : Middleware {
         val repositoryFile = File.forRepository(context.file, repository)
 
         return when (context) {
-            is ContextFileAtCommit -> UrlOptions.UrlOptionsFileAtCommit(repositoryFile, context.commit, context.lineSelection)
-            is ContextCommit -> UrlOptions.UrlOptionsCommit(context.commit)
+            is ContextFileAtCommit -> UrlOptions.UrlOptionsFileAtCommit(
+                repositoryFile,
+                repository.currentBranch?.name ?: settings.fallbackBranch,
+                context.commit,
+                context.lineSelection
+            )
+            is ContextCommit -> UrlOptions.UrlOptionsCommit(
+                context.commit,
+                repository.currentBranch?.name ?: settings.fallbackBranch
+            )
             is ContextCurrentFile -> {
                 val commit = resolveCommit(repository, remote, settings, pullRequestWorkflowSupported)
 
                 if (commit != null) {
-                    UrlOptions.UrlOptionsFileAtCommit(repositoryFile, commit, context.lineSelection)
+                    UrlOptions.UrlOptionsFileAtCommit(
+                        repositoryFile,
+                        repository.currentBranch?.name ?: settings.fallbackBranch,
+                        commit,
+                        context.lineSelection
+                    )
                 } else {
                     UrlOptions.UrlOptionsFileAtBranch(
                         repositoryFile,

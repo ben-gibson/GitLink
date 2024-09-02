@@ -63,6 +63,7 @@ fun ValidationInfoBuilder.fileAtCommitTemplate(value: String): ValidationInfo? {
 
     val options = UrlOptions.UrlOptionsFileAtCommit(
         File("foo.kt", false, "src/main", false),
+        "main",
         Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"),
         LineSelection(10, 20)
     )
@@ -89,7 +90,7 @@ fun ValidationInfoBuilder.commitTemplate(value: String): ValidationInfo? {
         return null
     }
 
-    val options = UrlOptions.UrlOptionsCommit(Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"))
+    val options = UrlOptions.UrlOptionsCommit(Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"), "main")
 
     return urlTemplate(options, commit = value)
 }
