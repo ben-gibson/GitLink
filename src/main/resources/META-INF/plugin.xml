@@ -81,6 +81,7 @@
         >
             <add-to-group group-id="Git.LogContextMenu"/>
             <add-to-group group-id="Vcs.Log.ContextMenu"/>
+            <add-to-group group-id="Vcs.FileHistory.ContextMenu"/>
         </action>
         <action
             id="uk.co.ben_gibson.git.link.ui.actions.vcslog.CopyAction"
@@ -88,6 +89,7 @@
         >
             <add-to-group group-id="Git.LogContextMenu"/>
             <add-to-group group-id="Vcs.Log.ContextMenu"/>
+            <add-to-group group-id="Vcs.FileHistory.ContextMenu"/>
         </action>
         <action
             id="uk.co.ben_gibson.git.link.ui.actions.vcslog.MarkdownAction"
@@ -95,6 +97,7 @@
         >
             <add-to-group group-id="Git.LogContextMenu"/>
             <add-to-group group-id="Vcs.Log.ContextMenu"/>
+            <add-to-group group-id="Vcs.FileHistory.ContextMenu"/>
         </action>
         <action
             id="uk.co.ben_gibson.git.link.ui.actions.gutter.BrowserAction"
