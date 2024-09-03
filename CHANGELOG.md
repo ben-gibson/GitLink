@@ -6,6 +6,7 @@
 
 - Fix warnings and deprecations
 - Support dynamic reloading
+- Fix error using BitBucket cloud host
 
 ## 4.5.0 - 2024-09-02
 

@@ -14,7 +14,7 @@ val PLATFORM_MAP = mapOf(
     Gitea::class.java to UrlTemplates.gitea(),
     Gogs::class.java to UrlTemplates.gogs(),
     Srht::class.java to UrlTemplates.srht(),
-    BitbucketServer::class.java to UrlTemplates.bitbucketServer(),
+    BitbucketCloud::class.java to UrlTemplates.bitbucketCloud(),
     Gerrit::class.java to UrlTemplates.gerrit(),
 )
 

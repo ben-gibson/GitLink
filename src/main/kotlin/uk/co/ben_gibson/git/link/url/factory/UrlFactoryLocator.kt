@@ -2,10 +2,7 @@ package uk.co.ben_gibson.git.link.url.factory
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import uk.co.ben_gibson.git.link.platform.Azure
-import uk.co.ben_gibson.git.link.platform.BitbucketCloud
-import uk.co.ben_gibson.git.link.platform.Chromium
-import uk.co.ben_gibson.git.link.platform.Platform
+import uk.co.ben_gibson.git.link.platform.*
 
 @Service
 class UrlFactoryLocator {
@@ -13,7 +10,7 @@ class UrlFactoryLocator {
         return when(platform) {
             is Chromium -> service<ChromiumUrlFactory>()
             is Azure -> service<AzureUrlFactory>()
-            is BitbucketCloud -> service<BitbucketCloudUrlFactory>()
+            is BitbucketServer -> service<BitbucketServerUrlFactory>()
             else -> service<TemplatedUrlFactoryProvider>().forPlatform(platform)
         }
     }

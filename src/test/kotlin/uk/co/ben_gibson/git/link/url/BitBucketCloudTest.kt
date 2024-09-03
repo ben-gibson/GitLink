@@ -8,7 +8,8 @@ import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.ui.LineSelection
 import java.util.stream.Stream
 import uk.co.ben_gibson.git.link.git.Commit
-import uk.co.ben_gibson.git.link.url.factory.BitbucketCloudUrlFactory
+import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
+import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
 
 class BitBucketCloudTest {
@@ -27,15 +28,6 @@ class BitBucketCloudTest {
                 REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://bitbucket.org/foo/bar/src/master/src/Foo.java#lines-10:20"
-            ),
-            Arguments.of(
-                URL.fromString("https://dev.example.com/scm/foo/bar"),
-                UrlOptions.UrlOptionsFileAtBranch(
-                    FILE,
-                    BRANCH,
-                    LINE_SELECTION
-                ),
-                "https://dev.example.com/foo/bar/src/master/src/Foo.java#lines-10:20"
             ),
             Arguments.of(
                 REMOTE_BASE_URL,
@@ -81,7 +73,8 @@ class BitBucketCloudTest {
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
     fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
-        val factory = BitbucketCloudUrlFactory()
+        val factory = TemplatedUrlFactory(UrlTemplates.bitbucketCloud())
+
         val url = factory.createUrl(baseUrl, options)
 
         assertEquals(expectedUrl, url.toString())
