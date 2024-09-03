@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 4.5.1 - 2024-09-03
+
 - Fix warnings and deprecations
 - Support dynamic reloading
 - Fix error using BitBucket cloud host
