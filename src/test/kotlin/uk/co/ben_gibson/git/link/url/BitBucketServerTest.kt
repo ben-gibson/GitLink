@@ -6,9 +6,8 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import uk.co.ben_gibson.git.link.git.*
 import uk.co.ben_gibson.git.link.ui.LineSelection
+import uk.co.ben_gibson.git.link.url.factory.BitbucketServerUrlFactory
 import java.util.stream.Stream
-import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
-import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
 
 class BitBucketServerTest {
@@ -23,6 +22,15 @@ class BitBucketServerTest {
 
         @JvmStatic
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                URL.fromString("https://stash.example.com/scm/foo/bar"),
+                UrlOptions.UrlOptionsFileAtBranch(
+                    FILE,
+                    BRANCH,
+                    LINE_SELECTION
+                ),
+                "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/master#10-20"
+            ),
             Arguments.of(
                 REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
@@ -72,7 +80,7 @@ class BitBucketServerTest {
     @ParameterizedTest
     @MethodSource("urlExpectationsProvider")
     fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
-        val factory = TemplatedUrlFactory(UrlTemplates.bitbucketServer())
+        val factory = BitbucketServerUrlFactory()
         val url = factory.createUrl(baseUrl, options)
 
         assertEquals(expectedUrl, url.toString())
