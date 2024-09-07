@@ -3,6 +3,9 @@
 # GitLink Changelog
 
 ## Unreleased
+
+## 4.5.2 - 2024-09-07
+
 - Fix Azure URL generation
 
 ## 4.5.1 - 2024-09-03
