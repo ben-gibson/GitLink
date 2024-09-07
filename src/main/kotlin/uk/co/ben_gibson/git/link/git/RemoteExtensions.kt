@@ -16,7 +16,11 @@ val GitRemote.httpUrl : URL? get() {
     var url = firstUrl ?: return null
 
     url = url.trim()
-        .removeSuffix(".git")
+
+    // Azure supports a .git suffix on the repo name, so don't remove it.
+    if (!url.contains("dev.azure")) {
+        url = url.removeSuffix(".git")
+    }
 
     // Do not try to remove the port if the URL uses the SSH protocol in the SCP syntax e.g.
     // 'git@github.com:foo.git' as it does not support port definitions. Attempting to remove the port

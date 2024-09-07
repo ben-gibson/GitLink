@@ -74,7 +74,6 @@ class AzureUrlFactory: UrlFactory {
         val basePathParts = baseUrl.path
             .toString()
             .removePrefix("v3/")
-            .plus(".git") // Azure expects .git after the repo name
             .split("/")
             .toMutableList()
 
