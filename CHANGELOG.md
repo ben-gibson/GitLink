@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+- Support rad protocol.
+
 ## 4.5.2 - 2024-09-07
 
 - Fix Azure URL generation

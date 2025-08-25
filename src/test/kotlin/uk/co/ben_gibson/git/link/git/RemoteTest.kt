@@ -49,6 +49,10 @@ class RemoteTest {
                 "http://ben-gibson@dev.azure.com/ben-gibson/test/_git/test.git",
                 "http://dev.azure.com/ben-gibson/test/_git/test.git"
             ),
+            Arguments.of(
+                "rad://z37oHWbEomJXUAqxd9hoQHWkg2pC8",
+                "http://z37oHWbEomJXUAqxd9hoQHWkg2pC8"
+            ),
         )
     }
 
