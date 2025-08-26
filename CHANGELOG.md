@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 4.5.3 - 2025-08-26
+
 - Support rad protocol.
 
 ## 4.5.2 - 2024-09-07
