@@ -26,6 +26,24 @@ class BitBucketServerTest {
                 URL.fromString("https://stash.example.com/scm/foo/bar"),
                 UrlOptions.UrlOptionsFileAtBranch(
                     FILE,
+                    "feature/ticket-23",
+                    LINE_SELECTION
+                ),
+                "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/feature%2Fticket-23#10-20"
+            ),
+            Arguments.of(
+                URL.fromString("https://stash.example.com/scm/foo/bar"),
+                UrlOptions.UrlOptionsFileAtBranch(
+                    FILE,
+                    "feature/ticket 23",
+                    LINE_SELECTION
+                ),
+                "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/feature%2Fticket%2023#10-20"
+            ),
+            Arguments.of(
+                URL.fromString("https://stash.example.com/scm/foo/bar"),
+                UrlOptions.UrlOptionsFileAtBranch(
+                    FILE,
                     BRANCH,
                     LINE_SELECTION
                 ),

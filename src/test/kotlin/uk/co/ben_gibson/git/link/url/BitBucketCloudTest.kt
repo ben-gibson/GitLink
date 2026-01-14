@@ -26,6 +26,16 @@ class BitBucketCloudTest {
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, "feature/ticket-23", LINE_SELECTION),
+                "https://bitbucket.org/foo/bar/src/feature/ticket-23/src/Foo.java#lines-10:20"
+            ),
+            Arguments.of(
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, "feature/ticket 23", LINE_SELECTION),
+                "https://bitbucket.org/foo/bar/src/feature/ticket%2023/src/Foo.java#lines-10:20"
+            ),
+            Arguments.of(
+                REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://bitbucket.org/foo/bar/src/master/src/Foo.java#lines-10:20"
             ),
