@@ -25,6 +25,16 @@ class GitHubTest {
         fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, "feature/ticket-23", LINE_SELECTION),
+                "https://github.com/my/repo/blob/feature/ticket-23/src/Foo.java#L10-L20"
+            ),
+            Arguments.of(
+                REMOTE_BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE, "feature/ticket 23", LINE_SELECTION),
+                "https://github.com/my/repo/blob/feature/ticket%2023/src/Foo.java#L10-L20"
+            ),
+            Arguments.of(
+                REMOTE_BASE_URL,
                 UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
                 "https://github.com/my/repo/blob/master/src/Foo.java#L10-L20"
             ),
