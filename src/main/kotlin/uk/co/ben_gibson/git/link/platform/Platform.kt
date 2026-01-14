@@ -104,4 +104,11 @@ class Gerrit : Platform(
     false
 )
 
+class Codeberg : Platform(
+    UUID.fromString("3fc8e330-760f-482f-8758-a0c34137d21c"),
+    message("platform.codeberg.name"),
+    Icons.CODEBERG,
+    setOf(Host("codeberg.org"))
+)
+
 class Custom(id: UUID, name: String, icon: Icon, domains: Set<Host> = setOf()) : Platform(id, name, icon, domains)
