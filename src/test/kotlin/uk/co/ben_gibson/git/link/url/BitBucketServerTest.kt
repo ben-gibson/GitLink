@@ -29,6 +29,18 @@ class BitBucketServerTest {
                 "File at branch with line selection (SCM URL format)"
             ),
             Arguments.of(
+                BASE_URL_SCM,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, "feature/ticket-23", LINE_SELECTION_RANGE),
+                "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/feature%2Fticket-23#10-20",
+                "Branch containing a forward slash should be encoded in the at parameter"
+            ),
+            Arguments.of(
+                BASE_URL_SCM,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, "feature/ticket 23", LINE_SELECTION_RANGE),
+                "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/feature%2Fticket%2023#10-20",
+                "Branch containing a space should be encoded in the at parameter"
+            ),
+            Arguments.of(
                 BASE_URL,
                 UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/master#10-20",

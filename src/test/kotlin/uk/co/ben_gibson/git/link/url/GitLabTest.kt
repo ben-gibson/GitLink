@@ -31,6 +31,18 @@ class GitLabTest {
             ),
             Arguments.of(
                 BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, "feature/ticket-23", LINE_SELECTION_RANGE),
+                "https://gitlab.com/my/repo/blob/feature/ticket-23/src/Foo.java#L10-20",
+                "Branch containing a forward slash should not be encoded"
+            ),
+            Arguments.of(
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, "feature/ticket 23", LINE_SELECTION_RANGE),
+                "https://gitlab.com/my/repo/blob/feature/ticket%2023/src/Foo.java#L10-20",
+                "Branch containing a space should be encoded"
+            ),
+            Arguments.of(
+                BASE_URL,
                 UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
                 "https://gitlab.com/my/repo/blob/master/src/Foo.java",
                 "File at branch without line selection"

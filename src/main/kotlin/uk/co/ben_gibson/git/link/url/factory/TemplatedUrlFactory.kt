@@ -10,7 +10,12 @@ import java.util.regex.Pattern
 import com.google.common.net.UrlEscapers
 
 open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory {
-    private val escape = UrlEscapers.urlPathSegmentEscaper().asFunction()
+    private val pathEscaper = UrlEscapers.urlPathSegmentEscaper().asFunction()
+
+    // Does not escape forward slashes, required by most platforms.
+    protected open val branchEscaper: (String) -> String = {
+        pathEscaper.apply(it).replace("%2F", "/")
+    }
 
     private val remotePathPattern = Pattern.compile("\\{remote:url:path:(\\d)}")
 
@@ -80,12 +85,12 @@ open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory
     }
 
     private fun processBranch(template: String, branch: String) = template
-        .replace("{branch}", escape.apply(branch))
+        .replace("{branch}", branchEscaper(branch))
 
     private fun processFile(template: String, file: File) = template
         .replace("{object}", if (file.isDirectory) "tree" else "blob")
-        .replace("{file:name}", if (file.isRoot) "" else escape.apply(file.name))
-        .replace("{file:path}", file.path.split("/").joinToString("/") { escape.apply(it) })
+        .replace("{file:name}", if (file.isRoot) "" else pathEscaper.apply(file.name))
+        .replace("{file:path}", file.path.split("/").joinToString("/") { pathEscaper.apply(it) })
 
     private fun processCommit(template: String, commit: Commit) = template
         .replace("{commit}", commit.toString())

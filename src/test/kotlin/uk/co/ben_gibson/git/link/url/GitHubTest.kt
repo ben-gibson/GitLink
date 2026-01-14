@@ -31,6 +31,18 @@ class GitHubTest {
             ),
             Arguments.of(
                 BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, "feature/ticket-23", LINE_SELECTION_RANGE),
+                "https://github.com/my/repo/blob/feature/ticket-23/src/Foo.java#L10-L20",
+                "Branch containing a forward slash should not be encoded"
+            ),
+            Arguments.of(
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, "feature/ticket 23", LINE_SELECTION_RANGE),
+                "https://github.com/my/repo/blob/feature/ticket%2023/src/Foo.java#L10-L20",
+                "Branch containing a space should be encoded"
+            ),
+            Arguments.of(
+                BASE_URL,
                 UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
                 "https://github.com/my/repo/blob/master/src/Foo.java#L10-L20",
                 "File at branch with line selection (duplicate for verification)"
