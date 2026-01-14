@@ -16,6 +16,7 @@ val PLATFORM_MAP = mapOf(
     Srht::class.java to UrlTemplates.srht(),
     BitbucketCloud::class.java to UrlTemplates.bitbucketCloud(),
     Gerrit::class.java to UrlTemplates.gerrit(),
+    Codeberg::class.java to UrlTemplates.codeberg(),
 )
 
 @Service
