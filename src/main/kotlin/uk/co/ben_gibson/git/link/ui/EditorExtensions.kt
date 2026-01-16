@@ -19,5 +19,12 @@ val Editor.lineSelection: LineSelection
             return LineSelection(caretModel.logicalPosition.line + 1)
         }
 
-        return LineSelection(start.line + 1, end.line + 1)
+        val startLine = start.line + 1
+        var endLine = end.line + 1
+
+        if (end.column == 0 && start != end) {
+            endLine--
+        }
+
+        return LineSelection(startLine, endLine)
     }
