@@ -16,7 +16,7 @@ version = providers.gradleProperty("pluginVersion").get()
 
 // Set the JVM language level used to build the project.
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 // Configure project's dependencies
@@ -34,7 +34,9 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.junitJupiter)
     testImplementation(libs.junitJupiterParams)
+    testImplementation(libs.opentest4j)
     testImplementation(libs.mockk)
+    testImplementation(libs.assertj)
 
     implementation(files("libs/url-0.0.11.jar"))
 
@@ -48,7 +50,6 @@ dependencies {
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
         plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
 
-        instrumentationTools()
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
@@ -58,6 +59,7 @@ dependencies {
 // Configure IntelliJ Platform Gradle Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html
 intellijPlatform {
     pluginConfiguration {
+        name = providers.gradleProperty("pluginName")
         version = providers.gradleProperty("pluginVersion")
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
@@ -88,7 +90,6 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = providers.gradleProperty("pluginSinceBuild")
-            untilBuild = providers.gradleProperty("pluginUntilBuild")
         }
     }
 
@@ -112,6 +113,7 @@ intellijPlatform {
         }
     }
 }
+
 
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
@@ -138,8 +140,8 @@ tasks {
     publishPlugin {
         dependsOn(patchChangelog)
     }
-}
 
-tasks.test {
-    useJUnitPlatform()
+    test {
+        useJUnitPlatform()
+    }
 }

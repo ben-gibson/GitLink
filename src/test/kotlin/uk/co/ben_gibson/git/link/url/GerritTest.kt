@@ -1,80 +1,89 @@
 package uk.co.ben_gibson.git.link.url
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import uk.co.ben_gibson.git.link.git.*
-import uk.co.ben_gibson.git.link.ui.LineSelection
-import java.util.stream.Stream
+import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_MASTER
+import uk.co.ben_gibson.git.link.url.UrlTestData.COMMIT_FULL
+import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_RESOURCES
+import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_ROOT
+import uk.co.ben_gibson.git.link.url.UrlTestData.FILE_JAVA
+import uk.co.ben_gibson.git.link.url.UrlTestData.LINE_SELECTION_RANGE
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
+import java.util.stream.Stream
 
 class GerritTest {
 
     companion object {
-
-        private val REMOTE_BASE_URL = URL.fromString("https://gerrit.example.com/foo/bar")
-        private const val BRANCH = "master"
-        private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
-        private val FILE = File("Foo.java", false, "src", false)
-        private val LINE_SELECTION = LineSelection(10, 20)
+        private val BASE_URL = URL.fromString("https://gerrit.example.com/foo/bar")
 
         @JvmStatic
-        fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
+        fun urlExpectations(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
-                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/refs/heads/master/src/Foo.java#10"
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/refs/heads/master/src/Foo.java#10",
+                "File at branch with line selection (Gerrit only uses start line)"
             ),
             Arguments.of(
-                REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
-                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/refs/heads/master/src/Foo.java"
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
+                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/refs/heads/master/src/Foo.java",
+                "File at branch without line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LineSelection(10, 20)),
-                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#10"
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
+                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#10",
+                "File at commit with line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(
-                    File("resources", true, "src/foo", false),
-                    "main",
-                    COMMIT
-                ),
-                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources"
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
+                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources",
+                "Directory at commit"
             ),
             Arguments.of(
-                REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(
-                    File("my-project", true, "", true),
-                    "main",
-                    COMMIT
-                ),
-                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
+                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+                "Repository root at commit"
             ),
             Arguments.of(
-                REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
-                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java"
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
+                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java",
+                "File at commit without line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
-                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL,
+                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+                "Direct commit URL"
             )
         )
     }
 
-    @ParameterizedTest
-    @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
+    @ParameterizedTest(name = "{3}")
+    @MethodSource("urlExpectations")
+    fun `should generate correct Gerrit URLs`(
+        baseUrl: URL,
+        options: UrlOptions,
+        expectedUrl: String,
+        description: String
+    ) {
+        // Given
         val factory = TemplatedUrlFactory(UrlTemplates.gerrit())
+
+        // When
         val url = factory.createUrl(baseUrl, options)
 
-        assertEquals(expectedUrl, url.toString())
+        // Then
+        assertThat(url.toString())
+            .describedAs(description)
+            .isEqualTo(expectedUrl)
     }
 }

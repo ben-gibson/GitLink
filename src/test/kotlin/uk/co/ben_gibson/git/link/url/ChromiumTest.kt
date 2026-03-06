@@ -1,99 +1,106 @@
 package uk.co.ben_gibson.git.link.url
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import uk.co.ben_gibson.git.link.git.File
-import uk.co.ben_gibson.git.link.ui.LineSelection
-import java.util.stream.Stream
-import uk.co.ben_gibson.git.link.git.Commit
+import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_MASTER
+import uk.co.ben_gibson.git.link.url.UrlTestData.COMMIT_FULL
+import uk.co.ben_gibson.git.link.url.UrlTestData.LINE_SELECTION_RANGE
 import uk.co.ben_gibson.git.link.url.factory.ChromiumUrlFactory
 import uk.co.ben_gibson.url.URL
+import java.util.stream.Stream
 
 class ChromiumTest {
 
     companion object {
-
-        private val REMOTE_BASE_URL_CHROMIUMOS = URL.fromString("https://chromium.googlesource.com/chromiumos/platform/ec")
-        private val REMOTE_BASE_URL_CHROMIUM = URL.fromString("https://chromium.googlesource.com/chromium/tools/build")
-        private const val BRANCH = "master"
-        private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
-        private val FILE = File("foo.c", false, "board", false)
-        private val LINE_SELECTION = LineSelection(10, 20)
+        private val BASE_URL_CHROMIUMOS = URL.fromString("https://chromium.googlesource.com/chromiumos/platform/ec")
+        private val BASE_URL_CHROMIUM = URL.fromString("https://chromium.googlesource.com/chromium/tools/build")
+        private val FILE_C = File("foo.c", false, "board", false)
 
         @JvmStatic
-        fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
-            // Chromiumos file at branch
+        fun urlExpectations(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                REMOTE_BASE_URL_CHROMIUMOS,
-                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
-                "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/ec/board/foo.c;l=10-20"
+                BASE_URL_CHROMIUMOS,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_C, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/ec/board/foo.c;l=10-20",
+                "ChromiumOS file at branch with line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_CHROMIUMOS,
-                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
-                "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/ec/board/foo.c"
-            ),
-
-            // Chromium file at branch
-            Arguments.of(
-                REMOTE_BASE_URL_CHROMIUM,
-                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
-                "https://source.chromium.org/chromium/chromium/tools/build/+/master:board/foo.c"
+                BASE_URL_CHROMIUMOS,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_C, BRANCH_MASTER, null),
+                "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/ec/board/foo.c",
+                "ChromiumOS file at branch without line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_CHROMIUM,
-                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
-                "https://source.chromium.org/chromium/chromium/tools/build/+/master:board/foo.c;l=10-20"
-            ),
-
-            // Chromiumos file at commit
-            Arguments.of(
-                REMOTE_BASE_URL_CHROMIUMOS,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LINE_SELECTION),
-                "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:src/platform/ec/board/foo.c;l=10-20"
+                BASE_URL_CHROMIUM,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_C, BRANCH_MASTER, null),
+                "https://source.chromium.org/chromium/chromium/tools/build/+/master:board/foo.c",
+                "Chromium file at branch without line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_CHROMIUMOS,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
-                "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:src/platform/ec/board/foo.c"
-            ),
-
-            // Chromium file at commit
-            Arguments.of(
-                REMOTE_BASE_URL_CHROMIUM,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LINE_SELECTION),
-                "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:board/foo.c;l=10-20"
+                BASE_URL_CHROMIUM,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_C, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                "https://source.chromium.org/chromium/chromium/tools/build/+/master:board/foo.c;l=10-20",
+                "Chromium file at branch with line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_CHROMIUM,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
-                "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:board/foo.c"
+                BASE_URL_CHROMIUMOS,
+                UrlOptions.UrlOptionsFileAtCommit(FILE_C, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
+                "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:src/platform/ec/board/foo.c;l=10-20",
+                "ChromiumOS file at commit with line selection"
             ),
-
-            // Chromiumos commit
             Arguments.of(
-                REMOTE_BASE_URL_CHROMIUMOS,
-                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
-                "https://source.chromium.org/chromiumos/_/chromium/chromiumos/platform/ec/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL_CHROMIUMOS,
+                UrlOptions.UrlOptionsFileAtCommit(FILE_C, "main", COMMIT_FULL, null),
+                "https://source.chromium.org/chromiumos/chromiumos/codesearch/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:src/platform/ec/board/foo.c",
+                "ChromiumOS file at commit without line selection"
             ),
-
-            // Chromium commit
             Arguments.of(
-                REMOTE_BASE_URL_CHROMIUM,
-                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
-                "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL_CHROMIUM,
+                UrlOptions.UrlOptionsFileAtCommit(FILE_C, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
+                "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:board/foo.c;l=10-20",
+                "Chromium file at commit with line selection"
             ),
+            Arguments.of(
+                BASE_URL_CHROMIUM,
+                UrlOptions.UrlOptionsFileAtCommit(FILE_C, "main", COMMIT_FULL, null),
+                "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c:board/foo.c",
+                "Chromium file at commit without line selection"
+            ),
+            Arguments.of(
+                BASE_URL_CHROMIUMOS,
+                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                "https://source.chromium.org/chromiumos/_/chromium/chromiumos/platform/ec/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+                "ChromiumOS direct commit URL"
+            ),
+            Arguments.of(
+                BASE_URL_CHROMIUM,
+                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                "https://source.chromium.org/chromium/chromium/tools/build/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+                "Chromium direct commit URL"
+            )
         )
     }
 
-    @ParameterizedTest
-    @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
+    @ParameterizedTest(name = "{3}")
+    @MethodSource("urlExpectations")
+    fun `should generate correct Chromium URLs`(
+        baseUrl: URL,
+        options: UrlOptions,
+        expectedUrl: String,
+        description: String
+    ) {
+        // Given
         val factory = ChromiumUrlFactory()
+
+        // When
         val url = factory.createUrl(baseUrl, options)
 
-        assertEquals(expectedUrl, url.toString())
+        // Then
+        assertThat(url.toString())
+            .describedAs(description)
+            .isEqualTo(expectedUrl)
     }
 }
