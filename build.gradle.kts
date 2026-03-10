@@ -34,6 +34,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.junitJupiter)
     testImplementation(libs.junitJupiterParams)
+    testImplementation(libs.junitPlatformLauncher)
     testImplementation(libs.opentest4j)
     testImplementation(libs.mockk)
     testImplementation(libs.assertj)
@@ -114,11 +115,11 @@ intellijPlatform {
     }
 }
 
-
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
     groups.empty()
     repositoryUrl = providers.gradleProperty("pluginRepositoryUrl")
+    versionPrefix = ""
 }
 
 // Configure Gradle Kover Plugin - read more: https://github.com/Kotlin/kotlinx-kover#configuration
