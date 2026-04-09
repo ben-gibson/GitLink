@@ -17,7 +17,6 @@ data class File(
             } else {
                 file.path.substring(repository.root.path.length)
                     .removeSuffix("/${file.name}")
-                    .removePrefix("/")
                     .trim('/')
             }
 
