@@ -7,7 +7,7 @@ assertj = "3.27.7"
 
 # plugins
 changelog = "2.5.0"
-intelliJPlatform = "2.11.0"
+intelliJPlatform = "2.13.1"
 kotlin = "2.1.20"
 kover = "0.9.5"
 qodana = "2025.3.1"

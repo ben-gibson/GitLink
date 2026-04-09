@@ -36,7 +36,10 @@ dependencies {
     testImplementation(libs.junitJupiterParams)
     testImplementation(libs.junitPlatformLauncher)
     testImplementation(libs.opentest4j)
-    testImplementation(libs.mockk)
+    testImplementation(libs.mockk) {
+        // MockK brings in kotlinx-coroutines 1.6.4 which conflicts with the version bundled in the IntelliJ Platform
+        exclude(group = "org.jetbrains.kotlinx")
+    }
     testImplementation(libs.assertj)
 
     implementation(files("libs/url-0.0.11.jar"))
