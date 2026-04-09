@@ -58,7 +58,7 @@ class SourceHutTest {
 
     @ParameterizedTest(name = "{3}")
     @MethodSource("urlExpectations")
-    fun `should generate correct SourceHut URLs`(
+    fun `should generate correct URLs`(
         baseUrl: URL,
         options: UrlOptions,
         expectedUrl: String,

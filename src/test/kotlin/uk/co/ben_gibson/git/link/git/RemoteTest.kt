@@ -14,7 +14,7 @@ import java.util.stream.Stream
 class RemoteTest {
 
     @Nested
-    inner class `HTTP URL Conversion` {
+    inner class HttpUrlConversion {
 
         @ParameterizedTest(name = "{0} -> {1}")
         @MethodSource("uk.co.ben_gibson.git.link.git.RemoteTest#httpUrlExpectations")
@@ -83,7 +83,7 @@ class RemoteTest {
     }
 
     @Nested
-    inner class `Domain Extraction` {
+    inner class DomainExtraction {
 
         @ParameterizedTest
         @CsvSource(
@@ -118,7 +118,7 @@ class RemoteTest {
     }
 
     @Nested
-    inner class `Edge Cases` {
+    inner class EdgeCases {
 
         @Test
         fun `should handle URLs with whitespace`() {

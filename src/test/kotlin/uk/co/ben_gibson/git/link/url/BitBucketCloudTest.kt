@@ -69,7 +69,7 @@ class BitBucketCloudTest {
 
     @ParameterizedTest(name = "{3}")
     @MethodSource("urlExpectations")
-    fun `should generate correct Bitbucket Cloud URLs`(
+    fun `should generate correct URLs`(
         baseUrl: URL,
         options: UrlOptions,
         expectedUrl: String,

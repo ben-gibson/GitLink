@@ -80,7 +80,7 @@ class GitHubTest {
 
     @ParameterizedTest(name = "{3}")
     @MethodSource("urlExpectations")
-    fun `should generate correct GitHub URLs`(baseUrl: URL, options: UrlOptions, expectedUrl: String, description: String) {
+    fun `should generate correct URLs`(baseUrl: URL, options: UrlOptions, expectedUrl: String, description: String) {
         // Given
         val factory = TemplatedUrlFactory(UrlTemplates.gitHub())
 
