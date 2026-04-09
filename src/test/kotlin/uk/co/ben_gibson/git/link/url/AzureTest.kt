@@ -1,101 +1,109 @@
 package uk.co.ben_gibson.git.link.url
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import uk.co.ben_gibson.git.link.git.*
-import uk.co.ben_gibson.git.link.ui.LineSelection
+import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_MASTER
+import uk.co.ben_gibson.git.link.url.UrlTestData.COMMIT_FULL
+import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_RESOURCES
+import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_ROOT
+import uk.co.ben_gibson.git.link.url.UrlTestData.FILE_JAVA
+import uk.co.ben_gibson.git.link.url.UrlTestData.LINE_SELECTION_RANGE
 import uk.co.ben_gibson.git.link.url.factory.AzureUrlFactory
-import java.util.stream.Stream
 import uk.co.ben_gibson.url.URL
+import java.util.stream.Stream
 
 class AzureTest {
 
     companion object {
-
-        private val REMOTE_BASE_URL_WITH_GIT = URL.fromString("https://dev.azure.com/ben-gibson/_git/test")
-        private val REMOTE_BASE_URL_WITHOUT_GIT = URL.fromString("https://dev.azure.com/ben-gibson/test")
-        private val REMOTE_BASE_URL_WITH_COMPANY_AND_GIT = URL.fromString("https://dev.azure.com/company/project/_git/test")
-        private val REMOTE_BASE_URL_WITH_COMPANY_WITHOUT_GIT = URL.fromString("https://dev.azure.com/company/project/test")
-        private const val BRANCH = "master"
-        private val COMMIT = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
-        private val FILE = File("Foo.java", false, "src", false)
-        private val LINE_SELECTION = LineSelection(10, 20)
+        private val BASE_URL_WITH_GIT = URL.fromString("https://dev.azure.com/ben-gibson/_git/test")
+        private val BASE_URL_WITHOUT_GIT = URL.fromString("https://dev.azure.com/ben-gibson/test")
+        private val BASE_URL_COMPANY_WITH_GIT = URL.fromString("https://dev.azure.com/company/project/_git/test")
+        private val BASE_URL_COMPANY_WITHOUT_GIT = URL.fromString("https://dev.azure.com/company/project/test")
 
         @JvmStatic
-        fun urlExpectationsProvider(): Stream<Arguments> = Stream.of(
+        fun urlExpectations(): Stream<Arguments> = Stream.of(
             Arguments.of(
-                REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH, LINE_SELECTION),
-                "https://dev.azure.com/ben-gibson/_git/test?version=GBmaster&path=src%2FFoo.java&line=10&lineEnd=21&lineStartColumn=1&lineEndColumn=1"
+                BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                "https://dev.azure.com/ben-gibson/_git/test?version=GBmaster&path=src%2FFoo.java&line=10&lineEnd=21&lineStartColumn=1&lineEndColumn=1",
+                "File at branch with line selection (with _git)"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsFileAtBranch(FILE, BRANCH),
-                "https://dev.azure.com/ben-gibson/_git/test?version=GBmaster&path=src%2FFoo.java"
+                BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
+                "https://dev.azure.com/ben-gibson/_git/test?version=GBmaster&path=src%2FFoo.java",
+                "File at branch without line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT, LINE_SELECTION),
-                "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2FFoo.java&line=10&lineEnd=21&lineStartColumn=1&lineEndColumn=1"
+                BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
+                "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2FFoo.java&line=10&lineEnd=21&lineStartColumn=1&lineEndColumn=1",
+                "File at commit with line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsFileAtCommit(
-                    File("resources", true, "src/foo", false),
-                    "main",
-                    COMMIT
-                ),
-                "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2Ffoo%2Fresources"
+                BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
+                "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2Ffoo%2Fresources",
+                "Directory at commit"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsFileAtCommit(
-                    File("my-project", true, "", true),
-                    "main",
-                    COMMIT
-                ),
-                "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=%2F"),
-            Arguments.of(
-                REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsFileAtCommit(FILE, "main", COMMIT),
-                "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2FFoo.java"
+                BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
+                "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=%2F",
+                "Repository root at commit"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_WITH_GIT,
-                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
-                "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
+                "https://dev.azure.com/ben-gibson/_git/test?version=GCb032a0707beac9a2f24b1b7d97ee4f7156de182c&path=src%2FFoo.java",
+                "File at commit without line selection"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_WITHOUT_GIT,
-                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
-                "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL_WITH_GIT,
+                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+                "Direct commit URL (with _git)"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_WITH_COMPANY_AND_GIT,
-                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
-                "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL_WITHOUT_GIT,
+                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                "https://dev.azure.com/ben-gibson/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+                "Direct commit URL (without _git should add it)"
             ),
             Arguments.of(
-                REMOTE_BASE_URL_WITH_COMPANY_WITHOUT_GIT,
-                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
-                "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL_COMPANY_WITH_GIT,
+                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+                "Company URL with _git"
             ),
             Arguments.of(
-                URL.fromString("https://ssh.dev.azure.com/v3/ben-gibson/test/test"),
-                UrlOptions.UrlOptionsCommit(COMMIT, "main"),
-                "https://dev.azure.com/ben-gibson/test/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c"
+                BASE_URL_COMPANY_WITHOUT_GIT,
+                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+                "Company URL without _git"
             )
         )
     }
 
-    @ParameterizedTest
-    @MethodSource("urlExpectationsProvider")
-    fun canGenerateUrl(baseUrl: URL, options: UrlOptions, expectedUrl: String) {
+    @ParameterizedTest(name = "{3}")
+    @MethodSource("urlExpectations")
+    fun `should generate correct URLs`(
+        baseUrl: URL,
+        options: UrlOptions,
+        expectedUrl: String,
+        description: String
+    ) {
+        // Given
         val factory = AzureUrlFactory()
+
+        // When
         val url = factory.createUrl(baseUrl, options)
 
-        assertEquals(expectedUrl, url.toString())
+        // Then
+        assertThat(url.toString())
+            .describedAs(description)
+            .isEqualTo(expectedUrl)
     }
 }
