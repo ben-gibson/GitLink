@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+- Modernise toolchain, improve tests, and add input validation.
+
 ## 4.5.3 - 2025-08-26
 
 - Support rad protocol.
