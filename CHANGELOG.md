@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 4.5.4 - 2026-04-11
+
 - Modernise toolchain, improve tests, and add input validation.
 
 ## 4.5.3 - 2025-08-26
