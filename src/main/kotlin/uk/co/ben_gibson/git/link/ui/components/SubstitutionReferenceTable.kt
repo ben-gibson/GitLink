@@ -3,6 +3,10 @@ package uk.co.ben_gibson.git.link.ui.components
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ListTableModel
+import java.awt.Component
+import javax.swing.JTable
+import javax.swing.JTextField
+import javax.swing.table.TableCellRenderer
 
 private val references = listOf(
     SubstitutionReference(
@@ -77,6 +81,22 @@ private class SubstitutionColumnInfo(name: String, val formatter: (SubstitutionR
     ColumnInfo<SubstitutionReference, String>(name) {
     override fun valueOf(item: SubstitutionReference): String {
         return formatter(item)
+    }
+
+    override fun getRenderer(item: SubstitutionReference?): TableCellRenderer {
+        return TableCellRenderer { table, value, isSelected, _, _, _ ->
+            JTextField(value.toString()).apply {
+                isEditable = false
+                border = null
+                if (isSelected) {
+                    background = table.selectionBackground
+                    foreground = table.selectionForeground
+                } else {
+                    background = table.background
+                    foreground = table.foreground
+                }
+            }
+        }
     }
 }
 

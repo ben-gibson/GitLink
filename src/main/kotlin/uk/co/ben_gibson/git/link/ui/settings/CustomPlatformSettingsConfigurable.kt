@@ -9,6 +9,10 @@ import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ColumnInfo
+import com.intellij.ui.dsl.builder.Row
+import com.intellij.util.ui.JBUI
+import com.intellij.util.ui.UIUtil
+import javax.swing.JTextArea
 import com.intellij.util.ui.ListTableModel
 import uk.co.ben_gibson.git.link.GitLinkBundle
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
@@ -128,35 +132,47 @@ private class CustomPlatformDialog(customPlatform: CustomHostSettings? = null) :
                 .bindText(platform::displayName)
                 .focused()
                 .validationOnApply { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
-                .comment(message("settings.custom-platform.add-dialog.field.name.comment"))
+            selectableComment(message("settings.custom-platform.add-dialog.field.name.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.domain.label")) {
             textField()
                 .bindText(platform::baseUrl)
                 .validationOnApply { notBlank(it.text) ?: domain(it.text) }
-                .comment(message("settings.custom-platform.add-dialog.field.domain.comment"))
+            selectableComment(message("settings.custom-platform.add-dialog.field.domain.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.file-at-branch-template.label")) {
             textField()
                 .bindText(platform::fileAtBranchTemplate)
                 .validationOnApply { notBlank(it.text) ?: fileAtBranchTemplate(it.text) }
-                .comment(message("settings.custom-platform.add-dialog.field.file-at-branch-template.comment"))
+            selectableComment(message("settings.custom-platform.add-dialog.field.file-at-branch-template.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.file-at-commit-template.label")) {
             textField()
                 .bindText(platform::fileAtCommitTemplate)
                 .validationOnApply { notBlank(it.text) ?: fileAtCommitTemplate(it.text) }
-                .comment(message("settings.custom-platform.add-dialog.field.file-at-commit-template.comment"))
+            selectableComment(message("settings.custom-platform.add-dialog.field.file-at-commit-template.comment"))
         }
         row(message("settings.custom-platform.add-dialog.field.commit-template.label")) {
             textField()
                 .bindText(platform::commitTemplate)
                 .validationOnApply { notBlank(it.text) ?: commitTemplate(it.text) }
-                .comment(message("settings.custom-platform.add-dialog.field.commit-template.comment"))
+            selectableComment(message("settings.custom-platform.add-dialog.field.commit-template.comment"))
         }
         row {
             scrollCell(substitutionReferenceTable)
                 .align(Align.FILL)
         }
     }
+}
+
+private fun Row.selectableComment(text: String) {
+    cell(JTextArea().apply {
+        this.text = text
+        isEditable = false
+        lineWrap = true
+        wrapStyleWord = true
+        background = UIUtil.TRANSPARENT_COLOR
+        foreground = JBUI.CurrentTheme.ContextHelp.FOREGROUND
+        font = JBUI.Fonts.smallFont()
+    })
 }
