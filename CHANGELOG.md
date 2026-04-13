@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+- Refactor pipeline to resolve context eagerly before middleware execution.
+
 ## 4.5.4 - 2026-04-11
 
 - Modernise toolchain, improve tests, and add input validation.

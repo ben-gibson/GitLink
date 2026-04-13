@@ -18,19 +18,16 @@ class GenerateUrl : Middleware {
     override val priority = 50
 
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
-        // We can't reach this point unless the platform, repository, and remote have been resolved
-        val baseUrl = pass.remoteOrThrow().httpUrl ?: return null
+        val baseUrl = pass.remote.httpUrl ?: return null
 
-        val platform = pass.platformOrThrow()
+        val options = createUrlOptions(pass, pass.platform.pullRequestWorkflowSupported)
 
-        val options = createUrlOptions(pass, platform.pullRequestWorkflowSupported)
-
-        return service<UrlFactoryLocator>().locate(platform).createUrl(baseUrl, options)
+        return service<UrlFactoryLocator>().locate(pass.platform).createUrl(baseUrl, options)
     }
 
     private fun createUrlOptions(pass: Pass, pullRequestWorkflowSupported: Boolean): UrlOptions {
-        val remote = pass.remoteOrThrow()
-        val repository = pass.repositoryOrThrow()
+        val remote = pass.remote
+        val repository = pass.repository
         val context = pass.context
         val settings = pass.project.service<ProjectSettings>()
 
