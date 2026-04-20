@@ -96,7 +96,21 @@ open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory
             return template.replace("\\{line-block:start}.+\\{line-block:end}".toRegex(), "")
         }
 
-        return template
+        var processed = template
+
+        // Whole file selection
+        if (lineSelection.start == 1) {
+            return processed.replace("\\{line-block:start}.+\\{line-block:end}".toRegex(), "")
+        }
+
+        // Single line selection
+        if (lineSelection.start == lineSelection.end) {
+            processed = processed.replace("-L{line:end}", "")
+            processed = processed.replace("-{line:end}", "")
+            processed = processed.replace(":{line:end}", "")
+        }
+
+        return processed
             .replace("{line:start}", lineSelection.start.toString())
             .replace("{line:end}", lineSelection.end.toString())
     }
