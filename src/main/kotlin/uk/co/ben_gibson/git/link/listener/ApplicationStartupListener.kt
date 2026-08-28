@@ -37,11 +37,11 @@ class ApplicationStartupListener : ProjectActivity {
 
         project.service<PlatformDetector>().detect { platform ->
             if (platform == null) {
-                service<Notifier>().send(Notification.couldNotDetectPlatform(project), project)
+                service<Notifier>().send(Notification.couldNotDetectPlatform(), project)
                 return@detect
             }
 
-            service<Notifier>().send(Notification.platformAutoDetected(platform, project), project)
+            service<Notifier>().send(Notification.platformAutoDetected(platform), project)
 
             projectSettings.host = platform.id.toString()
         }

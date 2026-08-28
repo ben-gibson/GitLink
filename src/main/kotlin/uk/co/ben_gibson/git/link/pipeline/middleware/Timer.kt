@@ -27,7 +27,7 @@ class Timer(private val clock: InstantSource = InstantSource.system()) : Middlew
         val total = clock.millis() - startTime
 
         if (total > 1000) {
-            service<Notifier>().send(Notification.performanceTips(pass.project), pass.project)
+            service<Notifier>().send(Notification.performanceTips(), pass.project)
         }
 
         return url

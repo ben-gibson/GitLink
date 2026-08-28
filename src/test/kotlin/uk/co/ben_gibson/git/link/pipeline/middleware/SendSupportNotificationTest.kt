@@ -101,8 +101,7 @@ class SendSupportNotificationTest {
         subject(pass) { url }
 
         // Then
-        assertThat(notifier.notifications.map { it.message })
-            .containsExactly(Notification.star().message)
+        assertThat(notifier.notifications).containsExactly(Notification.star())
     }
 
     @Test
@@ -116,7 +115,6 @@ class SendSupportNotificationTest {
         subject(pass) { url }
 
         // Then
-        assertThat(notifier.notifications.map { it.message })
-            .containsExactly(Notification.star().message)
+        assertThat(notifier.notifications).containsExactly(Notification.star())
     }
 }

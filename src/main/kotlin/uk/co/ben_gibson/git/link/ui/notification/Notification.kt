@@ -1,20 +1,13 @@
 package uk.co.ben_gibson.git.link.ui.notification
 
-import com.intellij.ide.browsers.BrowserLauncher
-import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
-import uk.co.ben_gibson.git.link.GitLinkBundle
-import uk.co.ben_gibson.git.link.GitLinkBundle.openPluginSettings
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.platform.Platform
-import uk.co.ben_gibson.git.link.settings.ApplicationSettings
-import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.url.URL
 
 data class Notification(
     val title: String? = null,
     val message: String,
-    val actions: Set<NotificationAction> = setOf(),
+    val actions: List<NotificationAction> = listOf(),
     val type: Type = Type.PERSISTENT
 ) {
     enum class Type {
@@ -25,10 +18,10 @@ data class Notification(
     companion object {
         private val DEFAULT_TITLE = message("name")
 
-        fun hostNotSet(project: Project) = Notification(
+        fun hostNotSet() = Notification(
             DEFAULT_TITLE,
             message("notifications.platform-not-set"),
-            actions = setOf(NotificationAction.settings(project))
+            actions = listOf(NotificationAction.OpenSettings())
         )
 
         fun repositoryNotFound() = Notification(DEFAULT_TITLE, message("notifications.repository-not-found"))
@@ -41,69 +34,64 @@ data class Notification(
             message = """
                 Finding GitLink useful? Show your support 💖 and ⭐ the repository 🙏.
             """.trimIndent(),
-            actions = setOf(
-                NotificationAction.openRepository {
-                    service<ApplicationSettings>().requestSupport = false
-                },
-                NotificationAction.doNotAskAgain {
-                    service<ApplicationSettings>().requestSupport = false
-                }
+            actions = listOf(
+                NotificationAction.OpenRepository(),
+                NotificationAction.DisableSetting(Setting.SUPPORT_REQUEST, message("actions.do-not-ask-again"))
             )
         )
 
-        fun performanceTips(project: Project) = Notification(
+        fun performanceTips() = Notification(
             message = message("notifications.performance"),
-            actions = setOf(
-                NotificationAction.disableRemoteCheck(project),
-                NotificationAction.doNotAskAgain { project.service<ProjectSettings>().showPerformanceTip = false },
+            actions = listOf(
+                NotificationAction.DisableSetting(Setting.REMOTE_CHECK, message("actions.disable")),
+                NotificationAction.DisableSetting(Setting.PERFORMANCE_TIP, message("actions.do-not-ask-again"))
             )
         )
 
-        fun couldNotDetectPlatform(project: Project) = Notification(
+        fun couldNotDetectPlatform() = Notification(
             message = message("notifications.could-not-detect-platform"),
-            actions = setOf(NotificationAction.settings(project, message("actions.configure-manually")))
+            actions = listOf(NotificationAction.OpenSettings(message("actions.configure-manually")))
         )
 
-        fun platformAutoDetected(remotePlatform: Platform, project: Project) = Notification(
+        fun platformAutoDetected(remotePlatform: Platform) = Notification(
             message =  message("notifications.platform-detected.message", remotePlatform.name),
-            actions = setOf(NotificationAction.settings(project, message("notifications.platform-detected.action")))
+            actions = listOf(NotificationAction.OpenSettings(message("notifications.platform-detected.action")))
         )
 
         fun linkCopied(link: URL) = Notification(
             DEFAULT_TITLE,
             message("notifications.copied-to-clipboard"),
-            setOf(NotificationAction.openUrl(link)),
+            listOf(NotificationAction.OpenUrl(link)),
             Type.TRANSIENT,
         )
     }
 }
 
-data class NotificationAction(val title: String, val run: (dismiss: () -> Unit) -> Unit) {
-    companion object {
-        fun settings(project: Project, title: String = message("title.settings")) = NotificationAction(title) { dismiss ->
-            dismiss()
-            openPluginSettings(project)
-        }
+enum class Setting {
+    SUPPORT_REQUEST,
+    PERFORMANCE_TIP,
+    REMOTE_CHECK
+}
 
-        fun openRepository(onComplete: () -> Unit) = NotificationAction(message("actions.sure-take-me-there")) { dismiss ->
-            GitLinkBundle.openRepository()
-            dismiss()
-            onComplete()
-        }
+sealed class NotificationAction {
+    abstract val title: String
 
-        fun doNotAskAgain(onComplete: () -> Unit) = NotificationAction(message("actions.do-not-ask-again")) { dismiss ->
-            dismiss()
-            onComplete()
-        }
+    data class OpenSettings(
+        override val title: String = message("title.settings")
+    ) : NotificationAction()
 
-        fun openUrl(url: URL, title: String = message("actions.take-me-there")) = NotificationAction(title) { dismiss ->
-            dismiss()
-            BrowserLauncher.instance.open(url.toString())
-        }
+    data class OpenUrl(
+        val url: URL,
+        override val title: String = message("actions.take-me-there")
+    ) : NotificationAction()
 
-        fun disableRemoteCheck(project: Project) = NotificationAction(message("actions.disable")) { dismiss ->
-            dismiss()
-            project.service<ProjectSettings>().shouldCheckRemote = false
-        }
-    }
+    // Opening the repository is taken as the support having been given, so the request is not shown again.
+    data class OpenRepository(
+        override val title: String = message("actions.sure-take-me-there")
+    ) : NotificationAction()
+
+    data class DisableSetting(
+        val setting: Setting,
+        override val title: String
+    ) : NotificationAction()
 }
