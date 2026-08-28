@@ -20,12 +20,12 @@ class GenerateUrl : Middleware {
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val baseUrl = pass.remote.httpUrl ?: return null
 
-        val options = createUrlOptions(pass, pass.platform.pullRequestWorkflowSupported)
+        val options = createUrlOptions(pass, pass.platform.commitsReachableFromRemote)
 
         return service<UrlFactoryLocator>().locate(pass.platform).createUrl(baseUrl, options)
     }
 
-    private fun createUrlOptions(pass: Pass, pullRequestWorkflowSupported: Boolean): UrlOptions {
+    private fun createUrlOptions(pass: Pass, commitsReachableFromRemote: Boolean): UrlOptions {
         val remote = pass.remote
         val repository = pass.repository
         val context = pass.context
@@ -45,7 +45,7 @@ class GenerateUrl : Middleware {
                 repository.currentBranch?.name ?: settings.fallbackBranch
             )
             is ContextCurrentFile -> {
-                val commit = resolveCommit(repository, remote, settings, pullRequestWorkflowSupported)
+                val commit = resolveCommit(repository, remote, settings, commitsReachableFromRemote)
 
                 if (commit != null) {
                     UrlOptions.UrlOptionsFileAtCommit(
@@ -75,10 +75,10 @@ class GenerateUrl : Middleware {
         return if (remote.contains(repository, branch)) branch.name else settings.fallbackBranch
     }
 
-    private fun resolveCommit(repository: GitRepository, remote: GitRemote, settings: ProjectSettings, pullRequestWorkflowSupported: Boolean): Commit? {
+    private fun resolveCommit(repository: GitRepository, remote: GitRemote, settings: ProjectSettings, commitsReachableFromRemote: Boolean): Commit? {
         val commit = repository.currentCommit() ?: return null
 
-        if (!pullRequestWorkflowSupported || !settings.shouldCheckRemote) {
+        if (!commitsReachableFromRemote || !settings.shouldCheckRemote) {
            return commit
         }
 

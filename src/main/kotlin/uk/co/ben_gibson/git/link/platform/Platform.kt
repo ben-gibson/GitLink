@@ -8,7 +8,7 @@ import javax.swing.Icon
 import uk.co.ben_gibson.url.Host
 import java.util.regex.Pattern
 
-sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<Host> = setOf(), val domainPattern: Pattern? = null, val pullRequestWorkflowSupported: Boolean = true) {
+sealed class Platform(val id: UUID, val name: String, val icon: Icon, val domains: Set<Host> = setOf(), val domainPattern: Pattern? = null, val commitsReachableFromRemote: Boolean = true) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -95,13 +95,15 @@ class Chromium : Platform(
     setOf(Host("googlesource.com"))
 )
 
+// Gerrit changes are pushed to refs/for/<branch> rather than to the branch itself, so a local commit
+// is never reachable from a remote branch and checking for one would always fall back to a branch link.
 class Gerrit : Platform(
     UUID.fromString("a28d7024-f390-40d1-8554-db65a9120a38"),
     message("platform.gerrit.name"),
     Icons.GERRIT,
     setOf(),
     Pattern.compile(".*gerrit.*", Pattern.CASE_INSENSITIVE),
-    false
+    commitsReachableFromRemote = false
 )
 
 class Custom(id: UUID, name: String, icon: Icon, domains: Set<Host> = setOf()) : Platform(id, name, icon, domains)
