@@ -4,6 +4,7 @@
 
 ## Unreleased
 
+- Add `Codeberg` support.
 - Refactor pipeline to resolve context eagerly before middleware execution.
 - Send notifications through a service so they can be asserted in tests.
 
