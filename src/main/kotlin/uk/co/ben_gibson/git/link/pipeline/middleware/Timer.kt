@@ -5,7 +5,7 @@ import com.intellij.openapi.components.service
 import uk.co.ben_gibson.git.link.pipeline.Pass
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
-import uk.co.ben_gibson.git.link.ui.notification.sendNotification
+import uk.co.ben_gibson.git.link.ui.notification.Notifier
 import uk.co.ben_gibson.url.URL
 
 @Service
@@ -26,7 +26,7 @@ class Timer : Middleware {
         val total = System.currentTimeMillis() - startTime
 
         if (total > 1000) {
-            sendNotification(Notification.performanceTips(pass.project), pass.project)
+            service<Notifier>().send(Notification.performanceTips(pass.project), pass.project)
         }
 
         return url

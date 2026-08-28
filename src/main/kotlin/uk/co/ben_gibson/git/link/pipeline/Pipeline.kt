@@ -14,7 +14,7 @@ import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.platform.PlatformLocator
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
-import uk.co.ben_gibson.git.link.ui.notification.sendNotification
+import uk.co.ben_gibson.git.link.ui.notification.Notifier
 import uk.co.ben_gibson.url.URL
 import java.util.*
 
@@ -56,7 +56,7 @@ class Pipeline(private val project: Project) {
         val platform = project.service<PlatformLocator>().locate()
 
         if (platform == null) {
-            sendNotification(Notification.hostNotSet(project), project)
+            service<Notifier>().send(Notification.hostNotSet(project), project)
         }
 
         return platform
@@ -65,7 +65,7 @@ class Pipeline(private val project: Project) {
     private fun locateRepository(context: Context): GitRepository? {
         val repository = GitRepositoryManager.getInstance(project).getRepositoryForFile(context.file)
 
-        repository ?: sendNotification(Notification.repositoryNotFound(), project)
+        repository ?: service<Notifier>().send(Notification.repositoryNotFound(), project)
 
         return repository
     }
@@ -73,7 +73,7 @@ class Pipeline(private val project: Project) {
     private fun locateRemote(repository: GitRepository): GitRemote? {
         val remote = repository.locateRemote(project.service<ProjectSettings>().remote)
 
-        remote ?: sendNotification(Notification.remoteNotFound(), project)
+        remote ?: service<Notifier>().send(Notification.remoteNotFound(), project)
 
         return remote
     }

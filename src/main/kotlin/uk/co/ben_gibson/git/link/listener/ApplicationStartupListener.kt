@@ -8,7 +8,7 @@ import uk.co.ben_gibson.git.link.platform.PlatformDetector
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
-import uk.co.ben_gibson.git.link.ui.notification.sendNotification
+import uk.co.ben_gibson.git.link.ui.notification.Notifier
 
 class ApplicationStartupListener : ProjectActivity {
     override suspend fun execute(project: Project) {
@@ -25,7 +25,7 @@ class ApplicationStartupListener : ProjectActivity {
         }
 
         settings.lastVersion = version
-        sendNotification(Notification.welcome(version ?: "Unknown"), project)
+        service<Notifier>().send(Notification.welcome(version ?: "Unknown"), project)
     }
 
     private fun detectPlatform(project: Project) {
@@ -37,11 +37,11 @@ class ApplicationStartupListener : ProjectActivity {
 
         project.service<PlatformDetector>().detect { platform ->
             if (platform == null) {
-                sendNotification(Notification.couldNotDetectPlatform(project), project)
+                service<Notifier>().send(Notification.couldNotDetectPlatform(project), project)
                 return@detect
             }
 
-            sendNotification(Notification.platformAutoDetected(platform, project), project)
+            service<Notifier>().send(Notification.platformAutoDetected(platform, project), project)
 
             projectSettings.host = platform.id.toString()
         }
