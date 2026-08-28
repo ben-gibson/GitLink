@@ -68,5 +68,13 @@ data class UrlTemplates(val fileAtBranch: String, val fileAtCommit : String, val
                 "{remote:url:protocol}://{remote:url:host}/plugins/gitiles/{remote:url:path}/+/{commit}"
             )
         }
+
+        fun codeberg(): UrlTemplates {
+            return UrlTemplates(
+                "{remote:url}/src/branch/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
+                "{remote:url}/src/commit/{commit}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
+                "{remote:url}/commit/{commit}"
+            )
+        }
     }
 }
