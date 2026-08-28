@@ -5,6 +5,7 @@
 ## Unreleased
 
 - Refactor pipeline to resolve context eagerly before middleware execution.
+- Send notifications through a service so they can be asserted in tests.
 
 ## 4.5.4 - 2026-04-11
 
