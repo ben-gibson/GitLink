@@ -115,7 +115,6 @@ class TimerTest {
 
         // Then
         assertThat(result).isEqualTo(url)
-        assertThat(notifier.notifications.map { it.message })
-            .containsExactly(Notification.performanceTips(project).message)
+        assertThat(notifier.notifications).containsExactly(Notification.performanceTips())
     }
 }
