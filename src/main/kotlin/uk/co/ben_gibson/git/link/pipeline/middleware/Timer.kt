@@ -7,9 +7,10 @@ import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.Notifier
 import uk.co.ben_gibson.url.URL
+import java.time.InstantSource
 
 @Service
-class Timer : Middleware {
+class Timer(private val clock: InstantSource = InstantSource.system()) : Middleware {
     override val priority = 40
 
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
@@ -19,11 +20,11 @@ class Timer : Middleware {
             return next()
         }
 
-        val startTime = System.currentTimeMillis()
+        val startTime = clock.millis()
 
         val url = next()
 
-        val total = System.currentTimeMillis() - startTime
+        val total = clock.millis() - startTime
 
         if (total > 1000) {
             service<Notifier>().send(Notification.performanceTips(pass.project), pass.project)

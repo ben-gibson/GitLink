@@ -8,6 +8,8 @@ import io.mockk.mockk
 import uk.co.ben_gibson.git.link.ContextCurrentFile
 import uk.co.ben_gibson.git.link.pipeline.Pass
 import uk.co.ben_gibson.git.link.platform.GitHub
+import java.time.Instant
+import java.time.InstantSource
 
 fun pass(
     project: Project,
@@ -22,4 +24,10 @@ fun pass(
         repository = repository,
         remote = remote,
     )
+}
+
+class FixedInstantSource(private vararg val readings: Long) : InstantSource {
+    private var index = 0
+
+    override fun instant(): Instant = Instant.ofEpochMilli(readings[index++])
 }

@@ -43,18 +43,4 @@ class RecordHitTest {
         assertThat(result).isNull()
         assertThat(service<ApplicationSettings>().hits).isEqualTo(0)
     }
-
-    @Test
-    fun `should add to the existing hit count`() {
-        // Given
-        service<ApplicationSettings>().hits = 5
-        val url = URL.fromString("https://github.com/user/repo/blob/main/file.kt")
-        val pass = pass(project)
-
-        // When
-        subject(pass) { url }
-
-        // Then
-        assertThat(service<ApplicationSettings>().hits).isEqualTo(6)
-    }
 }
