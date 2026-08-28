@@ -10,7 +10,6 @@ intelliJPlatform = "2.13.1"
 kotlin = "2.1.20"
 kover = "0.9.5"
 qodana = "2025.3.1"
-junitJupiter = "5.11.3"
 junitJupiterParams = "5.11.3"
 junitPlatformLauncher = "1.11.3"
 
@@ -18,7 +17,6 @@ junitPlatformLauncher = "1.11.3"
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 opentest4j = { group = "org.opentest4j", name = "opentest4j", version.ref = "opentest4j" }
 assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
-junitJupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 junitJupiterParams = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junitJupiterParams" }
 junitPlatformLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatformLauncher" }
 
