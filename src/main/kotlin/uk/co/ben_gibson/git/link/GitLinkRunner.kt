@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.pipeline.Pipeline
 import uk.co.ben_gibson.git.link.ui.notification.Notification
-import uk.co.ben_gibson.git.link.ui.notification.sendNotification
+import uk.co.ben_gibson.git.link.ui.notification.Notifier
 import uk.co.ben_gibson.url.URL
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
@@ -35,7 +35,7 @@ fun copyToClipBoard(project: Project, context: Context, asMarkdown: Boolean = fa
             null
         )
 
-        sendNotification(Notification.linkCopied(it), project)
+        service<Notifier>().send(Notification.linkCopied(it), project)
     }
 }
 
