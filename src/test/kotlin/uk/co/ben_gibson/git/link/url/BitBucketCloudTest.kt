@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_MASTER
+import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_WITH_SLASH
+import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_WITH_SPACE
 import uk.co.ben_gibson.git.link.url.UrlTestData.COMMIT_FULL
 import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_RESOURCES
 import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_ROOT
@@ -27,6 +29,18 @@ class BitBucketCloudTest {
                 UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
                 "https://bitbucket.org/foo/bar/src/master/src/Foo.java#lines-10:20",
                 "File at branch with line selection"
+            ),
+            Arguments.of(
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_WITH_SLASH, LINE_SELECTION_RANGE),
+                "https://bitbucket.org/foo/bar/src/feature/ticket-23/src/Foo.java#lines-10:20",
+                "Branch containing a forward slash should not be encoded"
+            ),
+            Arguments.of(
+                BASE_URL,
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_WITH_SPACE, LINE_SELECTION_RANGE),
+                "https://bitbucket.org/foo/bar/src/feature/ticket%2023/src/Foo.java#lines-10:20",
+                "Branch containing a space should be encoded"
             ),
             Arguments.of(
                 BASE_URL,
