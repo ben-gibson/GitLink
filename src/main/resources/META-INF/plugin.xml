@@ -12,6 +12,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.settings.ApplicationSettings"/>
+        <applicationService
+            serviceInterface="uk.co.ben_gibson.git.link.ui.notification.Notifier"
+            serviceImplementation="uk.co.ben_gibson.git.link.ui.notification.IntellijNotifier"
+        />
         <notificationGroup id="git.link.notification.general" displayType="BALLOON" key="notification.group.general.name" />
         <notificationGroup id="git.link.notification.important" displayType="STICKY_BALLOON" key="notification.group.important.name" />
         <postStartupActivity implementation="uk.co.ben_gibson.git.link.listener.ApplicationStartupListener"/>

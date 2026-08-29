@@ -2,7 +2,7 @@ package uk.co.ben_gibson.git.link.ui.notification
 
 import com.intellij.openapi.project.Project
 
-class TestNotifier : Notifier() {
+class TestNotifier : Notifier {
     private val sent = mutableListOf<Notification>()
 
     val notifications: List<Notification> get() = sent
