@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_MASTER
+import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_WITH_SLASH
+import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_WITH_SPACE
 import uk.co.ben_gibson.git.link.url.UrlTestData.COMMIT_FULL
 import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_RESOURCES
 import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_ROOT
@@ -30,13 +32,13 @@ class BitBucketServerTest {
             ),
             Arguments.of(
                 BASE_URL_SCM,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, "feature/ticket-23", LINE_SELECTION_RANGE),
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_WITH_SLASH, LINE_SELECTION_RANGE),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/feature%2Fticket-23#10-20",
                 "Branch containing a forward slash should be encoded in the at parameter"
             ),
             Arguments.of(
                 BASE_URL_SCM,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, "feature/ticket 23", LINE_SELECTION_RANGE),
+                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_WITH_SPACE, LINE_SELECTION_RANGE),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/feature%2Fticket%2023#10-20",
                 "Branch containing a space should be encoded in the at parameter"
             ),

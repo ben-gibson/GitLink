@@ -7,6 +7,8 @@ import uk.co.ben_gibson.git.link.ui.LineSelection
 object UrlTestData {
     const val BRANCH_MAIN = "main"
     const val BRANCH_MASTER = "master"
+    const val BRANCH_WITH_SLASH = "feature/ticket-23"
+    const val BRANCH_WITH_SPACE = "feature/ticket 23"
 
     val COMMIT_FULL = Commit("b032a0707beac9a2f24b1b7d97ee4f7156de182c")
 
