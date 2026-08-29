@@ -155,15 +155,23 @@ class Gerrit : TemplatedPlatform(
     commitsReachableFromRemote = false
 )
 
-class Codeberg : TemplatedPlatform(
-    UUID.fromString("3fc8e330-760f-482f-8758-a0c34137d21c"),
-    message("platform.codeberg.name"),
-    Icons.CODEBERG,
+class Forgejo : TemplatedPlatform(
+    UUID.fromString("a0ac4b94-3c58-4162-9e5a-7ccef514a972"),
+    message("platform.forgejo.name"),
+    Icons.FORGEJO,
     UrlTemplates(
         "{remote:url}/src/branch/{branch}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
         "{remote:url}/src/commit/{commit}/{file:path}/{file:name}{line-block:start}#L{line:start}-L{line:end}{line-block:end}",
         "{remote:url}/commit/{commit}"
     ),
+    setOf(Domain.wildcard("forgejo"))
+)
+
+class Codeberg : TemplatedPlatform(
+    UUID.fromString("3fc8e330-760f-482f-8758-a0c34137d21c"),
+    message("platform.codeberg.name"),
+    Icons.CODEBERG,
+    Forgejo().templates,
     setOf(Domain.of("codeberg.org"))
 )
 

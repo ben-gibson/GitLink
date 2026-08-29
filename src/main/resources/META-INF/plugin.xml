@@ -5,10 +5,6 @@
     <vendor url="https://github.com/ben-gibson">Ben Gibson</vendor>
     <depends>com.intellij.modules.platform</depends>
     <depends>Git4Idea</depends>
-    <description>
-        A Jetbrains plugin open or copy git URLs to a remote host. Supports `GitHub`, `Bitbucket`, `GitLab`, `Gitee`, `Gitea`, `Gogs`,
-        `Azure` and `Gerrit` out of the box, while additional hosts can be configured using custom URL templates.
-    </description>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="uk.co.ben_gibson.git.link.settings.ApplicationSettings"/>
