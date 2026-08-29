@@ -28,28 +28,35 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
         row(message("settings.general.field.platform.label")) {
             comboBox(platformComboBoxModel, PlatformCellRenderer())
                 .bindItem({ initialPlatform }, { settings.host = it?.id?.toString() })
-                .comment(message("settings.general.field.platform.help"))
+                .gap(RightGap.SMALL)
+            contextHelp(message("settings.general.field.platform.help"))
         }
         row(message("settings.general.field.fallback-branch.label")) {
             textField()
                 .bindText(settings::fallbackBranch)
-                .comment(message("settings.general.field.fallback-branch.help"))
                 .validationOnApply { notBlank(it.text) }
+                .gap(RightGap.SMALL)
+            contextHelp(message("settings.general.field.fallback-branch.help"))
         }
         row(message("settings.general.field.remote.label")) {
             textField()
                 .bindText(settings::remote)
                 .validationOnApply { notBlank(it.text) }
+                .gap(RightGap.SMALL)
+            contextHelp(message("settings.general.field.remote.help"))
         }
         group(message("settings.general.section.advanced.label")) {
             row {
                 checkBox(message("settings.general.field.force-https.label"))
                     .bindSelected(settings::forceHttps)
+                    .gap(RightGap.SMALL)
+                contextHelp(message("settings.general.field.force-https.help"))
             }
             row {
-                checkBox(message("settings.general.field.should-check-remote.label"))
-                    .comment(message("settings.general.field.check-commit-on-remote.help"))
+                checkBox(message("settings.general.field.check-remote.label"))
                     .bindSelected(settings::shouldCheckRemote)
+                    .gap(RightGap.SMALL)
+                contextHelp(message("settings.general.field.check-remote.help"))
             }
         }
         row {

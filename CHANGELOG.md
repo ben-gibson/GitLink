@@ -7,6 +7,8 @@
 - Add `Codeberg` support.
 - Refactor pipeline to resolve context eagerly before middleware execution.
 - Send notifications through a service so they can be asserted in tests.
+- Base the URL templates of a custom platform on an existing platform.
+- Improve the layout and help text throughout the settings dialogs.
 
 ## 4.5.4 - 2026-04-11
 

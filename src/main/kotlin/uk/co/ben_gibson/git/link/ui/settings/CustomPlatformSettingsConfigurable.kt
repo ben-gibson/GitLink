@@ -3,10 +3,15 @@ package uk.co.ben_gibson.git.link.ui.settings
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.ToolbarDecorator
+import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
+import com.intellij.ui.dsl.builder.AlignX
+import com.intellij.ui.dsl.builder.RightGap
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.whenItemSelectedFromUi
 import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ListTableModel
@@ -16,7 +21,12 @@ import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomHostSettings
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.extension.replaceAt
+import uk.co.ben_gibson.git.link.platform.GitHub
+import uk.co.ben_gibson.git.link.platform.Platform
+import uk.co.ben_gibson.git.link.platform.PlatformRepository
+import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
 import uk.co.ben_gibson.git.link.ui.components.SubstitutionReferenceTable
+import uk.co.ben_gibson.git.link.url.factory.PLATFORM_MAP
 import uk.co.ben_gibson.git.link.ui.validation.*
 
 class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.custom-platform.group.title")) {
@@ -40,7 +50,7 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
         row {
             cell(tableContainer)
                 .align(Align.FILL)
-        }
+        }.resizableRow()
         row {
             browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT)
         }
@@ -115,48 +125,109 @@ private class CustomPlatformDialog(customPlatform: CustomHostSettings? = null) :
     val platform = customPlatform ?: CustomHostSettings()
     private val substitutionReferenceTable = SubstitutionReferenceTable().apply { setShowColumns(true) }
 
+    // Only platforms whose URL format is expressed purely as templates can seed a custom one. Azure, Chromium and
+    // Bitbucket Server are deliberately absent, as their factories do work beyond substitution that we cannot copy.
+    private val presets = service<PlatformRepository>()
+        .getAll()
+        .filter { PLATFORM_MAP.containsKey(it::class.java) }
+        .sortedBy { it.name }
+
+    private val presetComboBoxModel = CollectionComboBoxModel(
+        presets,
+        if (customPlatform == null) presets.firstOrNull { it is GitHub } else null
+    )
+
+    private lateinit var fileAtBranchTemplateField: JBTextField
+    private lateinit var fileAtCommitTemplateField: JBTextField
+    private lateinit var commitTemplateField: JBTextField
+
     init {
-        title = message("settings.custom-platform.add-dialog.title")
+        title = customPlatform
+            ?.let { message("settings.custom-platform.dialog.title.edit") }
+            ?: message("settings.custom-platform.dialog.title.add")
         setOKButtonText(customPlatform?.let { message("actions.update") } ?: message("actions.add"))
         setSize(700, 700)
+
+        // Seed a new platform before the panel binds, so the fields open populated rather than empty.
+        presetComboBoxModel.selected?.let {
+            val templates = PLATFORM_MAP.getValue(it::class.java)
+
+            platform.fileAtBranchTemplate = templates.fileAtBranch
+            platform.fileAtCommitTemplate = templates.fileAtCommit
+            platform.commitTemplate = templates.commit
+        }
+
         init()
     }
 
     override fun createCenterPanel() = panel {
-        row(message("settings.custom-platform.add-dialog.field.name.label")) {
+        row(message("settings.custom-platform.dialog.field.name.label")) {
             textField()
                 .bindText(platform::displayName)
-                .focused()
                 .validationOnApply { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
-                .comment(message("settings.custom-platform.add-dialog.field.name.comment"))
+                .align(AlignX.FILL)
+                .resizableColumn()
+                .gap(RightGap.SMALL)
+                .applyToComponent { emptyText.text = message("settings.custom-platform.dialog.field.name.placeholder") }
+            contextHelp(message("settings.custom-platform.dialog.field.name.help"))
         }
-        row(message("settings.custom-platform.add-dialog.field.domain.label")) {
+        row(message("settings.custom-platform.dialog.field.domain.label")) {
             textField()
                 .bindText(platform::baseUrl)
                 .validationOnApply { notBlank(it.text) ?: domain(it.text) }
-                .comment(message("settings.custom-platform.add-dialog.field.domain.comment"))
+                .align(AlignX.FILL)
+                .resizableColumn()
+                .gap(RightGap.SMALL)
+                .applyToComponent { emptyText.text = message("settings.custom-platform.dialog.field.domain.placeholder") }
+            contextHelp(message("settings.custom-platform.dialog.field.domain.help"))
         }
-        row(message("settings.custom-platform.add-dialog.field.file-at-branch-template.label")) {
+        row(message("settings.custom-platform.dialog.field.copy-templates.label")) {
+            comboBox(presetComboBoxModel, PlatformCellRenderer())
+                .whenItemSelectedFromUi(disposable) { applyPreset(it) }
+                .gap(RightGap.SMALL)
+            contextHelp(message("settings.custom-platform.dialog.field.copy-templates.help"))
+        }
+        row(message("settings.custom-platform.dialog.field.file-at-branch-template.label")) {
             textField()
                 .bindText(platform::fileAtBranchTemplate)
                 .validationOnApply { notBlank(it.text) ?: fileAtBranchTemplate(it.text) }
-                .comment(message("settings.custom-platform.add-dialog.field.file-at-branch-template.comment"))
+                .align(AlignX.FILL)
+                .resizableColumn()
+                .gap(RightGap.SMALL)
+                .applyToComponent { fileAtBranchTemplateField = this }
+            contextHelp(message("settings.custom-platform.dialog.field.file-at-branch-template.help"))
         }
-        row(message("settings.custom-platform.add-dialog.field.file-at-commit-template.label")) {
+        row(message("settings.custom-platform.dialog.field.file-at-commit-template.label")) {
             textField()
                 .bindText(platform::fileAtCommitTemplate)
                 .validationOnApply { notBlank(it.text) ?: fileAtCommitTemplate(it.text) }
-                .comment(message("settings.custom-platform.add-dialog.field.file-at-commit-template.comment"))
+                .align(AlignX.FILL)
+                .resizableColumn()
+                .gap(RightGap.SMALL)
+                .applyToComponent { fileAtCommitTemplateField = this }
+            contextHelp(message("settings.custom-platform.dialog.field.file-at-commit-template.help"))
         }
-        row(message("settings.custom-platform.add-dialog.field.commit-template.label")) {
+        row(message("settings.custom-platform.dialog.field.commit-template.label")) {
             textField()
                 .bindText(platform::commitTemplate)
                 .validationOnApply { notBlank(it.text) ?: commitTemplate(it.text) }
-                .comment(message("settings.custom-platform.add-dialog.field.commit-template.comment"))
+                .align(AlignX.FILL)
+                .resizableColumn()
+                .gap(RightGap.SMALL)
+                .applyToComponent { commitTemplateField = this }
+            contextHelp(message("settings.custom-platform.dialog.field.commit-template.help"))
         }
         row {
             scrollCell(substitutionReferenceTable)
                 .align(Align.FILL)
-        }
+        }.resizableRow()
+    }
+
+    private fun applyPreset(preset: Platform) {
+        val templates = PLATFORM_MAP.getValue(preset::class.java)
+
+        fileAtBranchTemplateField.text = templates.fileAtBranch
+        fileAtCommitTemplateField.text = templates.fileAtCommit
+        commitTemplateField.text = templates.commit
     }
 }
