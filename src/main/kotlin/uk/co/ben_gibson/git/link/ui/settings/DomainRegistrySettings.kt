@@ -6,6 +6,8 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.CollectionComboBoxModel
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.dsl.builder.Align
+import com.intellij.ui.dsl.builder.AlignX
+import com.intellij.ui.dsl.builder.RightGap
 import com.intellij.ui.dsl.builder.bindItem
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
@@ -52,23 +54,25 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
     }
 
     override fun createPanel() = panel {
-        row(message("settings.general.field.platform.label")) {
+        row(message("settings.domain-registry.field.platform.label")) {
             comboBox(
                 platformComboBoxModel,
                 PlatformCellRenderer()
             )
                 .bindItem({ platforms.getAll().first() }, { })
+                .gap(RightGap.SMALL)
                 .component.addItemListener {
                 if (it.stateChange == ItemEvent.SELECTED) {
                     val selectedPlatform = it.itemSelectable.selectedObjects.first() as Platform
                     refreshDomainsTable(selectedPlatform)
                 }
             }
+            contextHelp(message("settings.domain-registry.field.platform.help"))
         }
         row {
             cell(domainsTableContainer)
                 .align(Align.FILL)
-        }
+        }.resizableRow()
         row {
             browserLink(message("actions.report-bug.title"), GitLinkBundle.URL_BUG_REPORT)
         }
@@ -123,7 +127,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
 
     private fun createDomainsTableModel(domains: List<String> = listOf()): ListTableModel<String> = ListTableModel(
         arrayOf(
-            object : ColumnInfo<String, String>(message("settings.auto-detect.table.column.domain")) {
+            object : ColumnInfo<String, String>(message("settings.domain-registry.table.column.domain")) {
                 override fun valueOf(domain: String): String {
                     return domain
                 }
@@ -167,24 +171,29 @@ class RegisterDomainDialog(
     private val platforms: PlatformRepository
 ) : DialogWrapper(false) {
     init {
-        title = message("settings.auto-detect.register-domain-dialog.title")
-        setOKButtonText(if (domain.isEmpty()) { message("actions.register") } else { message("actions.update") })
+        val isNew = domain.isEmpty()
+
+        title = message(if (isNew) "settings.domain-registry.dialog.title.register" else "settings.domain-registry.dialog.title.edit")
+        setOKButtonText(if (isNew) message("actions.register") else message("actions.update"))
         setSize(600, 100)
         init()
     }
 
     override fun createCenterPanel() = panel {
-        row(message("settings.auto-detect.register-domain-dialog.title")) {
+        row(message("settings.domain-registry.dialog.field.domain.label")) {
             textField()
                 .bindText(::domain)
-                .focused()
                 .validationOnApply {
                     notBlank(it.text) ?:
                     domain(it.text) ?:
                     exists(it.text, platforms.getAll().flatMap { platform -> platform.domains.map { domain -> domain.toString() } } ) ?:
                     exists(it.text, domainsRegistry.values.flatten())
                 }
-
+                .align(AlignX.FILL)
+                .resizableColumn()
+                .applyToComponent { emptyText.text = message("settings.domain-registry.dialog.field.domain.placeholder") }
+                .gap(RightGap.SMALL)
+            contextHelp(message("settings.domain-registry.dialog.field.domain.help"))
         }
     }
 }
