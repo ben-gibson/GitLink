@@ -25,19 +25,19 @@ class CodebergTest {
         fun urlExpectations(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
                 "https://codeberg.org/my/repo/src/branch/master/src/Foo.java#L10-L20",
                 "File at branch with line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
                 "https://codeberg.org/my/repo/src/branch/master/src/Foo.java",
                 "File at branch without line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(
+                UrlOptions.FileAtBranch(
                     File("my-image.png", false, "src/foo bar baz/images", false),
                     BRANCH_MASTER,
                     null
@@ -47,31 +47,31 @@ class CodebergTest {
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
                 "https://codeberg.org/my/repo/src/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#L10-L20",
                 "File at commit with line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
                 "https://codeberg.org/my/repo/src/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources",
                 "Directory at commit"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
                 "https://codeberg.org/my/repo/src/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Repository root at commit"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
                 "https://codeberg.org/my/repo/src/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java",
                 "File at commit without line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                UrlOptions.Commit(COMMIT_FULL, "main"),
                 "https://codeberg.org/my/repo/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Direct commit URL"
             )

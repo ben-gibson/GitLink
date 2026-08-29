@@ -2,7 +2,7 @@ package uk.co.ben_gibson.git.link.url
 
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.git.File
-import uk.co.ben_gibson.git.link.ui.LineSelection
+import uk.co.ben_gibson.git.link.git.LineSelection
 
 object UrlTestData {
     const val BRANCH_MAIN = "main"

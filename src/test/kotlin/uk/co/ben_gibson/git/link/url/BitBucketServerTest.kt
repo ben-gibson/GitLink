@@ -26,61 +26,61 @@ class BitBucketServerTest {
         fun urlExpectations(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 BASE_URL_SCM,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/master#10-20",
                 "File at branch with line selection (SCM URL format)"
             ),
             Arguments.of(
                 BASE_URL_SCM,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_WITH_SLASH, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_WITH_SLASH, LINE_SELECTION_RANGE),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/feature%2Fticket-23#10-20",
                 "Branch containing a forward slash should be encoded in the at parameter"
             ),
             Arguments.of(
                 BASE_URL_SCM,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_WITH_SPACE, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_WITH_SPACE, LINE_SELECTION_RANGE),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/feature%2Fticket%2023#10-20",
                 "Branch containing a space should be encoded in the at parameter"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/master#10-20",
                 "File at branch with line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=refs/heads/master",
                 "File at branch without line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c#10-20",
                 "File at commit with line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/foo/resources?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Directory at commit"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
                 "https://stash.example.com/projects/foo/repos/bar/browse?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Repository root at commit"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
                 "https://stash.example.com/projects/foo/repos/bar/browse/src/Foo.java?at=b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "File at commit without line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                UrlOptions.Commit(COMMIT_FULL, "main"),
                 "https://stash.example.com/projects/foo/repos/bar/commits/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Direct commit URL"
             )

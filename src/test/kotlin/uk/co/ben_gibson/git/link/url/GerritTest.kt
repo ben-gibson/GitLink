@@ -24,43 +24,43 @@ class GerritTest {
         fun urlExpectations(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/refs/heads/master/src/Foo.java#10",
                 "File at branch with line selection (Gerrit only uses start line)"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_MASTER, null),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/refs/heads/master/src/Foo.java",
                 "File at branch without line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#10",
                 "File at commit with line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources",
                 "Directory at commit"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Repository root at commit"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java",
                 "File at commit without line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                UrlOptions.Commit(COMMIT_FULL, "main"),
                 "https://gerrit.example.com/plugins/gitiles/foo/bar/+/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Direct commit URL"
             )

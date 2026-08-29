@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.git.link.ui
+package uk.co.ben_gibson.git.link.git
 
 data class LineSelection(val start: Int, val end: Int) {
     init {

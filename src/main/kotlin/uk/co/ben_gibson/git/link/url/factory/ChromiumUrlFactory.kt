@@ -2,7 +2,7 @@ package uk.co.ben_gibson.git.link.url.factory
 
 import com.intellij.openapi.components.Service
 import uk.co.ben_gibson.git.link.git.File
-import uk.co.ben_gibson.git.link.ui.LineSelection
+import uk.co.ben_gibson.git.link.git.LineSelection
 import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.url.Host
 import uk.co.ben_gibson.url.Path
@@ -29,17 +29,17 @@ class ChromiumUrlFactory: UrlFactory {
             .with(Path("+"))
 
         return when (options) {
-            is UrlOptions.UrlOptionsFileAtBranch -> path.with(createChromiumFileSubPath(options.file, options.branch, options.lineSelection))
-            is UrlOptions.UrlOptionsFileAtCommit -> path.with(createChromiumFileSubPath(options.file, options.commit.toString(), options.lineSelection))
-            is UrlOptions.UrlOptionsCommit -> path.with(Path(options.commit.toString()))
+            is UrlOptions.FileAtBranch -> path.with(createChromiumFileSubPath(options.file, options.branch, options.lineSelection))
+            is UrlOptions.FileAtCommit -> path.with(createChromiumFileSubPath(options.file, options.commit.toString(), options.lineSelection))
+            is UrlOptions.Commit -> path.with(Path(options.commit.toString()))
         }
     }
 
     private fun createPathForChromiumos(baseUrl: URL, options: UrlOptions) : Path {
         return when (options) {
-            is UrlOptions.UrlOptionsFileAtBranch -> createChromiumosFileSubPath(baseUrl, options.file, options.branch, options.lineSelection)
-            is UrlOptions.UrlOptionsFileAtCommit -> createChromiumosFileSubPath(baseUrl, options.file, options.commit.toString(), options.lineSelection)
-            is UrlOptions.UrlOptionsCommit -> Path("chromiumos/_/chromium/chromiumos")
+            is UrlOptions.FileAtBranch -> createChromiumosFileSubPath(baseUrl, options.file, options.branch, options.lineSelection)
+            is UrlOptions.FileAtCommit -> createChromiumosFileSubPath(baseUrl, options.file, options.commit.toString(), options.lineSelection)
+            is UrlOptions.Commit -> Path("chromiumos/_/chromium/chromiumos")
                 .withSegments(baseUrl.path.toString().split('/').filter{ it.isNotBlank() }.drop(1))
                 .with(Path("+"))
                 .with(Path(options.commit.toString()))

@@ -6,7 +6,6 @@ import com.intellij.openapi.vcs.actions.ShowAnnotateOperationsPopup
 import git4idea.annotate.GitFileAnnotation
 import uk.co.ben_gibson.git.link.ui.actions.Action
 import uk.co.ben_gibson.git.link.Context
-import uk.co.ben_gibson.git.link.ContextCommit
 import uk.co.ben_gibson.git.link.git.Commit
 
 class CommitBrowserAction(private val annotation: GitFileAnnotation): Action(Type.BROWSER) {
@@ -16,6 +15,6 @@ class CommitBrowserAction(private val annotation: GitFileAnnotation): Action(Typ
 
         val revision = annotation.getLineRevisionNumber(lineNumber) ?: return null
 
-        return ContextCommit(annotation.file, Commit(revision.toString()))
+        return Context.Commit(annotation.file, Commit(revision.toString()))
     }
 }

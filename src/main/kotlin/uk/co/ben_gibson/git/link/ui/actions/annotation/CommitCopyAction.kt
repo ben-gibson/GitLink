@@ -5,7 +5,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vcs.actions.ShowAnnotateOperationsPopup
 import git4idea.annotate.GitFileAnnotation
 import uk.co.ben_gibson.git.link.Context
-import uk.co.ben_gibson.git.link.ContextCommit
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.ui.actions.Action
 
@@ -16,6 +15,6 @@ class CommitCopyAction(private val annotation: GitFileAnnotation): Action(Type.C
 
         val revision = annotation.getLineRevisionNumber(lineNumber) ?: return null
 
-        return ContextCommit(annotation.file, Commit(revision.toString()))
+        return Context.Commit(annotation.file, Commit(revision.toString()))
     }
 }

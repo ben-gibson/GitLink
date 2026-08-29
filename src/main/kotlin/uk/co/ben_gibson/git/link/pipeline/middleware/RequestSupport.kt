@@ -9,7 +9,7 @@ import uk.co.ben_gibson.git.link.ui.notification.Notifier
 import uk.co.ben_gibson.url.URL
 
 @Service
-class SendSupportNotification : Middleware {
+class RequestSupport : Middleware {
     override val priority = 10
 
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {

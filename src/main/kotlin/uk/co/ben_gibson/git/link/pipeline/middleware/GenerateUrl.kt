@@ -20,42 +20,41 @@ class GenerateUrl : Middleware {
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val baseUrl = pass.remote.httpUrl ?: return null
 
-        val options = createUrlOptions(pass, pass.platform.commitsReachableFromRemote)
+        val options = createUrlOptions(pass)
 
         return service<UrlFactoryLocator>().locate(pass.platform).createUrl(baseUrl, options)
     }
 
-    private fun createUrlOptions(pass: Pass, commitsReachableFromRemote: Boolean): UrlOptions {
+    private fun createUrlOptions(pass: Pass): UrlOptions {
         val remote = pass.remote
         val repository = pass.repository
         val context = pass.context
         val settings = pass.project.service<ProjectSettings>()
 
-        val repositoryFile = File.forRepository(context.file, repository)
-
         return when (context) {
-            is ContextFileAtCommit -> UrlOptions.UrlOptionsFileAtCommit(
-                repositoryFile,
+            is Context.FileAtCommit -> UrlOptions.FileAtCommit(
+                File.forRepository(context.file, repository),
                 repository.currentBranch?.name ?: settings.fallbackBranch,
                 context.commit,
                 context.lineSelection
             )
-            is ContextCommit -> UrlOptions.UrlOptionsCommit(
+            is Context.Commit -> UrlOptions.Commit(
                 context.commit,
                 repository.currentBranch?.name ?: settings.fallbackBranch
             )
-            is ContextCurrentFile -> {
-                val commit = resolveCommit(repository, remote, settings, commitsReachableFromRemote)
+            is Context.File -> {
+                val commit = resolveCommit(repository, remote, settings, pass.platform.commitsReachableFromRemote)
+                val repositoryFile = File.forRepository(context.file, repository)
 
                 if (commit != null) {
-                    UrlOptions.UrlOptionsFileAtCommit(
+                    UrlOptions.FileAtCommit(
                         repositoryFile,
                         repository.currentBranch?.name ?: settings.fallbackBranch,
                         commit,
                         context.lineSelection
                     )
                 } else {
-                    UrlOptions.UrlOptionsFileAtBranch(
+                    UrlOptions.FileAtBranch(
                         repositoryFile,
                         resolveBranch(repository, remote, settings),
                         context.lineSelection

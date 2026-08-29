@@ -27,25 +27,25 @@ class GitHubTest {
         fun urlExpectations(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_MASTER, LINE_SELECTION_RANGE),
                 "https://github.com/my/repo/blob/master/src/Foo.java#L10-L20",
                 "File at branch with line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_WITH_SLASH, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_WITH_SLASH, LINE_SELECTION_RANGE),
                 "https://github.com/my/repo/blob/feature/ticket-23/src/Foo.java#L10-L20",
                 "Branch containing a forward slash should not be encoded"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(FILE_JAVA, BRANCH_WITH_SPACE, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtBranch(FILE_JAVA, BRANCH_WITH_SPACE, LINE_SELECTION_RANGE),
                 "https://github.com/my/repo/blob/feature/ticket%2023/src/Foo.java#L10-L20",
                 "Branch containing a space should be encoded"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtBranch(
+                UrlOptions.FileAtBranch(
                     File("my-image.png", false, "src/foo bar baz/images", false),
                     BRANCH_MASTER,
                     null
@@ -55,31 +55,31 @@ class GitHubTest {
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
+                UrlOptions.FileAtCommit(FILE_JAVA, "main", COMMIT_FULL, LINE_SELECTION_RANGE),
                 "https://github.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java#L10-L20",
                 "File at specific commit with line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(DIR_RESOURCES, "main", COMMIT_FULL, null),
                 "https://github.com/my/repo/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/foo/resources",
                 "Directory at commit should use /tree/ path"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(DIR_ROOT, "main", COMMIT_FULL, null),
                 "https://github.com/my/repo/tree/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Repository root should link to tree at commit"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsFileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
+                UrlOptions.FileAtCommit(FILE_JAVA, "main", COMMIT_FULL, null),
                 "https://github.com/my/repo/blob/b032a0707beac9a2f24b1b7d97ee4f7156de182c/src/Foo.java",
                 "File at commit without line selection"
             ),
             Arguments.of(
                 BASE_URL,
-                UrlOptions.UrlOptionsCommit(COMMIT_FULL, "main"),
+                UrlOptions.Commit(COMMIT_FULL, "main"),
                 "https://github.com/my/repo/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
                 "Direct commit URL"
             )
