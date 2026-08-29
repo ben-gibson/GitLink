@@ -43,7 +43,7 @@
     </extensions>
 
     <!-- UI -->
-    <resource-bundle>messages.ActionsBundle</resource-bundle>
+    <resource-bundle>messages.MyBundle</resource-bundle>
 
     <actions>
         <action
