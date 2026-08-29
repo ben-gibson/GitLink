@@ -3,27 +3,21 @@ package uk.co.ben_gibson.git.link.editor
 import com.intellij.openapi.editor.Editor
 import uk.co.ben_gibson.git.link.git.LineSelection
 
-val Editor.lineSelection: LineSelection
+val Editor.lineSelection: LineSelection?
     get() {
-        val caretStates = caretModel.caretsAndSelections
-
-        if (caretStates.size < 1) {
-            return LineSelection(caretModel.logicalPosition.line + 1)
+        if (!selectionModel.hasSelection()) {
+            return null
         }
 
-        val caretState = caretStates[0]
+        val start = offsetToLogicalPosition(selectionModel.selectionStart)
+        val end = offsetToLogicalPosition(selectionModel.selectionEnd)
 
-        val start = caretState.selectionStart
-        val end = caretState.selectionEnd
-
-        if (start == null || end == null) {
-            return LineSelection(caretModel.logicalPosition.line + 1)
-        }
-
+        // Logical positions are zero based, whereas line numbers in a URL are one based
         val startLine = start.line + 1
         var endLine = end.line + 1
 
-        if (end.column == 0 && start != end) {
+        // A whole line selection ends at column zero of the following line, which isn't itself selected
+        if (end.column == 0) {
             endLine--
         }
 
