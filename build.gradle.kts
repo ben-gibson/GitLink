@@ -40,6 +40,10 @@ dependencies {
     }
     testImplementation(libs.assertj)
 
+    // Not shipped with the plugin, which uses the stdlib bundled in the IntelliJ Platform. Declared so the IDE
+    // can resolve the sources jar and show KDoc for stdlib functions -> https://jb.gg/intellij-platform-kotlin-stdlib
+    compileOnly(kotlin("stdlib"))
+
     implementation(files("libs/url-0.0.11.jar"))
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html

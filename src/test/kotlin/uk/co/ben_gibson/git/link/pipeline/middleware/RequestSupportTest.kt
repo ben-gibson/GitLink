@@ -16,12 +16,12 @@ import uk.co.ben_gibson.git.link.ui.notification.TestNotifier
 import uk.co.ben_gibson.url.URL
 
 @TestApplication
-class SendSupportNotificationTest {
+class RequestSupportTest {
 
     private val projectFixture = projectFixture()
     private val disposableFixture = disposableFixture()
     private val project get() = projectFixture.get()
-    private val subject = SendSupportNotification()
+    private val subject = RequestSupport()
     private lateinit var notifier: TestNotifier
 
     @BeforeEach

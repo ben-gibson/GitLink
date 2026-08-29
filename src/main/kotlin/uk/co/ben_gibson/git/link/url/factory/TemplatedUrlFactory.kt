@@ -2,7 +2,7 @@ package uk.co.ben_gibson.git.link.url.factory
 
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.git.File
-import uk.co.ben_gibson.git.link.ui.LineSelection
+import uk.co.ben_gibson.git.link.git.LineSelection
 import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
@@ -22,9 +22,9 @@ open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory
 
     override fun createUrl(baseUrl: URL, options: UrlOptions): URL {
         var processTemplate = when (options) {
-            is UrlOptions.UrlOptionsFileAtCommit -> processTemplate(options)
-            is UrlOptions.UrlOptionsFileAtBranch -> processTemplate(options)
-            is UrlOptions.UrlOptionsCommit -> processTemplate(options)
+            is UrlOptions.FileAtCommit -> processTemplate(options)
+            is UrlOptions.FileAtBranch -> processTemplate(options)
+            is UrlOptions.Commit -> processTemplate(options)
         }
 
         processTemplate = processBaseUrl(processTemplate, baseUrl)
@@ -36,7 +36,7 @@ open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory
 
     private fun removeUnmatchedSubstitutions(template: String) = template.replace("\\{.+?}".toRegex(), "")
 
-    private fun processTemplate(options: UrlOptions.UrlOptionsFileAtBranch): String {
+    private fun processTemplate(options: UrlOptions.FileAtBranch): String {
         var template = templates.fileAtBranch
 
         template = processFile(template, options.file)
@@ -46,7 +46,7 @@ open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory
         return template
     }
 
-    private fun processTemplate(options: UrlOptions.UrlOptionsFileAtCommit): String {
+    private fun processTemplate(options: UrlOptions.FileAtCommit): String {
         var template = templates.fileAtCommit
 
         template = processFile(template, options.file)
@@ -57,7 +57,7 @@ open class TemplatedUrlFactory(private val templates: UrlTemplates) : UrlFactory
         return template
     }
 
-    private fun processTemplate(options: UrlOptions.UrlOptionsCommit): String {
+    private fun processTemplate(options: UrlOptions.Commit): String {
         var template = templates.commit
 
         template = processCommit(template, options.commit)

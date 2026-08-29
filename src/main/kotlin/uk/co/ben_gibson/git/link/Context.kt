@@ -1,23 +1,25 @@
 package uk.co.ben_gibson.git.link
 
 import com.intellij.openapi.vfs.VirtualFile
-import uk.co.ben_gibson.git.link.git.Commit
-import uk.co.ben_gibson.git.link.ui.LineSelection
+import uk.co.ben_gibson.git.link.git.Commit as GitCommit
+import uk.co.ben_gibson.git.link.git.LineSelection
 
-sealed class Context(open val file: VirtualFile)
+// [repositoryFile] is used only to resolve which Git repository the action was triggered from -
+// it isn't necessarily the file being linked to (see Commit.root).
+sealed class Context(val repositoryFile: VirtualFile) {
+    data class Commit(
+        val root: VirtualFile,
+        val commit: GitCommit
+    ) : Context(root)
 
-data class ContextCommit(
-    override val file: VirtualFile,
-    val commit: Commit
-) : Context(file)
+    data class FileAtCommit(
+        val file: VirtualFile,
+        val commit: GitCommit,
+        val lineSelection: LineSelection? = null
+    ) : Context(file)
 
-data class ContextFileAtCommit(
-    override val file: VirtualFile,
-    val commit: Commit,
-    val lineSelection: LineSelection? = null
-) : Context(file)
-
-data class ContextCurrentFile(
-    override val file: VirtualFile,
-    val lineSelection: LineSelection? = null
-) : Context(file)
+    data class File(
+        val file: VirtualFile,
+        val lineSelection: LineSelection? = null
+    ) : Context(file)
+}

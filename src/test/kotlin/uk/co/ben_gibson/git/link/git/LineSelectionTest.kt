@@ -1,4 +1,4 @@
-package uk.co.ben_gibson.git.link.ui
+package uk.co.ben_gibson.git.link.git
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

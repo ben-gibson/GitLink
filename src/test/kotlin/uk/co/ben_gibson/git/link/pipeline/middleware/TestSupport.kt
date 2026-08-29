@@ -5,7 +5,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
 import io.mockk.mockk
-import uk.co.ben_gibson.git.link.ContextCurrentFile
+import uk.co.ben_gibson.git.link.Context
 import uk.co.ben_gibson.git.link.pipeline.Pass
 import uk.co.ben_gibson.git.link.platform.GitHub
 import java.time.Instant
@@ -19,7 +19,7 @@ fun pass(
     val file = mockk<VirtualFile>()
     return Pass(
         project = project,
-        context = ContextCurrentFile(file),
+        context = Context.File(file),
         platform = GitHub(),
         repository = repository,
         remote = remote,

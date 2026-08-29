@@ -1,6 +1,7 @@
-package uk.co.ben_gibson.git.link.ui
+package uk.co.ben_gibson.git.link.editor
 
 import com.intellij.openapi.editor.Editor
+import uk.co.ben_gibson.git.link.git.LineSelection
 
 val Editor.lineSelection: LineSelection
     get() {

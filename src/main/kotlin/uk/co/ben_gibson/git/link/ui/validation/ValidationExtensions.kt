@@ -5,7 +5,7 @@ import com.intellij.ui.layout.ValidationInfoBuilder
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.git.File
-import uk.co.ben_gibson.git.link.ui.LineSelection
+import uk.co.ben_gibson.git.link.git.LineSelection
 import uk.co.ben_gibson.git.link.url.*
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
@@ -61,7 +61,7 @@ fun ValidationInfoBuilder.fileAtCommitTemplate(value: String): ValidationInfo? {
         return null
     }
 
-    val options = UrlOptions.UrlOptionsFileAtCommit(
+    val options = UrlOptions.FileAtCommit(
         File("foo.kt", false, "src/main", false),
         "main",
         Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"),
@@ -76,7 +76,7 @@ fun ValidationInfoBuilder.fileAtBranchTemplate(value: String): ValidationInfo? {
         return null
     }
 
-    val options = UrlOptions.UrlOptionsFileAtBranch(
+    val options = UrlOptions.FileAtBranch(
         File("foo.kt", false, "src/main", false),
         "master",
         LineSelection(10, 20)
@@ -90,7 +90,7 @@ fun ValidationInfoBuilder.commitTemplate(value: String): ValidationInfo? {
         return null
     }
 
-    val options = UrlOptions.UrlOptionsCommit(Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"), "main")
+    val options = UrlOptions.Commit(Commit("734232a3c18f0625843bd161c3f5da272b9d53c1"), "main")
 
     return urlTemplate(options, commit = value)
 }

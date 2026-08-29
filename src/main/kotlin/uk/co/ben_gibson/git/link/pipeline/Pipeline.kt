@@ -25,7 +25,7 @@ class Pipeline(private val project: Project) {
         service<Timer>(),
         service<RecordHit>(),
         service<ForceHttps>(),
-        service<SendSupportNotification>(),
+        service<RequestSupport>(),
     )
 
     fun accept(context: Context) : URL? {
@@ -63,7 +63,7 @@ class Pipeline(private val project: Project) {
     }
 
     private fun locateRepository(context: Context): GitRepository? {
-        val repository = GitRepositoryManager.getInstance(project).getRepositoryForFile(context.file)
+        val repository = GitRepositoryManager.getInstance(project).getRepositoryForFile(context.repositoryFile)
 
         repository ?: service<Notifier>().send(Notification.repositoryNotFound(), project)
 

@@ -20,9 +20,9 @@ fun copyToClipBoard(project: Project, context: Context, asMarkdown: Boolean = fa
     processGitLink(project, context) {
         val url = if (asMarkdown) {
             val label = when(context) {
-                is ContextCommit -> context.commit.shortHash
-                is ContextCurrentFile -> context.file.name
-                is ContextFileAtCommit -> context.file.name
+                is Context.Commit -> context.commit.shortHash
+                is Context.File -> context.file.name
+                is Context.FileAtCommit -> context.file.name
             }
 
             "[${label}](${it})"
