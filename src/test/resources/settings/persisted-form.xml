@@ -1,0 +1,28 @@
+<ApplicationSettings>
+  <option name="customHosts">
+    <list>
+      <custom_hosts>
+        <option name="baseUrl" value="git.example.com" />
+        <option name="commitTemplate" value="c" />
+        <option name="displayName" value="My Platform" />
+        <option name="fileAtBranchTemplate" value="a" />
+        <option name="fileAtCommitTemplate" value="b" />
+        <option name="id" value="3fc8e330-760f-482f-8758-a0c34137d21c" />
+      </custom_hosts>
+    </list>
+  </option>
+  <option name="hits" value="0" />
+  <option name="lastVersion" />
+  <option name="customHostDomains">
+    <map>
+      <entry key="0d0a2f7e-1c9a-4e46-9b4e-4f6a12c4a111">
+        <value>
+          <set>
+            <option value="git.example.com" />
+          </set>
+        </value>
+      </entry>
+    </map>
+  </option>
+  <option name="requestSupport" value="true" />
+</ApplicationSettings>

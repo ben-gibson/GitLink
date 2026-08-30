@@ -17,7 +17,7 @@ import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ListTableModel
 import uk.co.ben_gibson.git.link.GitLinkBundle
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
-import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomHostSettings
+import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomPlatformSettings
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.extension.replaceAt
@@ -31,7 +31,7 @@ import uk.co.ben_gibson.git.link.ui.validation.*
 
 class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.custom-platform.group.title")) {
     private var settings = service<ApplicationSettings>()
-    private var customPlatforms = settings.customHosts
+    private var customPlatforms = settings.customPlatforms
     private val tableModel = createTableModel()
 
     private val table = TableView(tableModel).apply {
@@ -56,7 +56,7 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
         }
     }
 
-    private fun createTableModel(): ListTableModel<CustomHostSettings> = ListTableModel(
+    private fun createTableModel(): ListTableModel<CustomPlatformSettings> = ListTableModel(
         arrayOf(
             createColumn(message("settings.custom-platform.table.column.name")) { customPlatform -> customPlatform?.displayName },
             createColumn(message("settings.custom-platform.table.column.domain")) { customPlatform -> customPlatform?.baseUrl },
@@ -64,9 +64,9 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
         customPlatforms
     )
 
-    private fun createColumn(name: String, formatter: (CustomHostSettings?) -> String?) : ColumnInfo<CustomHostSettings, String> {
-        return object : ColumnInfo<CustomHostSettings, String>(name) {
-            override fun valueOf(item: CustomHostSettings?): String? {
+    private fun createColumn(name: String, formatter: (CustomPlatformSettings?) -> String?) : ColumnInfo<CustomPlatformSettings, String> {
+        return object : ColumnInfo<CustomPlatformSettings, String>(name) {
+            override fun valueOf(item: CustomPlatformSettings?): String? {
                 return formatter(item)
             }
         }
@@ -106,23 +106,23 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
     override fun reset() {
         super.reset()
 
-        customPlatforms = settings.customHosts
+        customPlatforms = settings.customPlatforms
         refreshTableModel()
     }
 
     override fun isModified() : Boolean {
-        return super.isModified() || customPlatforms != settings.customHosts
+        return super.isModified() || customPlatforms != settings.customPlatforms
     }
 
     override fun apply() {
         super.apply()
 
-        settings.customHosts = customPlatforms
+        settings.customPlatforms = customPlatforms
     }
 }
 
-private class CustomPlatformDialog(customPlatform: CustomHostSettings? = null) : DialogWrapper(false) {
-    val platform = customPlatform ?: CustomHostSettings()
+private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = null) : DialogWrapper(false) {
+    val platform = customPlatform ?: CustomPlatformSettings()
     private val substitutionReferenceTable = SubstitutionReferenceTable().apply { setShowColumns(true) }
 
     // Only platforms whose URL format is expressed purely as templates can seed a custom one. Azure, Chromium and

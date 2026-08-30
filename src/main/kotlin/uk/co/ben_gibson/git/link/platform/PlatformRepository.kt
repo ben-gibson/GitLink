@@ -26,21 +26,33 @@ private val EXISTING_PLATFORMS = setOf(
 class PlatformRepository {
     fun getById(id: String) = getById(UUID.fromString(id))
     fun getById(id: UUID) = load().firstOrNull { it.id == id }
-    fun getByDomain(domain: Host): Platform? {
-        val platforms = load()
-        return platforms.firstOrNull { it.domains.contains(domain) } ?: platforms.firstOrNull { it.domainPattern?.matcher(domain.toString())?.matches() == true }
-    }
     fun getAll() = load()
+
+    // An exact domain wins over a wildcard, so bitbucket.org resolves to Bitbucket Cloud rather than to
+    // Bitbucket Server, which claims any host containing 'bitbucket'.
+    fun getByDomain(host: Host): Platform? {
+        val platforms = load()
+
+        return platforms.firstOrNull { it.matchesExactly(host) }
+            ?: platforms.firstOrNull { it.matches(host) }
+            ?: getByRegisteredDomain(host)
+    }
+
+    private fun getByRegisteredDomain(host: Host) = service<ApplicationSettings>()
+        .registeredDomains
+        .entries
+        .firstOrNull { (_, domains) -> domains.any { Domain.of(it).matches(host) } }
+        ?.let { getById(it.key) }
 
     private fun load(): Set<Platform> {
         val settings = service<ApplicationSettings>()
 
-        val customPlatforms: List<Platform> = settings.customHosts.map {
+        val customPlatforms: List<Platform> = settings.customPlatforms.map {
             Custom(
                 UUID.fromString(it.id),
                 it.displayName,
                 Icons.GIT,
-                setOf(Host(it.baseUrl))
+                setOf(Domain.of(it.baseUrl))
             )
         }
 
