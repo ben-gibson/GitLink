@@ -28,14 +28,21 @@ class PlatformRepository {
     fun getById(id: UUID) = load().firstOrNull { it.id == id }
     fun getAll() = load()
 
-    // An exact domain wins over a wildcard, so bitbucket.org resolves to Bitbucket Cloud rather than to
-    // Bitbucket Server, which claims any host containing 'bitbucket'.
+    /**
+     * The platform serving a domain, e.g. github.com, searched for in the order:
+     *
+     * 1. A user registered domain against a platform, which is an explicit choice and so beats
+     *    anything built-in.
+     * 2. An exact match on a domain, so bitbucket.org resolves to Bitbucket Cloud
+     *    before Bitbucket Server which uses '*bitbucket*'.
+     * 3. A wildcard, e.g. '*gerrit*'.
+     */
     fun getByDomain(host: Host): Platform? {
         val platforms = load()
 
-        return platforms.firstOrNull { it.matchesExactly(host) }
+        return getByRegisteredDomain(host)
+            ?: platforms.firstOrNull { it.matchesExactly(host) }
             ?: platforms.firstOrNull { it.matches(host) }
-            ?: getByRegisteredDomain(host)
     }
 
     private fun getByRegisteredDomain(host: Host) = service<ApplicationSettings>()
