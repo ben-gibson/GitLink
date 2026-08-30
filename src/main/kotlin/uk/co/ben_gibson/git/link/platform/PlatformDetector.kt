@@ -11,7 +11,6 @@ import git4idea.repo.GitRepository
 import git4idea.repo.GitRepositoryManager
 import uk.co.ben_gibson.git.link.git.domain
 import uk.co.ben_gibson.git.link.git.locateRemote
-import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
 
 @Service(Service.Level.PROJECT)
@@ -31,12 +30,7 @@ class PlatformDetector(val project: Project) {
 
         val remote = repository.locateRemote(settings.remote) ?: return null
 
-        val applicationSettings = service<ApplicationSettings>()
-        val platforms = service<PlatformRepository>()
-
-        return remote.domain?.let {
-            platforms.getByDomain(it) ?: applicationSettings.findPlatformIdByCustomDomain(it)?.let { id -> platforms.getById(id) }
-        }
+        return remote.domain?.let { service<PlatformRepository>().getByDomain(it) }
     }
 
     private fun getRepositoryForFile(projectDirectory: VirtualFile, consumer: (GitRepository) -> Unit) {

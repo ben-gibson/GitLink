@@ -29,7 +29,7 @@ import javax.swing.ListSelectionModel
 class DomainRegistrySettings : BoundConfigurable(message("settings.domain-registry.group.title")), ApplicationSettings.ChangeListener {
     private val settings = service<ApplicationSettings>()
     private val platforms = service<PlatformRepository>()
-    private var domainRegistry = settings.customHostDomains
+    private var domainRegistry = settings.registeredDomains
 
     private val platformComboBoxModel = CollectionComboBoxModel(platforms.getAll().toList())
 
@@ -139,7 +139,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
     override fun reset() {
         super.reset()
 
-        domainRegistry = settings.customHostDomains
+        domainRegistry = settings.registeredDomains
 
         val platform = platformComboBoxModel.selected ?: return
 
@@ -147,13 +147,13 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
     }
 
     override fun isModified() : Boolean {
-        return super.isModified() || domainRegistry != settings.customHostDomains
+        return super.isModified() || domainRegistry != settings.registeredDomains
     }
 
     override fun apply() {
         super.apply()
 
-        settings.customHostDomains = domainRegistry
+        settings.registeredDomains = domainRegistry
     }
 
     override fun onChange() {

@@ -30,7 +30,7 @@ class TemplatedUrlFactoryProvider {
     }
 
     private fun customPlatform(host: Custom): TemplatedUrlFactory {
-        val config = service<ApplicationSettings>().customHosts.first { UUID.fromString(it.id).equals(host.id) }
+        val config = service<ApplicationSettings>().customPlatforms.first { UUID.fromString(it.id).equals(host.id) }
 
         return TemplatedUrlFactory(UrlTemplates(config.fileAtBranchTemplate, config.fileAtCommitTemplate, config.commitTemplate))
     }

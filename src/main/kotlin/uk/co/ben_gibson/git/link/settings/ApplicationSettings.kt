@@ -4,26 +4,23 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
+import com.intellij.util.xmlb.annotations.OptionTag
 import com.intellij.util.xmlb.annotations.Tag
-import uk.co.ben_gibson.url.Host
 import java.util.UUID
 
-/**
- * Supports storing the application settings in a persistent way.
- * The [State] and [Storage] annotations define the name of the data and the file name where
- * these persistent application settings are stored.
- */
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
 class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
     private var listeners: List<ChangeListener> = listOf()
 
-    var customHosts: List<CustomHostSettings> = listOf()
+    @get:OptionTag("customHosts")
+    var customPlatforms: List<CustomPlatformSettings> = listOf()
         set(value) {
             field = value
             notifyListeners()
         }
 
-    var customHostDomains: Map<String, Set<String>> = mapOf()
+    @get:OptionTag("customHostDomains")
+    var registeredDomains: Map<String, Set<String>> = mapOf()
 
     var lastVersion: String? = null
     var hits = 0
@@ -36,7 +33,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
     }
 
     @Tag("custom_hosts")
-    data class CustomHostSettings(
+    data class CustomPlatformSettings(
         var id: String = UUID.randomUUID().toString(),
         var displayName: String = "",
         var baseUrl: String = "",
@@ -44,11 +41,6 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
         var fileAtCommitTemplate: String = "",
         var commitTemplate: String = ""
     )
-
-    fun findPlatformIdByCustomDomain(domain: Host) = customHostDomains
-        .entries
-        .firstOrNull { entry -> entry.value.contains(domain.toString()) }
-        ?.key
 
     fun registerListener(listener: ChangeListener) {
         listeners = listeners.plus(listener)
