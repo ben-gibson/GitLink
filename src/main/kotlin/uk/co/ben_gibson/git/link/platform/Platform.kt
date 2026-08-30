@@ -60,11 +60,13 @@ class BitbucketServer : Platform(
     setOf(Domain.wildcard("bitbucket"))
 )
 
+// Gitea and Gogs are usually self hosted, so like Bitbucket Server they are claimed by a wildcard. It also
+// covers their public instances, gitea.com and gogs.io, which the fragment matches too.
 class Gogs : Platform(
     UUID.fromString("fd2d9cfc-1eef-4b1b-80bd-b02def58576c"),
     message("platform.gogs.name"),
     Icons.GOGS,
-    setOf(Domain.of("gogs.io"))
+    setOf(Domain.wildcard("gogs"))
 )
 
 class Srht : Platform(
@@ -78,7 +80,7 @@ class Gitea : Platform(
     UUID.fromString("e0f86390-1091-4871-8aeb-f534fbc99cf0"),
     message("platform.gitea.name"),
     Icons.GITEA,
-    setOf(Domain.of("gitea.io")),
+    setOf(Domain.wildcard("gitea")),
 )
 
 class Gitee : Platform(
