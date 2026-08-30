@@ -125,7 +125,7 @@ private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = nul
     val platform = customPlatform ?: CustomPlatformSettings()
     private val substitutionReferenceTable = SubstitutionReferenceTable().apply { setShowColumns(true) }
 
-    // Only platforms whose URL format is expressed purely as templates can seed a custom one. Azure, Chromium and
+    // Only platforms whose URL format is expressed purely as templates can seed a custom one. Azure and
     // Bitbucket Server are deliberately absent, as their factories do work beyond substitution that we cannot copy.
     private val presets = service<PlatformRepository>()
         .getAll()

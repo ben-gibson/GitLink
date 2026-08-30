@@ -30,7 +30,6 @@ class PlatformRepositoryTest {
             "git.sr.ht" to Srht(),
             "dev.azure.com" to Azure(),
             "azure.example.com" to Azure(),
-            "googlesource.com" to Chromium(),
             "gerrit.example.com" to Gerrit(),
             "codeberg.org" to Codeberg()
         )

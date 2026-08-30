@@ -8,7 +8,6 @@ import uk.co.ben_gibson.git.link.platform.*
 class UrlFactoryLocator {
     fun locate(platform: Platform) : UrlFactory {
         return when(platform) {
-            is Chromium -> service<ChromiumUrlFactory>()
             is Azure -> service<AzureUrlFactory>()
             is BitbucketServer -> service<BitbucketServerUrlFactory>()
             else -> service<TemplatedUrlFactoryProvider>().forPlatform(platform)
