@@ -97,13 +97,6 @@ class Azure : Platform(
     setOf(Domain.of("dev.azure.com"), Domain.wildcard("azure"))
 )
 
-class Chromium : Platform(
-    UUID.fromString("97bf87bc-99ef-4e1f-8d37-7948a2082df4"),
-    message("platform.chromium.name"),
-    Icons.CHROMIUM,
-    setOf(Domain.of("googlesource.com"))
-)
-
 // Gerrit changes are pushed to refs/for/<branch> rather than to the branch itself, so a local commit
 // is never reachable from a remote branch and checking for one would always fall back to a branch link.
 class Gerrit : Platform(

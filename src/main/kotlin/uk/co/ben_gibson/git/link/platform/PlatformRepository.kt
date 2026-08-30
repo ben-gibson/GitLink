@@ -17,7 +17,6 @@ private val EXISTING_PLATFORMS = setOf(
     Gogs(),
     Srht(),
     Azure(),
-    Chromium(),
     Gerrit(),
     Codeberg()
 )
