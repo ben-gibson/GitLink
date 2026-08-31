@@ -10,14 +10,9 @@ import java.util.UUID
 
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
 class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
-    private var listeners: List<ChangeListener> = listOf()
 
     @get:OptionTag("customHosts")
     var customPlatforms: List<CustomPlatformSettings> = listOf()
-        set(value) {
-            field = value
-            notifyListeners()
-        }
 
     @get:OptionTag("customHostDomains")
     var registeredDomains: Map<String, Set<String>> = mapOf()
@@ -42,19 +37,7 @@ class ApplicationSettings : PersistentStateComponent<ApplicationSettings?> {
         var commitTemplate: String = ""
     )
 
-    fun registerListener(listener: ChangeListener) {
-        listeners = listeners.plus(listener)
-    }
-
     fun recordHit() {
         hits++
-    }
-
-    private fun notifyListeners() {
-        listeners.forEach(ChangeListener::onChange)
-    }
-
-    interface ChangeListener {
-        fun onChange()
     }
 }

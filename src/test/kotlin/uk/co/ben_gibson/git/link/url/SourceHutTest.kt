@@ -4,12 +4,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import uk.co.ben_gibson.git.link.platform.Srht
 import uk.co.ben_gibson.git.link.git.Commit
 import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.git.LineSelection
 import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_MAIN
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
-import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
 import java.util.stream.Stream
 
@@ -65,7 +65,7 @@ class SourceHutTest {
         description: String
     ) {
         // Given
-        val factory = TemplatedUrlFactory(UrlTemplates.srht())
+        val factory = TemplatedUrlFactory(Srht().templates)
 
         // When
         val url = factory.createUrl(baseUrl, options)

@@ -16,22 +16,24 @@ import com.intellij.ui.table.TableView
 import com.intellij.util.ui.ColumnInfo
 import com.intellij.util.ui.ListTableModel
 import uk.co.ben_gibson.git.link.GitLinkBundle
-import uk.co.ben_gibson.git.link.settings.ApplicationSettings
-import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomPlatformSettings
 import javax.swing.ListSelectionModel.SINGLE_SELECTION
 import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.extension.replaceAt
+import uk.co.ben_gibson.git.link.platform.Custom
+import uk.co.ben_gibson.git.link.platform.CustomPlatform
+import uk.co.ben_gibson.git.link.platform.Domain
 import uk.co.ben_gibson.git.link.platform.GitHub
-import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.platform.PlatformRepository
+import uk.co.ben_gibson.git.link.platform.TemplatedPlatform
 import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
 import uk.co.ben_gibson.git.link.ui.components.SubstitutionReferenceTable
-import uk.co.ben_gibson.git.link.url.factory.PLATFORM_MAP
+import uk.co.ben_gibson.git.link.url.template.UrlTemplates
+import java.util.UUID
 import uk.co.ben_gibson.git.link.ui.validation.*
 
 class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.custom-platform.group.title")) {
-    private var settings = service<ApplicationSettings>()
-    private var customPlatforms = settings.customPlatforms
+    private val platforms = service<PlatformRepository>()
+    private var customPlatforms = platforms.getCustomPlatforms()
     private val tableModel = createTableModel()
 
     private val table = TableView(tableModel).apply {
@@ -56,17 +58,17 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
         }
     }
 
-    private fun createTableModel(): ListTableModel<CustomPlatformSettings> = ListTableModel(
+    private fun createTableModel(): ListTableModel<CustomPlatform> = ListTableModel(
         arrayOf(
-            createColumn(message("settings.custom-platform.table.column.name")) { customPlatform -> customPlatform?.displayName },
-            createColumn(message("settings.custom-platform.table.column.domain")) { customPlatform -> customPlatform?.baseUrl },
+            createColumn(message("settings.custom-platform.table.column.name")) { customPlatform -> customPlatform?.name },
+            createColumn(message("settings.custom-platform.table.column.domain")) { customPlatform -> customPlatform?.domain?.toString() },
         ),
         customPlatforms
     )
 
-    private fun createColumn(name: String, formatter: (CustomPlatformSettings?) -> String?) : ColumnInfo<CustomPlatformSettings, String> {
-        return object : ColumnInfo<CustomPlatformSettings, String>(name) {
-            override fun valueOf(item: CustomPlatformSettings?): String? {
+    private fun createColumn(name: String, formatter: (CustomPlatform?) -> String?) : ColumnInfo<CustomPlatform, String> {
+        return object : ColumnInfo<CustomPlatform, String>(name) {
+            override fun valueOf(item: CustomPlatform?): String? {
                 return formatter(item)
             }
         }
@@ -91,7 +93,7 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
     private fun editCustomPlatform() {
         val row = table.selectedObject ?: return
 
-        val dialog = CustomPlatformDialog(row.copy())
+        val dialog = CustomPlatformDialog(row)
 
         if (dialog.showAndGet()) {
             customPlatforms = customPlatforms.replaceAt(table.selectedRow, dialog.platform)
@@ -106,35 +108,50 @@ class CustomPlatformSettingsConfigurable : BoundConfigurable(message("settings.c
     override fun reset() {
         super.reset()
 
-        customPlatforms = settings.customPlatforms
+        customPlatforms = platforms.getCustomPlatforms()
         refreshTableModel()
     }
 
     override fun isModified() : Boolean {
-        return super.isModified() || customPlatforms != settings.customPlatforms
+        return super.isModified() || customPlatforms != platforms.getCustomPlatforms()
     }
 
     override fun apply() {
         super.apply()
 
-        settings.customPlatforms = customPlatforms
+        platforms.saveCustomPlatforms(customPlatforms)
     }
 }
 
-private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = null) : DialogWrapper(false) {
-    val platform = customPlatform ?: CustomPlatformSettings()
+private class CustomPlatformDialog(existing: CustomPlatform? = null) : DialogWrapper(false) {
+    private val id = existing?.id ?: UUID.randomUUID()
+    private var name = existing?.name ?: ""
+    private var domain = existing?.domain?.toString() ?: ""
+    private var fileAtBranchTemplate = ""
+    private var fileAtCommitTemplate = ""
+    private var commitTemplate = ""
+
+    val platform get() = CustomPlatform(
+        id,
+        name,
+        Domain.of(domain),
+        UrlTemplates(fileAtBranchTemplate, fileAtCommitTemplate, commitTemplate)
+    )
+
     private val substitutionReferenceTable = SubstitutionReferenceTable().apply { setShowColumns(true) }
 
-    // Only platforms whose URL format is expressed purely as templates can seed a custom one. Azure and
-    // Bitbucket Server are deliberately absent, as their factories do work beyond substitution that we cannot copy.
+    // Only a platform whose URL format is expressed purely as templates can seed a custom one, which
+    // rules out Azure and Bitbucket Server. Another custom platform is excluded as a preset is meant to
+    // be a starting point, not a copy of something the user has already written.
     private val presets = service<PlatformRepository>()
         .getAll()
-        .filter { PLATFORM_MAP.containsKey(it::class.java) }
+        .filterIsInstance<TemplatedPlatform>()
+        .filterNot { it is Custom }
         .sortedBy { it.name }
 
     private val presetComboBoxModel = CollectionComboBoxModel(
         presets,
-        if (customPlatform == null) presets.firstOrNull { it is GitHub } else null
+        if (existing == null) presets.firstOrNull { it is GitHub } else null
     )
 
     private lateinit var fileAtBranchTemplateField: JBTextField
@@ -142,19 +159,20 @@ private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = nul
     private lateinit var commitTemplateField: JBTextField
 
     init {
-        title = customPlatform
+        title = existing
             ?.let { message("settings.custom-platform.dialog.title.edit") }
             ?: message("settings.custom-platform.dialog.title.add")
-        setOKButtonText(customPlatform?.let { message("actions.update") } ?: message("actions.add"))
+        setOKButtonText(existing?.let { message("actions.update") } ?: message("actions.add"))
         setSize(700, 700)
 
-        // Seed a new platform before the panel binds, so the fields open populated rather than empty.
-        presetComboBoxModel.selected?.let {
-            val templates = PLATFORM_MAP.getValue(it::class.java)
+        // Fill the templates before the panel binds, so the fields open populated rather than empty. An
+        // existing platform keeps its own, while a new one is seeded from the preset selected below.
+        val templates = existing?.templates ?: presetComboBoxModel.selected?.templates
 
-            platform.fileAtBranchTemplate = templates.fileAtBranch
-            platform.fileAtCommitTemplate = templates.fileAtCommit
-            platform.commitTemplate = templates.commit
+        templates?.let {
+            fileAtBranchTemplate = it.fileAtBranch
+            fileAtCommitTemplate = it.fileAtCommit
+            commitTemplate = it.commit
         }
 
         init()
@@ -163,7 +181,7 @@ private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = nul
     override fun createCenterPanel() = panel {
         row(message("settings.custom-platform.dialog.field.name.label")) {
             textField()
-                .bindText(platform::displayName)
+                .bindText(::name)
                 .validationOnApply { notBlank(it.text) ?: alphaNumeric(it.text) ?: length(it.text, 3, 15) }
                 .align(AlignX.FILL)
                 .resizableColumn()
@@ -173,7 +191,7 @@ private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = nul
         }
         row(message("settings.custom-platform.dialog.field.domain.label")) {
             textField()
-                .bindText(platform::baseUrl)
+                .bindText(::domain)
                 .validationOnApply { notBlank(it.text) ?: domain(it.text) }
                 .align(AlignX.FILL)
                 .resizableColumn()
@@ -189,7 +207,7 @@ private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = nul
         }
         row(message("settings.custom-platform.dialog.field.file-at-branch-template.label")) {
             textField()
-                .bindText(platform::fileAtBranchTemplate)
+                .bindText(::fileAtBranchTemplate)
                 .validationOnApply { notBlank(it.text) ?: fileAtBranchTemplate(it.text) }
                 .align(AlignX.FILL)
                 .resizableColumn()
@@ -199,7 +217,7 @@ private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = nul
         }
         row(message("settings.custom-platform.dialog.field.file-at-commit-template.label")) {
             textField()
-                .bindText(platform::fileAtCommitTemplate)
+                .bindText(::fileAtCommitTemplate)
                 .validationOnApply { notBlank(it.text) ?: fileAtCommitTemplate(it.text) }
                 .align(AlignX.FILL)
                 .resizableColumn()
@@ -209,7 +227,7 @@ private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = nul
         }
         row(message("settings.custom-platform.dialog.field.commit-template.label")) {
             textField()
-                .bindText(platform::commitTemplate)
+                .bindText(::commitTemplate)
                 .validationOnApply { notBlank(it.text) ?: commitTemplate(it.text) }
                 .align(AlignX.FILL)
                 .resizableColumn()
@@ -223,8 +241,8 @@ private class CustomPlatformDialog(customPlatform: CustomPlatformSettings? = nul
         }.resizableRow()
     }
 
-    private fun applyPreset(preset: Platform) {
-        val templates = PLATFORM_MAP.getValue(preset::class.java)
+    private fun applyPreset(preset: TemplatedPlatform) {
+        val templates = preset.templates
 
         fileAtBranchTemplateField.text = templates.fileAtBranch
         fileAtCommitTemplateField.text = templates.fileAtCommit

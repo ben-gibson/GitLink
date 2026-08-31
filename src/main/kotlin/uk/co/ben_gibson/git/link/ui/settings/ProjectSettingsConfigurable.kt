@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.git.link.ui.settings
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.project.Project
@@ -10,24 +11,24 @@ import uk.co.ben_gibson.git.link.GitLinkBundle.message
 import uk.co.ben_gibson.git.link.platform.Platform
 import uk.co.ben_gibson.git.link.platform.PlatformRepository
 import uk.co.ben_gibson.git.link.settings.ProjectSettings
-import uk.co.ben_gibson.git.link.settings.ApplicationSettings
 import uk.co.ben_gibson.git.link.ui.components.PlatformCellRenderer
 import uk.co.ben_gibson.git.link.ui.validation.notBlank
 
-class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message("settings.general.group.title")), ApplicationSettings.ChangeListener {
+class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message("settings.general.group.title")) {
     private val platforms = service<PlatformRepository>()
     private val settings = project.service<ProjectSettings>()
     private val platformComboBoxModel = CollectionComboBoxModel(platforms.getAll().toList())
-    private val initialPlatform = settings.host?.let { platforms.getById(it) }
-
-    init {
-        service<ApplicationSettings>().registerListener(this)
-    }
+    private val selectedPlatform get() = settings.host?.let { platforms.getById(it) }
 
     override fun createPanel() = panel {
+        ApplicationManager.getApplication()
+            .messageBus
+            .connect(disposable!!)
+            .subscribe(PlatformRepository.ChangeListener.TOPIC, PlatformRepository.ChangeListener { refreshPlatforms() })
+
         row(message("settings.general.field.platform.label")) {
             comboBox(platformComboBoxModel, PlatformCellRenderer())
-                .bindItem({ initialPlatform }, { settings.host = it?.id?.toString() })
+                .bindItem({ selectedPlatform }, { settings.host = it?.id?.toString() })
                 .gap(RightGap.SMALL)
             contextHelp(message("settings.general.field.platform.help"))
         }
@@ -64,11 +65,18 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
         }
     }
 
-    override fun onChange() {
+    private fun refreshPlatforms() {
         val current = platformComboBoxModel.selectedItem as? Platform
 
         platformComboBoxModel.removeAll()
         platformComboBoxModel.add(platforms.getAll().toList())
+
+        // A custom platform may have been removed while it was the selected one, leaving us pointing at a
+        // platform that no longer exists.
+        if (selectedPlatform == null) {
+            settings.host = null
+        }
+
         platformComboBoxModel.selectedItem = current?.let { platforms.getById(it.id) }
     }
 }

@@ -1,9 +1,12 @@
 package uk.co.ben_gibson.git.link.platform
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import com.intellij.util.messages.Topic
 import uk.co.ben_gibson.git.link.settings.ApplicationSettings
-import uk.co.ben_gibson.git.link.ui.Icons
+import uk.co.ben_gibson.git.link.settings.ApplicationSettings.CustomPlatformSettings
+import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.Host
 import java.util.UUID
 
@@ -26,6 +29,23 @@ class PlatformRepository {
     fun getById(id: String) = getById(UUID.fromString(id))
     fun getById(id: UUID) = load().firstOrNull { it.id == id }
     fun getAll() = load()
+
+    fun getCustomPlatforms(): List<CustomPlatform> = service<ApplicationSettings>()
+        .customPlatforms
+        .map { it.toCustomPlatform() }
+
+    fun saveCustomPlatforms(customPlatforms: List<CustomPlatform>) {
+        if (customPlatforms == getCustomPlatforms()) {
+            return
+        }
+
+        service<ApplicationSettings>().customPlatforms = customPlatforms.map { it.toSettings() }
+
+        ApplicationManager.getApplication()
+            .messageBus
+            .syncPublisher(ChangeListener.TOPIC)
+            .onChange()
+    }
 
     /**
      * The platform serving a domain, e.g. github.com, searched for in the order:
@@ -50,18 +70,31 @@ class PlatformRepository {
         .firstOrNull { (_, domains) -> domains.any { Domain.of(it).matches(host) } }
         ?.let { getById(it.key) }
 
-    private fun load(): Set<Platform> {
-        val settings = service<ApplicationSettings>()
+    private fun load(): Set<Platform> = EXISTING_PLATFORMS.plus(getCustomPlatforms().map { Custom(it) })
 
-        val customPlatforms: List<Platform> = settings.customPlatforms.map {
-            Custom(
-                UUID.fromString(it.id),
-                it.displayName,
-                Icons.GIT,
-                setOf(Domain.of(it.baseUrl))
-            )
+    private fun CustomPlatformSettings.toCustomPlatform() = CustomPlatform(
+        UUID.fromString(id),
+        displayName,
+        Domain.of(baseUrl),
+        UrlTemplates(fileAtBranchTemplate, fileAtCommitTemplate, commitTemplate)
+    )
+
+    private fun CustomPlatform.toSettings() = CustomPlatformSettings(
+        id.toString(),
+        name,
+        domain.toString(),
+        templates.fileAtBranch,
+        templates.fileAtCommit,
+        templates.commit
+    )
+
+    fun interface ChangeListener {
+        fun onChange()
+
+        companion object {
+            @Topic.AppLevel
+            @JvmField
+            val TOPIC: Topic<ChangeListener> = Topic(ChangeListener::class.java, Topic.BroadcastDirection.NONE)
         }
-
-        return EXISTING_PLATFORMS.plus(customPlatforms)
     }
 }

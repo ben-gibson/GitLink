@@ -1,6 +1,8 @@
 package uk.co.ben_gibson.git.link.platform
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
+import com.intellij.openapi.util.Disposer
 import com.intellij.testFramework.junit5.TestApplication
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -43,15 +45,16 @@ class PlatformRepositoryTest {
     private val settings get() = service<ApplicationSettings>()
     private val subject = PlatformRepository()
 
-    private val customPlatform = ApplicationSettings.CustomPlatformSettings(
-        id = "0d0a2f7e-1c9a-4e46-9b4e-4f6a12c4a111",
-        displayName = "My Platform",
-        baseUrl = "git.example.com"
+    private val customPlatform = CustomPlatform(
+        UUID.fromString("0d0a2f7e-1c9a-4e46-9b4e-4f6a12c4a111"),
+        "My Platform",
+        Domain.of("git.example.com"),
+        GitHub().templates
     )
 
     @BeforeEach
     fun reset() {
-        settings.customPlatforms = listOf()
+        subject.saveCustomPlatforms(listOf())
         settings.registeredDomains = mapOf()
     }
 
@@ -76,7 +79,7 @@ class PlatformRepositoryTest {
 
     @Test
     fun `should match a domain owned by a custom platform`() {
-        settings.customPlatforms = listOf(customPlatform)
+        subject.saveCustomPlatforms(listOf(customPlatform))
 
         assertThat(subject.getByDomain(Host("git.example.com")))
             .isEqualTo(subject.getById(customPlatform.id))
@@ -86,8 +89,8 @@ class PlatformRepositoryTest {
     // built-in wildcard instead of the custom platform the user had registered it against.
     @Test
     fun `should prefer a user registered domain over a wildcard`() {
-        settings.customPlatforms = listOf(customPlatform)
-        settings.registeredDomains = mapOf(customPlatform.id to setOf("gerrit.example.com"))
+        subject.saveCustomPlatforms(listOf(customPlatform))
+        settings.registeredDomains = mapOf(customPlatform.id.toString() to setOf("gerrit.example.com"))
 
         assertThat(subject.getByDomain(Host("gerrit.example.com")))
             .isEqualTo(subject.getById(customPlatform.id))
@@ -110,5 +113,53 @@ class PlatformRepositoryTest {
         settings.registeredDomains = mapOf(UUID.randomUUID().toString() to setOf("github.com"))
 
         assertThat(subject.getByDomain(Host("github.com"))).isEqualTo(GitHub())
+    }
+
+    @Test
+    fun `should save a custom platform`() {
+        subject.saveCustomPlatforms(listOf(customPlatform))
+
+        assertThat(subject.getCustomPlatforms()).containsExactly(customPlatform)
+    }
+
+    @Test
+    fun `should build a platform from a custom platform`() {
+        subject.saveCustomPlatforms(listOf(customPlatform))
+
+        assertThat(subject.getById(customPlatform.id))
+            .isInstanceOfSatisfying(Custom::class.java) {
+              assertThat(it.templates).isEqualTo(customPlatform.templates)
+            }
+    }
+
+    @Test
+    fun `should notify listeners when the custom platforms change`() {
+        assertThat(countChanges { subject.saveCustomPlatforms(listOf(customPlatform)) }).isEqualTo(1)
+    }
+
+    @Test
+    fun `should not notify listeners when the custom platforms are unchanged`() {
+        subject.saveCustomPlatforms(listOf(customPlatform))
+
+        assertThat(countChanges { subject.saveCustomPlatforms(listOf(customPlatform)) }).isZero()
+    }
+
+    private fun countChanges(block: () -> Unit): Int {
+        val disposable = Disposer.newDisposable()
+
+        return try {
+            var changes = 0
+
+            ApplicationManager.getApplication()
+                .messageBus
+                .connect(disposable)
+                .subscribe(PlatformRepository.ChangeListener.TOPIC, PlatformRepository.ChangeListener { changes++ })
+
+            block()
+
+            changes
+        } finally {
+            Disposer.dispose(disposable)
+        }
     }
 }
