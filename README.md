@@ -4,7 +4,6 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Rating](https://img.shields.io/jetbrains/plugin/r/stars/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
-[![Donations](https://opencollective.com/gitlink/tiers/badge.svg?label=sponsor&color=brightgreen)](https://opencollective.com/gitlink)
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 
 <!-- Plugin description -->
@@ -74,7 +73,6 @@ While this avoids generating a URL to a 404, it does mean the linked contents ca
 * Star the repository
 * [Rate the plugin](https://plugins.jetbrains.com/plugin/8183-gitlink)
 * [Share the plugin](https://plugins.jetbrains.com/plugin/8183-gitlink)
-* [Become a Backer or Sponsor](https://opencollective.com/gitlink)
 
   
 ## Change log
