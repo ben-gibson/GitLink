@@ -41,7 +41,7 @@ class EditorExtensionsTest {
     }
 
     @Test
-    fun `should not return a line selection when nothing is selected`() {
+    fun `should anchor to the caret line when nothing is selected`() {
         // Given
         val editor = editor(
             """
@@ -55,7 +55,7 @@ class EditorExtensionsTest {
         val lineSelection = editor.lineSelection
 
         // Then
-        assertThat(lineSelection).isNull()
+        assertThat(lineSelection).isEqualTo(LineSelection(2, 2))
     }
 
     // Opens a real editor over the given text, with the <selection> and <caret> markers stripped out and applied
