@@ -7,6 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import git4idea.annotate.GitFileAnnotation
 import uk.co.ben_gibson.git.link.Context
 import uk.co.ben_gibson.git.link.git.Commit
+import uk.co.ben_gibson.git.link.git.LineSelection
 import uk.co.ben_gibson.git.link.ui.actions.Action
 
 abstract class AnnotationAction(
@@ -19,6 +20,13 @@ abstract class AnnotationAction(
 
         val revision = annotation.getLineRevisionNumber(lineNumber) ?: return null
 
-        return createContext(annotation.file, Commit(revision.asString()))
+        val context = createContext(annotation.file, Commit(revision.asString()))
+
+        // Anchor a file link to the line whose blame was clicked; a commit link has no line to carry
+        if (context is Context.FileAtCommit && lineNumber >= 0) {
+            return context.copy(lineSelection = LineSelection(lineNumber + 1))
+        }
+
+        return context
     }
 }

@@ -3,10 +3,11 @@ package uk.co.ben_gibson.git.link.editor
 import com.intellij.openapi.editor.Editor
 import uk.co.ben_gibson.git.link.git.LineSelection
 
-val Editor.lineSelection: LineSelection?
+val Editor.lineSelection: LineSelection
     get() {
         if (!selectionModel.hasSelection()) {
-            return null
+            // Nothing is selected, so anchor to the line the caret sits on, e.g. the line right-clicked in the editor
+            return LineSelection(caretModel.logicalPosition.line + 1)
         }
 
         val start = offsetToLogicalPosition(selectionModel.selectionStart)

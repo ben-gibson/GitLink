@@ -11,7 +11,7 @@
 - Base a custom platform's URL templates on an existing platform.
 - Detect self-hosted Gitea and Gogs installs.
 - Prefer a user-registered domain when detecting a platform.
-- Only add line numbers to a link when text is selected in the editor.
+- Anchor the link to the clicked line when opening a file from the blame gutter menu.
 - Fix an off-by-one error in the line numbers of a generated link.
 - Don't encode the forward slash in branch names.
 - Various refactors and cleanups.
