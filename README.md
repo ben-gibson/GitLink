@@ -10,7 +10,7 @@
 <!-- Plugin description -->
 
 A [Jetbrains plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providing shortcuts to open or copy a file, directory or commit in `GitHub`, `Bitbucket`, 
-`Codeberg`, `GitLab`, `Gitee` `Gitea`, `Forgejo`, `Gogs`, `Azure`, `sourcehut`, and `Gerrit`. Custom hosts can also be configured using the URL template syntax.
+`Codeberg`, `GitLab`, `Gitee` `Gitea`, `Forgejo`, `Gogs`, `Azure`, `sourcehut`, and `Gerrit`. Custom platforms can also be configured using the URL template syntax.
 
 <!-- Plugin description end -->
 
@@ -27,7 +27,7 @@ A [Jetbrains plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providin
 
 ## Usage
 
-Install the plugin and configure your remote host if it hasn't been auto-detected already:
+Install the plugin and configure your platform if it hasn't been auto-detected already:
 
       Preferences → Tools → GitLink
 

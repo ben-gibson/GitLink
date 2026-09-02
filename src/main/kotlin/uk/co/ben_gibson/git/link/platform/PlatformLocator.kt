@@ -10,7 +10,7 @@ class PlatformLocator(val project: Project) {
     fun locate() : Platform? {
         val settings = project.service<ProjectSettings>()
 
-        val platformId = settings.host?: return null
+        val platformId = settings.platformId?: return null
 
         val platforms = service<PlatformRepository>()
 

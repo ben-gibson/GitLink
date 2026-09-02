@@ -31,7 +31,7 @@ class ApplicationStartupListener : ProjectActivity {
     private fun detectPlatform(project: Project) {
         val projectSettings = project.service<ProjectSettings>()
 
-        if (projectSettings.host != null) {
+        if (projectSettings.platformId != null) {
             return
         }
 
@@ -43,7 +43,7 @@ class ApplicationStartupListener : ProjectActivity {
 
             service<Notifier>().send(Notification.platformAutoDetected(platform), project)
 
-            projectSettings.host = platform.id.toString()
+            projectSettings.platformId = platform.id.toString()
         }
     }
 }

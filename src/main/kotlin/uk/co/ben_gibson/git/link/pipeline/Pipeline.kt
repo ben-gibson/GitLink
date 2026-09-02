@@ -56,7 +56,7 @@ class Pipeline(private val project: Project) {
         val platform = project.service<PlatformLocator>().locate()
 
         if (platform == null) {
-            service<Notifier>().send(Notification.hostNotSet(), project)
+            service<Notifier>().send(Notification.platformNotSet(), project)
         }
 
         return platform
