@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 5.0.0 - 2026-09-02
+
 - Require IntelliJ 2026.2 or later.
 - Add `Codeberg` and `Forgejo` support.
 - Remove the experimental `Chromium` platform.
