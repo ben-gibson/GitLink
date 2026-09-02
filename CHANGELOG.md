@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+## 5.0.1 - 2026-09-02
+
+- Redesign the plugin logo.
+
 ## 5.0.0 - 2026-09-02
 
 - Require IntelliJ 2026.2 or later.

@@ -1,4 +1,8 @@
-# GitLink
+<p align="center">
+  <img alt="GitLink" src="./assets/logo.svg" width="88" />
+</p>
+
+<h1 align="center">GitLink</h1>
 
 ![Build](https://github.com/ben-gibson/GitLink/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
