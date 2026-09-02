@@ -13,22 +13,21 @@ A [Jetbrains plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providin
 
 <!-- Plugin description end -->
 
-<div>
+<p align="center">
   <a href="https://plugins.jetbrains.com/plugin/8183-gitlink">
-    <img alt="Menu Example" src="./assets/menu-example.png" width=200 />
+    <img alt="Demo" src="./assets/demo.gif" width="700" />
   </a>
-</div>
-<div>
-  <a href="https://plugins.jetbrains.com/plugin/8183-gitlink">
-    <img alt="Settings Example" src="./assets/settings-example.png" width=400 />
-  </a>
-</div>
+</p>
 
 ## Usage
 
 Install the plugin and configure your platform if it hasn't been auto-detected already:
 
       Preferences → Tools → GitLink
+
+<p align="center">
+  <img alt="Settings" src="./assets/settings-example.png" width="480" />
+</p>
 
 Make sure you have registered your projects root under the version control preferences:
 
