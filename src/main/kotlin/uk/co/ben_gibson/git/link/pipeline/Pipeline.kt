@@ -16,40 +16,33 @@ import uk.co.ben_gibson.git.link.settings.ProjectSettings
 import uk.co.ben_gibson.git.link.ui.notification.Notification
 import uk.co.ben_gibson.git.link.ui.notification.Notifier
 import uk.co.ben_gibson.url.URL
-import java.util.*
 
 @Service(Service.Level.PROJECT)
 class Pipeline(private val project: Project) {
-    private val middlewares: Set<Middleware> = setOf(
-        service<GenerateUrl>(),
-        service<Timer>(),
+    // Each middleware wraps the ones after it. GenerateUrl produces the URL rather than calling on, so it
+    // must come last.
+    private val middlewares: List<Middleware> = listOf(
+        service<RequestSupport>(),
         service<RecordHit>(),
         service<ForceHttps>(),
-        service<RequestSupport>(),
+        service<Timer>(),
+        service<GenerateUrl>(),
     )
 
     fun accept(context: Context) : URL? {
-        if (middlewares.isEmpty()) {
-            throw IllegalStateException("No middleware registered")
-        }
-
         val repository = locateRepository(context) ?: return null
         val remote = locateRemote(repository) ?: return null
         val platform = locatePlatform() ?: return null
 
         val pass = Pass(project, context, platform, repository, remote)
 
-        val queue = PriorityQueue(middlewares)
-
-        return next(queue, pass)
+        return next(middlewares, pass)
     }
 
-    private fun next(queue: PriorityQueue<Middleware>, pass: Pass) : URL? {
-        val middleware = queue.remove()
+    private fun next(remaining: List<Middleware>, pass: Pass) : URL? {
+        val middleware = remaining.firstOrNull() ?: return null
 
-        return middleware(pass) {
-            return@middleware next(queue, pass)
-        }
+        return middleware(pass) { next(remaining.drop(1), pass) }
     }
 
     private fun locatePlatform(): Platform? {

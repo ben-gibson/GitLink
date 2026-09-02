@@ -11,8 +11,6 @@ import java.time.InstantSource
 
 @Service
 class Timer(private val clock: InstantSource = InstantSource.system()) : Middleware {
-    override val priority = 40
-
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val settings = pass.project.service<ProjectSettings>()
 
