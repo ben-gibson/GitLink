@@ -16,7 +16,7 @@ version = providers.gradleProperty("pluginVersion").get()
 
 // Set the JVM language level used to build the project.
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 // Configure project's dependencies
@@ -52,6 +52,9 @@ dependencies {
 
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
         bundledPlugins(providers.gradleProperty("platformBundledPlugins").map { it.split(',') })
+
+        // Platform modules. Uses `platformBundledModules` property from the gradle.properties file.
+        bundledModules(providers.gradleProperty("platformBundledModules").map { it.split(',') })
 
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
         plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
