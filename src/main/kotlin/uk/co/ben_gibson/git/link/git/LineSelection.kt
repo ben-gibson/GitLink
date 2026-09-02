@@ -8,7 +8,4 @@ data class LineSelection(val start: Int, val end: Int) {
     }
 
     constructor(line: Int) : this(line, line)
-
-    val lineCount: Int
-        get() = end - start + 1
 }
