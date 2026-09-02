@@ -4,11 +4,21 @@
 
 <h1 align="center">GitLink</h1>
 
+<div align="center">
+
 ![Build](https://github.com/ben-gibson/GitLink/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Rating](https://img.shields.io/jetbrains/plugin/r/stars/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/8183-gitlink.svg)](https://plugins.jetbrains.com/plugin/8183-gitlink)
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
+
+</div>
+
+<p align="center">
+  <a href="https://plugins.jetbrains.com/plugin/8183-gitlink">
+    <img alt="Demo" src="./assets/demo.gif" width="700" />
+  </a>
+</p>
 
 <!-- Plugin description -->
 
@@ -16,12 +26,6 @@ A [Jetbrains plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providin
 `Codeberg`, `GitLab`, `Gitee`, `Gitea`, `Forgejo`, `Gogs`, `Azure`, `sourcehut`, and `Gerrit`. Custom platforms can also be configured using the URL template syntax.
 
 <!-- Plugin description end -->
-
-<p align="center">
-  <a href="https://plugins.jetbrains.com/plugin/8183-gitlink">
-    <img alt="Demo" src="./assets/demo.gif" width="700" />
-  </a>
-</p>
 
 ## Usage
 
