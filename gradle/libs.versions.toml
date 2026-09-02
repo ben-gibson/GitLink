@@ -10,8 +10,8 @@ intelliJPlatform = "2.18.1"
 kotlin = "2.4.10"
 kover = "0.9.5"
 qodana = "2026.2.1"
-junitJupiterParams = "5.11.3"
-junitPlatformLauncher = "1.11.3"
+junitJupiterParams = "5.14.4"
+junitPlatformLauncher = "1.14.4"
 
 [libraries]
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
