@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import uk.co.ben_gibson.git.link.platform.GitHub
 import uk.co.ben_gibson.git.link.git.File
 import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_MASTER
 import uk.co.ben_gibson.git.link.url.UrlTestData.BRANCH_WITH_SLASH
@@ -14,7 +15,6 @@ import uk.co.ben_gibson.git.link.url.UrlTestData.DIR_ROOT
 import uk.co.ben_gibson.git.link.url.UrlTestData.FILE_JAVA
 import uk.co.ben_gibson.git.link.url.UrlTestData.LINE_SELECTION_RANGE
 import uk.co.ben_gibson.git.link.url.factory.TemplatedUrlFactory
-import uk.co.ben_gibson.git.link.url.template.UrlTemplates
 import uk.co.ben_gibson.url.URL
 import java.util.stream.Stream
 
@@ -90,7 +90,7 @@ class GitHubTest {
     @MethodSource("urlExpectations")
     fun `should generate correct URLs`(baseUrl: URL, options: UrlOptions, expectedUrl: String, description: String) {
         // Given
-        val factory = TemplatedUrlFactory(UrlTemplates.gitHub())
+        val factory = TemplatedUrlFactory(GitHub().templates)
 
         // When
         val url = factory.createUrl(baseUrl, options)

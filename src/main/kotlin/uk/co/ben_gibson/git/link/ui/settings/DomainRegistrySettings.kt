@@ -1,5 +1,6 @@
 package uk.co.ben_gibson.git.link.ui.settings
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.ui.DialogWrapper
@@ -26,7 +27,7 @@ import uk.co.ben_gibson.git.link.ui.validation.notBlank
 import java.awt.event.ItemEvent
 import javax.swing.ListSelectionModel
 
-class DomainRegistrySettings : BoundConfigurable(message("settings.domain-registry.group.title")), ApplicationSettings.ChangeListener {
+class DomainRegistrySettings : BoundConfigurable(message("settings.domain-registry.group.title")) {
     private val settings = service<ApplicationSettings>()
     private val platforms = service<PlatformRepository>()
     private var domainRegistry = settings.registeredDomains
@@ -49,11 +50,12 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         .setRemoveActionUpdater { canModifyDomain() }
         .createPanel()
 
-    init {
-        service<ApplicationSettings>().registerListener(this)
-    }
-
     override fun createPanel() = panel {
+        ApplicationManager.getApplication()
+            .messageBus
+            .connect(disposable!!)
+            .subscribe(PlatformRepository.ChangeListener.TOPIC, PlatformRepository.ChangeListener { refreshPlatforms() })
+
         row(message("settings.domain-registry.field.platform.label")) {
             comboBox(
                 platformComboBoxModel,
@@ -156,7 +158,7 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         settings.registeredDomains = domainRegistry
     }
 
-    override fun onChange() {
+    private fun refreshPlatforms() {
         val current = platformComboBoxModel.selectedItem as? Platform
 
         platformComboBoxModel.removeAll()

@@ -10,7 +10,7 @@ class UrlFactoryLocator {
         return when(platform) {
             is Azure -> service<AzureUrlFactory>()
             is BitbucketServer -> service<BitbucketServerUrlFactory>()
-            else -> service<TemplatedUrlFactoryProvider>().forPlatform(platform)
+            is TemplatedPlatform -> TemplatedUrlFactory(platform.templates)
         }
     }
 }
