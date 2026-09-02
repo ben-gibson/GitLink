@@ -27,6 +27,10 @@ object GitLinkBundle : DynamicBundle(BUNDLE) {
         BrowserLauncher.instance.open("https://github.com/ben-gibson/GitLink")
     }
 
+    fun openReview() {
+        BrowserLauncher.instance.open("https://plugins.jetbrains.com/plugin/8183-gitlink/reviews")
+    }
+
     // The plugin class loader knows its own descriptor, which avoids the internal plugin manager lookups.
     fun plugin() = (GitLinkBundle::class.java.classLoader as? PluginAwareClassLoader)?.pluginDescriptor
 }
