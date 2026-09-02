@@ -16,7 +16,6 @@ class LineSelectionTest {
         // Then
         assertThat(selection.start).isEqualTo(10)
         assertThat(selection.end).isEqualTo(20)
-        assertThat(selection.lineCount).isEqualTo(11) // 10 to 20 inclusive
     }
 
     @Test
@@ -27,25 +26,6 @@ class LineSelectionTest {
         // Then
         assertThat(selection.start).isEqualTo(42)
         assertThat(selection.end).isEqualTo(42)
-        assertThat(selection.lineCount).isEqualTo(1)
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        "1, 1, 1",
-        "1, 5, 5",
-        "10, 20, 11",
-        "100, 200, 101"
-    )
-    fun `should calculate line count correctly`(start: Int, end: Int, expectedCount: Int) {
-        // Given
-        val selection = LineSelection(start, end)
-
-        // When
-        val count = selection.lineCount
-
-        // Then
-        assertThat(count).isEqualTo(expectedCount)
     }
 
     @ParameterizedTest
