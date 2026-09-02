@@ -15,12 +15,12 @@ A [Jetbrains plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providin
 
 <div>
   <a href="https://plugins.jetbrains.com/plugin/8183-gitlink">
-    <img alt="Menu Example" src="./menu-example.png" width=200 />
+    <img alt="Menu Example" src="./assets/menu-example.png" width=200 />
   </a>
 </div>
 <div>
   <a href="https://plugins.jetbrains.com/plugin/8183-gitlink">
-    <img alt="Settings Example" src="./settings-example.png" width=400 />
+    <img alt="Settings Example" src="./assets/settings-example.png" width=400 />
   </a>
 </div>
 
