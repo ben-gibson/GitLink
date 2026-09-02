@@ -15,7 +15,7 @@ A [Jetbrains plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providin
 
 <p align="center">
   <a href="https://plugins.jetbrains.com/plugin/8183-gitlink">
-    <video alt="Demo" src="./assets/demo.mp4" width="700" />
+    <img alt="Demo" src="./assets/demo.gif" width="700" />
   </a>
 </p>
 
