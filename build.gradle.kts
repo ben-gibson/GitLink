@@ -35,7 +35,10 @@ dependencies {
     testImplementation(libs.junitPlatformLauncher)
     testImplementation(libs.opentest4j)
     testImplementation(libs.mockk) {
-        // MockK brings in kotlinx-coroutines 1.6.4 which conflicts with the version bundled in the IntelliJ Platform
+        // MockK brings in its own Kotlin stdlib, reflect and coroutines, which conflict with the versions bundled
+        // in the IntelliJ Platform. Loading an older stdlib next to the platform makes the test application hang
+        // while it starts up.
+        exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
     }
     testImplementation(libs.assertj)
