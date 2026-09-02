@@ -18,7 +18,7 @@ data class Notification(
     companion object {
         private val DEFAULT_TITLE = message("name")
 
-        fun hostNotSet() = Notification(
+        fun platformNotSet() = Notification(
             DEFAULT_TITLE,
             message("notifications.platform-not-set"),
             actions = listOf(NotificationAction.OpenSettings())

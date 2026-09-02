@@ -5,6 +5,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.XmlSerializerUtil
+import com.intellij.util.xmlb.annotations.OptionTag
 
 /**
  * Supports storing the application settings in a persistent way.
@@ -14,7 +15,9 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 @Service(Service.Level.PROJECT)
 @State(name = "uk.co.ben_gibson.git.link.SettingsState", storages = [Storage("GitLink.xml")])
 class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
-    var host: String? = null
+    // Persisted under its old name so existing settings files keep working.
+    @get:OptionTag("host")
+    var platformId: String? = null
     var fallbackBranch = "main"
     var remote = "origin"
     private var checkCommitOnRemote = true

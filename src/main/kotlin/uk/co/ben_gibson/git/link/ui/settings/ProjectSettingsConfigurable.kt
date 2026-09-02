@@ -18,7 +18,7 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
     private val platforms = service<PlatformRepository>()
     private val settings = project.service<ProjectSettings>()
     private val platformComboBoxModel = CollectionComboBoxModel(platforms.getAll().toList())
-    private val selectedPlatform get() = settings.host?.let { platforms.getById(it) }
+    private val selectedPlatform get() = settings.platformId?.let { platforms.getById(it) }
 
     override fun createPanel() = panel {
         ApplicationManager.getApplication()
@@ -28,7 +28,7 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
 
         row(message("settings.general.field.platform.label")) {
             comboBox(platformComboBoxModel, PlatformCellRenderer())
-                .bindItem({ selectedPlatform }, { settings.host = it?.id?.toString() })
+                .bindItem({ selectedPlatform }, { settings.platformId = it?.id?.toString() })
                 .gap(RightGap.SMALL)
             contextHelp(message("settings.general.field.platform.help"))
         }
@@ -74,7 +74,7 @@ class ProjectSettingsConfigurable(project : Project) : BoundConfigurable(message
         // A custom platform may have been removed while it was the selected one, leaving us pointing at a
         // platform that no longer exists.
         if (selectedPlatform == null) {
-            settings.host = null
+            settings.platformId = null
         }
 
         platformComboBoxModel.selectedItem = current?.let { platforms.getById(it.id) }

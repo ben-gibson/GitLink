@@ -11,8 +11,8 @@ import uk.co.ben_gibson.url.URL
 class NotificationTest {
 
     @Test
-    fun `can create host not set notification`() {
-        val notification = Notification.hostNotSet()
+    fun `can create platform not set notification`() {
+        val notification = Notification.platformNotSet()
 
         assertThat(notification.title).isEqualTo(message("name"))
         assertThat(notification.message).isEqualTo(message("notifications.platform-not-set"))
