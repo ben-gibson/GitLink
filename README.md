@@ -10,7 +10,7 @@
 <!-- Plugin description -->
 
 A [Jetbrains plugin](https://plugins.jetbrains.com/plugin/8183-gitlink) providing shortcuts to open or copy a file, directory or commit in `GitHub`, `Bitbucket`, 
-`Codeberg`, `GitLab`, `Gitee` `Gitea`, `Forgejo`, `Gogs`, `Azure`, `sourcehut`, and `Gerrit`. Custom platforms can also be configured using the URL template syntax.
+`Codeberg`, `GitLab`, `Gitee`, `Gitea`, `Forgejo`, `Gogs`, `Azure`, `sourcehut`, and `Gerrit`. Custom platforms can also be configured using the URL template syntax.
 
 <!-- Plugin description end -->
 
@@ -35,12 +35,17 @@ Make sure you have registered your projects root under the version control prefe
 
       Preferences → Version Control (see unregistered roots)
 
-To open the current file in the default browser:
+The actions live under the Git menu and in the editor, project view and editor tab context menus:
 
-      View → Open in (your selected host) or
-      Select in... → Browser (GitLink)
+      Git → Open in (your selected platform)
+      Git → Copy (your selected platform) link
+      Git → Copy (your selected platform) Markdown link
 
-Additional shortcuts are available including from the editor gutter and Git log window.
+The current file can also be opened from the select-in popup:
+
+      Select in... → (your selected platform)
+
+Additional shortcuts are available from the editor gutter, the annotation gutter and the Git log window.
 
 A URL can be generated in one of the following ways: 
 
