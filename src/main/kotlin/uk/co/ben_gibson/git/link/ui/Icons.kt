@@ -14,4 +14,5 @@ object Icons {
     val GITEE = IconLoader.getIcon("/icons/gitee.svg", javaClass)
     val GERRIT = IconLoader.getIcon("/icons/gerrit.svg", javaClass)
     val CODEBERG = IconLoader.getIcon("/icons/codeberg.svg", javaClass)
+    val FORGEJO = IconLoader.getIcon("/icons/forgejo.svg", javaClass)
 }

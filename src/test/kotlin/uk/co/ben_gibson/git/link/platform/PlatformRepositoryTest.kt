@@ -33,7 +33,8 @@ class PlatformRepositoryTest {
             "dev.azure.com" to Azure(),
             "azure.example.com" to Azure(),
             "gerrit.example.com" to Gerrit(),
-            "codeberg.org" to Codeberg()
+            "codeberg.org" to Codeberg(),
+            "code.forgejo.org" to Forgejo()
         )
 
         @JvmStatic

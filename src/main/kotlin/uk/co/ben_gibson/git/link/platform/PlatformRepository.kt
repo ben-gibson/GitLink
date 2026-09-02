@@ -21,7 +21,8 @@ private val EXISTING_PLATFORMS = setOf(
     Srht(),
     Azure(),
     Gerrit(),
-    Codeberg()
+    Codeberg(),
+    Forgejo()
 )
 
 @Service
