@@ -2,8 +2,7 @@ package uk.co.ben_gibson.git.link
 
 import com.intellij.DynamicBundle
 import com.intellij.ide.browsers.BrowserLauncher
-import com.intellij.ide.plugins.PluginManagerCore
-import com.intellij.openapi.extensions.PluginId
+import com.intellij.ide.plugins.cl.PluginAwareClassLoader
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import org.jetbrains.annotations.NonNls
@@ -28,5 +27,6 @@ object GitLinkBundle : DynamicBundle(BUNDLE) {
         BrowserLauncher.instance.open("https://github.com/ben-gibson/GitLink")
     }
 
-    fun plugin() = PluginManagerCore.getPlugin(PluginId.getId("uk.co.ben-gibson.remote.repository.mapper"))
+    // The plugin class loader knows its own descriptor, which avoids the internal plugin manager lookups.
+    fun plugin() = (GitLinkBundle::class.java.classLoader as? PluginAwareClassLoader)?.pluginDescriptor
 }
