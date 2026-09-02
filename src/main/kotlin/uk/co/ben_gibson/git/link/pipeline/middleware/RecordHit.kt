@@ -8,8 +8,6 @@ import uk.co.ben_gibson.url.URL
 
 @Service
 class RecordHit : Middleware {
-    override val priority = 20
-
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val url = next() ?: return null
 

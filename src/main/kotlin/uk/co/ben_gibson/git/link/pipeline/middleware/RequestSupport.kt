@@ -10,8 +10,6 @@ import uk.co.ben_gibson.url.URL
 
 @Service
 class RequestSupport : Middleware {
-    override val priority = 10
-
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val url = next()
 

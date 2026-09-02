@@ -12,11 +12,8 @@ import uk.co.ben_gibson.git.link.url.UrlOptions
 import uk.co.ben_gibson.git.link.url.factory.UrlFactoryLocator
 import uk.co.ben_gibson.url.URL
 
-// Must be the last middleware in the pipeline!
 @Service
 class GenerateUrl : Middleware {
-    override val priority = 50
-
     override fun invoke(pass: Pass, next: () -> URL?) : URL? {
         val baseUrl = pass.remote.httpUrl ?: return null
 
