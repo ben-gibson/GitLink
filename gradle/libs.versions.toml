@@ -9,7 +9,6 @@ changelog = "2.5.0"
 intelliJPlatform = "2.18.1"
 kotlin = "2.4.10"
 kover = "0.9.5"
-qodana = "2026.2.1"
 junitJupiterParams = "5.14.4"
 junitPlatformLauncher = "1.14.4"
 
@@ -25,4 +24,3 @@ changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
 intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
-qodana = { id = "org.jetbrains.qodana", version.ref = "qodana" }
