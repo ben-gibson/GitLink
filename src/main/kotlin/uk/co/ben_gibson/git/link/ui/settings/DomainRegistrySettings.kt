@@ -127,15 +127,12 @@ class DomainRegistrySettings : BoundConfigurable(message("settings.domain-regist
         domainsTableModel.items = platform.domains.map { it.toString() }.toList() + domainRegistry.getOrDefault(platform.id.toString(), setOf())
     }
 
-    private fun createDomainsTableModel(domains: List<String> = listOf()): ListTableModel<String> = ListTableModel(
-        arrayOf(
-            object : ColumnInfo<String, String>(message("settings.domain-registry.table.column.domain")) {
-                override fun valueOf(domain: String): String {
-                    return domain
-                }
+    private fun createDomainsTableModel() = ListTableModel<String>(
+        object : ColumnInfo<String, String>(message("settings.domain-registry.table.column.domain")) {
+            override fun valueOf(domain: String): String {
+                return domain
             }
-        ),
-        domains
+        }
     )
 
     override fun reset() {
