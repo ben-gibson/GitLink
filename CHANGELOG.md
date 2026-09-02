@@ -4,15 +4,17 @@
 
 ## Unreleased
 
-- Remove the experimental `Chromium` support.
-- Add `Codeberg` support.
-- Add `Forgejo` support.
-- Refactor pipeline to resolve context eagerly before middleware execution.
-- Send notifications through a service so they can be asserted in tests.
-- Base the URL templates of a custom platform on an existing platform.
+- Require IntelliJ 2026.2 or later.
+- Add `Codeberg` and `Forgejo` support.
+- Remove the experimental `Chromium` platform.
 - Improve the layout and help text throughout the settings dialogs.
-- Fix an off-by-one error in the line numbers of a generated link.
+- Base a custom platform's URL templates on an existing platform.
+- Detect self-hosted Gitea and Gogs installs.
+- Prefer a user-registered domain when detecting a platform.
 - Only add line numbers to a link when text is selected in the editor.
+- Fix an off-by-one error in the line numbers of a generated link.
+- Don't encode the forward slash in branch names.
+- Various refactors and cleanups.
 
 ## 4.5.4 - 2026-04-11
 
