@@ -32,10 +32,11 @@ data class Notification(
 
         fun star() = Notification(
             message = """
-                Finding GitLink useful? Show your support 💖 and ⭐ the repository 🙏.
+                Finding GitLink useful? A ⭐ on GitHub or a review on the Marketplace really helps 🙏.
             """.trimIndent(),
             actions = listOf(
                 NotificationAction.OpenRepository(),
+                NotificationAction.OpenReview(),
                 NotificationAction.DisableSetting(Setting.SUPPORT_REQUEST, message("actions.do-not-ask-again"))
             )
         )
@@ -87,7 +88,12 @@ sealed class NotificationAction {
 
     // Opening the repository is taken as the support having been given, so the request is not shown again.
     data class OpenRepository(
-        override val title: String = message("actions.sure-take-me-there")
+        override val title: String = message("actions.star-the-repository")
+    ) : NotificationAction()
+
+    // Leaving a review is taken as the support having been given, so the request is not shown again.
+    data class OpenReview(
+        override val title: String = message("actions.leave-a-review")
     ) : NotificationAction()
 
     data class DisableSetting(

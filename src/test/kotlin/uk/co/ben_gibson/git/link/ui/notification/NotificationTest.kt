@@ -60,6 +60,7 @@ class NotificationTest {
         assertThat(notification.type).isEqualTo(Notification.Type.PERSISTENT)
         assertThat(notification.actions).containsExactly(
             NotificationAction.OpenRepository(),
+            NotificationAction.OpenReview(),
             NotificationAction.DisableSetting(Setting.SUPPORT_REQUEST, message("actions.do-not-ask-again"))
         )
     }

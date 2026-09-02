@@ -52,6 +52,10 @@ class IntellijNotifier : Notifier {
                 GitLinkBundle.openRepository()
                 disable(Setting.SUPPORT_REQUEST, project)
             }
+            is NotificationAction.OpenReview -> {
+                GitLinkBundle.openReview()
+                disable(Setting.SUPPORT_REQUEST, project)
+            }
             is NotificationAction.DisableSetting -> disable(action.setting, project)
         }
     }
