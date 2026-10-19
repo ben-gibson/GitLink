@@ -17,6 +17,7 @@ class AzureTest {
     private val baseUrlWithoutGit = URL.fromString("https://dev.azure.com/ben-gibson/test")
     private val baseUrlCompanyWithGit = URL.fromString("https://dev.azure.com/company/project/_git/test")
     private val baseUrlCompanyWithoutGit = URL.fromString("https://dev.azure.com/company/project/test")
+    private val baseUrlSsh = URL.fromString("https://ssh.dev.azure.com/v3/ben-gibson/test/test")
 
     @TestFactory
     fun `should generate correct URLs`() = assertUrls(
@@ -80,6 +81,12 @@ class AzureTest {
             UrlOptions.Commit(COMMIT_FULL, "main"),
             "https://dev.azure.com/company/project/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
             "Company URL without _git"
+        ),
+        Expectation(
+            baseUrlSsh,
+            UrlOptions.Commit(COMMIT_FULL, "main"),
+            "https://dev.azure.com/ben-gibson/test/_git/test/commit/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+            "SSH subdomain should be stripped from host"
         ),
     )
 }

@@ -17,6 +17,7 @@ import uk.co.ben_gibson.url.URL
 class BitBucketServerTest {
     private val baseUrl = URL.fromString("https://stash.example.com/foo/bar")
     private val baseUrlScm = URL.fromString("https://stash.example.com/scm/foo/bar")
+    private val baseUrlSsh = URL.fromString("https://ssh.stash.example.com/foo/bar")
 
     @TestFactory
     fun `should generate correct URLs`() = assertUrls(
@@ -80,6 +81,12 @@ class BitBucketServerTest {
             UrlOptions.Commit(COMMIT_FULL, "main"),
             "https://stash.example.com/projects/foo/repos/bar/commits/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
             "Direct commit URL"
+        ),
+        Expectation(
+            baseUrlSsh,
+            UrlOptions.Commit(COMMIT_FULL, "main"),
+            "https://stash.example.com/projects/foo/repos/bar/commits/b032a0707beac9a2f24b1b7d97ee4f7156de182c",
+            "SSH subdomain should be stripped from host"
         ),
     )
 }

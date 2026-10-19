@@ -3,6 +3,7 @@ package uk.co.ben_gibson.git.link.url.factory
 import com.intellij.openapi.components.Service
 import uk.co.ben_gibson.git.link.url.UrlOptions
 import uk.co.ben_gibson.git.link.url.template.UrlTemplates
+import uk.co.ben_gibson.url.Host
 import uk.co.ben_gibson.url.Path
 import uk.co.ben_gibson.url.URL
 
@@ -24,6 +25,9 @@ class BitbucketServerUrlFactory : TemplatedUrlFactory(TEMPLATES) {
     }
 
     private fun normaliseBaseUrl(baseUrl: URL): URL {
-        return baseUrl.copy(path = Path(baseUrl.path.toString().removePrefix("scm/")))
+        return baseUrl.copy(
+            host = Host(baseUrl.host.toString().removePrefix("ssh.")),
+            path = Path(baseUrl.path.toString().removePrefix("scm/"))
+        )
     }
 }
