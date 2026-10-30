@@ -91,7 +91,9 @@ class RemoteTest {
             "https://gitlab.com/user/repo.git, gitlab.com",
             "git@bitbucket.org:user/repo.git, bitbucket.org",
             "https://git.company.com/user/repo.git, git.company.com",
-            "ssh://git@custom.host:7999/repo.git, custom.host"
+            "ssh://git@custom.host:7999/repo.git, custom.host",
+            "git@ssh.bitbucket.org:user/repo.git, bitbucket.org",
+            "git@ssh.dev.azure.com:v3/org/project/repo, dev.azure.com"
         )
         fun `should extract domain`(gitUrl: String, expectedDomain: String) {
             // Given
@@ -222,6 +224,26 @@ class RemoteTest {
                 "http://ben-gibson@dev.azure.com/ben-gibson/test/_git/test.git",
                 "http://dev.azure.com/ben-gibson/test/_git/test.git",
                 "Azure DevOps URL (preserves .git suffix)"
+            ),
+            Arguments.of(
+                "git@ssh.dev.azure.com:v3/ben-gibson/test/test",
+                "http://dev.azure.com/ben-gibson/test/test",
+                "Azure DevOps SSH URL should use the web host and drop the API version"
+            ),
+            Arguments.of(
+                "ssh://git@ssh.dev.azure.com:22/v3/ben-gibson/test/test",
+                "http://dev.azure.com/ben-gibson/test/test",
+                "Azure DevOps SSH URL with protocol should use the web host and drop the API version"
+            ),
+            Arguments.of(
+                "git@ssh.bitbucket.org:foo/bar.git",
+                "http://bitbucket.org/foo/bar",
+                "Bitbucket Cloud SSH URL should use the web host"
+            ),
+            Arguments.of(
+                "ssh://git@ssh.bitbucket.org/foo/bar.git",
+                "http://bitbucket.org/foo/bar",
+                "Bitbucket Cloud SSH URL with protocol should use the web host"
             ),
             Arguments.of(
                 "rad://z37oHWbEomJXUAqxd9hoQHWkg2pC8",
