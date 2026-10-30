@@ -95,7 +95,7 @@ jobs:
           name: ${{ steps.artifact.outputs.filename }}
           path: ./build/distributions/content/*/*
 
-  # Run tests and upload a code coverage report
+  # Run tests
   test:
     name: Test
     needs: [ build ]
@@ -137,13 +137,6 @@ jobs:
         with:
           name: tests-result
           path: ${{ github.workspace }}/build/reports/tests
-
-      # Upload the Kover report to CodeCov
-      - name: Upload Code Coverage Report
-        uses: codecov/codecov-action@v5
-        with:
-          files: ${{ github.workspace }}/build/reports/kover/report.xml
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   # Run plugin structure verification along with IntelliJ Plugin Verifier
   verify:
