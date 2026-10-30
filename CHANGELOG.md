@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+## 5.0.2 - 2026-10-30
+
+- Support Bitbucket Cloud remotes on `ssh.bitbucket.org`.
+
 ## 5.0.1 - 2026-09-02
 
 - Redesign the plugin logo.

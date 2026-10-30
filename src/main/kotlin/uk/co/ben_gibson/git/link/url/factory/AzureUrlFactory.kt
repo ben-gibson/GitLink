@@ -70,10 +70,8 @@ class AzureUrlFactory: UrlFactory {
     }
 
     private fun normaliseBaseUrl(baseUrl: URL): URL {
-        // Convert ssh.dev.azure.com:v3/ben-gibson/test/test to dev.azure.com:ben-gibson/test/_git/test.git
         val basePathParts = baseUrl.path
             .toString()
-            .removePrefix("v3/")
             .split("/")
             .toMutableList()
 
@@ -84,11 +82,6 @@ class AzureUrlFactory: UrlFactory {
             basePathParts.add(indexToAddGit, "_git")
         }
 
-        var normalisedBaseUrl = baseUrl.copy(path = Path(basePathParts.joinToString("/")))
-
-        if (baseUrl.host.toString().startsWith("ssh.")) {
-            normalisedBaseUrl = normalisedBaseUrl.copy(host = Host(baseUrl.host.toString().removePrefix("ssh.")))
-        }
-        return normalisedBaseUrl
+        return baseUrl.copy(path = Path(basePathParts.joinToString("/")))
     }
 }

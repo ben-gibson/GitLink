@@ -8,6 +8,7 @@ import git4idea.commands.GitLineHandler
 import git4idea.repo.GitRemote
 import git4idea.repo.GitRepository
 import uk.co.ben_gibson.url.Host
+import uk.co.ben_gibson.url.Path
 import uk.co.ben_gibson.url.URL
 
 val GitRemote.domain: Host?
@@ -40,8 +41,17 @@ val GitRemote.httpUrl: URL?
             url = "http://$url"
         }
 
-        return runCatching { URL.fromString(url) }.getOrNull()
+        return runCatching { URL.fromString(url) }.getOrNull()?.withWebHost()
     }
+
+// Some platforms serve SSH from a host that can't be opened in the browser e.g. ssh.bitbucket.org, so swap it
+// for the web host.
+private fun URL.withWebHost(): URL = when (host.toString()) {
+    "ssh.bitbucket.org" -> withHost(Host("bitbucket.org"))
+    "ssh.dev.azure.com" -> withHost(Host("dev.azure.com"))
+        .withPath(Path(path.toString().removePrefix("v3/")))
+    else -> this
+}
 
 fun GitRemote.contains(repository: GitRepository, branch: GitLocalBranch): Boolean {
     val result = Git.getInstance().lsRemote(
