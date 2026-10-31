@@ -1,13 +1,12 @@
-# GitHub Actions Workflow is created for testing and preparing the plugin release in the following steps:
-# - Validate Gradle Wrapper.
-# - Run 'test' and 'verifyPlugin' tasks.
-# - Run the 'buildPlugin' task and prepare artifact for further tests.
-# - Run the 'runPluginVerifier' task.
-# - Create a draft release.
+# GitHub Actions workflow for building, testing, verifying, and preparing plugin release drafts:
+# - Build the plugin ZIP with the 'buildPlugin' task and upload it as a workflow artifact.
+# - Run the 'check' task and upload test reports on failure.
+# - Run the 'verifyPlugin' task and upload Plugin Verifier reports.
+# - Create a draft GitHub release on non-pull-request runs.
 #
-# The workflow is triggered on push and pull_request events.
+# The workflow is triggered on pushes to the 'main' branch and on pull_request events.
 #
-# GitHub Actions reference: https://help.github.com/en/actions
+# GitHub Actions reference: https://docs.github.com/actions
 #
 ## JBIJPPTPL
 
@@ -25,77 +24,46 @@ concurrency:
 
 jobs:
 
-  # Prepare environment and build the plugin
+  # Prepare the environment and build the plugin
   build:
     name: Build
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.properties.outputs.version }}
-      changelog: ${{ steps.properties.outputs.changelog }}
-      pluginVerifierHomeDir: ${{ steps.properties.outputs.pluginVerifierHomeDir }}
     steps:
 
       # Free GitHub Actions Environment Disk Space
       - name: Maximize Build Space
-        uses: jlumbroso/free-disk-space@v1.3.1
+        uses: jlumbroso/free-disk-space@v2.0.0
         with:
-          tool-cache: false
+          preinstalled-runtimes: false
           large-packages: false
 
       # Check out the current repository
       - name: Fetch Sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      # Set up Java environment for the next steps
+      # Set up the Java environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: zulu
           java-version: 25
 
       # Setup Gradle
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
-
-      # Set environment variables
-      - name: Export Properties
-        id: properties
-        shell: bash
-        run: |
-          PROPERTIES="$(./gradlew properties --console=plain -q)"
-          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
-          CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
-
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "pluginVerifierHomeDir=~/.pluginVerifier" >> $GITHUB_OUTPUT
-          
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$CHANGELOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+        uses: gradle/actions/setup-gradle@v6
 
       # Build plugin
       - name: Build plugin
         run: ./gradlew buildPlugin
 
-      # Prepare plugin archive content for creating artifact
-      - name: Prepare Plugin Artifact
-        id: artifact
-        shell: bash
-        run: |
-          cd ${{ github.workspace }}/build/distributions
-          FILENAME=`ls *.zip`
-          unzip "$FILENAME" -d content
-
-          echo "filename=${FILENAME:0:-4}" >> $GITHUB_OUTPUT
-
-      # Store already-built plugin as an artifact for downloading
+      # Store an already-built plugin as an artifact for downloading
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: ${{ steps.artifact.outputs.filename }}
-          path: ./build/distributions/content/*/*
+          name: plugin-distribution
+          path: ./build/distributions/*.zip
 
-  # Run tests
+  # Run tests and upload test reports on failure
   test:
     name: Test
     needs: [ build ]
@@ -104,25 +72,25 @@ jobs:
 
       # Free GitHub Actions Environment Disk Space
       - name: Maximize Build Space
-        uses: jlumbroso/free-disk-space@v1.3.1
+        uses: jlumbroso/free-disk-space@v2.0.0
         with:
-          tool-cache: false
+          preinstalled-runtimes: false
           large-packages: false
 
       # Check out the current repository
       - name: Fetch Sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      # Set up Java environment for the next steps
+      # Set up the Java environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: zulu
           java-version: 25
 
       # Setup Gradle
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: true
 
@@ -133,7 +101,7 @@ jobs:
       # Collect Tests Result of failed tests
       - name: Collect Tests Result
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: tests-result
           path: ${{ github.workspace }}/build/reports/tests
@@ -147,25 +115,25 @@ jobs:
 
       # Free GitHub Actions Environment Disk Space
       - name: Maximize Build Space
-        uses: jlumbroso/free-disk-space@v1.3.1
+        uses: jlumbroso/free-disk-space@v2.0.0
         with:
-          tool-cache: false
+          preinstalled-runtimes: false
           large-packages: false
 
       # Check out the current repository
       - name: Fetch Sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      # Set up Java environment for the next steps
+      # Set up the Java environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: zulu
           java-version: 25
 
       # Setup Gradle
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: true
 
@@ -176,7 +144,7 @@ jobs:
       # Collect Plugin Verifier Result
       - name: Collect Plugin Verifier Result
         if: ${{ always() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: pluginVerifier-result
           path: ${{ github.workspace }}/build/reports/pluginVerifier
@@ -194,18 +162,18 @@ jobs:
 
       # Check out the current repository
       - name: Fetch Sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # Set up the Java environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: zulu
           java-version: 25
 
       # Setup Gradle
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: true
 
@@ -216,7 +184,7 @@ jobs:
         run: |
           gh api repos/{owner}/{repo}/releases \
             --jq '.[] | select(.draft == true) | .id' \
-            | xargs -I '{}' gh api -X DELETE repos/{owner}/{repo}/releases/{}
+            | xargs -r -I '{}' gh api -X DELETE repos/{owner}/{repo}/releases/{}
 
       # Create a new release draft which is not publicly visible and requires manual acceptance
       - name: Create Release Draft
